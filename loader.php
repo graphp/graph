@@ -1,6 +1,6 @@
 <?php
 
-class Loader{
+interface Loader{
 	
 }
 

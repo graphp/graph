@@ -1,6 +1,6 @@
 <?php
 
-class Edge{
+interface Edge{
 	private $id = NULL;
 	private $from = NULL;
 	private $to = NULL;
