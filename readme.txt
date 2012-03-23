@@ -1,13 +1,10 @@
-init
-yehaa
+# graph-php
+Something useful related to graphs!
 
-I'm here!
+## Documentation
+[EclipseGitHubEinrichtung](https://github.com/Flos/graph-php/wiki/EclipseGitHubEinrichtung)
 
-
-
-Hot to install git and eclipse
-
- git remote add origin git@github.com:Flos/graph-php.git
- git push -u origin master
- 
- I'm here too...
+## Features
+* Loading from adjacency lists
+* Loading from edge lists
+* Doing depth search on a graph
