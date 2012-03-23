@@ -16,17 +16,22 @@ class LoaderAdjacencyMatrix implements Loader{
 		for ($i=1;$i<=15;$i++){
 
 			// Add Vertices
-			echo "\n Adding vertice $i,";
+			echo "Adding vertice $i,";
 			
 			$graph->addVertice(new Vertice($i));
-
+			$currentEdgeList = explode("\t", $file[$i]);
+			
 			for ($k=0;$k<15;$k++)
 			{
 				// Add edges
-				echo " edge $edgeCounter, ";
+				if($currentEdgeList[$k] != 0){
+					echo " edge $k, ";
+				}
+				
 				$graph->addEdgeUndirected($edgeCounter);
 				$edgeCounter++;
 			}
+			echo "\n";
 		}
 
 	}
