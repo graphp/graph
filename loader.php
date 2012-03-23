@@ -2,7 +2,7 @@
 
 interface Loader{
 	
-	public abstract function getGraphFromFile($fileName);
+	public function getGraphFromFile($fileName);
 	
 }
 
