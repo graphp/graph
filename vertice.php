@@ -15,6 +15,10 @@ class Vertice{
 	
 //getter setter
 	
+	public function getId(){
+		return $this->id;
+	}
+	
 	public function addEdge($edge){
 		
 		if ( isset($this->edges[ $edge->getId() ]) ){
@@ -33,6 +37,18 @@ class Vertice{
 		return $this->edges[$edge->getId()];
 	}
 	
+	public function getEdge($id){
+		if ( ! isset($this->edges[$id]) ){
+			throw new Exception("Edge isn't added");
+		}
+		
+		return $this->edges[$id];
+	}
+	
+	public function getEdges(){
+		return $this->edges;
+	}
+	
 //Encapsulated algorithem
 	
 	//Breadth-first search (prototyp)
@@ -40,6 +56,10 @@ class Vertice{
 		$alg = new BreitenSuche_Agl($this);
 		return $alg->getResult();
 	}
+	
+	public function searchDepthFirst(){
+		
+	} 
 }
 
 ?>
