@@ -31,8 +31,8 @@ class Vertice{
 	 * @param id of edge $edgeId
 	 * @throws Exception
 	 */
-	public function addEdge($edgeId){
-		
+	public function addEdgeId($edgeId){
+		$edgeId = (int)$edgeId;
 		if ( isset($this->edges[ $edgeId ]) ){
 			throw new Exception("Edge is allready added");
 		}
@@ -45,7 +45,7 @@ class Vertice{
 	 * @param instance of Edge  (EdgeDirected or EdgeUndirected) $edge
 	 * @throws Exception
 	 */
-	public function removeEdge($edge){
+	public function removeEdgeId($edge){
 	
 		if ( ! isset($this->edges[ $edgeId ]) ){
 			throw new Exception("Edge isn't added");
@@ -57,7 +57,7 @@ class Vertice{
 	/**
 	 * returns all edges of this Vertice
 	 */
-	public function getEdges(){
+	public function getEdgeIdArray(){
 		return $this->edges;
 	}
 }

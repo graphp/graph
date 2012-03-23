@@ -26,7 +26,7 @@ class Graph{
 	 * adds this to the Graph and returns the created EdgeDirected
 	 * @param identifier of the new Edge $id
 	 */
-	public function addEdgeDirected($id=NULL){
+	public function addEdgeDirectedId($id=NULL){
 		$edge = new EdgeDirected($id);
 		$this->edges[$edge->getId()] = $edge;
 	
@@ -38,7 +38,7 @@ class Graph{
 	 * adds this to the Graph and returns the created EdgeUndirected
 	 * @param identifier of the new Edge $id
 	 */
-	public function addEdgeUndirected($id=NULL){
+	public function addEdgeUndirectedId($id=NULL){
 		$edge = new EdgeUndirected($id);
 		
 		$this->edges[$edge->getId()] = $edge;
@@ -61,7 +61,7 @@ class Graph{
 	/**
 	 * returns a array of all Edges
 	 */
-	public function getEdges(){
+	public function getEdgeArray(){
 		return $this->edges;
 	}
 	
@@ -95,7 +95,7 @@ class Graph{
 	/**
 	 * returns an array of all Vertices
 	 */
-	public function getVertices(){
+	public function getVerticeArray(){
 		return $this->vertices;
 	}
 
