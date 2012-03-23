@@ -1,6 +1,7 @@
 <?php
 
 include 'edge.php';
+include 'edgeUndirected.php';
 
 class Graph{
 	private $edges = array();

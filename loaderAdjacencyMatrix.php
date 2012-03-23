@@ -6,20 +6,27 @@ class LoaderAdjacencyMatrix implements Loader{
 
 	public function getGraphFromFile($fileName)
 	{
-		$hubba = new Graph();
+		$graph = new Graph();
 
 		$file = file($fileName);
-
 		$verticeCount = $file[0];
-			
-		for ($i=1;$i<=15;$i++)
+		$edgeCounter = 0;
+
+		for ($i=1;$i<=15;$i++){
+
+			// Add Vertices
+			echo "Adding vertice $i \n";
+			$graph->addVertice($i);
+
 			for ($k=0;$k<15;$k++)
 			{
-				echo 'add' + $k;
-				$hubba->addEdge($k);
+				// Add edges
+				$graph->addEdgeUndirected($edgeCounter);
+				$edgeCounter++;
 			}
-	}
+		}
 
+	}
 }
 
 ?>
