@@ -1,6 +1,7 @@
 <?php
 include 'loader.php';
 include 'graph.php';
+include 'vertice.php';
 
 class LoaderAdjacencyMatrix implements Loader{
 
@@ -15,12 +16,14 @@ class LoaderAdjacencyMatrix implements Loader{
 		for ($i=1;$i<=15;$i++){
 
 			// Add Vertices
-			echo "Adding vertice $i \n";
-			$graph->addVertice($i);
+			echo "\n Adding vertice $i,";
+			
+			$graph->addVertice(new Vertice($i));
 
 			for ($k=0;$k<15;$k++)
 			{
 				// Add edges
+				echo " edge $edgeCounter, ";
 				$graph->addEdgeUndirected($edgeCounter);
 				$edgeCounter++;
 			}
