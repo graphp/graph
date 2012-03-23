@@ -1,5 +1,8 @@
 <?php
 
+include_once 'edge.php';
+include_once 'algorithSearchDepthFirst.php';
+
 class Vertice{
 	private $id = NULL;
 	private $edges = array();
@@ -7,7 +10,7 @@ class Vertice{
 	/**
 	 * Creates a Vertice
 	 * @param Identifier (int, string, what you want) $id
-	 * @param array of id's of edges $edges
+	 * @param optional array of id's of edges $edges
 	 */
 	public function __construct($id, $edges = NULL){
 		$this->id = $id;
@@ -25,16 +28,16 @@ class Vertice{
 	
 	/**
 	 * Add an edge to the Vertice
-	 * @param instance of Edge (EdgeDirected or EdgeUndirected) $edge
+	 * @param id of edge $edgeId
 	 * @throws Exception
 	 */
-	public function addEdge($edge){
+	public function addEdge($edgeId){
 		
-		if ( isset($this->edges[ $edge->getId() ]) ){
+		if ( isset($this->edges[ $edgeId ]) ){
 			throw new Exception("Edge is allready added");
 		}
 		
-		$this->edges[$edge->getId()] = $edge;
+		$this->edges[$edgeId] = $edgeId;
 	}
 	
 	/**
@@ -44,24 +47,11 @@ class Vertice{
 	 */
 	public function removeEdge($edge){
 	
-		if ( ! isset($this->edges[ $edge->getId() ]) ){
+		if ( ! isset($this->edges[ $edgeId ]) ){
 			throw new Exception("Edge isn't added");
 		}
 	
-		return $this->edges[$edge->getId()];
-	}
-	
-	/**
-	 * returns the Edge with the identifier $id
-	 * @param identifier of Edge $id
-	 * @throws Exception
-	 */
-	public function getEdge($id){
-		if ( ! isset($this->edges[$id]) ){
-			throw new Exception("Edge isn't added");
-		}
-		
-		return $this->edges[$id];
+		return $this->edges[$edgeId];
 	}
 	
 	/**
@@ -70,18 +60,6 @@ class Vertice{
 	public function getEdges(){
 		return $this->edges;
 	}
-	
-//Encapsulated algorithem
-	
-	//Breadth-first search (prototyp)
-	public function searchBreadthFirst(){
-		$alg = new BreitenSuche_Agl($this);
-		return $alg->getResult();
-	}
-	
-	public function searchDepthFirst(){
-		
-	} 
 }
 
 ?>

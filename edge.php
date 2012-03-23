@@ -1,5 +1,7 @@
 <?php
 
+include_once 'vertice.php';
+
 abstract class Edge{
 	private $id = NULL;
 	private $from = NULL;
@@ -40,8 +42,13 @@ abstract class Edge{
 		$this->to = $to;
 	}
 	
-//Encapsulated algorithem
-
+	public function getFromId(){
+		return $this->from;
+	}
+	
+	public function getToId(){
+		return $this->to;
+	}
 }
 
 ?>
