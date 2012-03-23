@@ -1,6 +1,6 @@
 <?php
 
-class EdgeUndirected implements Edge{
+class EdgeUndirected extends Edge{
 	
 }
 
