@@ -17,6 +17,17 @@ interface Edge{
 		$this->to = $to;
 	}
 	
+//getter setter
+	
+	public function getId(){
+		return $this->id;
+	}
+	
+	public function setEdge($from, $to){
+		$this->from = $from;
+		$this->to = $to;
+	}
+	
 //Encapsulated algorithem
 
 }
