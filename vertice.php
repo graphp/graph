@@ -1,5 +1,7 @@
 <?php
 
+include 'edge.php';
+
 class Vertice{
 	private $id = NULL;
 	private $edges = array();

@@ -2,6 +2,8 @@
 
 include 'edge.php';
 include 'edgeUndirected.php';
+include 'edgeDirected.php';
+include 'Vertice.php';
 
 class Graph{
 	private $edges = array();

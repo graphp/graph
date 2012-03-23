@@ -1,5 +1,7 @@
 <?php
 
+include 'vertice.php';
+
 abstract class Edge{
 	private $id = NULL;
 	private $from = NULL;
