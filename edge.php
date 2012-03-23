@@ -9,6 +9,12 @@ abstract class Edge{
 //		$this->id = $id;
 //	}
 	
+	/**
+	 * creats a new Edge
+	 * @param identifier of new Edge $id
+	 * @param identifier of Vertice $from
+	 * @param identifier of Vertice $to
+	 */
 	public function __construct($id, $from = NULL, $to = NULL){
 		$this->__construct($id);
 		$this->from = $from;
@@ -17,10 +23,18 @@ abstract class Edge{
 	
 //getter setter
 	
+	/**
+	 * returns the id of this Edge
+	 */
 	public function getId(){
 		return $this->id;
 	}
 	
+	/**
+	 * sets the Vertices of this Edge
+	 * @param id of new Vertice $from
+	 * @param id of new Vertice $to
+	 */
 	public function setEdge($from, $to){
 		$this->from = $from;
 		$this->to = $to;
