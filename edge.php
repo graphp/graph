@@ -19,11 +19,6 @@ interface Edge{
 	
 //Encapsulated algorithem
 
-	//Breadth-first search (prototyp)
-	public function searchBreadthFirst(){
-		$alg = new BreitenSuche_Agl($this);
-		return $alg->getResult();
-	}
 }
 
 ?>
