@@ -40,9 +40,9 @@ class LoaderAdjacencyMatrix implements Loader{
 					$this->writeDebugMessage(" and edge #$edgeCounter: $i -> $k ");
 					
 					$currentEdge = new EdgeUndirected($edgeCounter);
-					$currentEdge->setEdge($i, $k);
+					$currentEdge->setEdgeIds($i, $k);
 						
-					$thisVertice->addEdge($currentEdge->getId());
+					$thisVertice->addEdgeId($currentEdge->getId());
 					$graph->addEdge($currentEdge);
 
 					$edgeCounter++;
