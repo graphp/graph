@@ -35,7 +35,7 @@ class LoaderEdgeList implements Loader{
 				// add edge to graph
 				$graph->addEdge($edge);
 				// add edge to vertice
-				$vertexArray[$array[0]]->addEdge($edge);
+				$vertexArray[$array[0]]->addEdge($edgeCounter);
 				echo "added edge nr {$edgeCounter} from {$array[0]} to {$array[1]}\n";
 				
 				$edgeCounter++;
