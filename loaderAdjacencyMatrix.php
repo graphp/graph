@@ -31,6 +31,7 @@ class LoaderAdjacencyMatrix implements Loader{
 			$currentEdgeList = explode("\t", $file[$i+1]);
 
 			for ($k=0;$k<$verticeCount;$k++){
+				
 				// Add edges
 				if($currentEdgeList[$k] != 0){
 						

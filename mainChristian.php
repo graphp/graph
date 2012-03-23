@@ -6,12 +6,11 @@ $loaderAdjacencyMatrix = new LoaderAdjacencyMatrix();
 
 $derGraf = $loaderAdjacencyMatrix->getGraphFromFile("data/Graph1.txt");
 
-echo "DATass! \n";
-
+echo "\n";
 foreach ($derGraf->getVertices() as $value) {
 	echo $value->getId()." ";
 }
 
-$derGraf->searchDepthFirst(2);
+$derGraf->searchDepthFirst("0");
 
 ?>
