@@ -16,7 +16,7 @@ abstract class Edge{
 	 * @param identifier of Vertice $to
 	 */
 	public function __construct($id, $from = NULL, $to = NULL){
-		$this->__construct($id);
+		$this->id = $id;
 		$this->from = $from;
 		$this->to = $to;
 	}
