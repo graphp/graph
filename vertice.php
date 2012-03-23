@@ -4,13 +4,9 @@ class Vertice{
 	private $id = NULL;
 	private $edges = array();
 	
-	//auto search for free id ???
-	public function __construct(){
-		
-	}
-	
-	public function __construct($id){
+	public function __construct($id, $edges = NULL){
 		$this->id = $id;
+		$this->edges = $edges;
 	}
 	
 //getter setter
