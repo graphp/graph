@@ -41,6 +41,14 @@ abstract class Edge{
 		$this->from = $from;
 		$this->to = $to;
 	}
+	
+	public function getFromId(){
+		return $this->from;
+	}
+	
+	public function getToId(){
+		return $this->to;
+	}
 }
 
 ?>

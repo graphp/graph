@@ -116,8 +116,10 @@ class Graph{
 		return $alg->getResult();
 	}
 	
-	public function searchDepthFirst(){
-		$alg = new AlgorithSearchDepthFirst($this);
+	public function searchDepthFirst($verticeId){
+		
+		$alg = new AlgorithSearchDepthFirst($this, $verticeId);
+		
 		return $alg->getResult();
 	}
 }
