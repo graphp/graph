@@ -1,8 +1,17 @@
 <?php
-include 'loaderAdjacencyMatrix.php';
+include_once 'loaderAdjacencyMatrix.php';
+include_once 'vertice.php';
 
 $loaderAdjacencyMatrix = new LoaderAdjacencyMatrix();
 
-$loaderAdjacencyMatrix->getGraphFromFile("data/Graph1.txt");
+$derGraf = $loaderAdjacencyMatrix->getGraphFromFile("data/Graph1.txt");
+
+echo "DATass! \n";
+
+foreach ($derGraf->getVertices() as $value) {
+	echo $value->getId()." ";
+}
+
+$derGraf->searchDepthFirst(2);
 
 ?>

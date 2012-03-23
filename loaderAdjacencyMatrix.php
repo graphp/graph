@@ -1,39 +1,51 @@
 <?php
-include 'loader.php';
-include 'graph.php';
-include 'vertice.php';
+include_once 'loader.php';
+include_once 'graph.php';
+include_once 'vertice.php';
 
 class LoaderAdjacencyMatrix implements Loader{
+	
+	private $debugMode = false;
+	
+	private function writeDebugMessage($messageString){
+		if($this->debugMode){
+			echo $messageString;
+		}
+		
+	}
+	
+	public function getGraphFromFile($fileName)	{
 
-	public function getGraphFromFile($fileName)
-	{
 		$graph = new Graph();
 
 		$file = file($fileName);
 		$verticeCount = $file[0];
 		$edgeCounter = 0;
 
-		for ($i=1;$i<=15;$i++){
+		for ($i=0;$i<$verticeCount;$i++){
 
 			// Add Vertices
-			echo "Adding vertice $i,";
-			
+			$this->writeDebugMessage("Adding vertice $i,");
+
 			$graph->addVertice(new Vertice($i));
-			$currentEdgeList = explode("\t", $file[$i]);
-			
-			for ($k=0;$k<15;$k++)
-			{
+			$currentEdgeList = explode("\t", $file[$i+1]);
+
+			for ($k=0;$k<$verticeCount;$k++){
 				// Add edges
 				if($currentEdgeList[$k] != 0){
-					echo " edge $k, ";
+						
+					$this->writeDebugMessage(" edge $k, ");
+					$currentEdge = new EdgeUndirected($edgeCounter);
+					$currentEdge->setEdge($i, $k);
+						
+					$graph->addEdge($currentEdge);	
 				}
-				
-				$graph->addEdgeUndirected($edgeCounter);
+
 				$edgeCounter++;
 			}
-			echo "\n";
+			$this->writeDebugMessage("\n");
 		}
-
+		return $graph;
 	}
 }
 
