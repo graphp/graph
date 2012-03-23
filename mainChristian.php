@@ -7,10 +7,10 @@ $loaderAdjacencyMatrix = new LoaderAdjacencyMatrix();
 $derGraf = $loaderAdjacencyMatrix->getGraphFromFile("data/Graph1.txt");
 
 echo "\n";
-foreach ($derGraf->getVertices() as $value) {
-	echo $value->getId()." ";
-}
+//foreach ($derGraf->getVertices() as $value) {
+//	echo $value->getId()." ";
+//}
 
-$derGraf->searchDepthFirst("0");
+$derGraf->searchDepthFirst(1);
 
 ?>

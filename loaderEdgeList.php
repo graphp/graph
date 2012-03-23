@@ -18,6 +18,7 @@ class LoaderEdgeList implements Loader{
 		// Add all vertices to the graph
 		$vertexArray=array();
 		for($i=0;$i<$verticeCount;$i++){
+			//echo "added vertize ".$i." \n";
 			$vertexArray[$i]=new Vertice($i);	
 		}
 		
@@ -27,15 +28,17 @@ class LoaderEdgeList implements Loader{
 		foreach ($file as $zeile) {
 			//skip first entry, it contains only the number of vertices
 			if($zeile==$file[0]){
-				echo "Starting with {$zeile} elements\n";
+				echo "Starting with ".$zeile." elements\n";
 			}
 			else{
 				$array = explode("\t",$zeile);
+				//echo "trying to add edge nr {$edgeCounter} from {$array[0]} to {$array[1]}\n";
 				$edge = new EdgeUndirected($edgeCounter,$array[0],$array[1]);
 				// add edge to graph
 				$graph->addEdge($edge);
 				// add edge to vertice
-				$vertexArray[$array[0]]->addEdge($edgeCounter);
+				$vertexArray[(int)$array[0]]->addEdge($edgeCounter);
+				$vertexArray[(int)$array[1]]->addEdge($edgeCounter);
 				echo "added edge nr {$edgeCounter} from {$array[0]} to {$array[1]}\n";
 				
 				$edgeCounter++;
