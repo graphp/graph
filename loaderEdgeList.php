@@ -47,15 +47,11 @@ class LoaderEdgeList implements Loader{
 		for($i=0;$i<$verticeCount;$i++){
 			$graph->addVertice($vertexArray[$i]);
 		}
-		echo "Added {$verticeCount} vertizes and {$edgeCounter} Nodes\n";
+		echo "Added {$verticeCount} vertices and {$edgeCounter} edges\n";
 		
 		return $graph;
 		
 	}	
 }
-$interface = new LoaderEdgeList();
-$graph = $interface->getGraphFromFile("data/Graph2.txt");
-
-$graph->searchDepthFirst(1);
 
 ?>

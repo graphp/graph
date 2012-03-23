@@ -19,7 +19,7 @@ class AlgorithSearchDepthFirst{
 		$vertice = $this->graph->getVertice( $verticeId );				//Get Vertice to id
 		
 		if ( ! isset($this->visited[$verticeId]) ){						//If I didn't visited this Vertice continue
-			echo $verticeId."\t";										//Output
+			//echo $verticeId."\t";										//Output
 			$this->visited[$verticeId] = $verticeId;					//Add Vertice to visited Vertices
 			
 			$edgeIds = $vertice->getEdgeIdArray();						//Get ID's of all Edges
@@ -44,8 +44,8 @@ class AlgorithSearchDepthFirst{
 	}
 	
 	public function getResult(){
-		echo "\n\nStartVertice ".(int)$this->StartVerticeId."\n\n\n";
 		$this->recursivDepthFirstSearch((int)$this->StartVerticeId);
+		return $this->visited;
 	}
 }
 
