@@ -26,7 +26,7 @@ class Graph{
 	 * adds this to the Graph and returns the created EdgeDirected
 	 * @param identifier of the new Edge $id
 	 */
-	public function addEdgeDirectedId($id=NULL){
+	public function addEdgeDirectedId($id){
 		$edge = new EdgeDirected($id);
 		$this->edges[$edge->getId()] = $edge;
 	
@@ -38,7 +38,7 @@ class Graph{
 	 * adds this to the Graph and returns the created EdgeUndirected
 	 * @param identifier of the new Edge $id
 	 */
-	public function addEdgeUndirectedId($id=NULL){
+	public function addEdgeUndirectedId($id){
 		$edge = new EdgeUndirected($id);
 		
 		$this->edges[$edge->getId()] = $edge;
@@ -53,7 +53,7 @@ class Graph{
 	 */
 	public function getEdge($id){
 		if(!isset($edges[$id])){
-			throw new Exception();
+			throw new Exception("Edge doesn't exist ".$id);
 		}
 		return $edges[$id];
 	}

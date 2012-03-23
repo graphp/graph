@@ -54,6 +54,8 @@ class LoaderEdgeList implements Loader{
 	}	
 }
 $interface = new LoaderEdgeList();
-$interface->getGraphFromFile("data/Graph2.txt");
+$graph = $interface->getGraphFromFile("data/Graph2.txt");
+
+$graph->searchDepthFirst(1);
 
 ?>
