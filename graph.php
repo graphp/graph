@@ -52,10 +52,10 @@ class Graph{
 	 * @throws Exception
 	 */
 	public function getEdge($id){
-		if(!isset($edges[$id])){
-			throw new Exception("Edge doesn't exist ".$id);
+		if(!isset($this->edges[$id])){
+			throw new Exception("Edge ".$id." doesn't exist");
 		}
-		return $edges[$id];
+		return $this->edges[$id];
 	}
 	
 	/**
