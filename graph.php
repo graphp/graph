@@ -1,9 +1,9 @@
 <?php
 
-include 'edge.php';
-include 'edgeUndirected.php';
-include 'edgeDirected.php';
-include 'Vertice.php';
+include_once 'edge.php';
+include_once 'edgeUndirected.php';
+include_once 'edgeDirected.php';
+include_once 'Vertice.php';
 
 class Graph{
 	private $edges = array();
@@ -40,6 +40,7 @@ class Graph{
 	 */
 	public function addEdgeUndirected($id=NULL){
 		$edge = new EdgeUndirected($id);
+		
 		$this->edges[$edge->getId()] = $edge;
 	
 		return $edge;
@@ -108,6 +109,17 @@ class Graph{
 //	public function isConsecutive(){
 //		$is = 0;
 //	}
+
+	//Breadth-first search (prototyp)
+	public function searchBreadthFirst(){
+		$alg = new BreitenSuche_Agl($this);
+		return $alg->getResult();
+	}
+	
+	public function searchDepthFirst(){
+		$alg = new AlgorithSearchDepthFirst($this);
+		return $alg->getResult();
+	}
 }
 
 ?>

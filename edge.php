@@ -1,6 +1,6 @@
 <?php
 
-include 'vertice.php';
+include_once 'vertice.php';
 
 abstract class Edge{
 	private $id = NULL;
@@ -41,9 +41,6 @@ abstract class Edge{
 		$this->from = $from;
 		$this->to = $to;
 	}
-	
-//Encapsulated algorithem
-
 }
 
 ?>
