@@ -1,5 +1,7 @@
 <?php
 
+include 'edge.php';
+
 class Graph{
 	private $edges = array();
 
