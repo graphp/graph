@@ -14,6 +14,8 @@ class main{
 		echo "Read Graph-File:\n";
 		
 		$this->readFile();
+		
+		$this->chooseAction();
 	}
 	
 	private function readFile(){
@@ -59,6 +61,46 @@ class main{
 				$rightInput = true;
 				break;
 		}
+	}
+
+	private function chooseAction(){
+		$chooseOption = false;
+		
+		while($chooseOption == false)
+		{
+			echo "What do you want to do?\n";
+			echo "0 = breadth-first search\n";
+			echo "1 = depth-first search\n";
+		
+			fscanf(STDIN, "%d\n", $option);
+		
+			switch ($option){
+				case 0:
+					$this->startSearchBreadthFirst();
+					$chooseOption = true;
+					break;
+				case 1:
+					$this->startSearchDepthFirst();
+					$chooseOption = true;
+					break;
+			}
+		}
+	}
+	
+	private function startSearchBreadthFirst(){
+		echo "Please enter the name of the starting node?\n";
+		
+		fscanf(STDIN, "%s\n", $startingNode);
+		
+		print_r($this->graph->searchBreadthFirst($startingNode));
+	}
+	
+	private function startSearchDepthFirst(){
+		echo "Please enter the name of the starting node?\n";
+	
+		fscanf(STDIN, "%s\n", $startingNode);
+	
+		print_r($this->graph->searchDepthFirst($startingNode));
 	}
 }
 
