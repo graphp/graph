@@ -1,11 +1,11 @@
 <?php
 
-class Vertice{
+class Vertex{
 	private $id = NULL;
 	private $edges = array();
 	
 	/**
-	 * Creates a Vertice
+	 * Creates a Vertex
 	 * @param Identifier (int, string, what you want) $id
 	 * @param optional array of id's of edges $edges
 	 */
@@ -17,14 +17,14 @@ class Vertice{
 //getter setter
 	
 	/**
-	 * returns id of this Vertice
+	 * returns id of this Vertex
 	 */
 	public function getId(){
 		return $this->id;
 	}
 	
 	/**
-	 * Add an edge to the Vertice
+	 * Add an edge to the Vertex
 	 * @param id of edge $edgeId
 	 * @throws Exception
 	 */
@@ -38,7 +38,7 @@ class Vertice{
 	}
 	
 	/**
-	 * removes an Edge of this Vertice
+	 * removes an Edge of this Vertex
 	 * @param instance of Edge  (EdgeDirected or EdgeUndirected) $edge
 	 * @throws Exception
 	 */
@@ -52,7 +52,7 @@ class Vertice{
 	}
 	
 	/**
-	 * returns all edges of this Vertice
+	 * returns all edges of this Vertex
 	 */
 	public function getEdgeIdArray(){
 		return $this->edges;

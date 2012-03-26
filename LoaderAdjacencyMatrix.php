@@ -16,20 +16,20 @@ class LoaderAdjacencyMatrix implements Loader{
 		$graph = new Graph();
 
 		$file = file($fileName);
-		$verticeCount = $file[0];
+		$vertexCount = $file[0];
 		$edgeCounter = 0;
 
-		for ($i=0;$i<$verticeCount;$i++){
+		for ($i=0;$i<$vertexCount;$i++){
 
 			// Add Vertices
-			$this->writeDebugMessage("Adding vertice $i,");
+			$this->writeDebugMessage("Adding vertex $i,");
 
-			$thisVertice = new Vertice($i);
-			$graph->addVertice($thisVertice);
+			$thisVertex = new Vertex($i);
+			$graph->addVertex($thisVertex);
 			
 			$currentEdgeList = explode("\t", $file[$i+1]);
 
-			for ($k=0;$k<$verticeCount;$k++){
+			for ($k=0;$k<$vertexCount;$k++){
 				
 				// Add edges
 				if($currentEdgeList[$k] != 0){
@@ -39,7 +39,7 @@ class LoaderAdjacencyMatrix implements Loader{
 					$currentEdge = new EdgeUndirected($edgeCounter);
 					$currentEdge->setEdgeIds($i, $k);
 						
-					$thisVertice->addEdgeId($currentEdge->getId());
+					$thisVertex->addEdgeId($currentEdge->getId());
 					$graph->addEdge($currentEdge);
 
 					$edgeCounter++;

@@ -61,25 +61,25 @@ class Graph{
 	}
 	
 	/**
-	 * adds a Vertice to the Graph
-	 * @param instance of Vertice $vertice
+	 * adds a Vertex to the Graph
+	 * @param instance of Vertex $vertex
 	 */
-	public function addVertice($vertice){
-		$this->vertices[$vertice->getId()] = $vertice;
+	public function addVertex($vertex){
+		$this->vertices[$vertex->getId()] = $vertex;
 	}
 	
 	//@clue Wie geht es mit überladen bei unterschiedlichem Datentyp????
-//	public function addVertice($id = NULL){
-//		$vertice = new Vertice($id);
-//		$this->vertices[$vertice->getId()] = $vertice;
+//	public function addVertex($id = NULL){
+//		$vertex = new Vertex($id);
+//		$this->vertices[$vertex->getId()] = $vertex;
 //	}
 	
 	/**
-	 * returns the Vertice with identifier $id
-	 * @param identifier of Vertice $id
+	 * returns the Vertex with identifier $id
+	 * @param identifier of Vertex $id
 	 * @throws Exception
 	 */
-	public function getVertice($id){
+	public function getVertex($id){
 		if( ! isset($this->vertices[$id]) ){
 			throw new Exception();
 		}
@@ -90,7 +90,7 @@ class Graph{
 	/**
 	 * returns an array of all Vertices
 	 */
-	public function getVerticeArray(){
+	public function getVertexArray(){
 		return $this->vertices;
 	}
 
@@ -111,9 +111,9 @@ class Graph{
 		return $alg->getResult();
 	}
 	
-	public function searchDepthFirst($verticeId){
+	public function searchDepthFirst($vertexId){
 		
-		$alg = new AlgorithSearchDepthFirst($this, $verticeId);
+		$alg = new AlgorithSearchDepthFirst($this, $vertexId);
 		
 		return $alg->getResult();
 	}

@@ -27,7 +27,7 @@ class main{
 		{
 			echo "What kind of File you want to read?\n";
 			echo "0 = Adjacency matrix\n";
-			echo "1 = Vertice list\n";
+			echo "1 = Vertex list\n";
 		
 			fscanf(STDIN, "%d\n", $fileFormat);
 		

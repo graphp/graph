@@ -2,24 +2,24 @@
 
 class AlgorithSearchDepthFirst{
 	
-	private $StartVerticeId = NULL;
+	private $StartVertexId = NULL;
 	private $graph = NULL;
 	private $visited = array();
 		
-	public function __construct($graph, $verticeId){
-		$this->StartVerticeId = $verticeId;
+	public function __construct($graph, $vertexId){
+		$this->StartVertexId = $vertexId;
 		$this->graph = $graph;
 	}
 	
-	private function recursivDepthFirstSearch($verticeId){
+	private function recursivDepthFirstSearch($vertexId){
 		
-		$vertice = $this->graph->getVertice( $verticeId );				//Get Vertice to id
+		$vertex = $this->graph->getVertex( $vertexId );				//Get Vertex to id
 		
-		if ( ! isset($this->visited[$verticeId]) ){						//If I didn't visited this Vertice continue
-			//echo $verticeId."\t";										//Output
-			$this->visited[$verticeId] = $verticeId;					//Add Vertice to visited Vertices
+		if ( ! isset($this->visited[$vertexId]) ){						//If I didn't visited this Vertex continue
+			//echo $vertexId."\t";										//Output
+			$this->visited[$vertexId] = $vertexId;					//Add Vertex to visited Vertices
 			
-			$edgeIds = $vertice->getEdgeIdArray();						//Get ID's of all Edges
+			$edgeIds = $vertex->getEdgeIdArray();						//Get ID's of all Edges
 			
 			foreach ($edgeIds as $edgeId){								
 				
@@ -27,21 +27,21 @@ class AlgorithSearchDepthFirst{
 				
 				$classname = get_class($edge);
 				
-				if ( $classname == "EdgeUndirected" || $edge->getFromId() == $verticeId) {	//If this Edge "pointing away" of this vertice
+				if ( $classname == "EdgeUndirected" || $edge->getFromId() == $vertexId) {	//If this Edge "pointing away" of this vertex
 
-					$nextVertices = $edge->getFromId();					//find id of next vertice
-					if ($nextVertices == $verticeId){
+					$nextVertices = $edge->getFromId();					//find id of next vertex
+					if ($nextVertices == $vertexId){
 						$nextVertices = $edge->getToId();
 					}
 					
-					$this->recursivDepthFirstSearch( $nextVertices );	//recursiv call with next vertice
+					$this->recursivDepthFirstSearch( $nextVertices );	//recursiv call with next vertex
 				}
 			}
 		}
 	}
 	
 	public function getResult(){
-		$this->recursivDepthFirstSearch((int)$this->StartVerticeId);
+		$this->recursivDepthFirstSearch((int)$this->StartVertexId);
 		return $this->visited;
 	}
 }

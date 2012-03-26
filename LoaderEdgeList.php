@@ -10,14 +10,14 @@ class LoaderEdgeList implements Loader{
 		//echo file_get_contents ("data/Graph2.txt" );
 		$graph = new Graph();
 		$file = file($fileName);
-		$verticeCount = $file[0];
+		$vertexCount = $file[0];
 		
 		
 		// Add all vertices to the graph
 		$vertexArray=array();
-		for($i=0;$i<$verticeCount;$i++){
+		for($i=0;$i<$vertexCount;$i++){
 			//echo "added vertize ".$i." \n";
-			$vertexArray[$i]=new Vertice($i);	
+			$vertexArray[$i]=new Vertex($i);	
 		}
 		
 		
@@ -34,7 +34,7 @@ class LoaderEdgeList implements Loader{
 				$edge = new EdgeUndirected($edgeCounter,$array[0],$array[1]);
 				// add edge to graph
 				$graph->addEdge($edge);
-				// add edge to vertice
+				// add edge to vertex
 				$vertexArray[(int)$array[0]]->addEdgeId($edgeCounter);
 				$vertexArray[(int)$array[1]]->addEdgeId($edgeCounter);
 				echo "added edge nr {$edgeCounter} from {$array[0]} to {$array[1]}\n";
@@ -42,10 +42,10 @@ class LoaderEdgeList implements Loader{
 				$edgeCounter++;
 			}
 		}
-		for($i=0;$i<$verticeCount;$i++){
-			$graph->addVertice($vertexArray[$i]);
+		for($i=0;$i<$vertexCount;$i++){
+			$graph->addVertex($vertexArray[$i]);
 		}
-		echo "Added {$verticeCount} vertices and {$edgeCounter} edges\n";
+		echo "Added {$vertexCount} vertices and {$edgeCounter} edges\n";
 		
 		return $graph;
 		
