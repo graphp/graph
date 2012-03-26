@@ -3,11 +3,12 @@
 include_once 'loader.php';
 
 class LoaderEdgeList implements Loader{
+	
+	private $debugMode = false;
+	
 	public function __construct(){
-		echo "constuktor LoaderEdgeList\n";
-		
-		
 	}
+	
 	public function getGraphFromFile($fileName){
 		//echo file_get_contents ("data/Graph2.txt" );
 		$graph = new Graph();
@@ -28,7 +29,9 @@ class LoaderEdgeList implements Loader{
 		foreach ($file as $zeile) {
 			//skip first entry, it contains only the number of vertices
 			if($zeile==$file[0]){
-				echo "Starting with ".$zeile." elements\n";
+				if ($this->debugMode){
+					echo "Starting with ".$zeile." elements\n";
+				}
 			}
 			else{
 				$array = explode("\t",$zeile);
@@ -39,7 +42,9 @@ class LoaderEdgeList implements Loader{
 				// add edge to vertice
 				$vertexArray[(int)$array[0]]->addEdgeId($edgeCounter);
 				$vertexArray[(int)$array[1]]->addEdgeId($edgeCounter);
-				echo "added edge nr {$edgeCounter} from {$array[0]} to {$array[1]}\n";
+				if ($this->debugMode){
+					echo "added edge nr {$edgeCounter} from {$array[0]} to {$array[1]}\n";
+				}
 				
 				$edgeCounter++;
 			}
@@ -47,7 +52,9 @@ class LoaderEdgeList implements Loader{
 		for($i=0;$i<$verticeCount;$i++){
 			$graph->addVertice($vertexArray[$i]);
 		}
-		echo "Added {$verticeCount} vertices and {$edgeCounter} edges\n";
+		if ($this->debugMode){
+			echo "Added {$verticeCount} vertices and {$edgeCounter} edges\n";
+		}
 		
 		return $graph;
 		
