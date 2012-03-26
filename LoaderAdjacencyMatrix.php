@@ -1,7 +1,4 @@
 <?php
-include_once 'loader.php';
-include_once 'graph.php';
-include_once 'vertice.php';
 
 class LoaderAdjacencyMatrix implements Loader{
 	
@@ -54,5 +51,3 @@ class LoaderAdjacencyMatrix implements Loader{
 		return $graph;
 	}
 }
-
-?>

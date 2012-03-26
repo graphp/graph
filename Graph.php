@@ -1,10 +1,5 @@
 <?php
 
-include_once 'edge.php';
-include_once 'edgeUndirected.php';
-include_once 'edgeDirected.php';
-include_once 'vertice.php';
-
 class Graph{
 	private $edges = array();
 
@@ -123,5 +118,3 @@ class Graph{
 		return $alg->getResult();
 	}
 }
-
-?>

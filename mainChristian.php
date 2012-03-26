@@ -1,5 +1,8 @@
 <?php
-include_once 'loaderAdjacencyMatrix.php';
+
+spl_autoload_register(function($class){
+    require_once(__DIR__.'/'.str_replace('_','/',$class).'.php');
+});
 
 $loaderAdjacencyMatrix = new LoaderAdjacencyMatrix();
 
@@ -14,5 +17,4 @@ $derGraf->searchDepthFirst(1);
 // foreach ($derGraf->getEdgeArray() as $key => $value) {
 // 	echo $key;
 // 	print_r($value);
-// } 
-?>
+// }

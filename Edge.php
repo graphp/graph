@@ -1,7 +1,5 @@
 <?php
 
-include_once 'vertice.php';
-
 abstract class Edge{
 	private $id = NULL;
 	private $from = NULL;
@@ -56,5 +54,3 @@ abstract class Edge{
 		return $this->to;
 	}
 }
-
-?>

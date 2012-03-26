@@ -1,8 +1,8 @@
 <?php
 
-include_once 'loaderEdgeList.php';
-include_once 'loaderAdjacencyMatrix.php';
-include_once 'graph.php';
+spl_autoload_register(function($class){
+    require_once(__DIR__.'/'.str_replace('_','/',$class).'.php');
+});
 
 $interface = new main();
 
@@ -61,5 +61,3 @@ class main{
 		}
 	}
 }
-
-?>

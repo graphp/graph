@@ -1,7 +1,5 @@
 <?php
 
-include_once 'loader.php';
-
 class LoaderEdgeList implements Loader{
 	public function __construct(){
 		echo "constuktor LoaderEdgeList\n";
@@ -53,5 +51,3 @@ class LoaderEdgeList implements Loader{
 		
 	}	
 }
-
-?>

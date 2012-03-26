@@ -1,8 +1,5 @@
 <?php
 
-include_once 'vertice.php';
-include_once 'graph.php';
-
 class AlgorithSearchDepthFirst{
 	
 	private $StartVerticeId = NULL;
@@ -48,5 +45,3 @@ class AlgorithSearchDepthFirst{
 		return $this->visited;
 	}
 }
-
-?>

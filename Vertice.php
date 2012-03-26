@@ -1,8 +1,5 @@
 <?php
 
-include_once 'edge.php';
-include_once 'algorithSearchDepthFirst.php';
-
 class Vertice{
 	private $id = NULL;
 	private $edges = array();
@@ -61,5 +58,3 @@ class Vertice{
 		return $this->edges;
 	}
 }
-
-?>
