@@ -1,15 +1,16 @@
 <?php
 
 class Vertex{
-	private $id = NULL;
-	private $edges = array();
+	private $id;
+	private $edges;
 	
 	/**
 	 * Creates a Vertex
-	 * @param Identifier (int, string, what you want) $id
-	 * @param optional array of id's of edges $edges
+	 * 
+	 * @param int   $id    Identifier (int, string, what you want) $id
+	 * @param array $edges optional array of id's of edges
 	 */
-	public function __construct($id, $edges = NULL){
+	public function __construct($id, $edges = array()){
 		$this->id = $id;
 		$this->edges = $edges;
 	}
@@ -18,6 +19,8 @@ class Vertex{
 	
 	/**
 	 * returns id of this Vertex
+	 * 
+	 * @return int
 	 */
 	public function getId(){
 		return $this->id;
@@ -25,7 +28,9 @@ class Vertex{
 	
 	/**
 	 * Add an edge to the Vertex
-	 * @param id of edge $edgeId
+	 * 
+	 * @param int $edgeId id of edge
+	 * @return Vertex $this (chainable)
 	 * @throws Exception
 	 */
 	public function addEdgeId($edgeId){
@@ -35,24 +40,30 @@ class Vertex{
 		}
 		
 		$this->edges[$edgeId] = $edgeId;
+		return $this;
 	}
 	
 	/**
 	 * removes an Edge of this Vertex
-	 * @param instance of Edge  (EdgeDirected or EdgeUndirected) $edge
+	 * 
+	 * @param int $edge if of Edge  (EdgeDirected or EdgeUndirected)
+	 * @return Vertex $this (chainable)
 	 * @throws Exception
 	 */
 	public function removeEdgeId($edge){
 	
-		if ( ! isset($this->edges[ $edgeId ]) ){
+		if ( ! isset($this->edges[ $edge ]) ){
 			throw new Exception("Edge isn't added");
 		}
 	
-		return $this->edges[$edgeId];
+		unset($this->edges[$edge]);
+		return $this;
 	}
 	
 	/**
 	 * returns all edges of this Vertex
+	 * 
+	 * @return array[int]
 	 */
 	public function getEdgeIdArray(){
 		return $this->edges;

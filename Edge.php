@@ -1,9 +1,9 @@
 <?php
 
 abstract class Edge{
-	private $id = NULL;
-	private $from = NULL;
-	private $to = NULL;
+	private $id;
+	private $from;
+	private $to;
 
 //	public function __construct($id){
 //		$this->id = $id;

@@ -20,8 +20,10 @@ class Graph{
 	
 	/**
 	 * adds a new Edge to the Graph
+	 * 
 	 * @param Edge $edge instance of the new Edge
 	 * @return Edge given edge as-is (chainable)
+	 * @uses Edge::getId()
 	 */
 	public function addEdge($edge){
 		$this->edges[$edge->getId()] = $edge;
@@ -33,12 +35,11 @@ class Graph{
 	 * 
 	 * @param int $id identifier of the new Edge
 	 * @return EdgeDirected
+	 * @uses Graph::addEdge()
 	 */
 	public function addEdgeDirectedId($id){
 		$edge = new EdgeDirected($id);
-		$this->edges[$edge->getId()] = $edge;
-	    
-		return $edge;
+		return $this->addEdge($edge);
 	}
 	
 	/**
@@ -46,18 +47,18 @@ class Graph{
 	 * 
 	 * @param int $id identifier of the new Edge
 	 * @return EdgeUndirected
+	 * @uses Graph::addEdge()
 	 */
 	public function addEdgeUndirectedId($id){
 		$edge = new EdgeUndirected($id);
-		
-		$this->edges[$edge->getId()] = $edge;
-	
-		return $edge;
+		return $this->addEdge($edge);
 	}
 	
 	/**
 	 * returns the Edge with identifier $id
-	 * @param identifier of Edge $id
+	 * 
+	 * @param int $id identifier of Edge
+	 * @return Edge
 	 * @throws Exception
 	 */
 	public function getEdge($id){
@@ -81,6 +82,7 @@ class Graph{
 	 * 
 	 * @param Vertex $vertex instance of Vertex $vertex
 	 * @return Vertex (chainable)
+	 * @uses Vertex::getId()
 	 */
 	public function addVertex($vertex){
 		$this->vertices[$vertex->getId()] = $vertex;
@@ -95,6 +97,7 @@ class Graph{
 	
 	/**
 	 * returns the Vertex with identifier $id
+	 * 
 	 * @param int|string $id identifier of Vertex
 	 * @return Vertex
 	 * @throws Exception
