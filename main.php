@@ -11,11 +11,17 @@ class main{
 	private $graph = NULL;
 	
 	public function __construct(){
-		echo "Read Graph-File:\n";
+		echo "Read Graph-File:\n\n";
 		
 		$this->readFile();
 		
-		$this->chooseAction();
+		echo "\n";
+		
+		while(true){
+			$this->chooseAction();
+			
+			echo "\n";
+		}
 	}
 	
 	private function readFile(){

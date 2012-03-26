@@ -86,7 +86,7 @@ class Graph{
 	 */
 	public function getVertice($id){
 		if( ! isset($this->vertices[$id]) ){
-			throw new Exception();
+			throw new Exception("Vertice ".$id." doesn't exist");
 		}
 		
 		return $this->vertices[$id];
