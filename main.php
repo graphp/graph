@@ -1,8 +1,8 @@
 <?php
 
-include_once 'loaderEdgeList.php';
-include_once 'loaderAdjacencyMatrix.php';
-include_once 'graph.php';
+spl_autoload_register(function($class){
+    require_once(__DIR__.'/'.str_replace('_','/',$class).'.php');
+});
 
 $interface = new main();
 
@@ -35,7 +35,7 @@ class main{
 		{
 			echo "What kind of File you want to read?\n";
 			echo "0 = Adjacency matrix\n";
-			echo "1 = Vertice list\n";
+			echo "1 = Vertex list\n";
 		
 			fscanf(STDIN, "%d\n", $fileFormat);
 		
@@ -109,5 +109,3 @@ class main{
 		print_r($this->graph->searchDepthFirst($startingNode));
 	}
 }
-
-?>
