@@ -11,9 +11,10 @@ abstract class Edge{
 	
 	/**
 	 * creats a new Edge
-	 * @param identifier of new Edge $id
-	 * @param identifier of Vertex $from
-	 * @param identifier ofs Vertex $to
+	 * 
+	 * @param int      $id   identifier of new Edge
+	 * @param int|NULL $from identifier of start/source Vertex
+	 * @param int|NULL $to   identifier of end/target Vertex
 	 */
 	public function __construct($id, $from = NULL, $to = NULL){
 		$id = (int)$id;
@@ -29,6 +30,8 @@ abstract class Edge{
 	
 	/**
 	 * returns the id of this Edge
+	 * 
+	 * @return int
 	 */
 	public function getId(){
 		return $this->id;
@@ -36,8 +39,8 @@ abstract class Edge{
 	
 	/**
 	 * sets the Vertices of this Edge
-	 * @param id of new Vertex $from
-	 * @param id of new Vertex $to
+	 * @param int $from id of new Vertex
+	 * @param int $to   id of new Vertex
 	 */
 	public function setEdgeIds($from, $to){
 		$from = (int)$from;
