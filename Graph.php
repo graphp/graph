@@ -118,17 +118,23 @@ class Graph{
 	public function getVertexArray(){
 		return $this->vertices;
 	}
-
-//transform methods
 	
-//	public function getMatrixOb(){
-//	}
-
-//Encapsulated algorithem
-	
-//	public function isConsecutive(){
-//		$is = 0;
-//	}
+	/**
+	 * check whether graph is consecutive
+	 * 
+	 * @return boolean
+	 * @todo
+	 */
+	public function isConsecutive(){
+		throw new Exception('Unsupported');
+		
+		foreach($this->edges as $edge){
+		    if(true){
+		        return false;
+		    }
+		}
+		return true;
+	}
 
 	//Breadth-first search (prototyp)
 	public function searchBreadthFirst(){

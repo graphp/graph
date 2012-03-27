@@ -61,6 +61,86 @@ class Vertex{
 	}
 	
 	/**
+	 * checks whether this start vertex has a path to the given target vertex
+	 * 
+	 * @param Vertex $vertex
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public function hasPathTo($vertex){
+	    throw new Exception('TODO');
+	    return true;
+	}
+	
+	/**
+	 * checks whether the given vertex has a path TO THIS vertex
+	 * 
+	 * @param Vertex $vertex
+	 * @return boolean
+	 * @uses Vertex::hasPathTo()
+	 */
+	public function hasPathFrom($vertex){
+	    return $vertex->hasPathTo($this);
+	}
+	
+	/**
+	 * add new directed edge from this start vertex to given target vertex
+	 * 
+	 * @param Vertex $vertex target vertex
+	 * @return EdgeDirected
+	 * @throws Exception
+	 */
+	public function addEdgeTo($vertex){
+	    if(true){ // duplicate paths
+	        throw new Exception('');
+	    }
+	    $edge = new EdgeDirected($id,$this,$vertex); // TODO:
+	    $this->graph->addEdge($edge);
+	    return $edge;
+	}
+	
+	/**
+	 * add new undirected edge between this vertex and given vertex
+	 * 
+	 * @param Vertex $vertex
+	 * @return EdgeUndirected
+	 * @throws Exception
+	 */
+	public function addEdge($vertex){
+	    if(true){
+	        throw new Exception('TODO');
+	    }
+	    $edge = new EdgeUndirected($id);
+	    return $edge;
+	}
+	
+	/**
+	 * check whether this vertex has a direct edge to given $vertex
+	 * 
+	 * @param Vertex $vertex
+	 * @return boolean
+	 */
+	public function hasEdgeTo($vertex){
+	    foreach($this->getEdges() as $edge){
+	        if($edge->getTarget() === $this){ // TODO:
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	/**
+	 * check whether the given vertex has a direct edge to THIS vertex
+	 * 
+	 * @param Vertex $vertex
+	 * @return boolean
+	 * @uses Vertex::hasEdgeTo()
+	 */
+	public function hasEdgeFrom($vertex){
+	    return $vertex->hasEdgeTo($this);
+	}
+	
+	/**
 	 * returns all edges of this Vertex
 	 * 
 	 * @return array[int]
