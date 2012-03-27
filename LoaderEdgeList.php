@@ -17,7 +17,7 @@ class LoaderEdgeList implements Loader{
 		$vertexArray=array();
 		for($i=0;$i<$vertexCount;$i++){
 			//echo "added vertize ".$i." \n";
-			$vertexArray[$i]=new Vertex($i);	
+			$vertexArray[$i] = $graph->addVertex($i);	
 		}
 		
 		

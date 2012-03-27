@@ -24,8 +24,7 @@ class LoaderAdjacencyMatrix implements Loader{
 			// Add Vertices
 			$this->writeDebugMessage("Adding vertex $i,");
 
-			$thisVertex = new Vertex($i);
-			$graph->addVertex($thisVertex);
+			$thisVertex = $graph->addVertex($i);
 			
 			$currentEdgeList = explode("\t", $file[$i+1]);
 

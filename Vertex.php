@@ -2,17 +2,18 @@
 
 class Vertex{
 	private $id;
-	private $edges;
+	private $edges = array();
+	private $graph;
 	
 	/**
 	 * Creates a Vertex
 	 * 
 	 * @param int   $id    Identifier (int, string, what you want) $id
-	 * @param array $edges optional array of id's of edges
+	 * @param Graph $grpah graph to be added to
 	 */
-	public function __construct($id, $edges = array()){
+	public function __construct($id, $graph=NULL){
 		$this->id = $id;
-		$this->edges = $edges;
+		$this->graph = $graph;
 	}
 	
 //getter setter
@@ -121,8 +122,10 @@ class Vertex{
 	 * @return boolean
 	 */
 	public function hasEdgeTo($vertex){
-	    foreach($this->getEdges() as $edge){
-	        if($edge->getTarget() === $this){ // TODO:
+	    foreach($this->edges as $id){
+            $edge = $this->graph->getEdge($id);
+            // TODO: directed?
+            if($edge->getToId() === $this->id){
 	            return true;
 	        }
 	    }
@@ -138,6 +141,21 @@ class Vertex{
 	 */
 	public function hasEdgeFrom($vertex){
 	    return $vertex->hasEdgeTo($this);
+	}
+	
+	/**
+	 * get all vertices this vertex has an edge to
+	 * 
+	 * @return array[Vertex]
+	 */
+	public function getVerticesEdgeTo($graph){
+	    $ret = array();
+	    foreach($this->edges as $id){
+	        $edge = $this->graph->getEdge($id);
+	        // TODO: directed?
+	        $ret[$id] = $this->graph->getVertex($edge->getToId());
+	    }
+	    return $ret;
 	}
 	
 	/**

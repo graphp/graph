@@ -78,22 +78,22 @@ class Graph{
 	}
 	
 	/**
-	 * adds a Vertex to the Graph
+	 * adds a new Vertex to the Graph
 	 * 
-	 * @param Vertex $vertex instance of Vertex $vertex
+	 * @param Vertex|int|NULL $vertex instance of Vertex or new vertex ID to use
 	 * @return Vertex (chainable)
 	 * @uses Vertex::getId()
 	 */
-	public function addVertex($vertex){
+	public function addVertex($vertex=NULL){
+	    if($vertex === NULL){    // no ID given
+	        $vertex = max(array_keys($this->vertices))+1; // auto ID
+	    }
+	    if(!($vertex instanceof Vertex)){
+	        $vertex = new Vertex($vertex,$this);
+	    }
 		$this->vertices[$vertex->getId()] = $vertex;
 		return $vertex;
 	}
-	
-	//@clue Wie geht es mit überladen bei unterschiedlichem Datentyp????
-//	public function addVertex($id = NULL){
-//		$vertex = new Vertex($id);
-//		$this->vertices[$vertex->getId()] = $vertex;
-//	}
 	
 	/**
 	 * returns the Vertex with identifier $id
@@ -136,8 +136,23 @@ class Graph{
 		return true;
 	}
 
-	//Breadth-first search (prototyp)
-	public function searchBreadthFirst(){
+	/**
+	 * Breadth-first search (BFS)
+	 * 
+	 * @param Vertex $vertex
+	 * @return array
+	 */
+	public function searchBreadthFirst($vertex){
+	    $queue = array($vertex);
+	    $mark = array($vertex);
+	    
+	    do{
+	        $t = array_shift($queue); // get first from queue
+	        
+	        $vertices = $t->get;
+	        
+	    }while($queue);
+	    
 		$alg = new BreitenSuche_Agl($this);
 		return $alg->getResult();
 	}
