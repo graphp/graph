@@ -12,9 +12,14 @@ $derGraf = $loaderAdjacencyMatrix->getGraphFromFile("data/Graph1.txt");
 //	echo $value->getId()." ";
 //}
 
-$derGraf->searchDepthFirst(1);
+var_dump($derGraf->searchDepthFirst(1));
 
-// foreach ($derGraf->getEdgeArray() as $key => $value) {
-// 	echo $key;
-// 	print_r($value);
-// }
+foreach ($derGraf->getEdgeArray() as $key => $value) {
+	echo $key;
+	print_r($value);
+}
+
+echo 'breitensuche ab 1:
+';
+$alg = new AlgorithmBreadthFirst($derGraf->getVertex(1));
+var_dump($alg->getVerticesIds());
