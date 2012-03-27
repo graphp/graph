@@ -135,27 +135,6 @@ class Graph{
 		}
 		return true;
 	}
-
-	/**
-	 * Breadth-first search (BFS)
-	 * 
-	 * @param Vertex $vertex
-	 * @return array
-	 */
-	public function searchBreadthFirst($vertex){
-	    $queue = array($vertex);
-	    $mark = array($vertex);
-	    
-	    do{
-	        $t = array_shift($queue); // get first from queue
-	        
-	        $vertices = $t->get;
-	        
-	    }while($queue);
-	    
-		$alg = new BreitenSuche_Agl($this);
-		return $alg->getResult();
-	}
 	
 	public function searchDepthFirst($vertexId){
 		

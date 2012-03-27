@@ -148,12 +148,13 @@ class Vertex{
 	 * 
 	 * @return array[Vertex]
 	 */
-	public function getVerticesEdgeTo($graph){
+	public function getVerticesEdgeTo(){
 	    $ret = array();
 	    foreach($this->edges as $id){
 	        $edge = $this->graph->getEdge($id);
 	        // TODO: directed?
-	        $ret[$id] = $this->graph->getVertex($edge->getToId());
+	        $vertexId = $edge->getToId();
+	        $ret[$vertexId] = $this->graph->getVertex($vertexId);
 	    }
 	    return $ret;
 	}
@@ -165,5 +166,15 @@ class Vertex{
 	 */
 	public function getEdgeIdArray(){
 		return $this->edges;
+	}
+	
+	/**
+	 * Breadth-first search (BFS)
+	 *
+	 * @return array[Vertex]
+	 */
+	public function searchBreadthFirst(){
+	    $alg = new AlgorithmBreadthFirst($this);
+	    return $alg->getVertices();
 	}
 }
