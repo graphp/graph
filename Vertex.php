@@ -69,7 +69,7 @@ class Vertex{
 	 * @throws Exception
 	 */
 	public function createEdge($vertex){
-	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeDirected($this,$vertex))));
+	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeUndirected($this,$vertex))));
 	}
 	
 	/**
@@ -145,6 +145,81 @@ class Vertex{
 	        }
 	    }
 	    return $ret;
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	public function getDegree(){
+	    $n = 0;
+	    foreach($this->edges as $edge){
+	        if($edge instanceof EdgeDirected){
+	            throw new Exception('Degree not supported for directed edges');
+	        }
+	        ++$n;
+	    }
+	    return $n;
+	}
+	
+	public function isIsolated(){
+	    return !$this->edges;
+	}
+	
+	public function isLeaf(){
+	    return ($this->getDegree() === 1);
+	}
+	
+	public function getIndegree(){
+	    $n = 0;
+	    foreach($this->edges as $edge){
+	        if($edge->hasVertexTo($this)){
+	            ++$n;
+	        }
+	    }
+	    return $n;
+	}
+	
+	public function getOutdegree(){
+	    $n = 0;
+	    foreach($this->edges as $edge){
+	        if($edge->hasVertexFrom($this)){
+	            ++$n;
+	        }
+	    }
+	    return $n;
+	}
+	
+	/**
+	 * checks whether this vertex is a source, i.e. its indegree is zero
+	 * 
+	 * @return boolean
+	 * @uses Edge::hasVertexTo()
+	 * @see Vertex::getIndegree()
+	 */
+	public function isSource(){
+	    foreach($this->edges as $edge){
+	        if($edge->hasVertexTo($this)){
+	            return false;
+	        }
+	    }
+	    return true; // reach this point: no edge to this vertex
+	}
+	
+	/**
+	 * checks whether this vertex is a sink, i.e. its outdegree is zero
+	 * 
+	 * @return boolean
+	 * @uses Edge::hasVertexFrom()
+	 * @see Vertex::getOutdegree()
+	 */
+	public function isSink(){
+	    foreach($this->edge as $edge){
+	        if($edge->hasVertexFrom($this)){
+	            return false;
+	        }
+	    }
+	    return true; // reach this point: no edge away from this vertex
 	}
 	
 	/**

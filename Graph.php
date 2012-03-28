@@ -83,6 +83,51 @@ class Graph implements Countable{
 	    return count($this->vertices);
 	}
 	
+	public function getSize(){
+	    return count($this->vertices);
+	}
+	
+	/**
+	 * get degree for k-regular-graph (only if each vertex has the same degree)
+	 * 
+	 * @return int
+	 * @throws Exception if graph is not regular (i.e. vertex degrees are not equal)
+	 * @uses Vertex::getIndegree()
+	 * @uses Vertex::getOutdegree()
+	 */
+	public function getDegree(){
+	    $anyVertex = reset($this->vertices); // get any start vertex for initial degree (simply use first from list)
+	    if($anyVertex === false){
+	        throw new Exception('Empty graph with no vertices');
+	    }
+	    $degree = $anyVertex->getIndegree(); // get initial degree to compare others to
+	    
+	    foreach($this->vertices as $vertex){
+	        $i = $vertex->getIndegree();
+	        
+	        if($i !== $degree || $i !== $vertex->getOutdegree()){ // degree same (and for digraphs: indegree=outdegree)
+	            throw new Exception('Graph is not k-regular');
+	        }
+	    }
+	    
+	    return $degree;
+	}
+	
+	/**
+	 * checks whether this graph is regular, i.e. each vertex has the same indegree/outdegree
+	 * 
+	 * @return boolean
+	 * @uses Graph::getDegree()
+	 */
+	public function isRegular(){
+	    try{
+	        $this->getDegree();
+	        return true;
+	    }
+	    catch(Exception $ignore){ }
+	    return false;
+	}
+	
 	/**
 	 * check whether graph is consecutive
 	 * 
@@ -110,7 +155,7 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * checks whether this graph is empty (no vertex - and thus no edges)
+	 * checks whether this graph is empty (no vertex - and thus no edges, aka null graph)
 	 * 
 	 * @return boolean
 	 */
@@ -143,6 +188,36 @@ class Graph implements Countable{
 	        }
 	    }
 	    return true;
+	}
+	
+	/**
+	 * checks whether ths indegree of every vertex equals its outdegree
+	 * 
+	 * @return boolean
+	 * @uses Vertex::getIndegree()
+	 * @uses Vertex::getOutdegree()
+	 */
+	public function isBalanced(){
+	    foreach($this->vertices as $vertex){
+	        if($vertex->getIndegree() !== $vertex->getOutdegree()){
+	            return false;
+	        }
+	    }
+	    return true;
+	}
+	
+	/**
+	 * checks whether the graph has any directed edges (aka digraph)
+	 * 
+	 * @return boolean
+	 */
+	public function isDirected(){
+	    foreach($this->edges as $edge){
+	        if($eddge instanceof EdgeDirected){
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 	
 	/**
