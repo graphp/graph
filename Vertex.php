@@ -9,9 +9,9 @@ class Vertex{
 	 * Creates a Vertex
 	 * 
 	 * @param int   $id    Identifier (int, string, what you want) $id
-	 * @param Graph $grpah graph to be added to
+	 * @param Graph $graph graph to be added to
 	 */
-	public function __construct($id, $graph=NULL){
+	public function __construct($id, $graph){
 		$this->id = $id;
 		$this->graph = $graph;
 	}
@@ -25,40 +25,6 @@ class Vertex{
 	 */
 	public function getId(){
 		return $this->id;
-	}
-	
-	/**
-	 * Add an edge to the Vertex
-	 * 
-	 * @param int $edgeId id of edge
-	 * @return Vertex $this (chainable)
-	 * @throws Exception
-	 */
-	public function addEdgeId($edgeId){
-		$edgeId = (int)$edgeId;
-		if ( isset($this->edges[ $edgeId ]) ){
-			throw new Exception("Edge is allready added");
-		}
-		
-		$this->edges[$edgeId] = $edgeId;
-		return $this;
-	}
-	
-	/**
-	 * removes an Edge of this Vertex
-	 * 
-	 * @param int $edge if of Edge  (EdgeDirected or EdgeUndirected)
-	 * @return Vertex $this (chainable)
-	 * @throws Exception
-	 */
-	public function removeEdgeId($edge){
-	
-		if ( ! isset($this->edges[ $edge ]) ){
-			throw new Exception("Edge isn't added");
-		}
-	
-		unset($this->edges[$edge]);
-		return $this;
 	}
 	
 	/**
@@ -85,33 +51,52 @@ class Vertex{
 	}
 	
 	/**
-	 * add new directed edge from this start vertex to given target vertex
+	 * create new directed edge from this start vertex to given target vertex
 	 * 
 	 * @param Vertex $vertex target vertex
 	 * @return EdgeDirected
 	 * @throws Exception
 	 */
-	public function addEdgeTo($vertex){
-	    if(true){ // duplicate paths
-	        throw new Exception('');
-	    }
-	    $edge = new EdgeDirected($id,$this,$vertex); // TODO:
-	    $this->graph->addEdge($edge);
-	    return $edge;
+	public function createEdgeTo($vertex){
+	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeDirected($this,$vertex))));
 	}
 	
 	/**
-	 * add new undirected edge between this vertex and given vertex
+	 * add new undirected (bidirectional) edge between this vertex and given vertex
 	 * 
 	 * @param Vertex $vertex
 	 * @return EdgeUndirected
 	 * @throws Exception
 	 */
-	public function addEdge($vertex){
-	    if(true){
-	        throw new Exception('TODO');
+	public function createEdge($vertex){
+	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeDirected($this,$vertex))));
+	}
+	
+	/**
+	 * add given edge to list of connected edges (should NOT be called manually!)
+	 * 
+	 * @param Edge $edge
+	 * @return Edge given $edge as-is
+	 * @private
+	 */
+	public function addEdge($edge){
+	    $this->edges []= $edge;
+	    return $edge;
+	}
+	
+	/**
+	 * remove the given edge from list of connected edges
+	 * 
+	 * @param Edge $edge
+	 * @return Edge given $edge as-is
+	 * @private
+	 */
+	public function removeEdge($edge){
+	    $id = array_search($edge,$this->edges,true);
+	    if($id === false){
+	        throw new Exception('Given edge does NOT exist');
 	    }
-	    $edge = new EdgeUndirected($id);
+	    unset($this->edges[$id]);
 	    return $edge;
 	}
 	
@@ -120,12 +105,11 @@ class Vertex{
 	 * 
 	 * @param Vertex $vertex
 	 * @return boolean
+	 * @uses Edge::hasVertexTo()
 	 */
 	public function hasEdgeTo($vertex){
-	    foreach($this->edges as $id){
-            $edge = $this->graph->getEdge($id);
-            // TODO: directed?
-            if($edge->getToId() === $this->id){
+	    foreach($this->edges as $edge){
+            if($edge->hasVertexTo($vertex)){
 	            return true;
 	        }
 	    }
@@ -143,29 +127,24 @@ class Vertex{
 	    return $vertex->hasEdgeTo($this);
 	}
 	
+	public function getEdges(){
+	    return $this->edges;
+	}
+	
 	/**
 	 * get all vertices this vertex has an edge to
 	 * 
 	 * @return array[Vertex]
+	 * @uses Edge::getVerticesTo()
 	 */
 	public function getVerticesEdgeTo(){
 	    $ret = array();
-	    foreach($this->edges as $id){
-	        $edge = $this->graph->getEdge($id);
-	        // TODO: directed?
-	        $vertexId = $edge->getToId();
-	        $ret[$vertexId] = $this->graph->getVertex($vertexId);
+	    foreach($this->edges as $edge){
+	        foreach($edge->getVerticesTo() as $vertex){
+	            $ret[$vertex->getId()] = $vertex;
+	        }
 	    }
 	    return $ret;
-	}
-	
-	/**
-	 * returns all edges of this Vertex
-	 * 
-	 * @return array[int]
-	 */
-	public function getEdgeIdArray(){
-		return $this->edges;
 	}
 	
 	/**

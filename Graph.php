@@ -1,6 +1,6 @@
 <?php
 
-class Graph{
+class Graph implements Countable{
     /**
      * array of all edges in this graph
      * 
@@ -14,85 +14,45 @@ class Graph{
 	 * @var array[Vertex]
 	 */
 	private $vertices = array();
-
-
-//getter setter
 	
 	/**
-	 * adds a new Edge to the Graph
+	 * create a new Vertex in the Graph
 	 * 
-	 * @param Edge $edge instance of the new Edge
-	 * @return Edge given edge as-is (chainable)
-	 * @uses Edge::getId()
-	 */
-	public function addEdge($edge){
-		$this->edges[$edge->getId()] = $edge;
-		return $edge;
-	}
-	
-	/**
-	 * create a new EdgeDirected,  add to the Graph and return
-	 * 
-	 * @param int $id identifier of the new Edge
-	 * @return EdgeDirected
-	 * @uses Graph::addEdge()
-	 */
-	public function addEdgeDirectedId($id){
-		$edge = new EdgeDirected($id);
-		return $this->addEdge($edge);
-	}
-	
-	/**
-	 * create a new EdgeUndirected, add to the Graph and return
-	 * 
-	 * @param int $id identifier of the new Edge
-	 * @return EdgeUndirected
-	 * @uses Graph::addEdge()
-	 */
-	public function addEdgeUndirectedId($id){
-		$edge = new EdgeUndirected($id);
-		return $this->addEdge($edge);
-	}
-	
-	/**
-	 * returns the Edge with identifier $id
-	 * 
-	 * @param int $id identifier of Edge
-	 * @return Edge
-	 * @throws Exception
-	 */
-	public function getEdge($id){
-		if(!isset($this->edges[$id])){
-			throw new Exception("Edge ".$id." doesn't exist");
-		}
-		return $this->edges[$id];
-	}
-	
-	/**
-	 * returns an array of all Edges
-	 * 
-	 * @return array[Edge]
-	 */
-	public function getEdgeArray(){
-		return $this->edges;
-	}
-	
-	/**
-	 * adds a new Vertex to the Graph
-	 * 
-	 * @param Vertex|int|NULL $vertex instance of Vertex or new vertex ID to use
+	 * @param int|NULL $vertex instance of Vertex or new vertex ID to use
 	 * @return Vertex (chainable)
 	 * @uses Vertex::getId()
 	 */
-	public function addVertex($vertex=NULL){
-	    if($vertex === NULL){    // no ID given
-	        $vertex = max(array_keys($this->vertices))+1; // auto ID
+	public function createVertex($id=NULL){
+	    if($id === NULL){    // no ID given
+	        $id = $this->getNextId();
 	    }
-	    if(!($vertex instanceof Vertex)){
-	        $vertex = new Vertex($vertex,$this);
+	    if(isset($this->vertices[$id])){
+	        throw new Exception('ID must be unique');
 	    }
-		$this->vertices[$vertex->getId()] = $vertex;
+	    $vertex = new Vertex($id,$this);
+		$this->vertices[$id] = $vertex;
 		return $vertex;
+	}
+	
+	/**
+	 * create the given number of vertices
+	 * 
+	 * @param int $n
+	 * @return Graph (chainable)
+	 * @uses Graph::getNextId()
+	 */
+	public function createVertices($n){
+	    for($id=$this->getNextId(),$n+=$id;$id<$n;++$id){
+	        $this->vertices[$id] = new Vertex($id,$this);
+	    }
+	    return $this;
+	}
+	
+	private function getNextId(){
+	    if(!$this->vertices){
+	        return 0;
+	    }
+	    return max(array_keys($this->vertices))+1; // auto ID
 	}
 	
 	/**
@@ -115,8 +75,12 @@ class Graph{
 	 * 
 	 * @return array[Vertex]
 	 */
-	public function getVertexArray(){
+	public function getVertices(){
 		return $this->vertices;
+	}
+	
+	public function count(){
+	    return count($this->vertices);
 	}
 	
 	/**
@@ -134,6 +98,74 @@ class Graph{
 		    }
 		}
 		return true;
+	}
+	
+	/**
+	 * checks whether this graph is trivial (one vertex and no edges)
+	 * 
+	 * @return boolean
+	 */
+	public function isTrivial(){
+	    return (!$this->edges && count($this->vertices) === 1);
+	}
+	
+	/**
+	 * checks whether this graph is empty (no vertex - and thus no edges)
+	 * 
+	 * @return boolean
+	 */
+	public function isEmpty(){
+	    return !$this->vertices;
+	}
+	
+	/**
+	 * checks whether this graph has no edges
+	 * 
+	 * @return boolean
+	 */
+	public function isEdgeless(){
+	    return !$this->edges;
+	}
+	
+	/**
+	 * checks whether this graph is complete (every vertex has an edge to any other vertex)
+	 * 
+	 * @return boolean
+	 * @uses Vertex::hasEdgeTo()
+	 */
+	public function isComplete(){
+	    $c = $this->vertices;                                                   // copy of array (separate iterator but same vertices)
+	    foreach($this->vertices as $vertex){                                    // from each vertex
+	        foreach($c as $other){                                              // to each vertex
+	            if($other !== $vertex && !$vertex->hasEdgeTo($other)){          // missing edge => fail
+	                return false;
+	            }
+	        }
+	    }
+	    return true;
+	}
+	
+	/**
+	 * adds a new Edge to the Graph (should NOT be called manually!)
+	 *
+	 * @param Edge $edge instance of the new Edge
+	 * @return Edge given edge as-is (chainable)
+	 * @private
+	 */
+	public function addEdge($edge){
+	    $this->edges[] = $edge;
+	    return $edge;
+	}
+	
+	/**
+	 * returns an array of all Edges
+	 *
+	 * @return array[Edge]
+	 * @todo purpose? REMOVE ME?
+	 * @private
+	 */
+	public function getEdges(){
+	    return $this->edges;
 	}
 	
 	public function searchDepthFirst($vertexId){
