@@ -5,7 +5,7 @@ abstract class Edge{
 	 * returns the id of this Edge
 	 * 
 	 * @return int
-	 * @todo purpose? REMOVE ME?
+	 * @todo purpose? REMOVE ME?	=> Tobias: should be abstract
 	 */
 	public function getId(){
 		return 0;
