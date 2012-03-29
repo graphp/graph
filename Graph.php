@@ -64,7 +64,7 @@ class Graph implements Countable{
 	 */
 	public function getVertex($id){
 		if( ! isset($this->vertices[$id]) ){
-			throw new Exception('Given Vertex does not exist');
+			throw new Exception('Vertex '.$id.' does not exist');
 		}
 		
 		return $this->vertices[$id];
@@ -191,7 +191,7 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * checks whether ths indegree of every vertex equals its outdegree
+	 * checks whether the indegree of every vertex equals its outdegree
 	 * 
 	 * @return boolean
 	 * @uses Vertex::getIndegree()
@@ -241,12 +241,5 @@ class Graph implements Countable{
 	 */
 	public function getEdges(){
 	    return $this->edges;
-	}
-	
-	public function searchDepthFirst($vertexId){
-		
-		$alg = new AlgorithSearchDepthFirst($this, $vertexId);
-		
-		return $alg->getResult();
 	}
 }
