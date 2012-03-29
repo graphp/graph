@@ -37,7 +37,7 @@ class LoaderAdjacencyMatrix implements Loader{
 						
 					$this->writeDebugMessage(" and edge #$edgeCounter: $i -> $k ");
 					
-					$thisVertex->createEdge($graph->getVertex($k));
+					$thisVertex->createEdge($graph->getVertex($k));							//should this not be a directedEdge???
 					
 					$edgeCounter++;
 				}
