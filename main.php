@@ -8,6 +8,10 @@ $interface = new main();
 
 class main{
 	
+	/**
+	 * 
+	 * @var Graph
+	 */
 	private $graph = NULL;
 	
 	public function __construct(){
@@ -17,11 +21,11 @@ class main{
 		
 		echo "\n";
 		
-		while(true){
+		//while(true){
 			$this->chooseAction();
 			
 			echo "\n";
-		}
+		//}
 	}
 	
 	private function readFile(){
@@ -98,14 +102,27 @@ class main{
 		
 		fscanf(STDIN, "%s\n", $startingNode);
 		
-		print_r($this->graph->searchBreadthFirst($startingNode));
+		print_r($this->graph->getVertex($startingNode)->searchBreadthFirst());
 	}
 	
 	private function startSearchDepthFirst(){
 		echo "Please enter the name of the starting node?\n";
 	
 		fscanf(STDIN, "%s\n", $startingNode);
+
+		$this->printArrayOfVertices($this->graph->getVertex($startingNode)->searchDepthFirst());
+	}
 	
-		print_r($this->graph->searchDepthFirst($startingNode));
+	/**
+	 * 
+	 * @param array[Vertex] $array
+	 */
+	private function printArrayOfVertices($array){
+		
+		echo "\n\n";
+		
+		foreach ($array as $vertex){
+			echo $vertex->getId(); echo "\n";
+		}
 	}
 }

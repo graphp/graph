@@ -53,6 +53,6 @@ class AlgorithmSearchDepthFirst{
 	 */
 	public function getResult(){
 		$this->recursiveDepthFirstSearch($this->StartVertex);
-		return $this->$visitedVertices;
+		return $this->visitedVertices;
 	}
 }
