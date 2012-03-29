@@ -2,7 +2,15 @@
 
 class Vertex{
 	private $id;
+	
+	/**
+	 * @var array[Edge]
+	 */
 	private $edges = array();
+	
+	/**
+	 * @var Graph
+	 */
 	private $graph;
 	
 	/**
@@ -34,7 +42,7 @@ class Vertex{
 	 * @return boolean
 	 * @throws Exception
 	 */
-	public function hasPathTo($vertex){
+	public function hasPathTo($vertex){			//Tobias: I think this will be a algorithm later in the lecture
 	    throw new Exception('TODO');
 	    return true;
 	}
@@ -94,7 +102,7 @@ class Vertex{
 	public function removeEdge($edge){
 	    $id = array_search($edge,$this->edges,true);
 	    if($id === false){
-	        throw new Exception('Given edge does NOT exist');
+	        throw new Exception('Given edge does NOT exist');				//Tobias: if edge gets Id => output of id
 	    }
 	    unset($this->edges[$id]);
 	    return $edge;
@@ -228,7 +236,7 @@ class Vertex{
 	 * @return array[Vertex]
 	 */
 	public function searchBreadthFirst(){
-	    $alg = new AlgorithmBreadthFirst($this);
+	    $alg = new AlgorithmSearchBreadthFirst($this);
 	    return $alg->getVertices();
 	}
 	
