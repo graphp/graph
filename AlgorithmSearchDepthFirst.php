@@ -34,13 +34,13 @@ class AlgorithmSearchDepthFirst{
 	 */
 	private function recursiveDepthFirstSearch($vertex){
 		
-		if ( ! isset($this->visitedVertices[$vertex->getId()]) ){		//If I didn't visit this vertex before
-			$this->visitedVertices[$vertex->getId()] = $vertex;			//Add Vertex to allready visited vertices
+		if ( ! isset($this->visitedVertices[$vertex->getId()]) ){		//If I didn't visited this vertex before
+			$this->visitedVertices[$vertex->getId()] = $vertex;			//Add Vertex to already visited vertices
 			
 			$nextVertices = $vertex->getVerticesEdgeTo();				//Get next vertices
 			
 			foreach ($nextVertices as $nextVertix){
-				$this->recursiveDepthFirstSearch($nextVertix);
+				$this->recursiveDepthFirstSearch($nextVertix);				//recursive call for next vertices
 			}
 		}
 	}
