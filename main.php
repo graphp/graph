@@ -102,7 +102,7 @@ class main{
 		
 		fscanf(STDIN, "%s\n", $startingNode);
 		
-		print_r($this->graph->getVertex($startingNode)->searchBreadthFirst());
+		$this->printArrayOfVertices($this->graph->getVertex($startingNode)->searchBreadthFirst());
 	}
 	
 	private function startSearchDepthFirst(){
