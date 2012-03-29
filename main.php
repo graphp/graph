@@ -21,11 +21,11 @@ class main{
 		
 		echo "\n";
 		
-		//while(true){
+		while(true){
 			$this->chooseAction();
 			
 			echo "\n";
-		//}
+		}
 	}
 	
 	private function readFile(){
