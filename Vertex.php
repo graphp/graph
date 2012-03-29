@@ -231,4 +231,15 @@ class Vertex{
 	    $alg = new AlgorithmBreadthFirst($this);
 	    return $alg->getVertices();
 	}
+	
+	/**
+	 * Depth-first search (recursive)
+	 * $this is the starting vertex
+	 * 
+	 * @return array[Vertex]
+	 */
+	public function searchDepthFirst(){
+		$alg = new AlgorithmSearchDepthFirst($this);
+		return $alg->getResult();
+	}
 }
