@@ -64,6 +64,8 @@ class Vertex{
 	 * @param Vertex $vertex target vertex
 	 * @return EdgeDirected
 	 * @throws Exception
+	 * @uses Vertex::addEdge()
+	 * @uses Graph::addEdge()
 	 */
 	public function createEdgeTo($vertex){
 	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeDirected($this,$vertex))));
@@ -75,6 +77,8 @@ class Vertex{
 	 * @param Vertex $vertex
 	 * @return EdgeUndirected
 	 * @throws Exception
+	 * @uses Vertex::addEdge()
+	 * @uses Graph::addEdge()
 	 */
 	public function createEdge($vertex){
 	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeUndirected($this,$vertex))));
@@ -93,7 +97,7 @@ class Vertex{
 	}
 	
 	/**
-	 * remove the given edge from list of connected edges
+	 * remove the given edge from list of connected edges (should NOT be called manually)
 	 * 
 	 * @param Edge $edge
 	 * @return Edge given $edge as-is
@@ -205,8 +209,15 @@ class Vertex{
 	}
 	
 	/**
+	 * get degree of this vertex (number of edges)
 	 * 
+	 * vertex degree is NOT defined for directed graphs (digraphs) and will
+	 * throw an exception! use indegree and outdegree instead
+	 * 
+	 * @return int
 	 * @throws Exception
+	 * @see Vertex::getIndegree()
+	 * @see Vertex::getOutdegree()
 	 */
 	public function getDegree(){
 	    $n = 0;
@@ -219,14 +230,34 @@ class Vertex{
 	    return $n;
 	}
 	
+	/**
+	 * check whether this vertex is isolated (i.e. has no edges attached)
+	 * 
+	 * @return boolean
+	 */
 	public function isIsolated(){
 	    return !$this->edges;
 	}
 	
+	/**
+	 * check whether this is a leaf node (i.e. has only one edge)
+	 * 
+	 * @return boolean
+	 * @throws Exception if this is directed graph
+	 * @uses Vertex::getDegree()
+	 * @todo check logic! should be indegree=1 and outdegree=0 for directed and degree=indegree=outdegree=1 for undirected?
+	 */
 	public function isLeaf(){
 	    return ($this->getDegree() === 1);
 	}
 	
+	/**
+	 * get indegree of this vertex (number of edges TO this vertex)
+	 * 
+	 * @return int
+	 * @uses Edge::hasVertexTo()
+	 * @see Vertex::getDegree()
+	 */
 	public function getIndegree(){
 	    $n = 0;
 	    foreach($this->edges as $edge){
@@ -237,6 +268,13 @@ class Vertex{
 	    return $n;
 	}
 	
+	/**
+	 * get outdegree of this vertex (number of edges FROM this vertex TO other vertices)
+	 * 
+	 * @return int
+	 * @uses Edge::hasVertexFrom()
+	 * @see Vertex::getDegree()
+	 */
 	public function getOutdegree(){
 	    $n = 0;
 	    foreach($this->edges as $edge){
@@ -283,6 +321,7 @@ class Vertex{
 	 * Breadth-first search (BFS)
 	 *
 	 * @return array[Vertex]
+	 * @uses AlgorithmSearchBreadthFirst::getVertices()
 	 */
 	public function searchBreadthFirst(){
 	    $alg = new AlgorithmSearchBreadthFirst($this);
@@ -290,10 +329,11 @@ class Vertex{
 	}
 	
 	/**
-	 * Depth-first search (recursive)
+	 * Depth-first search (recursive DFS)
 	 * $this is the starting vertex
 	 * 
 	 * @return array[Vertex]
+	 * @uses AlgorithmSearchDepthFirst::getResult()
 	 */
 	public function searchDepthFirst(){
 		$alg = new AlgorithmSearchDepthFirst($this);

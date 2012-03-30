@@ -48,6 +48,13 @@ class Graph implements Countable{
 	    return $this;
 	}
 	
+	/**
+	 * get next free/unused/available vertex ID
+	 * 
+	 * its guaranteed there's NO other vertex with a greater ID
+	 * 
+	 * @return int
+	 */
 	private function getNextId(){
 	    if(!$this->vertices){
 	        return 0;
@@ -79,10 +86,21 @@ class Graph implements Countable{
 		return $this->vertices;
 	}
 	
+	/**
+	 * return number of vertices (implements Countable, allows calling count($graph))
+	 * 
+	 * @return int
+	 * @see Countable::count()
+	 */
 	public function count(){
 	    return count($this->vertices);
 	}
 	
+	/**
+	 * return number of vertices
+	 * 
+	 * @return int
+	 */
 	public function getSize(){
 	    return count($this->vertices);
 	}
