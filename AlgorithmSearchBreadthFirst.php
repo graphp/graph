@@ -5,6 +5,10 @@ class AlgorithmSearchBreadthFirst{
         $this->vertex = $startVertex;
     }
     
+    /**
+     * 
+     * @return array[Vertex]
+     */
     public function getVertices(){
         $queue = array($this->vertex);
         $mark = array($this->vertex->getId() => true);
