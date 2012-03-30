@@ -7,7 +7,7 @@ class AlgorithmSearchBreadthFirst{
     
     public function getVertices(){
         $queue = array($this->vertex);
-        $mark = array($this->vertex->getId()=>$this->vertex->getId());
+        $mark = array($this->vertex->getId() => true);
         $visited = array();
         
         do{
@@ -18,7 +18,7 @@ class AlgorithmSearchBreadthFirst{
             foreach($vertices as $id=>$vertex){
                 if(!isset($mark[$id])){
                     $queue[] = $vertex;
-                    $mark[$id] = $id;
+                    $mark[$id] = true;
                 }
             }
         
