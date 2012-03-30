@@ -15,7 +15,7 @@ class LoaderAdjacencyMatrix implements Loader{
 
 		$graph = new Graph();
 
-		$file = file($fileName);
+		$file = file($fileName, FILE_IGNORE_NEW_LINES);
 		$vertexCount = $file[0];
 		$edgeCounter = 0;
 		
