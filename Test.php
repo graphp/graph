@@ -45,11 +45,14 @@ $steffiGraf = $LoaderEdgeList->getGraphFromFile("data/Graph2.txt");
 
 $steffiGrafBild = new GraphViz($steffiGraf);
 
-$script = $steffiGrafBild->createGraphVizScript();
+$script = $steffiGrafBild->createDirectedGraphVizScript();
 
 $newfile="graph.gv";
 $file = fopen ($newfile, "w");
 fwrite($file, $script);
 fclose ($file);
 
+echo "Generate picture ...";
+exec("dot -Tpng graph.gv -o graph.png && eog graph.png"); 
+echo "... done\n";
 //echo $script;
