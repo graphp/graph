@@ -15,19 +15,37 @@ class EdgeDirected extends Edge{
         $this->to = $to;
     }
     
-    public function getVerticesFrom(){
-        return array($this->from);
+//     public function getVerticesFrom(){
+//         return array($this->from);
+//     }
+    
+//     public function getVerticesTo(){
+//         return array($this->to);
+//     }
+    
+    public function isConnection($from, $to){
+    	return ($this->to === $to && $this->from === $from);
     }
     
-    public function getVerticesTo(){
-        return array($this->to);
+//     public function hasVertexFrom($vertex){
+//         return ($this->from === $vertex);
+//     }
+    
+//     public function hasVertexTo($vertex){
+//         return ($this->to === $vertex);
+//     }
+    
+	public function getVertexToFrom($startVertex){
+    	if ($this->from !== $startVertex){
+    		throw new Exception('Invalid start vertex');
+    	}
+    	return $this->to;
     }
     
-    public function hasVertexFrom($vertex){
-        return ($this->from === $vertex);
-    }
-    
-    public function hasVertexTo($vertex){
-        return ($this->to === $vertex);
+    public function getVertexFromTo($endVertex){
+    	if ($this->to !== $endVertex){
+    		throw new Exception('Invalid end vertex');
+    	}
+    	return $this->from;
     }
 }
