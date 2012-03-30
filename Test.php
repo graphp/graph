@@ -53,6 +53,6 @@ fwrite($file, $script);
 fclose ($file);
 
 echo "Generate picture ...";
-exec("dot -Tpng graph.gv -o graph.png && eog graph.png"); 
+exec("dot -Tpng graph.gv -o graph.png && xdg-open graph.png"); 
 echo "... done\n";
 //echo $script;
