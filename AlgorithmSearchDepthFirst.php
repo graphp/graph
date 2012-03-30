@@ -10,13 +10,6 @@ class AlgorithmSearchDepthFirst{
 	private $StartVertex = NULL;
 	
 	/**
-	 * array of visited vertices
-	 *
-	 * @var array[Vertex]
-	 */
-	private $visitedVertices = array();
-	
-	/**
 	 * 
 	 * @param Vertex $startVertex
 	 */
@@ -32,15 +25,15 @@ class AlgorithmSearchDepthFirst{
 	 * 
 	 * @param Vertex $vertex
 	 */
-	private function recursiveDepthFirstSearch($vertex){
+	private function recursiveDepthFirstSearch($vertex, & $visitedVertices){
 		
-		if ( ! isset($this->visitedVertices[$vertex->getId()]) ){		//If I didn't visited this vertex before
-			$this->visitedVertices[$vertex->getId()] = $vertex;			//Add Vertex to already visited vertices
+		if ( ! isset($visitedVertices[$vertex->getId()]) ){						//	If I didn't visited this vertex before
+			$visitedVertices[$vertex->getId()] = $vertex;						//		Add Vertex to already visited vertices
 			
-			$nextVertices = $vertex->getVerticesEdgeTo();				//Get next vertices
+			$nextVertices = $vertex->getVerticesEdgeTo();						//		Get next vertices
 			
 			foreach ($nextVertices as $nextVertix){
-				$this->recursiveDepthFirstSearch($nextVertix);				//recursive call for next vertices
+				$this->recursiveDepthFirstSearch($nextVertix, $visitedVertices);//			recursive call for next vertices
 			}
 		}
 	}
@@ -51,8 +44,9 @@ class AlgorithmSearchDepthFirst{
 	 * 
 	 * @return array[Vertex]
 	 */
-	public function getResult(){
-		$this->recursiveDepthFirstSearch($this->StartVertex);
-		return $this->visitedVertices;
+	public function getVertices(){
+		$visitedVertices = array();
+		$this->recursiveDepthFirstSearch($this->StartVertex, $visitedVertices);
+		return $visitedVertices;
 	}
 }

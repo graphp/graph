@@ -330,13 +330,12 @@ class Vertex{
 	
 	/**
 	 * Depth-first search (recursive DFS)
-	 * $this is the starting vertex
 	 * 
 	 * @return array[Vertex]
-	 * @uses AlgorithmSearchDepthFirst::getResult()
+	 * @uses AlgorithmSearchDepthFirst::getVertices()
 	 */
 	public function searchDepthFirst(){
 		$alg = new AlgorithmSearchDepthFirst($this);
-		return $alg->getResult();
+		return $alg->getVertices();
 	}
 }
