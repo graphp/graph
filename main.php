@@ -81,6 +81,7 @@ class main{
 			echo "What do you want to do?\n";
 			echo "0 = breadth-first search\n";
 			echo "1 = depth-first search\n";
+			echo "2 = components of graph\n";
 		
 			fscanf(STDIN, "%d\n", $option);
 		
@@ -91,6 +92,12 @@ class main{
 					break;
 				case 1:
 					$this->startSearchDepthFirst();
+					$chooseOption = true;
+					break;
+				case 2:
+					echo "The graph has ";
+					echo $this->graph->getNumberOfComponents();
+					echo " components\n";
 					$chooseOption = true;
 					break;
 			}
