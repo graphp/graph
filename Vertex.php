@@ -135,8 +135,41 @@ class Vertex{
 	    return $vertex->hasEdgeTo($this);
 	}
 	
+	/**
+	 * get ALL edges attached to this vertex
+	 * 
+	 * @return array[Edge]
+	 */
 	public function getEdges(){
 	    return $this->edges;
+	}
+	
+	/**
+	 * get edges FROM this vertex TO the given vertex
+	 * 
+	 * @param Vertex $vertex
+	 * @return array[Edge]
+	 * @uses Edge::hasVertexTo()
+	 */
+	public function getEdgesTo($vertex){
+	    $ret = array();
+	    foreach($this->edges as $edge){
+	        if($edge->hasVertexTo($vertex)){
+	            $ret[] = $edge;
+	        }
+	    }
+	    return $ret;
+	}
+	
+	/**
+	 * get edges FROM the given vertex TO this vertex
+	 *
+	 * @param Vertex $vertex
+	 * @return array[Edge]
+	 * @uses Vertex::getEdgesTo()
+	 */
+	public function getEdgesFrom($vertex){
+	    return $vertex->getEdgesTo($this);
 	}
 	
 	/**
@@ -149,6 +182,22 @@ class Vertex{
 	    $ret = array();
 	    foreach($this->edges as $edge){
 	        foreach($edge->getVerticesTo() as $vertex){
+	            $ret[$vertex->getId()] = $vertex;
+	        }
+	    }
+	    return $ret;
+	}
+	
+	/**
+	 * get all vertices that have an edge TO this vertex
+	 * 
+	 * @return array[Vertex]
+	 * @uses Edge::getVerticesFrom()
+	 */
+    public function getVerticesEdgeFrom(){
+	    $ret = array();
+	    foreach($this->edges as $edge){
+	        foreach($edge->getVerticesFrom() as $vertex){
 	            $ret[$vertex->getId()] = $vertex;
 	        }
 	    }
