@@ -121,7 +121,7 @@ class Vertex{
 	 */
 	public function hasEdgeTo($vertex){
 	    foreach($this->edges as $edge){
-            if($edge->hasVertexTo($vertex)){
+            if($edge->isConnection($this, $vertex)){
 	            return true;
 	        }
 	    }
@@ -180,14 +180,13 @@ class Vertex{
 	 * get all vertices this vertex has an edge to
 	 * 
 	 * @return array[Vertex]
-	 * @uses Edge::getVerticesTo()
+	 * @uses Edge::getVerticesToFrom()
 	 */
 	public function getVerticesEdgeTo(){
 	    $ret = array();
 	    foreach($this->edges as $edge){
-	        foreach($edge->getVerticesTo() as $vertex){
-	            $ret[$vertex->getId()] = $vertex;
-	        }
+	        $vertex = $edge->getVertexToFrom($this);
+	        $ret[$vertex->getId()] = $vertex;
 	    }
 	    return $ret;
 	}
@@ -196,14 +195,13 @@ class Vertex{
 	 * get all vertices that have an edge TO this vertex
 	 * 
 	 * @return array[Vertex]
-	 * @uses Edge::getVerticesFrom()
+	 * @uses Edge::getVerticesFromTo()
 	 */
     public function getVerticesEdgeFrom(){
 	    $ret = array();
 	    foreach($this->edges as $edge){
-	        foreach($edge->getVerticesFrom() as $vertex){
-	            $ret[$vertex->getId()] = $vertex;
-	        }
+	        $vertex = $edge->getVerticesFromTo($this);
+            $ret[$vertex->getId()] = $vertex;
 	    }
 	    return $ret;
 	}

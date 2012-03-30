@@ -45,7 +45,7 @@ $steffiGraf = $LoaderEdgeList->getGraphFromFile("data/Graph2.txt");
 
 $steffiGrafBild = new GraphViz($steffiGraf);
 
-$script = $steffiGrafBild->createDirectedGraphVizScript();
+$script = $steffiGrafBild->createUndirectedGraphVizScript();
 
 $newfile="graph.gv";
 $file = fopen ($newfile, "w");
