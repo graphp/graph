@@ -260,4 +260,12 @@ class Graph implements Countable{
 	public function getEdges(){
 	    return $this->edges;
 	}
+	
+	/**
+	 * @return int number of components of this graph
+	 */
+	public function getNumberOfComponents(){
+		$alg = new AlgorithmConnectedComponents($this);
+		return $alg->getNumberOfComponents();
+	}
 }
