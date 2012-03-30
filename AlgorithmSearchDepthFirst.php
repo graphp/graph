@@ -51,7 +51,7 @@ class AlgorithmSearchDepthFirst{
 	 * 
 	 * @return array[Vertex]
 	 */
-	public function getResult(){
+	public function getVertices(){
 		$this->recursiveDepthFirstSearch($this->StartVertex);
 		return $this->visitedVertices;
 	}
