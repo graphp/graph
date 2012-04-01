@@ -147,20 +147,15 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * check whether graph is consecutive
+	 * check whether graph is consecutive (i.e. all vertices are connected)
 	 * 
 	 * @return boolean
-	 * @todo
+	 * @see Graph::getNumberOfComponents()
+	 * @uses AlgorithmConnectedComponents::isSingle()
 	 */
 	public function isConsecutive(){
-		throw new Exception('Unsupported');
-		
-		foreach($this->edges as $edge){
-		    if(true){
-		        return false;
-		    }
-		}
-		return true;
+	    $alg = new AlgorithmConnectedComponents($this);
+	    return $alg->isSingle();
 	}
 	
 	/**
