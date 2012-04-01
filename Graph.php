@@ -159,6 +159,18 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * check whether this graph has an eulerian cycle
+	 * 
+	 * @return boolean
+	 * @uses AlgorithmEulerian::hasCycle()
+	 * @link http://en.wikipedia.org/wiki/Eulerian_path
+	 */
+	public function hasEulerianCycle(){
+	    $alg = new AlgorithmEulerian($this);
+	    return $alg->hasCycle();
+	}
+	
+	/**
 	 * checks whether this graph is trivial (one vertex and no edges)
 	 * 
 	 * @return boolean
