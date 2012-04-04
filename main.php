@@ -40,12 +40,14 @@ class main{
 			echo "What kind of File you want to read?\n";
 			echo "0 = Adjacency matrix\n";
 			echo "1 = Edge list\n";
+			echo "2 = Create complete graph\n";
 		
 			fscanf(STDIN, "%d\n", $fileFormat);
 		
 			switch ($fileFormat){
 				case 0:
 				case 1:
+				case 2:
 					$fileFormatRightInput = true;
 			}
 		}
@@ -68,6 +70,11 @@ class main{
 			case 1:
 				$interface = new LoaderEdgeList();
 				$this->graph = $interface->getGraphFromFile($fileName);
+				$rightInput = true;
+				break;
+			case 2:
+				$interface = new LoaderCompleteGraph($fileName);
+				$this->graph = $interface->getGraph();
 				$rightInput = true;
 				break;
 		}
