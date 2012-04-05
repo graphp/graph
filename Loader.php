@@ -2,6 +2,6 @@
 
 interface Loader{
 	
-	public function getGraphFromFile($fileName);
+	public function getGraph();
 	
 }

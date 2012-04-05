@@ -1,6 +1,6 @@
 <?php
 
-class LoaderCompleteGraph{
+class LoaderCompleteGraph implements Loader{
 	
 	private $numberOfVertices;
 	
@@ -13,7 +13,7 @@ class LoaderCompleteGraph{
 	
 	}
 	
-	public function __construct($n){
+	public function setNumverOfVertices($n){
 		$this->numberOfVertices = $n;
 	}
 	

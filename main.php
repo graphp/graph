@@ -14,6 +14,21 @@ class main{
 	 */
 	private $graph = NULL;
 	
+	private function getFiles() {
+		$files = array();
+		$dir = openDir("data");
+		$i = 0;
+		while ($file = readDir($dir)) {
+			if ($file != "." && $file != "..") {
+				$files[$i] = $file;
+				++$i;
+			}
+		}
+		closeDir($dir);
+		
+		return $files;
+	}
+	
 	public function __construct(){
 		echo "Read Graph-File:\n\n";
 		
@@ -64,12 +79,14 @@ class main{
 		switch ($fileFormat){
 			case 0:
 				$loaderAdjacencyMatrix = new LoaderAdjacencyMatrix();
-				$this->graph = $loaderAdjacencyMatrix->getGraphFromFile($fileName);
+				$loaderAdjacencyMatrix->setFileName($fileName);
+				$this->graph = $loaderAdjacencyMatrix->getGraph();
 				$rightInput = true;
 				break;
 			case 1:
 				$interface = new LoaderEdgeList();
-				$this->graph = $interface->getGraphFromFile($fileName);
+				$interface->setFileName($fileName);
+				$this->graph = $interface->getGraph();
 				$rightInput = true;
 				break;
 			case 2:
