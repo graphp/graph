@@ -90,7 +90,8 @@ class main{
 				$rightInput = true;
 				break;
 			case 2:
-				$interface = new LoaderCompleteGraph($fileName);
+				$interface = new LoaderCompleteGraph();
+				$interface->setNumverOfVertices($fileName);
 				$this->graph = $interface->getGraph();
 				$rightInput = true;
 				break;
