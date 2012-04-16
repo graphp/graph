@@ -13,18 +13,18 @@ $steffiGraf = $LoaderEdgeListWeighted->getGraph();
 
 $steffiGrafBild = new GraphViz($steffiGraf);
 
-$script = $steffiGrafBild->createUnDirectedGraphVizScript();
-$newfile="graph.gv";
-$file = fopen ($newfile, "w");
-fwrite($file, $script);
-fclose ($file);
+// $script = $steffiGrafBild->createUnDirectedGraphVizScript();
+// $newfile="graph.gv";
+// $file = fopen ($newfile, "w");
+// fwrite($file, $script);
+// fclose ($file);
 
-echo "Generate picture ...";
-exec("dot -Tpng graph.gv -o graph.png && xdg-open graph.png");
-echo "... done\n";
-echo $script;
+// echo "Generate picture ...";
+// exec("dot -Tpng graph.gv -o graph.png && xdg-open graph.png");
+// echo "... done\n";
+// echo $script;
 
-//$alg = new AlgorithmPrim($steffiGraf,$steffiGraf->getVertex(1));
+$alg = new AlgorithmPrim($steffiGraf,$steffiGraf->getVertex(1));
 
 $alg->getVertices();
 

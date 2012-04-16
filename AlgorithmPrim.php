@@ -18,13 +18,18 @@ class AlgorithmPrim{
 		$edgeQueue = new SplPriorityQueue();
 		$edgeQueue->setExtractFlags(0x00000001); // Set extract flag to value
 		
+		foreach ($this->startVertice->getEdges() as $currentEdge) {
+			$edgeQueue->insert($currentEdge, $currentEdge->value);
+		}
 		$markInserted = array($this->startVertice->getId() => true);
 
 		$allVertices = $this->startGraph->getVertices();
 		
 		// for all vertices add one edge
 		foreach ($allVertices as $currentVertex) { 
-	
+		
+			
+			
 			// Add edges from $currentVertex to priority queue
 			foreach ($currentVertex->getEdges() as $currentEdge) {
 				$edgeQueue->insert($currentEdge, $currentEdge->value);
@@ -37,7 +42,7 @@ class AlgorithmPrim{
 			$cheapestEdgeIsOk = false;
 			while($cheapestEdgeIsOk == false) { 
 				foreach ($cheapestEdge->getTargetVertices() as $currentTarget){
-					if($markInserted[$currentTarget->getId()] == false){
+					if(isset($markInserted[$currentTarget->getId()]) && $markInserted[$currentTarget->getId()] == false){
 						$cheapestEdgeIsOk == true;
 					}
 				}
