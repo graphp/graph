@@ -113,6 +113,14 @@ class Vertex{
 	}
 	
 	/**
+	 * remove all edges saved in the vertice
+	 *
+	 */
+	public function removeAllEdges(){
+		unset($this->edges) ? $this->edges = array() : $this->edges=array();
+	}
+	
+	/**
 	 * check whether this vertex has a direct edge to given $vertex
 	 * 
 	 * @param Vertex $vertex
