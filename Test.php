@@ -4,16 +4,47 @@ spl_autoload_register(function($class){
     require_once(__DIR__.'/'.str_replace('_','/',$class).'.php');
 });
 
-function grad($graph){
-    echo 'grad: '.count($graph).'
-';
-}
 
-$loaderAdjacencyMatrix = new LoaderAdjacencyMatrix();
+///////////////////////////////////////////////////////////////////////////////////
+$LoaderEdgeListWeighted = new LoaderEdgeListWeighted();
 
-$derGraf = $loaderAdjacencyMatrix->getGraphFromFile("data/Graph1.txt");
+$LoaderEdgeListWeighted->setFileName("data/G_1_1_debugSample.txt");
+$steffiGraf = $LoaderEdgeListWeighted->getGraph();
 
-grad($derGraf);
+$steffiGrafBild = new GraphViz($steffiGraf);
+
+$script = $steffiGrafBild->createUnDirectedGraphVizScript();
+$newfile="graph.gv";
+$file = fopen ($newfile, "w");
+fwrite($file, $script);
+fclose ($file);
+
+echo "Generate picture ...";
+exec("dot -Tpng graph.gv -o graph.png && xdg-open graph.png");
+echo "... done\n";
+echo $script;
+
+//$alg = new AlgorithmPrim($steffiGraf,$steffiGraf->getVertex(1));
+
+$alg->getVertices();
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
+// function grad($graph){
+//     echo 'grad: '.count($graph).'
+// ';
+// }
+
+// $loaderAdjacencyMatrix = new LoaderAdjacencyMatrix();
+
+// $derGraf = $loaderAdjacencyMatrix->getGraphFromFile("data/Graph1.txt");
+
+// grad($derGraf);
 
 //foreach ($derGraf->getVertices() as $value) {
 //	echo $value->getId()." ";
@@ -26,33 +57,37 @@ grad($derGraf);
 // 	print_r($value);
 // }
 
-echo 'breitensuche ab 1:
-';
-$alg = new AlgorithmSearchBreadthFirst($derGraf->getVertex(1));
-echo implode(' ',$alg->getVerticesIds());
+///////////////////////////////////////////////////////////////////////////////////
+// echo 'breitensuche ab 1:
+// ';
+// $alg = new AlgorithmSearchBreadthFirst($derGraf->getVertex(1));
+// echo implode(' ',$alg->getVerticesIds());
 
-$derGraf->createVertices(100000);
+// $derGraf->createVertices(100000);
 
-grad($derGraf);
+// grad($derGraf);
 
-$derGraf->createVertices(10000);
+// $derGraf->createVertices(10000);
 
-grad($derGraf);
+// grad($derGraf);
+///////////////////////////////////////////////////////////////////////////////////
 
-$LoaderEdgeList = new LoaderEdgeList();
+///////////////////////////////////////////////////////////////////////////////////
+// $LoaderEdgeList = new LoaderEdgeList();
 
-$steffiGraf = $LoaderEdgeList->getGraphFromFile("data/Graph2.txt");
+// $steffiGraf = $LoaderEdgeList->getGraphFromFile("data/Graph2.txt");
 
-$steffiGrafBild = new GraphViz($steffiGraf);
+// $steffiGrafBild = new GraphViz($steffiGraf);
 
-$script = $steffiGrafBild->createUndirectedGraphVizScript();
+// $script = $steffiGrafBild->createUndirectedGraphVizScript();
 
-$newfile="graph.gv";
-$file = fopen ($newfile, "w");
-fwrite($file, $script);
-fclose ($file);
+// $newfile="graph.gv";
+// $file = fopen ($newfile, "w");
+// fwrite($file, $script);
+// fclose ($file);
 
-echo "Generate picture ...";
-exec("dot -Tpng graph.gv -o graph.png && xdg-open graph.png"); 
-echo "... done\n";
+// echo "Generate picture ...";
+// exec("dot -Tpng graph.gv -o graph.png && xdg-open graph.png"); 
+// echo "... done\n";
 //echo $script;
+///////////////////////////////////////////////////////////////////////////////////
