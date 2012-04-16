@@ -33,7 +33,14 @@ class AlgorithmSearchBreadthFirst{
 			// Now find next cheapest edge to add
 			$cheapestEdge = $edgeQueue->extract();
 
-			while($cheapestEdge == false) { // TODO Check if is: [visiteted]->[unvisited]
+			// Check if is: [visiteted]->[unvisited]
+			$cheapestEdgeIsOk = false;
+			while($cheapestEdgeIsOk == false) { 
+				foreach ($cheapestEdge->getTargetVertices() as $currentTarget){
+					if($markInserted[$currentTarget->getId()] == false){
+						$cheapestEdgeIsOk == true;
+					}
+				}
 				$cheapestEdge = $edgeQueue->extract();
 			}
 

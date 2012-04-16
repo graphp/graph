@@ -4,6 +4,13 @@ abstract class Edge{
 	
 	public $value;
 	
+	/**
+	 * get Vertices that are a target of this edge
+	 *
+	 * @return array[Vertex]
+	 */
+	abstract public function getTargetVertices();
+	
 // 	abstract public function hasVertexTo($vertex);
 	
 // 	abstract public function hasVertexFrom($vertex);
