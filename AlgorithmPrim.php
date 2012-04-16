@@ -23,15 +23,14 @@ class AlgorithmPrim{
 		}
 		$markInserted = array($this->startVertice->getId() => true);
 
-		$allVertices = $this->startGraph->getVertices();
+		$allVertices = $this->startGraph->getVertices(); // TODO remove startvertice, gives error later
 		
 		// for all vertices add one edge
 		foreach ($allVertices as $currentVertex) { 
-		
-			
 			
 			// Add edges from $currentVertex to priority queue
 			foreach ($currentVertex->getEdges() as $currentEdge) {
+				print "Adding Edges from ".$currentVertex->getId()."\n"; // TODO error while adding edges
 				$edgeQueue->insert($currentEdge, $currentEdge->value);
 			}
 
@@ -40,13 +39,23 @@ class AlgorithmPrim{
 
 			// Check if is: [visiteted]->[unvisited]
 			$cheapestEdgeIsOk = false;
-			while($cheapestEdgeIsOk == false) { 
+			while($cheapestEdgeIsOk == false) {
 				foreach ($cheapestEdge->getTargetVertices() as $currentTarget){
-					if(isset($markInserted[$currentTarget->getId()]) && $markInserted[$currentTarget->getId()] == false){
+					if($currentTarget == $currentVertex){
+						break; // only use edges to other vertices
+					}
+					
+					print $currentVertex->getId()." -> ".$currentTarget->getId()."\t";
+					print !isset($markInserted[$currentTarget->getId()])."\n";
+					if(!isset($markInserted[$currentTarget->getId()])){
 						$cheapestEdgeIsOk == true;
+						break;
 					}
 				}
-				$cheapestEdge = $edgeQueue->extract();
+				if($cheapestEdgeIsOk == false){
+					print "\n\n";
+					$cheapestEdge = $edgeQueue->extract();
+				}
 			}
 
 			$returnGraph->addEdge($cheapestEdge);
