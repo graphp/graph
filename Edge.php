@@ -2,6 +2,8 @@
 
 abstract class Edge{
 	
+	public $value;
+	
 // 	abstract public function hasVertexTo($vertex);
 	
 // 	abstract public function hasVertexFrom($vertex);

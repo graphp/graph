@@ -117,7 +117,8 @@ class Vertex{
 	 *
 	 */
 	public function removeAllEdges(){
-		unset($this->edges) ? $this->edges = array() : $this->edges=array();
+		unset($this->edges);
+		$this->edges = array();
 	}
 	
 	/**
