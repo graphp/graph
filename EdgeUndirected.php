@@ -4,9 +4,10 @@ class EdgeUndirected extends Edge{
 	private $a;
 	private $b;
 
-	public function __construct($a,$b){
+	public function __construct($a,$b,$weight){
 		$this->a = $a;
 		$this->b = $b;
+		$this->value = $weight;
 	}
 
 	//     public function getVerticesFrom(){

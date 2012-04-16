@@ -1,5 +1,5 @@
 <?php
-class AlgorithmSearchBreadthFirst{
+class AlgorithmPrim{
 	public function __construct(Graph $inputGraph, Vertex $startVertice){
 		$this->startGraph = clone $inputGraph;
 		$this->startVertice = clone $startVertice;
