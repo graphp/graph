@@ -35,6 +35,21 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * Return string with graph visualisation
+	 *
+	 * @return string
+	 */
+	public function toString(){
+		$return = "Vertices of graph:\n";
+	
+		foreach ($this->vertices as $vertex){
+			$return .= "\t".$vertex->toString()."\n";
+		}
+	
+		return $return;
+	}
+	
+	/**
 	 * create the given number of vertices
 	 * 
 	 * @param int $n

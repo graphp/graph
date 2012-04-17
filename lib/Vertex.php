@@ -24,6 +24,21 @@ class Vertex{
 		$this->graph = $graph;
 	}
 	
+	/**
+	 * Return string with vertex visualisation
+	 *
+	 * @return string
+	 */
+	public function toString(){
+		$return = "Edges of vertex ".$this->id.":\n";
+		
+		foreach ($this->edges as $edge){
+			$return .= "\t".$edge->toString()."\n"; 
+		}
+		
+		return $return;
+	}
+	
 //getter setter
 	
 	/**
