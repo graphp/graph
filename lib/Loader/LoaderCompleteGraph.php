@@ -6,15 +6,15 @@ class LoaderCompleteGraph implements Loader{
 	
 	private $debugMode = false;
 	
+	public function __construct($n){
+	    $this->numberOfVertices = $n;
+	}
+	
 	private function writeDebugMessage($messageString){
 		if($this->debugMode){
 			echo $messageString;
 		}
 	
-	}
-	
-	public function setNumverOfVertices($n){
-		$this->numberOfVertices = $n;
 	}
 	
 	public function getGraph(){

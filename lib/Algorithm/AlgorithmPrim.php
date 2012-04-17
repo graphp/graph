@@ -8,7 +8,7 @@ class AlgorithmPrim{
 
 	/**
 	 *
-	 * @return Graph[Vertex]
+	 * @return Graph
 	 */
 	public function getVertices(){
 		
@@ -17,7 +17,7 @@ class AlgorithmPrim{
 		$returnGraph->createVertex($this->startVertice->getId()); // Add starting vertex
 
 		$edgeQueue = new SplPriorityQueue();
-		$edgeQueue->setExtractFlags(0x00000001); // Set extract type to value
+		$edgeQueue->setExtractFlags(SplPriorityQueue::EXTR_PRIORITY); // Set extract type to value
 		// END Initialize program
 		
 		
