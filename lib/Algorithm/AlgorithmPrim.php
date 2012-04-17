@@ -8,7 +8,7 @@ class AlgorithmPrim{
 
 	/**
 	 *
-	 * @return Graph[Vertex]
+	 * @return Graph
 	 */
 	public function getVertices(){
 		

@@ -4,13 +4,16 @@ class LoaderEdgeListWeighted extends LoaderFile{
 	
 	private $debugMode = false;
 	
+	private $fileName;
+	
 	private function writeDebugMessage($messageString){
 		if($this->debugMode){
 			echo $messageString;
 		}
 	}
 	
-	public function __construct(){
+	public function __construct($filename){
+	    $this->fileName = $filename;
 	}
 	
 	public function getGraph(){

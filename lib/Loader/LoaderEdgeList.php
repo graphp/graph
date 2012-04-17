@@ -4,13 +4,16 @@ class LoaderEdgeList extends LoaderFile{
 	
 	private $debugMode = false;
 	
+	private $fileName;
+	
+	public function __construct($filename){
+	    $this->fileName = $filename;
+	}
+	
 	private function writeDebugMessage($messageString){
 		if($this->debugMode){
 			echo $messageString;
 		}
-	}
-	
-	public function __construct(){
 	}
 	
 	public function getGraph(){
