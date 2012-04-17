@@ -21,6 +21,10 @@ class EdgeUndirected extends Edge{
 	public function getTargetVertices(){
 		return array($this->a,$this->b);
 	}
+	
+	public function toString(){
+		return $this->a->getId()." <-> ".$this->b->getId()." Value: ".$this->value;
+	}
 
 	//     public function hasVertexFrom($vertex){
 	//         return ($this->a === $vertex || $this->b === $vertex);

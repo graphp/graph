@@ -11,6 +11,13 @@ abstract class Edge{
 	 */
 	abstract public function getTargetVertices();
 	
+	/**
+	 * Return string with edge visualisation
+	 *
+	 * @return string
+	 */
+	abstract function toString();
+	
 // 	abstract public function hasVertexTo($vertex);
 	
 // 	abstract public function hasVertexFrom($vertex);

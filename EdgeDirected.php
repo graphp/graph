@@ -27,6 +27,10 @@ class EdgeDirected extends Edge{
 	public function getTargetVertices(){
 		return array($this->to);
 	}
+	
+	public function toString(){
+		return $this->from->getId()." -> ".$this->to->getId()." Value: ".$this->value;
+	}
 
 	//     public function hasVertexFrom($vertex){
 	//         return ($this->from === $vertex);

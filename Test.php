@@ -24,7 +24,7 @@ $steffiGrafBild = new GraphViz($steffiGraf);
 // echo "... done\n";
 // echo $script;
 
-$alg = new AlgorithmPrim($steffiGraf,$steffiGraf->getVertex(1));
+$alg = new AlgorithmPrim($steffiGraf,$steffiGraf->getVertex(0));
 
 $alg->getVertices();
 
