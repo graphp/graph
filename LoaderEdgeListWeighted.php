@@ -1,6 +1,6 @@
 <?php
 
-class LoaderEdgeList extends LoaderFile{
+class LoaderEdgeListWeighted extends LoaderFile{
 	
 	private $debugMode = false;
 	
@@ -30,7 +30,7 @@ class LoaderEdgeList extends LoaderFile{
 			$from = $graph->getVertex($edgeConnections[0]);
 			$to = $graph->getVertex($edgeConnections[1]);
 			
-			$from->createEdge($to);								//TODO directed
+			$from->createEdge($to,$edgeConnections[2]);								//TODO directed
 		}
 		
 		return $graph;

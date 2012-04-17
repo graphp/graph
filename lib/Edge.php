@@ -2,6 +2,22 @@
 
 abstract class Edge{
 	
+	public $value;
+	
+	/**
+	 * get Vertices that are a target of this edge
+	 *
+	 * @return array[Vertex]
+	 */
+	abstract public function getTargetVertices();
+	
+	/**
+	 * Return string with edge visualisation
+	 *
+	 * @return string
+	 */
+	abstract function toString();
+	
 // 	abstract public function hasVertexTo($vertex);
 	
 // 	abstract public function hasVertexFrom($vertex);

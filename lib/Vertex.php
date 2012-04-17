@@ -67,8 +67,8 @@ class Vertex{
 	 * @uses Vertex::addEdge()
 	 * @uses Graph::addEdge()
 	 */
-	public function createEdgeTo($vertex){
-	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeDirected($this,$vertex))));
+	public function createEdgeTo($vertex, $weight = null){
+	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeDirected($this,$vertex,$weight))));
 	}
 	
 	/**
@@ -80,8 +80,8 @@ class Vertex{
 	 * @uses Vertex::addEdge()
 	 * @uses Graph::addEdge()
 	 */
-	public function createEdge($vertex){
-	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeUndirected($this,$vertex))));
+	public function createEdge($vertex, $weight = null){
+	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeUndirected($this,$vertex,$weight))));
 	}
 	
 	/**
@@ -110,6 +110,15 @@ class Vertex{
 	    }
 	    unset($this->edges[$id]);
 	    return $edge;
+	}
+	
+	/**
+	 * remove all edges saved in the vertice
+	 *
+	 */
+	public function removeAllEdges(){
+		unset($this->edges);
+		$this->edges = array();
 	}
 	
 	/**
