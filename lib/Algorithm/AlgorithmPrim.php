@@ -17,14 +17,14 @@ class AlgorithmPrim{
 		$returnGraph->createVertex($this->startVertice->getId()); // Add starting vertex
 
 		$edgeQueue = new SplPriorityQueue();
-		$edgeQueue->setExtractFlags(0x00000001); // Set extract type to value
+		$edgeQueue->setExtractFlags(SplPriorityQueue::EXTR_DATA); // Set extract type to value
 		// END Initialize program
 		
 		
 		// Initialize algorithm
 		foreach ($this->startVertice->getEdges() as $currentEdge) {
 			print "Init adding Edge: ".$currentEdge->toString()."\n";
-			$edgeQueue->insert($currentEdge, $currentEdge->value);
+			$edgeQueue->insert($currentEdge, -$currentEdge->value);
 		}
 		$returnGraph->addEdge($edgeQueue->extract());
 		$markInserted = array($this->startVertice->getId() => true);
@@ -75,7 +75,7 @@ class AlgorithmPrim{
 				// Add all edges from $currentVertex to priority queue
 				foreach ($currentVertex->getEdges() as $currentEdge) {
 					print "\t Adding Edge: ".$currentEdge->toString()."\n";
-					$edgeQueue->insert($currentEdge, $currentEdge->value);
+					$edgeQueue->insert($currentEdge, -$currentEdge->value);
 				}
 			}
 		}
