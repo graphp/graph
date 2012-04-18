@@ -18,7 +18,7 @@ class AlgorithmPrim{
 		$edgeQueue = new SplPriorityQueue();
 		//default: $edgeQueue->setExtractFlags(SplPriorityQueue::EXTR_DATA);
 		// END Initialize program
-
+		
 
 		// Initialize algorithm
 		if($this->debugMode){
@@ -72,7 +72,7 @@ class AlgorithmPrim{
 			
 			// BEGIN Cheapest Edge found, add new vertex and edge to returnGraph
 			if($this->debugMode){
-				print "\t\t Choosed cheapest edge: ".$newEgde->toString()."\n";
+				print "\t\t Choosed cheapest edge: ".$newEdge->toString()."\n";
 			}
 			
 			$returnGraph->createVertex($newTargetVertex->getId());
@@ -82,12 +82,12 @@ class AlgorithmPrim{
 			$fromTemp = $cheapestEdge->getVertexFromToById($to);
 			$from = $returnGraph->getVertex($fromTemp->getId());
 
-			$newEgde = $returnGraph->addEdge(new EdgeUndirected($to, $from));
+			$newEdge = $returnGraph->addEdge(new EdgeUndirected($to, $from));
 			$newEdge->setWeight($cheapestEdge->getWeight());
 
-			$to->addEdge($newEgde);
-			$from->addEdge($newEgde);
-			$returnGraph->addEdge($newEgde);
+			$to->addEdge($newEdge);
+			$from->addEdge($newEdge);
+			$returnGraph->addEdge($newEdge);
 			// END Cheapest Edge found, add new vertex and edge to returnGraph
 			
 
