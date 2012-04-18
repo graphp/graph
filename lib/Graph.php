@@ -41,7 +41,7 @@ class Graph implements Countable{
 	 * @return Vertex new vertex in this graph
 	 * @throws Exception
 	 */
-	public function createVertexFrom($vertex){
+	public function createVertexClone($vertex){
 	    $id = $vertex->getId();
 	    if(isset($this->vertices[$id])){
 	        throw new Exception('Id of cloned vertex already exists');
@@ -50,6 +50,25 @@ class Graph implements Countable{
 	    // TODO: properly set attributes of vertex
 	    $this->vertices[$id] = $vertex;
 	    return $new;
+	}
+	
+	/**
+	 * create new clone of the given edge between adjacent vertices
+	 * 
+	 * @param EdgeUndirected $originalEdge original edge from old graph
+	 * @return EdgeUndirected new edge in this graph
+	 */
+	public function createEdgeClone($originalEdge){
+	    $ends = $originalEdge->getVertices();
+	    
+	    $a = $this->getVertex($ends[0]->getId()); // get start vertex from old start vertex id
+	    $b = $this->getVertex($ends[1]->getId()); // get target vertex from old target vertex id
+	    
+	    $newEdge = $a->createEdge($b); // create new edge between new a and b
+	    // TODO: copy edge attributes
+	    $newEdge->setWeight($originalEdge->getWeight());
+	    
+	    return $newEdge;
 	}
 	
 	/**
