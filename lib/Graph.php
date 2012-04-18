@@ -35,6 +35,24 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * create a new Vertex in this Graph from the given input Vertex of another graph
+	 * 
+	 * @param Vertex $vertex
+	 * @return Vertex new vertex in this graph
+	 * @throws Exception
+	 */
+	public function createVertexFrom($vertex){
+	    $id = $vertex->getId();
+	    if(isset($this->vertices[$id])){
+	        throw new Exception('Id of cloned vertex already exists');
+	    }
+	    $new = new Vertex($id,$this);
+	    // TODO: properly set attributes of vertex
+	    $this->vertices[$id] = $vertex;
+	    return $new;
+	}
+	
+	/**
 	 * Return string with graph visualisation
 	 *
 	 * @return string
