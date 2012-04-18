@@ -14,57 +14,65 @@ class AlgorithmPrim{
 
 		// Initialize program
 		$returnGraph =  new Graph();
-
+		
+		foreach($this->startGraph->getVertices() as $vertex){ 						// copy all vertices to new graph
+			$returnGraph->createVertexClone($vertex);
+		}
+		
 		$edgeQueue = new SplPriorityQueue();
-		//default: $edgeQueue->setExtractFlags(SplPriorityQueue::EXTR_DATA);
+									
 		// END Initialize program
 		
 
-		// Initialize algorithm
+		//debug output?
 		if($this->debugMode){
 			print "Init start vertex: ".$this->startVertice->getId()."\n";
 		}
-		$returnGraph->createVertex($this->startVertice->getId()); // Add starting vertex
-		$markInserted = array($this->startVertice->getId() => true);
-		foreach ($this->startVertice->getEdges() as $currentEdge) {
+		
+		// Initialize algorithm 
+		
+		$markInserted = array($this->startVertice->getId() => true);			// Color starting vertex
+					
+		foreach ($this->startVertice->getEdges() as $currentEdge) {				// Add all edges from startvertex
 			if($this->debugMode){
-				print "\t Init adding Edge: ".$currentEdge->toString()."\n";
+				print "\t Init adding Edge: ".$currentEdge->toString()."\n";	
 			}
-			$edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
+			$edgeQueue->insert($currentEdge, -$currentEdge->getWeight());		// Add edges to priority queue with inverted weights (priority queue has high values at the front)
 		}
 		// END Initialize algorithm
 
 
 		// BEGIN algorithm
-		// for all vertices add one edge
-		$startVerticeId = $this->startVertice->getId();
-		foreach ($this->startGraph->getVertices() as $value) {
-			if($value->getId() == $startVerticeId){
+		
+		$startVerticeId = $this->startVertice->getId();							// set start vertex id 
+ 		foreach ($this->startGraph->getVertices() as $value) {					// iterate n times over edges form know nodes
+			
+ 			if($value->getId() == $startVerticeId){								// skip the first entry to run only n-1 times 
 				continue;
 			}
 			
-			// Find next cheapest edge to add
-			$cheapestEdge = $edgeQueue->extract();
+			
+			$cheapestEdge = $edgeQueue->extract();								// Get next cheapest edge
 
 			// BEGIN Check if edge is is: [visiteted]->[unvisited]
-			$cheapestEdgeIsOk = false;
+			$cheapestEdgeIsOk = false;											// 
 			while($cheapestEdgeIsOk == false) {
 				if($this->debugMode){
 					print "\t Checking: ".$cheapestEdge->toString()."\n";
 				}
 					
-				foreach ($cheapestEdge->getTargetVertices() as $currentTarget){
+				foreach ($cheapestEdge->getTargetVertices() as $currentTarget){	// run over both vertices
 
-					$cheapestEdgeIsOkOld = $cheapestEdgeIsOk;
+					$cheapestEdgeIsOkOld = $cheapestEdgeIsOk;					
 
-					$cheapestEdgeIsOk = $cheapestEdgeIsOk ? true : !isset($markInserted[$currentTarget->getId()]);
+					$cheapestEdgeIsOk = $cheapestEdgeIsOk ? true : !isset($markInserted[$currentTarget->getId()]); //check if already visited, if not visit
 
-					if($cheapestEdgeIsOkOld != $cheapestEdgeIsOk){
+					if($cheapestEdgeIsOkOld != $cheapestEdgeIsOk){				//get unvisted vertex				
 						$newTargetVertex = $currentTarget;
 					}
 				}
-				if($cheapestEdgeIsOk == false || $newTargetVertex->getId() == $this->startVertice->getId()){
-					$cheapestEdge = $edgeQueue->extract();
+				if($cheapestEdgeIsOk == false){									// check if cheapest edge is false
+					$cheapestEdge = $edgeQueue->extract();						//if edge is not ok, get a new edge from the queue
 				}
 			}
 			// END Check if edge is is: [visiteted]->[unvisited]
@@ -75,30 +83,17 @@ class AlgorithmPrim{
 				print "\t\t Choosed cheapest edge: ".$newEdge->toString()."\n";
 			}
 			
-			$returnGraph->createVertex($newTargetVertex->getId());
 			$markInserted[$newTargetVertex->getId()] = true;
 				
-			$to = $returnGraph->getVertex($newTargetVertex->getId());
-			$fromTemp = $cheapestEdge->getVertexFromToById($to);
-			$from = $returnGraph->getVertex($fromTemp->getId());
-
-			$newEdge = $returnGraph->addEdge(new EdgeUndirected($to, $from));
-			$newEdge->setWeight($cheapestEdge->getWeight());
-
-			$to->addEdge($newEdge);
-			$from->addEdge($newEdge);
-			$returnGraph->addEdge($newEdge);
-			// END Cheapest Edge found, add new vertex and edge to returnGraph
-			
-
+			$newEgde = $returnGraph->createEdgeClone($cheapestEdge);
 
 			// BEGIN get unvisited vertex of the edge and add edges from new vertex
 			if($newTargetVertex->getId() != $this->startVertice->getId()){
 				if($this->debugMode){
 					print "Adding Vertex with ID:".$newTargetVertex->getId()."\n";
 				}
-				// Add all edges from $currentVertex to priority queue
-				foreach ($newTargetVertex->getEdges() as $currentEdge) {
+						
+				foreach ($newTargetVertex->getEdges() as $currentEdge) {		// Add all edges from $currentVertex to priority queue
 					if($this->debugMode){
 						print "\t Adding Edge: ".$currentEdge->toString()."\n";
 					}
@@ -109,7 +104,9 @@ class AlgorithmPrim{
 		}
 		// END algorithm
 
-		print 'done\n';
+		if($this->debugMode){
+		    print "done".PHP_EOL;
+		}
 		return $returnGraph;
 	}
 
