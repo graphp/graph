@@ -25,6 +25,15 @@ class Vertex{
 	}
 	
 	/**
+	 * get graph this vertex is attached to
+	 * 
+	 * @return Graph
+	 */
+	public function getGraph(){
+	    return $this->graph;
+	}
+	
+	/**
 	 * Return string with vertex visualisation
 	 *
 	 * @return string
@@ -83,6 +92,9 @@ class Vertex{
 	 * @uses Graph::addEdge()
 	 */
 	public function createEdgeTo($vertex){
+	    if($vertex->getGraph() !== $this->graph){
+	        throw new Exception('Target vertex has to be within the same graph');
+	    }
 	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeDirected($this,$vertex))));
 	}
 	
@@ -96,6 +108,10 @@ class Vertex{
 	 * @uses Graph::addEdge()
 	 */
 	public function createEdge($vertex){
+	    if($vertex->getGraph() !== $this->graph){
+	        throw new Exception('Target vertex has to be within the same graph');
+	    }
+	    //echo 'new edge from '.$this->id.' to '.$vertex->getId().PHP_EOL;
 	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeUndirected($this,$vertex))));
 	}
 	
