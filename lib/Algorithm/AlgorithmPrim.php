@@ -16,7 +16,7 @@ class AlgorithmPrim{
 		$returnGraph =  new Graph();
 
 		$edgeQueue = new SplPriorityQueue();
-		$edgeQueue->setExtractFlags(SplPriorityQueue::EXTR_DATA); // Set extract type to value
+		//default: $edgeQueue->setExtractFlags(SplPriorityQueue::EXTR_DATA);
 		// END Initialize program
 
 
@@ -30,7 +30,7 @@ class AlgorithmPrim{
 			if($this->debugMode){
 				print "\t Init adding Edge: ".$currentEdge->toString()."\n";
 			}
-			$edgeQueue->insert($currentEdge, -$currentEdge->value);
+			$edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
 		}
 		// END Initialize algorithm
 
@@ -82,7 +82,8 @@ class AlgorithmPrim{
 			$fromTemp = $cheapestEdge->getVertexFromToById($to);
 			$from = $returnGraph->getVertex($fromTemp->getId());
 
-			$newEgde = $returnGraph->addEdge(new EdgeUndirected($to, $from, $cheapestEdge->value));
+			$newEgde = $returnGraph->addEdge(new EdgeUndirected($to, $from));
+			$newEdge->setWeight($cheapestEdge->getWeight());
 
 			$to->addEdge($newEgde);
 			$from->addEdge($newEgde);
@@ -101,7 +102,7 @@ class AlgorithmPrim{
 					if($this->debugMode){
 						print "\t Adding Edge: ".$currentEdge->toString()."\n";
 					}
-					$edgeQueue->insert($currentEdge, -$currentEdge->value);
+					$edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
 				}
 			}
 			// END get unvisited vertex of the edge and add edges from new vertex

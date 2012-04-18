@@ -17,7 +17,13 @@ class GraphViz{
 			    $currentTargetVertex = $currentEdge->getVertexToFrom($vertex);
 				
 				if($currentTargetVertex !== $vertex && !isset($mark[$currentTargetVertex->getId()])){
-					$script .= $vertex->getId()." -- ".$currentTargetVertex->getId()." [label=".$currentEdge->value."];\n";
+					$script .= $vertex->getId()." -- ".$currentTargetVertex->getId();
+					
+					$weight = $currentEdge->getWeight();
+					if($weight !== NULL){                                       // add weight as label (if set)
+					    $script .= " [label='".$weight."']";
+					}
+					$script .= ";\n";
 				}
 			}
 			$mark[$vertex->getId()] = true;
@@ -38,7 +44,13 @@ class GraphViz{
 			    $currentTargetVertex = $currentEdge->getVertexToFrom($vertex);
 						
 				if($currentTargetVertex !== $vertex){
-					$script .= $vertex->getId()." -> ".$currentTargetVertex->getId()." [label=".$currentEdge->value."];\n";
+					$script .= $vertex->getId()." -> ".$currentTargetVertex->getId();
+					
+					$weight = $currentEdge->getWeight();
+					if($weight !== NULL){                                       // add weight as label (if set)
+					    $script .= " [label='".$weight."']";
+					}
+					$script .= "\n";
 				}
 			}
 		}

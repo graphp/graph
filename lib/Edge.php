@@ -2,7 +2,13 @@
 
 abstract class Edge{
 	
-	public $value;
+    /**
+     * weight of this edge
+     * 
+     * @var float|NULL
+     * @see Edge::getWeight()
+     */
+	protected $weight = NULL;
 	
 	/**
 	 * get Vertices that are a target of this edge
@@ -47,4 +53,24 @@ abstract class Edge{
 	abstract public function getVertexFromTo($endVertex);
 	
 // 	abstract public function getVerticesFrom();
+    
+	/**
+	 * return weight of edge
+	 * 
+	 * @return float|NULL weight of edge or NULL=not set
+	 */
+	public function getWeight(){
+	    return $this->weight;
+	}
+	
+	/**
+	 * set new weight for edge
+	 * 
+	 * @param float|NULL $weight
+	 * @return Edge $this (chainable)
+	 */
+	public function setWeight($weight){
+	    $this->weight = $weight;
+	    return $this;
+	}
 }

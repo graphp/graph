@@ -4,10 +4,9 @@ class EdgeUndirected extends Edge{
 	private $a;
 	private $b;
 
-	public function __construct($a,$b,$weight){
+	public function __construct($a,$b){
 		$this->a = $a;
 		$this->b = $b;
-		$this->value = $weight;
 	}
 
 	//     public function getVerticesFrom(){
@@ -23,7 +22,7 @@ class EdgeUndirected extends Edge{
 	}
 	
 	public function toString(){
-		return $this->a->getId()." <-> ".$this->b->getId()." Value: ".$this->value;
+		return $this->a->getId()." <-> ".$this->b->getId()." Weight: ".$this->weight;
 	}
 
 	//     public function hasVertexFrom($vertex){

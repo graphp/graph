@@ -10,10 +10,9 @@ class EdgeDirected extends Edge{
 	 * @param Vertex $from start/source Vertex
 	 * @param Vertex $to   end/target Vertex
 	 */
-	public function __construct($from,$to,$weight){
+	public function __construct($from,$to){
 		$this->from = $from;
 		$this->to = $to;
-		$this->value = $weight;
 	}
 
 	//     public function getVerticesFrom(){
@@ -29,7 +28,7 @@ class EdgeDirected extends Edge{
 	}
 	
 	public function toString(){
-		return $this->from->getId()." -> ".$this->to->getId()." Value: ".$this->value;
+		return $this->from->getId()." -> ".$this->to->getId()." Weight: ".$this->weight;
 	}
 
 	//     public function hasVertexFrom($vertex){
