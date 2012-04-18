@@ -28,11 +28,14 @@ class AlgorithmKruskal{
 		
 		foreach ($this->graph->getEdges() as $edge){							//For all edges
 		    if($edge instanceof EdgeDirected){
-		        throw new Exception('Not supported');
+		        throw new Exception('Kruskal for directed edges not supported');
 		    }
-		    $sortedEdges->insert($edge, - $edge->getWeight());						//Add edges with negativ Weight because of order in stl
+		    $weight = $edge->getWeight();
+		    if($weight === NULL){
+		        throw new Exception('Kruskal for edges with no weight not supported');
+		    }
+		    $sortedEdges->insert($edge, - $weight);						//Add edges with negativ Weight because of order in stl
 		}
-		
 		
 		//Füge billigste Kanten zu neuen Graphen hinzu und verschmelze teilgragen wenn es nötig ist (keine Kreise)
 		//solange ich mehr als einen Graphen habe mit weniger als n-1 kanten (bei n knoten im original)
@@ -40,11 +43,9 @@ class AlgorithmKruskal{
 			//Gucke Kante an:
 					
 			$vertices = $edge->getVertices();
-			$vertexA = $vertices[0];
-			$vertexB = $vertices[1];
 			
-			$aId = $vertexA->getId();
-			$bId = $vertexB->getId();
+			$aId = $vertices[0]->getId();
+			$bId = $vertices[1]->getId();
 			
 			$aColor = isset($colorOfVertices[$aId]) ? $colorOfVertices[$aId] : NULL;
 			$bColor = isset($colorOfVertices[$bId]) ? $colorOfVertices[$bId] : NULL;
@@ -100,7 +101,7 @@ class AlgorithmKruskal{
 			//=> nichts machen
 		}
 		
-		if(count($colorCounts) === 1){
+		if(count($colorCounts) !== 1){
 		    throw new Exception('Graph is not connected or empty');
 		}
 		
