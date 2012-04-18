@@ -57,13 +57,3 @@ class AlgorithmNearestNeighbor{
 		return $resultGraph;
 	}
 }
-
-
-
-
-
-
-
-
-
-
