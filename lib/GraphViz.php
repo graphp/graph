@@ -12,17 +12,15 @@ class GraphViz{
 		$script = "graph G {\n";
 		$mark = array();
 			
-		foreach ($this->graph->getVertices() as $vertice){
-			foreach ($vertice->getEdges() as $currentEdge){
-				foreach ($currentEdge->getTargetVertices() as $currentTargetVertice) {
-						
-					if($currentTargetVertice != $vertice && !isset($mark[$currentTargetVertice->getId()])){
-						$script .= $vertice->getId()." -- ".$currentTargetVertice->getId()." [label=".$currentEdge->value."];\n";
-					}
-						
+		foreach ($this->graph->getVertices() as $vertex){
+			foreach ($vertex->getEdges() as $currentEdge){
+			    $currentTargetVertex = $currentEdge->getVertexToFrom($vertex);
+				
+				if($currentTargetVertex !== $vertex && !isset($mark[$currentTargetVertex->getId()])){
+					$script .= $vertex->getId()." -- ".$currentTargetVertex->getId()." [label=".$currentEdge->value."];\n";
 				}
 			}
-			$mark[$vertice->getId()] = true;
+			$mark[$vertex->getId()] = true;
 		}
 		$script .= "\n}";
 			
@@ -34,16 +32,13 @@ class GraphViz{
 	 */
 	public function createDirectedGraphVizScript(){
 		$script = "digraph G {\n";
-		$mark = array();
-
-		foreach ($this->graph->getVertices() as $vertice){
-			foreach ($vertice->getEdges() as $currentEdge){
-				foreach ($currentEdge->getTargetVertices() as $currentTargetVertice) {
+		
+		foreach ($this->graph->getVertices() as $vertex){
+			foreach ($vertex->getEdges() as $currentEdge){
+			    $currentTargetVertex = $currentEdge->getVertexToFrom($vertex);
 						
-					if($currentTargetVertice != $vertice && !isset($mark[$currentTargetVertice->getId()])){
-						$script .= $vertice->getId()." -> ".$currentTargetVertice->getId()." [label=".$currentEdge->value."];\n";
-					}
-						
+				if($currentTargetVertex !== $vertex){
+					$script .= $vertex->getId()." -> ".$currentTargetVertex->getId()." [label=".$currentEdge->value."];\n";
 				}
 			}
 		}
