@@ -80,4 +80,13 @@ abstract class Edge{
 	 * @return array[Vertex]
 	 */
 	abstract public function getVertices();
+	
+	/**
+	 * do NOT allow cloning of objects
+	 * 
+	 * @throws Exception
+	 */
+	private function __clone(){
+	    throw new Exception();
+	}
 }

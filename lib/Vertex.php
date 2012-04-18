@@ -376,4 +376,13 @@ class Vertex{
 		$alg = new AlgorithmSearchDepthFirst($this);
 		return $alg->getVertices();
 	}
+	
+	/**
+	 * do NOT allow cloning of objects
+	 *
+	 * @throws Exception
+	 */
+	private function __clone(){
+	    throw new Exception();
+	}
 }

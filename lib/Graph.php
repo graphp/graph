@@ -327,4 +327,13 @@ class Graph implements Countable{
 		$alg = new AlgorithmConnectedComponents($this);
 		return $alg->getNumberOfComponents();
 	}
+	
+	/**
+	 * do NOT allow cloning of objects
+	 *
+	 * @throws Exception
+	 */
+	private function __clone(){
+	    throw new Exception();
+	}
 }
