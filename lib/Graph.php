@@ -41,15 +41,15 @@ class Graph implements Countable{
 	 * @return Vertex new vertex in this graph
 	 * @throws Exception
 	 */
-	public function createVertexClone($vertex){
-	    $id = $vertex->getId();
+	public function createVertexClone($originalVertex){
+	    $id = $originalVertex->getId();
 	    if(isset($this->vertices[$id])){
 	        throw new Exception('Id of cloned vertex already exists');
 	    }
-	    $new = new Vertex($id,$this);
+	    $newVertex = new Vertex($id,$this);
 	    // TODO: properly set attributes of vertex
-	    $this->vertices[$id] = $vertex;
-	    return $new;
+	    $this->vertices[$id] = $newVertex;
+	    return $newVertex;
 	}
 	
 	/**
@@ -305,7 +305,7 @@ class Graph implements Countable{
 	 * @private
 	 */
 	public function addEdge($edge){
-	    $this->edges[] = $edge;
+	    $this->edges []= $edge;
 	    return $edge;
 	}
 	
