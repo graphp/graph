@@ -4,6 +4,23 @@ class GraphViz{
 	public function __construct(Graph $graphToPlot){
 		$this->graph = $graphToPlot;
 	}
+	
+	public function display(){
+        $script = $this->createUnDirectedGraphVizScript();
+        
+        var_dump($script);
+        
+        $tmp = tempnam('/tmp','graphviz');
+        file_put_contents($tmp,$script);
+        
+        
+        echo "Generate picture ...";
+        
+        exec('dot -Tpng '.$tmp.' -o '.$tmp.'.png');
+        exec('xdg-open '.$tmp.'.png # > /dev/null &2>1 &');
+        
+        echo "... done\n";
+	}
 
 	/**
 	 * @return GraphViz script with one edge between every vertex
@@ -21,7 +38,7 @@ class GraphViz{
 					
 					$weight = $currentEdge->getWeight();
 					if($weight !== NULL){                                       // add weight as label (if set)
-					    $script .= " [label='".$weight."']";
+					    $script .= " [label=".$weight."]";
 					}
 					$script .= ";\n";
 				}
@@ -48,7 +65,7 @@ class GraphViz{
 					
 					$weight = $currentEdge->getWeight();
 					if($weight !== NULL){                                       // add weight as label (if set)
-					    $script .= " [label='".$weight."']";
+					    $script .= " [label=".$weight."]";
 					}
 					$script .= "\n";
 				}
