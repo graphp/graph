@@ -1,8 +1,8 @@
 <?php
 class AlgorithmPrim{
 	public function __construct(Graph $inputGraph, Vertex $startVertice){
-		$this->startGraph = clone $inputGraph;
-		$this->startVertice = clone $startVertice;
+		$this->startGraph = $inputGraph;
+		$this->startVertice = $startVertice;
 	}
 
 	private $debugMode = false;
