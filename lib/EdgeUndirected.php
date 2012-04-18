@@ -21,6 +21,10 @@ class EdgeUndirected extends Edge{
 		return array($this->a,$this->b);
 	}
 	
+	public function getVertices(){
+	    return array($this->a,$this->b);
+	}
+	
 	public function toString(){
 		return $this->a->getId()." <-> ".$this->b->getId()." Weight: ".$this->weight;
 	}

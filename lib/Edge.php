@@ -73,4 +73,11 @@ abstract class Edge{
 	    $this->weight = $weight;
 	    return $this;
 	}
+	
+	/**
+	 * get all vertices this edge connects
+	 * 
+	 * @return array[Vertex]
+	 */
+	abstract public function getVertices();
 }

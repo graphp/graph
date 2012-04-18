@@ -27,6 +27,10 @@ class EdgeDirected extends Edge{
 		return array($this->to);
 	}
 	
+	public function getVertices(){
+	    return array($this->from,$this->to);
+	}
+	
 	public function toString(){
 		return $this->from->getId()." -> ".$this->to->getId()." Weight: ".$this->weight;
 	}
