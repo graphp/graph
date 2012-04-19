@@ -19,15 +19,15 @@ class AlgorithmKruskal{
 		    $newGraph->createVertexClone($vertex);
 		}
 		
-		$colorCounts = array();
-		$colorOfVertices = array();
-		$colorNext = 0;
+		$colorNext = 0;    // next color to assign
+		$colorVertices = array(); // array(color1=>array(vid1,vid2,...),color2=>...)
+		$colorOfVertices = array(); // array(vid1=>color1,vid2=>color1,...)
 		
 		//Sortiere Kanten im Graphen
 		$sortedEdges = new SplPriorityQueue();
 		
 		foreach ($this->graph->getEdges() as $edge){							//For all edges
-		    if($edge instanceof EdgeDirected){
+	        if($edge instanceof EdgeDirected){
 		        throw new Exception('Kruskal for directed edges not supported');
 		    }
 		    $weight = $edge->getWeight();
@@ -53,10 +53,10 @@ class AlgorithmKruskal{
 			//1. weder start noch end gehört zu einem graphen
 				//=> neuer Graph mit kanten
 			if ( $aColor === NULL && $bColor === NULL ){
-				$colorCounts[$colorNext] = 2;
-				
 				$colorOfVertices[$aId] = $colorNext;
 				$colorOfVertices[$bId] = $colorNext;
+				
+				$colorVertices[$colorNext] = array($aId,$bId);
 				
 				++$colorNext;
 				
@@ -66,13 +66,13 @@ class AlgorithmKruskal{
 				//=> erweitere diesesn Graphen
 			else if ($aColor === NULL && $bColor !== NULL){						//Only b has color
 				$colorOfVertices[$aId] = $bColor;                               // paint a in b's color
-				++$colorCounts[$bColor];
+				$colorVertices[$bColor][]=$aId;
 				
 				$newGraph->createEdgeClone($edge);
 			}
 			else if ($aColor !== NULL && $bColor === NULL){						//Only a has color
 				$colorOfVertices[$bId] = $aColor;                               // paint b in a's color
-				++$colorCounts[$aColor];
+				$colorVertices[$aColor][]=$bId;
 				
 				$newGraph->createEdgeClone($edge);
 			}
@@ -82,18 +82,16 @@ class AlgorithmKruskal{
 				$betterColor = $aColor;
 				$worseColor  = $bColor;
 				
-				if($colorCounts[$bColor] > $colorCounts[$aColor]){              // more vertices with color a => paint all in b in a's color
+				if(count($colorVertices[$bColor]) > count($colorVertices[$aColor])){ // more vertices with color a => paint all in b in a's color
 				    $betterColor = $bColor;
 				    $worseColor = $aColor;
 				}
 				
-			    foreach($colorOfVertices as $vid=>$color){
-			        if($color === $worseColor){                                 //search all vertices with color b
-			            $colorOfVertices[$vid] = $betterColor;                  // replaint in a's color
-			        }
-			    }
-			    $colorCounts[$betterColor] += $colorCounts[$worseColor];        // update colorcount + old colorcount
-			    unset($colorCounts[$worseColor]);                               // delete old color
+				foreach($colorVertices[$worseColor] as $vid){                   //search all vertices with color b
+				    $colorOfVertices[$vid] = $betterColor;
+				    $colorVertices[$betterColor][]=$vid;                        // repaint in a's color
+				}
+			    unset($colorVertices[$worseColor]);                             // delete old color
 			    
 			    $newGraph->createEdgeClone($edge);
 			}
@@ -101,8 +99,8 @@ class AlgorithmKruskal{
 			//=> nichts machen
 		}
 		
-		if(count($colorCounts) !== 1){
-		    throw new Exception('Graph is not connected or empty');
+		if(count($colorVertices) !== 1){
+		    throw new Exception('Graph is not connected');
 		}
 		
 		return $newGraph;
