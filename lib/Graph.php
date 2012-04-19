@@ -290,7 +290,7 @@ class Graph implements Countable{
 	 */
 	public function isDirected(){
 	    foreach($this->edges as $edge){
-	        if($eddge instanceof EdgeDirected){
+	        if($edge instanceof EdgeDirected){
 	            return true;
 	        }
 	    }
@@ -298,11 +298,54 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * adds a new Edge to the Graph (should NOT be called manually!)
+	 * checks whether this graph has any weighted edges
+	 * 
+	 * edges usually have no weight attached. a weight explicitly set to (int)0
+	 * will be considered as 'weighted'.
+	 * 
+	 * @return boolean
+	 * @uses Edge::getWeight()
+	 */
+	public function isWeighted(){
+	    foreach($this->edges as $edge){
+	        if($edge->getWeight() !== NULL){
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	/**
+	 * get total weight of graph (sum of weight of all edges)
+	 * 
+	 * edges with no weight assigned will evaluate to weight (int)0. thus an
+	 * unweighted graph (see isWeighted()) will return total weight of (int)0.
+	 * 
+	 * returned weight can also be negative or (int)0 if edges have been
+	 * assigned a negative weight or a weight of (int)0.
+	 * 
+	 * @return float total weight
+	 * @see Graph::isWeighted()
+	 * @uses Edge::getWeight()
+	 */
+	public function getWeight(){
+	    $weight = 0;
+	    foreach($this->edges as $edge){
+	        $w = $edge->getWeight();
+	        if($w !== NULL){
+	            $weight += $w;
+	        }
+	    }
+	    return $weight;
+	}
+	
+	/**
+	 * adds a new Edge to the Graph (MUST NOT be called manually!)
 	 *
 	 * @param Edge $edge instance of the new Edge
 	 * @return Edge given edge as-is (chainable)
 	 * @private
+	 * @see Vertex::createEdge()
 	 */
 	public function addEdge($edge){
 	    $this->edges []= $edge;
