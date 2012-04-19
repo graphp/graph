@@ -47,6 +47,10 @@ class EdgeDirected extends Edge{
 		return ($this->to === $to && $this->from === $from);
 	}
 	
+	public function isLoop(){
+	    return ($this->to === $this->from);
+	}
+	
 	public function getVertexToFrom($startVertex){
 		if ($this->from !== $startVertex){
 			throw new Exception('Invalid start vertex');

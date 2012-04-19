@@ -30,6 +30,13 @@ abstract class Edge{
 	
 	abstract public function isConnection($from, $to);
 	
+	/**
+	 * returns whether this edge is actually a loop
+	 * 
+	 * @return boolean
+	 */
+	abstract public function isLoop();
+	
 // 	abstract public function getVerticesTo();
 	
 	/**

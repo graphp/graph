@@ -41,6 +41,10 @@ class EdgeUndirected extends Edge{
 		//							  one way				or						other way
 		return ( ( $this->a === $from && $this->b === $to ) || ( $this->b === $from && $this->a === $to ) );
 	}
+	
+	public function isLoop(){
+	    return ($this->a === $this->b);
+	}
 
 	public function getVertexToFrom($startVertex){
 		if ($this->a === $startVertex){
