@@ -131,7 +131,6 @@ class Vertex{
 	 * remove the given edge from list of connected edges (MUST NOT be called manually)
 	 * 
 	 * @param Edge $edge
-	 * @return Edge given $edge as-is
 	 * @private
 	 * @see Edge::destroy() instead!
 	 */
@@ -141,16 +140,6 @@ class Vertex{
 	        throw new Exception('Given edge does NOT exist');				//Tobias: if edge gets Id => output of id
 	    }
 	    unset($this->edges[$id]);
-	    return $edge;
-	}
-	
-	/**
-	 * remove all edges saved in the vertice
-	 *
-	 */
-	public function removeAllEdges(){
-		unset($this->edges);
-		$this->edges = array();
 	}
 	
 	/**
@@ -376,6 +365,19 @@ class Vertex{
 	public function searchDepthFirst(){
 		$alg = new AlgorithmSearchDepthFirst($this);
 		return $alg->getVertices();
+	}
+	
+	/**
+	 * destroy vertex and all edges connected to it and remove reference from graph
+	 *
+	 * @uses Edge::destroy()
+	 * @uses Graph::removeVertex()
+	 */
+	public function destroy(){
+	    foreach($this->edges as $edge){
+	        $edge->destroy();
+	    }
+	    $this->graph->removeVertex($this);
 	}
 	
 	/**

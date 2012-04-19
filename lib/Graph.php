@@ -447,6 +447,21 @@ class Graph implements Countable{
 	    return $edge;
 	}
 	
+    /**
+	 * remove the given vertex from list of known vertices (MUST NOT be called manually!)
+	 *
+	 * @param Vertex $vertex
+	 * @private
+	 * @see Vertex::destroy() instead!
+	 */
+	public function removeVertex($vertex){
+	    $id = array_search($vertex,$this->vertices,true);
+	    if($id === false){
+	        throw new Exception('Given vertex does NOT exist');
+	    }
+	    unset($this->vertices[$id]);
+	}
+	
 	/**
 	 * returns an array of all Edges
 	 *
