@@ -112,7 +112,7 @@ class Vertex{
 	        throw new Exception('Target vertex has to be within the same graph');
 	    }
 	    //echo 'new edge from '.$this->id.' to '.$vertex->getId().PHP_EOL;
-	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeUndirected($this,$vertex))));
+	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeUndirectedId($this,$vertex))));
 	}
 	
 	/**
