@@ -130,6 +130,44 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * get best vertex ordered by given criterium $by
+	 *
+	 * @param string  $by   criterium to sort by can be eiter of [id,degree,indegree,outdegree]
+	 * @param boolean $desc whether to return biggest (true) instead of smallest (default:false)
+	 * @return Vertex
+	 * @throws Exception if criterium is unknown, no vertices exist or calling vertex functions throws an exception (degree on digraphs)
+	 * @uses Vertex::getId()
+	 * @uses Vertex::getDegree()
+	 * @uses Vertex::getIndegree()
+	 * @uses Vertex::getOutdegree()
+	 */
+	public function getVertexOrdered($by,$desc=false){
+	    $ret = NULL;
+	    $best = NULL;
+	    foreach($this->vertices as $vertex){
+	        if($by === 'id'){
+	            $now = $vertex->getId();
+	        }else if($by === 'degree'){
+	            $now = $vertex->getDegree();
+	        }else if($by === 'indegree'){
+	            $now = $vertex->getIndegree();
+	        }else if($by === 'outdegree'){
+	            $now = $vertex->getOutdegree();
+	        }else{
+	            throw new Exception('Invalid order flag "'.$by.'"');
+	        }
+	        if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
+	            $ret = $vertex;
+	            $best = $now;
+	        }
+	    }
+	    if($ret === NULL){
+	        throw new Exception('No vertex found');
+	    }
+	    return $ret;
+	}
+	
+	/**
 	 * returns an array of all Vertices
 	 * 
 	 * @return array[Vertex]
