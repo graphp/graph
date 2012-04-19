@@ -13,6 +13,26 @@ class AlgorithmKruskal{
 	 * @return Graph
 	 */
 	public function getResultGraph(){
+		//Sortiere Kanten im Graphen
+		$sortedEdges = new SplPriorityQueue();
+		
+		foreach ($this->graph->getEdges() as $edge){							//For all edges
+		    if(!$edge->isLoop()){                                               // ignore loops (a->a)
+    		    if($edge instanceof EdgeDirected){
+    		        throw new Exception('Kruskal for directed edges not supported');
+    		    }
+    		    $weight = $edge->getWeight();
+    		    if($weight === NULL){
+    		        throw new Exception('Kruskal for edges with no weight not supported');
+    		    }
+    		    $sortedEdges->insert($edge, - $weight);						//Add edges with negativ Weight because of order in stl
+		    }
+		}
+		
+		if($sortedEdges->isEmpty()){
+		    throw new Exception('No edges found');
+		}
+		
 		$newGraph = new Graph();
 		
 		foreach($this->graph->getVertices() as $vertex){ // copy all vertices to new graph
@@ -22,20 +42,6 @@ class AlgorithmKruskal{
 		$colorNext = 0;    // next color to assign
 		$colorVertices = array(); // array(color1=>array(vid1,vid2,...),color2=>...)
 		$colorOfVertices = array(); // array(vid1=>color1,vid2=>color1,...)
-		
-		//Sortiere Kanten im Graphen
-		$sortedEdges = new SplPriorityQueue();
-		
-		foreach ($this->graph->getEdges() as $edge){							//For all edges
-	        if($edge instanceof EdgeDirected){
-		        throw new Exception('Kruskal for directed edges not supported');
-		    }
-		    $weight = $edge->getWeight();
-		    if($weight === NULL){
-		        throw new Exception('Kruskal for edges with no weight not supported');
-		    }
-		    $sortedEdges->insert($edge, - $weight);						//Add edges with negativ Weight because of order in stl
-		}
 		
 		//Füge billigste Kanten zu neuen Graphen hinzu und verschmelze teilgragen wenn es nötig ist (keine Kreise)
 		//solange ich mehr als einen Graphen habe mit weniger als n-1 kanten (bei n knoten im original)
