@@ -53,6 +53,21 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * creates new vertices in this Graph from the given input array of Vertex of another graph
+	 * 
+	 * @param array(Vertex) $originalVertices
+	 * @return array(Vertex) new vertices in this graph
+	 * 
+	 * @uses createVertexClone($originalVertex)
+	 * 
+	 */
+	public function createVerticesClone($originalVertices){
+		foreach ($originalVertices as $vertex){
+			$this->createVertexClone($vertex);
+		}
+	}
+	
+	/**
 	 * create new clone of the given edge between adjacent vertices
 	 * 
 	 * @param EdgeUndirected $originalEdge original edge from old graph

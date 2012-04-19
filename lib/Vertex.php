@@ -198,7 +198,7 @@ class Vertex{
 	public function getEdgesTo($vertex){
 	    $ret = array();
 	    foreach($this->edges as $edge){
-	        if($edge->hasVertexTo($vertex)){
+	        if($edge->isConnection($this, $vertex)){
 	            $ret[] = $edge;
 	        }
 	    }
