@@ -88,6 +88,25 @@ abstract class Edge{
 	 */
 	abstract public function getVertices();
 	
+	private function getGraph(){
+	    foreach($this->getVertices() as $vertex){
+	        return $vertex->getGraph();
+	    }
+	}
+	
+	/**
+	 * destroy edge and remove reference from vertices and graph
+	 * 
+	 * @uses Graph::removeEdge()
+	 * @uses Vertex::removeEdge()
+	 */
+	public function destroy(){
+	    $this->getGraph()->removeEdge($this);
+	    foreach($this->getVertices() as $vertex){
+	        $vertex->removeEdge($this);
+	    }
+	}
+	
 	/**
 	 * do NOT allow cloning of objects
 	 * 

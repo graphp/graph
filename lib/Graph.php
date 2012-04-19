@@ -431,6 +431,23 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * remove the given edge from list of connected edges (MUST NOT be called manually!)
+	 *
+	 * @param Edge $edge
+	 * @return Edge given $edge as-is
+	 * @private
+	 * @see Edge::destroy() instead!
+	 */
+	public function removeEdge($edge){
+	    $id = array_search($edge,$this->edges,true);
+	    if($id === false){
+	        throw new Exception('Given edge does NOT exist');
+	    }
+	    unset($this->edges[$id]);
+	    return $edge;
+	}
+	
+	/**
 	 * returns an array of all Edges
 	 *
 	 * @return array[Edge]
