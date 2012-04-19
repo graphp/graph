@@ -442,6 +442,36 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * get all edges ordered by given criterium $by
+	 *
+	 * @param string  $by   criterium to sort by can only be [weight]
+	 * @param boolean $desc whether to return biggest (true) instead of smallest (default:false)
+	 * @return array
+	 * @throws Exception if criterium is unknown
+	 * @uses Edge::getWeight()
+	 */
+	public function getEdgesOrdered($by,$desc=false){
+	    $temp = array(); // temporary indexed array to be sorted
+	    foreach($this->edges as $eid=>$edge){
+	        if($by === 'weight'){
+	            $now = $edge->getWeight();
+	        }else{
+	            throw new Exception('Invalid sort criterium');
+	        }
+	        $temp[$eid] = $now;
+	    }
+	    if($desc){ // actually sort array ASC/DESC
+	        arsort($temp);
+	    }else{
+	        asort($temp);
+	    }
+	    foreach($temp as $eid=>&$value){ // make sure resulting array is edigeId=>edge
+	        $value = $this->edges[$eid];
+	    }
+	    return $temp;
+	}
+	
+	/**
 	 * @return int number of components of this graph
 	 */
 	public function getNumberOfComponents(){
