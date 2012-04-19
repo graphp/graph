@@ -222,6 +222,31 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * get minimum degree of vertices
+	 *
+	 * @return int
+	 * @throws Exception if graph is empty or directed
+	 * @uses Graph::getVertexOrdered()
+	 * @uses Vertex::getDegree()
+	 */
+	public function getMinDegree(){
+	    return $this->getVertexOrdered('degree')->getDegree();
+	}
+	
+	/**
+	 * get maximum degree of vertices
+	 *
+	 * @return int
+	 * @throws Exception if graph is empty or directed
+	 * @uses Graph::getVertexOrdered()
+	 * @uses Vertex::getDegree()
+	 */
+	public function getMaxDegree(){
+	    return $this->getVertexOrdered('degree',true)->getDegree();
+	}
+	
+	
+	/**
 	 * checks whether this graph is regular, i.e. each vertex has the same indegree/outdegree
 	 * 
 	 * @return boolean
