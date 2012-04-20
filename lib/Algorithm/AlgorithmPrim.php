@@ -13,11 +13,7 @@ class AlgorithmPrim{
 	public function getResultGraph(){
 
 		// Initialize program
-		$returnGraph =  new Graph();
-		
-		foreach($this->startGraph->getVertices() as $vertex){ 						// copy all vertices to new graph
-			$returnGraph->createVertexClone($vertex);
-		}
+		$returnGraph = $this->startGraph->createGraphCloneEdgeless();
 		
 		$edgeQueue = new SplPriorityQueue();
 									

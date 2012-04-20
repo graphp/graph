@@ -36,8 +36,10 @@ class AlgorithmKruskal{
 	    
 	    //$sortedEdges = $this->graph->getEdgesOrdered('weight');
 		
-		$newGraph = new Graph();
-		$newGraph->createVerticesClone( $this->graph->getVertices() );			// copy all vertices to new graph
+		$newGraph = $this->graph->createGraphCloneEdgeless();
+// 		$newGraph = Graph::factoryCloneVertices($this->graph);
+// 		$newGraph = new Graph();
+// 		$newGraph->createVerticesClone( $this->graph->getVertices() );			// copy all vertices to new graph
 
 /*		foreach($this->graph->getVertices() as $vertex){ // copy all vertices to new graph
 		    $newGraph->createVertexClone($vertex);
@@ -109,14 +111,12 @@ class AlgorithmKruskal{
 			//=> nichts machen
 		}
 		
-		if (count( $newGraph->getEdges() ) !== ( $newGraph->getSize() - 1 ) ){
+		// definition of spanning tree: number of edges = number of vertices - 1
+		// above algorithm does not check isolated edges or may otherwise return multiple connected components => force check
+		if ($newGraph->getNumberOfEdges() !== ( $newGraph->getNumberOfVertices() - 1 ) ){
 			throw new Exception('Graph is not connected');
 		}
 		
-/*		if(count($colorVertices) !== 1){
-		    throw new Exception('Graph is not connected');
-		}
-*/		
 		return $newGraph;
 	}
 }
