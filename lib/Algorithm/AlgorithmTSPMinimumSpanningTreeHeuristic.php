@@ -12,7 +12,7 @@ class AlgorithmTSPMinimumSpanningTreeHeuristic{
 	 * @param Vertex $startVertex
 	 * @return Graph
 	 */
-	public function getResultGraph(Vertex $startVertex){
+	public function getResultGraph(){
 		$returnGraph = $this->graph->createGraphCloneEdgeless();
 		
 		$minimumSpanningTreeAlgorithm = new AlgorithmKruskal($this->graph);
@@ -20,22 +20,32 @@ class AlgorithmTSPMinimumSpanningTreeHeuristic{
 		
 		$depthFirstSearch = $minimumSpanningTree->getAnyVertex()->searchDepthFirst();
 		
-		$oldVertex = NULL;
 		$startVertex = NULL;
+		$oldVertex = NULL;
 		
 		foreach ($depthFirstSearch as $vertex){
+			
+			$vertex = $this->graph->getVertex( $vertex->getId() );
 			
 			if ($startVertex === NULL){
 				$startVertex = $vertex;
 			}
 			else {
-				$returnGraph->getVertex( $oldVertex->getId() )->createEdge( $vertex );
+				foreach ($oldVertex->getEdgesTo( $vertex ) as $edge ){
+					$returnGraph->createEdgeClone( $edge );
+					break;
+				}
+//				$returnGraph->getVertex( $oldVertex->getId() )->createEdge( $returnGraph->getVertex( $vertex->getId() ) );
 			}
 			
 			$oldVertex = $vertex;
 		}
-		
-		$returnGraph->getVertex( $oldVertex->getId() )->createEdge( $startVertex );	//Connect last vertex with start vertex
+
+		foreach ($oldVertex->getEdgesTo( $startVertex ) as $edge ){
+			$returnGraph->createEdgeClone( $edge );
+			break;
+		}		
+//		$returnGraph->getVertex( $oldVertex->getId() )->createEdge( $returnGraph->getVertex( $startVertex->getId() ) );	//Connect last vertex with start vertex
 		
 		return $returnGraph;
 	}
