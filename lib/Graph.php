@@ -65,6 +65,40 @@ class Graph implements Countable{
 		foreach ($originalVertices as $vertex){
 			$this->createVertexClone($vertex);
 		}
+		return $this;
+	}
+	
+	/**
+	 * create new clone/copy of this graph - copy all attributes and vertices, but do NOT copy edges
+	 * 
+	 * using this method is faster than creating a new graph and calling createEdgeClone() yourself
+	 *
+	 * @return Graph
+	 */
+	public function createGraphCloneEdgeless(){
+	    $graph = new Graph();
+	    // TODO: set additional graph attributes
+	    foreach($this->getVertices() as $vid=>$originalVertex){
+	        $vertex = new Vertex($vid,$graph);
+	        // TODO: set additional vertex attributes
+	        $graph->vertices[$vid] = $vertex;
+	    }
+	    return $graph;
+	}
+	
+	/**
+	 * create new clone/copy of this graph - copy all attributes, vertices and edges
+	 *
+	 * @return Graph
+	 * @uses Graph::createGraphCloneEdgeless()
+	 * @uses Graph::createEdgeClone()
+	 */
+	public function createGraphClone(){
+	    $graph = $this->createGraphCloneEdgeless();
+	    foreach($this->edges as $edge){
+	        $graph->createEdgeClone($edge);
+	    }
+	    return $graph;
 	}
 	
 	/**
