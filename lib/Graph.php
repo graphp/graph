@@ -216,6 +216,24 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * return number of vertices
+	 * 
+	 * @return int
+	 */
+	public function getNumberOfVertices(){
+	    return count($this->vertices);
+	}
+	
+	/**
+	 * return number of edges
+	 * 
+	 * @return int
+	 */
+	public function getNumberOfEdges(){
+	    return count($this->edges);
+	}
+	
+	/**
 	 * get degree for k-regular-graph (only if each vertex has the same degree)
 	 * 
 	 * @return int
