@@ -106,10 +106,14 @@ class AlgorithmKruskal{
 			//=> nichts machen
 		}
 		
-		if(count($colorVertices) !== 1){
-		    throw new Exception('Graph is not connected');
+		if (count( $newGraph->getEdges() ) !== ( $newGraph->getSize() - 1 ) ){
+			throw new Exception('Graph is not connected');
 		}
 		
+/*		if(count($colorVertices) !== 1){
+		    throw new Exception('Graph is not connected');
+		}
+*/		
 		return $newGraph;
 	}
 
