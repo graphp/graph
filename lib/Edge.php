@@ -88,6 +88,20 @@ abstract class Edge{
 	 */
 	abstract public function getVertices();
 	
+	/**
+	 * get IDs of all vertices this edge connects
+	 * 
+	 * @return array[int]
+	 * @see Edge::getVertices()
+	 */
+	public function getVerticesId(){
+	    $ret = $this->getVertices();
+	    foreach($ret as &$v){
+	        $v = $v->getId();
+	    }
+	    return $ret;
+	}
+	
 	private function getGraph(){
 	    foreach($this->getVertices() as $vertex){
 	        return $vertex->getGraph();

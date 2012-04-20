@@ -27,6 +27,10 @@ class EdgeUndirectedId extends Edge{
 	    return array($this->graph->getVertex($this->a),$this->graph->getVertex($this->b));
 	}
 	
+	public function getVerticesId(){
+	    return array($this->a,$this->b);
+	}
+	
 	public function toString(){
 		return $this->a." <-> ".$this->b." Weight: ".$this->weight;
 	}
