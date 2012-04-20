@@ -72,12 +72,17 @@ class Graph implements Countable{
 	 * 
 	 * @param EdgeUndirected $originalEdge original edge from old graph
 	 * @return EdgeUndirected new edge in this graph
+	 * @uses Edge::getVerticesId()
+	 * @uses Graph::getVertex()
+	 * @uses Vertex::createEdge()
+	 * @uses Edge::getWeight()
+	 * @uses Edge::setWeight()
 	 */
 	public function createEdgeClone($originalEdge){
-	    $ends = $originalEdge->getVertices();
+	    $ends = $originalEdge->getVerticesId();
 	    
-	    $a = $this->getVertex($ends[0]->getId()); // get start vertex from old start vertex id
-	    $b = $this->getVertex($ends[1]->getId()); // get target vertex from old target vertex id
+	    $a = $this->getVertex($ends[0]); // get start vertex from old start vertex id
+	    $b = $this->getVertex($ends[1]); // get target vertex from old target vertex id
 	    
 	    $newEdge = $a->createEdge($b); // create new edge between new a and b
 	    // TODO: copy edge attributes
