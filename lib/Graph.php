@@ -504,6 +504,20 @@ class Graph implements Countable{
 	    return $edge;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @return Vertex any vertex in this graph
+	 * @throws Exception if Graph has no vertices
+	 */
+	public function getAnyVertex(){
+		foreach ($this->vertices as $vertex){
+			return $vertex;
+		}
+		
+		throw new Exception("Graph has no vertices");
+	}
+	
     /**
 	 * remove the given vertex from list of known vertices (MUST NOT be called manually!)
 	 *
