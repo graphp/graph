@@ -13,39 +13,37 @@ class AlgorithmTSPMinimumSpanningTreeHeuristic{
 	 * @return Graph
 	 */
 	public function getResultGraph(){
-		$returnGraph = $this->graph->createGraphCloneEdgeless();
+		$returnGraph = $this->graph->createGraphCloneEdgeless();				//Copy Edges of original graph
 		
-		$minimumSpanningTreeAlgorithm = new AlgorithmKruskal($this->graph);
+		$minimumSpanningTreeAlgorithm = new AlgorithmKruskal($this->graph);		//Create minimum spanning tree
 		$minimumSpanningTree = $minimumSpanningTreeAlgorithm->getResultGraph();
 		
-		$depthFirstSearch = $minimumSpanningTree->getAnyVertex()->searchDepthFirst();
+		$depthFirstSearch = $minimumSpanningTree->getAnyVertex()->searchDepthFirst();	//Depth first search in minmum spanning tree (for the eulerian path)
 		
 		$startVertex = NULL;
 		$oldVertex = NULL;
 		
-		foreach ($depthFirstSearch as $vertex){
+		foreach ($depthFirstSearch as $vertex){									//Connect vertices in order of the depth first search
 			
-			$vertex = $this->graph->getVertex( $vertex->getId() );
-			
+			$vertex = $this->graph->getVertex( $vertex->getId() );					//get vertex from the original graph (not from the depth first search)
+																					//i need to clone the edge from the original graph, therefore i need the original edge
 			if ($startVertex === NULL){
 				$startVertex = $vertex;
 			}
 			else {
-				foreach ($oldVertex->getEdgesTo( $vertex ) as $edge ){
+				foreach ($oldVertex->getEdgesTo( $vertex ) as $edge ){				//Get edge to clone
 					$returnGraph->createEdgeClone( $edge );
 					break;
 				}
-//				$returnGraph->getVertex( $oldVertex->getId() )->createEdge( $returnGraph->getVertex( $vertex->getId() ) );
 			}
 			
 			$oldVertex = $vertex;
 		}
 
-		foreach ($oldVertex->getEdgesTo( $startVertex ) as $edge ){
+		foreach ($oldVertex->getEdgesTo( $startVertex ) as $edge ){				//Connect last vertex with start vertex
 			$returnGraph->createEdgeClone( $edge );
 			break;
-		}		
-//		$returnGraph->getVertex( $oldVertex->getId() )->createEdge( $returnGraph->getVertex( $startVertex->getId() ) );	//Connect last vertex with start vertex
+		}
 		
 		return $returnGraph;
 	}
