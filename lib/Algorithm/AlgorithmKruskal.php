@@ -14,7 +14,8 @@ class AlgorithmKruskal{
 	 */
 	public function getResultGraph(){
 		//Sortiere Kanten im Graphen
-		$sortedEdges = new SplPriorityQueue();
+		
+	    $sortedEdges = new SplPriorityQueue();
 		
 		foreach ($this->graph->getEdges() as $edge){							//For all edges
 		    if(!$edge->isLoop()){                                               // ignore loops (a->a)
@@ -32,6 +33,8 @@ class AlgorithmKruskal{
 		if($sortedEdges->isEmpty()){
 		    throw new Exception('No edges found');
 		}
+	    
+	    //$sortedEdges = $this->graph->getEdgesOrdered('weight');
 		
 		$newGraph = new Graph();
 		
@@ -48,10 +51,10 @@ class AlgorithmKruskal{
 		foreach ($sortedEdges as $edge){
 			//Gucke Kante an:
 					
-			$vertices = $edge->getVertices();
+			$vertices = $edge->getVerticesId();
 			
-			$aId = $vertices[0]->getId();
-			$bId = $vertices[1]->getId();
+			$aId = $vertices[0];
+			$bId = $vertices[1];
 			
 			$aColor = isset($colorOfVertices[$aId]) ? $colorOfVertices[$aId] : NULL;
 			$bColor = isset($colorOfVertices[$bId]) ? $colorOfVertices[$bId] : NULL;
@@ -97,7 +100,7 @@ class AlgorithmKruskal{
 				    $colorOfVertices[$vid] = $betterColor;
 				    $colorVertices[$betterColor][]=$vid;                        // repaint in a's color
 				}
-			    unset($colorVertices[$worseColor]);                             // delete old color
+				unset($colorVertices[$worseColor]);                             // delete old color
 			    
 			    $newGraph->createEdgeClone($edge);
 			}
@@ -111,5 +114,4 @@ class AlgorithmKruskal{
 		
 		return $newGraph;
 	}
-
 }
