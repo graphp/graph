@@ -37,11 +37,12 @@ class AlgorithmKruskal{
 	    //$sortedEdges = $this->graph->getEdgesOrdered('weight');
 		
 		$newGraph = new Graph();
-		
-		foreach($this->graph->getVertices() as $vertex){ // copy all vertices to new graph
+		$newGraph->createVerticesClone( $this->graph->getVertices() );			// copy all vertices to new graph
+
+/*		foreach($this->graph->getVertices() as $vertex){ // copy all vertices to new graph
 		    $newGraph->createVertexClone($vertex);
 		}
-		
+*/		
 		$colorNext = 0;    // next color to assign
 		$colorVertices = array(); // array(color1=>array(vid1,vid2,...),color2=>...)
 		$colorOfVertices = array(); // array(vid1=>color1,vid2=>color1,...)
@@ -108,10 +109,14 @@ class AlgorithmKruskal{
 			//=> nichts machen
 		}
 		
-		if(count($colorVertices) !== 1){
-		    throw new Exception('Graph is not connected');
+		if (count( $newGraph->getEdges() ) !== ( $newGraph->getSize() - 1 ) ){
+			throw new Exception('Graph is not connected');
 		}
 		
+/*		if(count($colorVertices) !== 1){
+		    throw new Exception('Graph is not connected');
+		}
+*/		
 		return $newGraph;
 	}
 }
