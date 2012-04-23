@@ -13,7 +13,7 @@ class AlgorithmTSPMinimumSpanningTreeHeuristic{
 	 * @return Graph
 	 */
 	public function getResultGraph(){
-		$returnGraph = $this->graph->createGraphCloneEdgeless();				//Copy Edges of original graph
+		$returnGraph = $this->graph->createGraphCloneEdgeless();				//Copy vertices of original graph
 		
 		$minimumSpanningTreeAlgorithm = new AlgorithmKruskal($this->graph);		//Create minimum spanning tree
 		$minimumSpanningTree = $minimumSpanningTreeAlgorithm->getResultGraph();
@@ -31,7 +31,7 @@ class AlgorithmTSPMinimumSpanningTreeHeuristic{
 				$startVertex = $vertex;
 			}
 			else {
-				foreach ($oldVertex->getEdgesTo( $vertex ) as $edge ){				//Get edge to clone
+				foreach ($oldVertex->getEdgesTo( $vertex ) as $edge ){				//Get edge to clone //more edges are possible (returns an array)
 					$returnGraph->createEdgeClone( $edge );
 					break;
 				}
@@ -40,7 +40,7 @@ class AlgorithmTSPMinimumSpanningTreeHeuristic{
 			$oldVertex = $vertex;
 		}
 
-		foreach ($oldVertex->getEdgesTo( $startVertex ) as $edge ){				//Connect last vertex with start vertex
+		foreach ($oldVertex->getEdgesTo( $startVertex ) as $edge ){				//Connect last vertex with start vertex //retusn an array
 			$returnGraph->createEdgeClone( $edge );
 			break;
 		}
