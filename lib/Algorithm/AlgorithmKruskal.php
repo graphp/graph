@@ -37,14 +37,7 @@ class AlgorithmKruskal{
 	    //$sortedEdges = $this->graph->getEdgesOrdered('weight');
 		
 		$newGraph = $this->graph->createGraphCloneEdgeless();
-// 		$newGraph = Graph::factoryCloneVertices($this->graph);
-// 		$newGraph = new Graph();
-// 		$newGraph->createVerticesClone( $this->graph->getVertices() );			// copy all vertices to new graph
-
-/*		foreach($this->graph->getVertices() as $vertex){ // copy all vertices to new graph
-		    $newGraph->createVertexClone($vertex);
-		}
-*/		
+		
 		$colorNext = 0;    // next color to assign
 		$colorVertices = array(); // array(color1=>array(vid1,vid2,...),color2=>...)
 		$colorOfVertices = array(); // array(vid1=>color1,vid2=>color1,...)
