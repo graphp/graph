@@ -222,6 +222,39 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * get iterator object for all vertices (optionally ordered by given argument)
+	 * 
+	 * @param string|NULL $order
+	 * @param boolean $desc
+	 * @return Iterator
+	 * @throws Exception
+	 */
+	public function getVerticesIterator($order=NULL,$desc=false){
+	    if($order === NULL){
+	        return new ArrayIterator($desc ? array_reverse($this->vertices) : $this->vertices);
+	    }
+	    $it = new SplPriorityQueue();
+	    foreach($this->vertices as $vertex){
+	        if($by === 'id'){
+	            $now = $vertex->getId();
+	        }else if($by === 'degree'){
+	            $now = $vertex->getDegree();
+	        }else if($by === 'indegree'){
+	            $now = $vertex->getIndegree();
+	        }else if($by === 'outdegree'){
+	            $now = $vertex->getOutdegree();
+	        }else{
+	            throw new Exception('Invalid order flag "'.$by.'"');
+	        }
+	        if($desc && $now !== NULL){
+	            $now = -$now;
+	        }
+	        $it->insert($vertex,$now);
+	    }
+	    return $it;
+	}
+	
+	/**
 	 * returns an array of all Vertices
 	 * 
 	 * @return array[Vertex]
