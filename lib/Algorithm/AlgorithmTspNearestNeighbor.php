@@ -1,5 +1,5 @@
 <?php
-class AlgorithmNearestNeighbor{
+class AlgorithmTspNearestNeighbor{
 	
 	private $graph;
 	

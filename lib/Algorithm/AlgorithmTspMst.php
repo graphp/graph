@@ -1,6 +1,6 @@
 <?php
-class AlgorithmTSPMinimumSpanningTreeHeuristic{
-
+class AlgorithmTspMst{
+    
 	private $graph;
 
 	public function __construct(Graph $inputGraph){
@@ -15,7 +15,7 @@ class AlgorithmTSPMinimumSpanningTreeHeuristic{
 	public function getResultGraph(){
 		$returnGraph = $this->graph->createGraphCloneEdgeless();				// Copy vertices of original graph
 
-		$minimumSpanningTreeAlgorithm = new AlgorithmKruskal($this->graph);		// Create minimum spanning tree
+		$minimumSpanningTreeAlgorithm = new AlgorithmMstKruskal($this->graph);		// Create minimum spanning tree
 		$minimumSpanningTree = $minimumSpanningTreeAlgorithm->getResultGraph();
 
 		$depthFirstSearch = $minimumSpanningTree->getAnyVertex()->searchDepthFirst();	// Depth first search in minmum spanning tree (for the eulerian path)

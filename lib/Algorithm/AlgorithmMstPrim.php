@@ -1,5 +1,5 @@
 <?php
-class AlgorithmPrim{
+class AlgorithmMstPrim{
 	public function __construct(Graph $inputGraph, Vertex $startVertice){
 		$this->startGraph = $inputGraph;
 		$this->startVertice = $startVertice;
