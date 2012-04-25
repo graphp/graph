@@ -43,7 +43,7 @@ class AlgorithmNearestNeighbor{
 			}
 			
 			if ( isset( $visitedVertices[ $nextVertex->getId() ] ) ){			//check if there is a way i can use
-				throw new Exception("Graph is not connected - can't find an edge to unconnected vertex");
+				throw new Exception("Graph is not complete - can't find an edge to unconnected vertex");
 			}
 			
 			$visitedVertices[ $nextVertex->getId() ] = TRUE;
@@ -55,7 +55,7 @@ class AlgorithmNearestNeighbor{
 		$edges = $vertex->getEdgesTo($startVertex);
 		
 		if ( ! $edges ){														//check if there is a way from end edge to start edge
-			throw new Exception("Graph is not connected - can't find an edge to the start vertex");
+			throw new Exception("Graph is not complete - can't find an edge to the start vertex");
 		}
 		
 		foreach ( $edges as $edge ){											//get first connecting edge
