@@ -24,7 +24,11 @@ class LoaderEdgeList extends LoaderFile{
 		$vertexCount = $file[0];
 		$edgeCounter = 0;
 		
+		$this->writeDebugMessage('create '.$vertexCount.' vertices');
+		
 		$graph->createVertices($vertexCount);
+		
+		$this->writeDebugMessage('parse edges');
 		
 		unset($file[0]);
 		foreach ($file as $zeile) {
