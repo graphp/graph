@@ -168,77 +168,6 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * get best vertex ordered by given criterium $by
-	 *
-	 * @param string  $by   criterium to sort by can be eiter of [id,degree,indegree,outdegree]
-	 * @param boolean $desc whether to return biggest (true) instead of smallest (default:false)
-	 * @return Vertex
-	 * @throws Exception if criterium is unknown, no vertices exist or calling vertex functions throws an exception (degree on digraphs)
-	 * @uses Vertex::getId()
-	 * @uses Vertex::getDegree()
-	 * @uses Vertex::getIndegree()
-	 * @uses Vertex::getOutdegree()
-	 */
-	public function getVertexOrdered($by,$desc=false){
-	    $ret = NULL;
-	    $best = NULL;
-	    foreach($this->vertices as $vertex){
-	        if($by === 'id'){
-	            $now = $vertex->getId();
-	        }else if($by === 'degree'){
-	            $now = $vertex->getDegree();
-	        }else if($by === 'indegree'){
-	            $now = $vertex->getIndegree();
-	        }else if($by === 'outdegree'){
-	            $now = $vertex->getOutdegree();
-	        }else{
-	            throw new Exception('Invalid order flag "'.$by.'"');
-	        }
-	        if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
-	            $ret = $vertex;
-	            $best = $now;
-	        }
-	    }
-	    if($ret === NULL){
-	        throw new Exception('No vertex found');
-	    }
-	    return $ret;
-	}
-	
-	/**
-	 * get iterator object for all vertices (optionally ordered by given argument)
-	 * 
-	 * @param string|NULL $order
-	 * @param boolean $desc
-	 * @return Iterator
-	 * @throws Exception
-	 */
-	public function getVerticesIterator($order=NULL,$desc=false){
-	    if($order === NULL){
-	        return new ArrayIterator($desc ? array_reverse($this->vertices) : $this->vertices);
-	    }
-	    $it = new SplPriorityQueue();
-	    foreach($this->vertices as $vertex){
-	        if($by === 'id'){
-	            $now = $vertex->getId();
-	        }else if($by === 'degree'){
-	            $now = $vertex->getDegree();
-	        }else if($by === 'indegree'){
-	            $now = $vertex->getIndegree();
-	        }else if($by === 'outdegree'){
-	            $now = $vertex->getOutdegree();
-	        }else{
-	            throw new Exception('Invalid order flag "'.$by.'"');
-	        }
-	        if($desc && $now !== NULL){
-	            $now = -$now;
-	        }
-	        $it->insert($vertex,$now);
-	    }
-	    return $it;
-	}
-	
-	/**
 	 * returns an array of all Vertices
 	 * 
 	 * @return array[Vertex]
@@ -279,16 +208,12 @@ class Graph implements Countable{
 	 * get degree for k-regular-graph (only if each vertex has the same degree)
 	 * 
 	 * @return int
-	 * @throws Exception if graph is not regular (i.e. vertex degrees are not equal)
+	 * @throws Exception if graph is empty or not regular (i.e. vertex degrees are not equal)
 	 * @uses Vertex::getIndegree()
 	 * @uses Vertex::getOutdegree()
 	 */
 	public function getDegree(){
-	    $anyVertex = reset($this->vertices); // get any start vertex for initial degree (simply use first from list)
-	    if($anyVertex === false){
-	        throw new Exception('Empty graph with no vertices');
-	    }
-	    $degree = $anyVertex->getIndegree(); // get initial degree to compare others to
+	    $degree = $this->getAnyVertex()->getIndegree(); // get initial degree of any start vertex to compare others to
 	    
 	    foreach($this->vertices as $vertex){
 	        $i = $vertex->getIndegree();
@@ -306,11 +231,11 @@ class Graph implements Countable{
 	 *
 	 * @return int
 	 * @throws Exception if graph is empty or directed
-	 * @uses Graph::getVertexOrdered()
+	 * @uses Vertex::getFirst()
 	 * @uses Vertex::getDegree()
 	 */
 	public function getMinDegree(){
-	    return $this->getVertexOrdered('degree')->getDegree();
+	    return Vertex::getFirst($this->vertices,'degree')->getDegree();
 	}
 	
 	/**
@@ -318,11 +243,11 @@ class Graph implements Countable{
 	 *
 	 * @return int
 	 * @throws Exception if graph is empty or directed
-	 * @uses Graph::getVertexOrdered()
+	 * @uses Vertex::getFirst()
 	 * @uses Vertex::getDegree()
 	 */
 	public function getMaxDegree(){
-	    return $this->getVertexOrdered('degree',true)->getDegree();
+	    return Vertex::getFirst($this->vertices,'degree',true)->getDegree();
 	}
 	
 	

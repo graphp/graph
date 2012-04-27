@@ -1,6 +1,98 @@
 <?php
 
 class Vertex{
+    /**
+     * get first vertex (optionally ordered by given criterium $by) from given array of vertices
+     *
+     * @param array[Vertex]|Graph $vertices array of vertices to scan for 'first' vertex
+     * @param NULL|string         $by       criterium to sort by can be eiter of [NULL,id,degree,indegree,outdegree]
+     * @param boolean             $desc     whether to return biggest (true) instead of smallest (default:false)
+     * @return Vertex
+     * @throws Exception if criterium is unknown, no vertices exist or calling vertex functions throws an exception (degree on digraphs)
+     * @uses Graph::getVertices() if graph is given instead of vertices
+     * @uses Vertex::getId()
+     * @uses Vertex::getDegree()
+     * @uses Vertex::getIndegree()
+     * @uses Vertex::getOutdegree()
+     */
+    public static function getFirst($vertices,$by=NULL,$desc=false){
+        if($vertices instanceof Graph){
+            $vertices = $vertices->getVertices();
+        }
+        $ret = NULL;
+        $best = NULL;
+        foreach($vertices as $vertex){
+            if($by === NULL){        // do not sort - needs special handling
+                if($desc){            // always remember vertex from last iteration
+                    $ret = $vertex;
+                    continue;
+                }else{                // just return first vertex right away
+                    return $vertex;
+                }
+            }else if($by === 'id'){
+                $now = $vertex->getId();
+            }else if($by === 'degree'){
+                $now = $vertex->getDegree();
+            }else if($by === 'indegree'){
+                $now = $vertex->getIndegree();
+            }else if($by === 'outdegree'){
+                $now = $vertex->getOutdegree();
+            }else{
+                throw new Exception('Invalid order flag "'.$by.'"');
+            }
+            if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
+                $ret = $vertex;
+                $best = $now;
+            }
+        }
+        if($ret === NULL){
+            throw new Exception('No vertex found');
+        }
+        return $ret;
+    }
+    
+    /**
+     * get iterator for vertices (optionally ordered by given criterium $by) from given array of vertices
+     *
+     * @param array[Vertex]|Graph $vertices array of vertices to scan for 'first' vertex
+     * @param NULL|string         $by       criterium to sort by can be eiter of [NULL,id,degree,indegree,outdegree]
+     * @param boolean             $desc     whether to return biggest first (true) instead of smallest first (default:false)
+     * @return Iterator iterator object (supporting at the very least foreach)
+     * @throws Exception if criterium is unknown or calling vertex functions throws an exception (degree on digraphs)
+     * @uses Graph::getVertices() if graph is given instead of vertices
+     * @uses Vertex::getId()
+     * @uses Vertex::getDegree()
+     * @uses Vertex::getIndegree()
+     * @uses Vertex::getOutdegree()
+     */
+    public static function getAll($vertices,$by=NULL,$desc=false){
+        if($vertices instanceof Graph){
+            $vertices = $vertices->getVertices();
+        }
+        if($by === NULL){
+            return new ArrayIterator($desc ? array_reverse($vertices) : $vertices);
+        }
+        $it = new SplPriorityQueue();
+        foreach($vertices as $vertex){
+            if($by === 'id'){
+                $now = $vertex->getId();
+            }else if($by === 'degree'){
+                $now = $vertex->getDegree();
+            }else if($by === 'indegree'){
+                $now = $vertex->getIndegree();
+            }else if($by === 'outdegree'){
+                $now = $vertex->getOutdegree();
+            }else{
+                throw new Exception('Invalid order flag "'.$by.'"');
+            }
+            if($desc && $now !== NULL){
+                $now = -$now;
+            }
+            $it->insert($vertex,$now);
+        }
+        return $it;
+    }
+    
 	private $id;
 	
 	/**
