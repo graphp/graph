@@ -115,6 +115,9 @@ class Vertex{
         foreach($vertices as $vertex){
             if($by === self::ORDER_ID){
                 $now = $vertex->getId();
+                if($desc && is_string($now)){
+                    throw new Exception('Unable to reverse sorting for string IDs');
+                }
             }else if($by === self::ORDER_DEGREE){
                 $now = $vertex->getDegree();
             }else if($by === self::ORDER_INDEGREE){

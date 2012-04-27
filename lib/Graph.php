@@ -25,6 +25,8 @@ class Graph implements Countable{
 	public function createVertex($id=NULL){
 	    if($id === NULL){    // no ID given
 	        $id = $this->getNextId();
+	    }else if(!is_int($id) && !is_string($id)){
+	        throw new Exception('Vertex ID has to be of type integer or string');
 	    }
 	    if(isset($this->vertices[$id])){
 	        throw new Exception('ID must be unique');
