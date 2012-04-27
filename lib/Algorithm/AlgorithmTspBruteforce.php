@@ -29,6 +29,23 @@ class AlgorithmTspBruteforce{
     private $numEdges;
     
     /**
+     * upper limit to use for branch-and-bound (BNB)
+     * 
+     * @var float|NULL
+     * @see AlgorithmTspBruteforce::setUpperLimit()
+     */
+    private $upperLimit = NULL;
+    
+    /**
+     * whether to use branch-and-bound
+     * 
+     * simply put, there's no valid reason why anybody would want to turn off this flag
+     * 
+     * @var boolean
+     */
+    private $branchAndBound = true;
+    
+    /**
      * 
      * @param unknown_type $graph
      */
@@ -36,6 +53,30 @@ class AlgorithmTspBruteforce{
         $this->graph = $graph;
     }
     
+    /**
+     * explicitly set upper limit to use for branch-and-bound
+     * 
+     * this method can be used to optimize the algorithm by providing an upper
+     * bound of when to stop branching any further.
+     * 
+     * @param double $limit
+     * @return AlgorithmTspBruteforce $this (chainable)
+     */
+    public function setUpperLimit($limit){
+        if($limit === true){
+            $alg = new AlgorithmTspMst($this->graph);
+            $limit = $alg->getResultGraph()->getWeight();
+        }
+        $this->upperLimit = $limit;
+        return $this;
+    }
+    
+    /**
+     * get resulting graph with the (first) best circle of edges connecting all vertices
+     * 
+     * @throws Exception on error
+     * @return Graph
+     */
     public function getResultGraph(){
         $this->numEdges = $this->graph->getNumberOfVertices();
         if($this->numEdges < 3){
@@ -44,7 +85,7 @@ class AlgorithmTspBruteforce{
         
         // numEdges 3-12 should work
         
-        $this->bestWeight = NULL;
+        $this->bestWeight = $this->upperLimit;
         $this->startVertex = $this->graph->getVertex(0);
         
         $result = $this->step($this->startVertex,
@@ -73,10 +114,11 @@ class AlgorithmTspBruteforce{
      * @return array[Edge]
      */
     private function step($vertex,$totalWeight,$visitedVertices,$visitedEdges){
-        if($this->bestWeight !== NULL && $totalWeight >= $this->bestWeight){ // stop recursion if best result is exceeded (branch and bound)
+        if($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight >= $this->bestWeight){ // stop recursion if best result is exceeded (branch and bound)
             return NULL;
         }
         if($vertex === $this->startVertex && count($visitedEdges) === $this->numEdges){ // kreis geschlossen am Ende
+            $this->bestWeight = $totalWeight; // new best result
             return $visitedEdges;
         }
         
@@ -91,8 +133,8 @@ class AlgorithmTspBruteforce{
             $target = $edge->getVertexToFrom($vertex);
             
             $weight = $edge->getWeight();
-            if($weight === NULL){
-                throw new Exception('Unweighted edges not supported');
+            if($weight < 0){
+                throw new Exception('Edge with negative weight "'.$weight.'" not supported');
             }
             
             $result = $this->step($target,
@@ -102,10 +144,31 @@ class AlgorithmTspBruteforce{
                       );
             
             if($result !== NULL){ // new result found
-                $bestResult = $result;
+                if($this->branchAndBound || // branch and bound enabled (default): returned result MUST be the new best result
+                   $bestResult === NULL || // this is the first result, just use it anyway
+                   $this->sumEdges($result) < $this->sumEdges($bestResult)){ // this is the new best result
+                    $bestResult = $result;
+                }
             }
         }
         
         return $bestResult;
+    }
+    
+    /**
+     * get sum of weight of given edges
+     * 
+     * no need to optimize this further, as it's only evaluated if branchAndBound is disabled and
+     * there's no valid reason why anybody would want to do so.
+     * 
+     * @param array[Edge] $edges
+     * @return float
+     */
+    private function sumEdges($edges){
+        $sum = 0;
+        foreach($edges as $edge){
+            $sum += $edge->getWeight();
+        }
+        return $sum;
     }
 }
