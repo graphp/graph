@@ -13,15 +13,13 @@ class AlgorithmTspNearestNeighbor{
 	 * @return Graph
 	 */
 	public function getResultGraph(Vertex $startVertex){
-		$resultGraph = new Graph();
-		$visitedVertices = array();
-		
-		$resultGraph->createVerticesClone( $this->graph->getVertices() );
+		$resultGraph = $this->graph->createGraphCloneEdgeless();
 		
 		$n = count($this->graph);
 
 		$vertex = $startVertex;
-		$visitedVertices[ $vertex->getId() ] = TRUE;
+		$visitedVertices = array($vertex->getId() => true);
+		
 		for (	$i = 0; $i < $n - 1; ++$i,
 									$vertex = $nextVertex){						//n-1 steps (spanning tree)
 			
@@ -52,16 +50,10 @@ class AlgorithmTspNearestNeighbor{
 			
 		}
 		
-		$edges = $vertex->getEdgesTo($startVertex);
-		
-		if ( ! $edges ){														//check if there is a way from end edge to start edge
-			throw new Exception("Graph is not complete - can't find an edge to the start vertex");
-		}
-		
-		foreach ( $edges as $edge ){											//get first connecting edge
-			$resultGraph->createEdgeClone( $edge );									//connect the last vertex with the start vertex
-			break;
-		}
+		//check if there is a way from end edge to start edge
+		//get first connecting edge
+		//connect the last vertex with the start vertex
+		$resultGraph->createEdgeClone(Edge::getFirst($vertex->getEdgesTo($startVertex)));
 		
 		return $resultGraph;
 	}

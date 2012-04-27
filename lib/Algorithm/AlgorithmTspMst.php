@@ -31,21 +31,17 @@ class AlgorithmTspMst{
 				$startVertex = $vertex;											
 			}
 			else {
-				foreach ($oldVertex->getEdgesTo( $vertex ) as $edge ){			// get edge(s) to clone, multiple edges are possible (returns an array if undirected edge)
-					$returnGraph->createEdgeClone( $edge );
-					break;
-				}
+			    // get edge(s) to clone, multiple edges are possible (returns an array if undirected edge)
+				$returnGraph->createEdgeClone(Edge::getFirst($oldVertex->getEdgesTo($vertex)));
 			}
 				
 			$oldVertex = $vertex;
 		}
 		
-																				// connect last vertex with start vertex
-		foreach ($oldVertex->getEdgesTo( $startVertex ) as $edge ){				// multiple edges are possible (returns an array if undirected edge)
-			$returnGraph->createEdgeClone( $edge );
-			break;
-		}
-
+		// connect last vertex with start vertex
+		// multiple edges are possible (returns an array if undirected edge)
+		$returnGraph->createEdgeClone(Edge::getFirst($oldVertex->getEdgesTo($startVertex)));
+		
 		return $returnGraph;
 	}
 }
