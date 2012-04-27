@@ -1,11 +1,10 @@
 <?php
 
 abstract class Edge{
-	
     /**
      * weight of this edge
      * 
-     * @var float|NULL
+     * @var float|int|NULL
      * @see Edge::getWeight()
      */
 	protected $weight = NULL;
@@ -64,7 +63,7 @@ abstract class Edge{
 	/**
 	 * return weight of edge
 	 * 
-	 * @return float|NULL weight of edge or NULL=not set
+	 * @return float|int|NULL numeric weight of edge or NULL=not set
 	 */
 	public function getWeight(){
 	    return $this->weight;
@@ -73,10 +72,13 @@ abstract class Edge{
 	/**
 	 * set new weight for edge
 	 * 
-	 * @param float|NULL $weight
+	 * @param float|int|NULL $weight new numeric weight of edge or NULL=unset weight
 	 * @return Edge $this (chainable)
 	 */
 	public function setWeight($weight){
+	    if($weight !== NULL && !is_float($weight) && !is_int($weight)){
+	        throw new Exception('Invalid weight given - must be numeric or NULL');
+	    }
 	    $this->weight = $weight;
 	    return $this;
 	}
