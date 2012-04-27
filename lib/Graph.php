@@ -235,7 +235,7 @@ class Graph implements Countable{
 	 * @uses Vertex::getDegree()
 	 */
 	public function getMinDegree(){
-	    return Vertex::getFirst($this->vertices,'degree')->getDegree();
+	    return Vertex::getFirst($this->vertices,Vertex::ORDER_DEGREE)->getDegree();
 	}
 	
 	/**
@@ -247,7 +247,7 @@ class Graph implements Countable{
 	 * @uses Vertex::getDegree()
 	 */
 	public function getMaxDegree(){
-	    return Vertex::getFirst($this->vertices,'degree',true)->getDegree();
+	    return Vertex::getFirst($this->vertices,Vertex::ORDER_DEGREE,true)->getDegree();
 	}
 	
 	

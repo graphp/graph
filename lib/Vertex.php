@@ -2,10 +2,49 @@
 
 class Vertex{
     /**
+     * do not change order - FIFO : first in, first out
+     * 
+     * @var int
+     */
+    const ORDER_FIFO = 0;
+    
+    /**
+     * order by vertex ID
+     * 
+     * @var int
+     * @see Vertex::getId()
+     */
+    const ORDER_ID = 1;
+    
+    /**
+     * order by vertex degree
+     * 
+     * @var int
+     * @see Vertex::getDegree()
+     */
+    const ORDER_DEGREE = 2;
+    
+    /**
+     * order by indegree of vertex
+     * 
+     * @var int
+     * @see Vertex::getIndegree()
+     */
+    const ORDER_INDEGREE = 3;
+    
+    /**
+     * order by outdegree of vertex
+     * 
+     * @var int
+     * @see Vertex::getOutdegree()
+     */
+    const ORDER_OUTDEGREE = 4;
+    
+    /**
      * get first vertex (optionally ordered by given criterium $by) from given array of vertices
      *
      * @param array[Vertex]|Graph $vertices array of vertices to scan for 'first' vertex
-     * @param NULL|string         $by       criterium to sort by can be eiter of [NULL,id,degree,indegree,outdegree]
+     * @param int                 $by       criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param boolean             $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Vertex
      * @throws Exception if criterium is unknown, no vertices exist or calling vertex functions throws an exception (degree on digraphs)
@@ -15,27 +54,27 @@ class Vertex{
      * @uses Vertex::getIndegree()
      * @uses Vertex::getOutdegree()
      */
-    public static function getFirst($vertices,$by=NULL,$desc=false){
+    public static function getFirst($vertices,$by=self::ORDER_FIFO,$desc=false){
         if($vertices instanceof Graph){
             $vertices = $vertices->getVertices();
         }
         $ret = NULL;
         $best = NULL;
         foreach($vertices as $vertex){
-            if($by === NULL){        // do not sort - needs special handling
+            if($by === self::ORDER_FIFO){        // do not sort - needs special handling
                 if($desc){            // always remember vertex from last iteration
                     $ret = $vertex;
                     continue;
                 }else{                // just return first vertex right away
                     return $vertex;
                 }
-            }else if($by === 'id'){
+            }else if($by === self::ORDER_ID){
                 $now = $vertex->getId();
-            }else if($by === 'degree'){
+            }else if($by === self::ORDER_DEGREE){
                 $now = $vertex->getDegree();
-            }else if($by === 'indegree'){
+            }else if($by === self::ORDER_INDEGREE){
                 $now = $vertex->getIndegree();
-            }else if($by === 'outdegree'){
+            }else if($by === self::ORDER_OUTDEGREE){
                 $now = $vertex->getOutdegree();
             }else{
                 throw new Exception('Invalid order flag "'.$by.'"');
@@ -55,7 +94,7 @@ class Vertex{
      * get iterator for vertices (optionally ordered by given criterium $by) from given array of vertices
      *
      * @param array[Vertex]|Graph $vertices array of vertices to scan for 'first' vertex
-     * @param NULL|string         $by       criterium to sort by can be eiter of [NULL,id,degree,indegree,outdegree]
+     * @param int                 $by       criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param boolean             $desc     whether to return biggest first (true) instead of smallest first (default:false)
      * @return Iterator iterator object (supporting at the very least foreach)
      * @throws Exception if criterium is unknown or calling vertex functions throws an exception (degree on digraphs)
@@ -65,22 +104,22 @@ class Vertex{
      * @uses Vertex::getIndegree()
      * @uses Vertex::getOutdegree()
      */
-    public static function getAll($vertices,$by=NULL,$desc=false){
+    public static function getAll($vertices,$by=self::ORDER_FIFO,$desc=false){
         if($vertices instanceof Graph){
             $vertices = $vertices->getVertices();
         }
-        if($by === NULL){
+        if($by === self::ORDER_FIFO){
             return new ArrayIterator($desc ? array_reverse($vertices) : $vertices);
         }
         $it = new SplPriorityQueue();
         foreach($vertices as $vertex){
-            if($by === 'id'){
+            if($by === self::ORDER_ID){
                 $now = $vertex->getId();
-            }else if($by === 'degree'){
+            }else if($by === self::ORDER_DEGREE){
                 $now = $vertex->getDegree();
-            }else if($by === 'indegree'){
+            }else if($by === self::ORDER_INDEGREE){
                 $now = $vertex->getIndegree();
-            }else if($by === 'outdegree'){
+            }else if($by === self::ORDER_OUTDEGREE){
                 $now = $vertex->getOutdegree();
             }else{
                 throw new Exception('Invalid order flag "'.$by.'"');
