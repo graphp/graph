@@ -8,6 +8,27 @@ class AlgorithmTspBruteforce{
     private $graph;
     
     /**
+     * best weight so for (used for branch-and-bound)
+     * 
+     * @var number|NULL
+     */
+    private $bestWeight;
+    
+    /**
+     * reference to start vertex
+     * 
+     * @var Vertex
+     */
+    private $startVertex;
+    
+    /**
+     * total number of edges needed
+     * 
+     * @var int
+     */
+    private $numEdges;
+    
+    /**
      * 
      * @param unknown_type $graph
      */
@@ -23,20 +44,21 @@ class AlgorithmTspBruteforce{
         
         // numEdges 3-12 should work
         
+        $this->bestWeight = NULL;
         $this->startVertex = $this->graph->getVertex(0);
         
         $result = $this->step($this->startVertex,
                               0,
-                              array($this->startVertex => true),
+                              array(),
                               array()
                   );
         
         if($result === NULL){
-            throw new Exception();
+            throw new Exception('No resulting solution for TSP found');
         }
         
         $graph = $this->graph->createGraphCloneEdgeless();
-        foreach($edges as $edge){
+        foreach($result as $edge){
             $graph->createEdgeClone($edge);
         }
         return $graph;
@@ -51,18 +73,21 @@ class AlgorithmTspBruteforce{
      * @return array[Edge]
      */
     private function step($vertex,$totalWeight,$visitedVertices,$visitedEdges){
-        if($target === $this->startVertex && count($visitedEdges) === $this->numEdges){ // kreis geschlossen am Ende
-            return array($totalWeight,$visitedEdges);
+        if($this->bestWeight !== NULL && $totalWeight >= $this->bestWeight){ // stop recursion if best result is exceeded (branch and bound)
+            return NULL;
+        }
+        if($vertex === $this->startVertex && count($visitedEdges) === $this->numEdges){ // kreis geschlossen am Ende
+            return $visitedEdges;
         }
         
-        if(isset($visitedVertices[$target->getId()])){ // weiter verzweigen in alle vertices
+        if(isset($visitedVertices[$vertex->getId()])){                          // only visit each vertex once
             return NULL;
         }
         $visitedVertices[$vertex->getId()] = true;
         
         $bestResult = NULL;
         
-        foreach($vertex->getEdges() as $edge){
+        foreach($vertex->getEdges() as $edge){                                  // weiter verzweigen in alle vertices
             $target = $edge->getVertexToFrom($vertex);
             
             $weight = $edge->getWeight();
@@ -70,18 +95,14 @@ class AlgorithmTspBruteforce{
                 throw new Exception('Unweighted edges not supported');
             }
             
-            // TODO: branch and bound if $totalWeight+$weight > $bestWeight
-            
             $result = $this->step($target,
                                   $totalWeight + $weight,
-                                  $visitedVertices + array($target->getId() => true),
+                                  $visitedVertices,
                                   array_merge($visitedEdges,array($edge))
                       );
             
             if($result !== NULL){ // new result found
-                if($bestResult === NULL || $result[0] < $bestResult[0]){ // either first result or best result
-                    $bestResult = $result;
-                }
+                $bestResult = $result;
             }
         }
         
