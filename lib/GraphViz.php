@@ -16,8 +16,8 @@ class GraphViz{
         
         echo "Generate picture ...";
         
-        exec('dot -Tpng '.$tmp.' -o '.$tmp.'.png');
-        exec('xdg-open '.$tmp.'.png # > /dev/null &2>1 &');
+        exec('dot -Tpng '.$tmp.' -o '.$tmp.'.png'); // use program 'dot' to actually generate graph image
+        exec('xdg-open '.$tmp.'.png > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
         
         echo "... done\n";
 	}
