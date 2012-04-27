@@ -88,14 +88,18 @@ class Vertex{
 	 * @param Vertex $vertex target vertex
 	 * @return EdgeDirected
 	 * @throws Exception
-	 * @uses Vertex::addEdge()
 	 * @uses Graph::addEdge()
 	 */
 	public function createEdgeTo($vertex){
 	    if($vertex->getGraph() !== $this->graph){
 	        throw new Exception('Target vertex has to be within the same graph');
 	    }
-	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeDirected($this,$vertex))));
+	    
+	    $edge = new EdgeDirected($this,$vertex);
+	    $this->edges []= $edge;
+	    $vertex->edges []= $edge;
+	    $this->graph->addEdge($edge);
+	    return $edge;
 	}
 	
 	/**
@@ -104,26 +108,17 @@ class Vertex{
 	 * @param Vertex $vertex
 	 * @return EdgeUndirected
 	 * @throws Exception
-	 * @uses Vertex::addEdge()
 	 * @uses Graph::addEdge()
 	 */
 	public function createEdge($vertex){
 	    if($vertex->getGraph() !== $this->graph){
 	        throw new Exception('Target vertex has to be within the same graph');
 	    }
-	    //echo 'new edge from '.$this->id.' to '.$vertex->getId().PHP_EOL;
-	    return $this->graph->addEdge($this->addEdge($vertex->addEdge(new EdgeUndirectedId($this,$vertex))));
-	}
-	
-	/**
-	 * add given edge to list of connected edges (should NOT be called manually!)
-	 * 
-	 * @param Edge $edge
-	 * @return Edge given $edge as-is
-	 * @private
-	 */
-	public function addEdge($edge){
+	    
+	    $edge = new EdgeUndirectedId($this,$vertex);
 	    $this->edges []= $edge;
+	    $vertex->edges []= $edge;
+	    $this->graph->addEdge($edge);
 	    return $edge;
 	}
 	
@@ -131,6 +126,7 @@ class Vertex{
 	 * remove the given edge from list of connected edges (MUST NOT be called manually)
 	 * 
 	 * @param Edge $edge
+	 * @return void
 	 * @private
 	 * @see Edge::destroy() instead!
 	 */

@@ -511,20 +511,19 @@ class Graph implements Countable{
 	 * adds a new Edge to the Graph (MUST NOT be called manually!)
 	 *
 	 * @param Edge $edge instance of the new Edge
-	 * @return Edge given edge as-is (chainable)
+	 * @return void
 	 * @private
 	 * @see Vertex::createEdge()
 	 */
 	public function addEdge($edge){
 	    $this->edges []= $edge;
-	    return $edge;
 	}
 	
 	/**
 	 * remove the given edge from list of connected edges (MUST NOT be called manually!)
 	 *
 	 * @param Edge $edge
-	 * @return Edge given $edge as-is
+	 * @return void
 	 * @private
 	 * @see Edge::destroy() instead!
 	 */
@@ -534,7 +533,6 @@ class Graph implements Countable{
 	        throw new Exception('Given edge does NOT exist');
 	    }
 	    unset($this->edges[$id]);
-	    return $edge;
 	}
 	
 	/**
