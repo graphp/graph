@@ -53,22 +53,6 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * creates new vertices in this Graph from the given input array of Vertex of another graph
-	 * 
-	 * @param array(Vertex) $originalVertices
-	 * @return array(Vertex) new vertices in this graph
-	 * 
-	 * @uses createVertexClone($originalVertex)
-	 * 
-	 */
-	public function createVerticesClone($originalVertices){
-		foreach ($originalVertices as $vertex){
-			$this->createVertexClone($vertex);
-		}
-		return $this;
-	}
-	
-	/**
 	 * create new clone/copy of this graph - copy all attributes and vertices, but do NOT copy edges
 	 * 
 	 * using this method is faster than creating a new graph and calling createEdgeClone() yourself
@@ -274,16 +258,7 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * return number of vertices
-	 * 
-	 * @return int
-	 */
-	public function getSize(){
-	    return count($this->vertices);
-	}
-	
-	/**
-	 * return number of vertices
+	 * return number of vertices (aka. size of graph, |V| or just 'n')
 	 * 
 	 * @return int
 	 */
@@ -565,44 +540,13 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * returns an array of all Edges
+	 * returns an array of ALL Edges in this graph
 	 *
 	 * @return array[Edge]
-	 * @todo purpose? REMOVE ME?
 	 * @private
 	 */
 	public function getEdges(){
 	    return $this->edges;
-	}
-	
-	/**
-	 * get all edges ordered by given criterium $by
-	 *
-	 * @param string  $by   criterium to sort by can only be [weight]
-	 * @param boolean $desc whether to return biggest (true) instead of smallest (default:false)
-	 * @return array
-	 * @throws Exception if criterium is unknown
-	 * @uses Edge::getWeight()
-	 */
-	public function getEdgesOrdered($by,$desc=false){
-	    $temp = array(); // temporary indexed array to be sorted
-	    foreach($this->edges as $eid=>$edge){
-	        if($by === 'weight'){
-	            $now = $edge->getWeight();
-	        }else{
-	            throw new Exception('Invalid sort criterium');
-	        }
-	        $temp[$eid] = $now;
-	    }
-	    if($desc){ // actually sort array ASC/DESC
-	        arsort($temp);
-	    }else{
-	        asort($temp);
-	    }
-	    foreach($temp as $eid=>&$value){ // make sure resulting array is edigeId=>edge
-	        $value = $this->edges[$eid];
-	    }
-	    return $temp;
 	}
 	
 	/**
