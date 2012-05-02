@@ -41,6 +41,13 @@ class Vertex{
     const ORDER_OUTDEGREE = 4;
     
     /**
+     * random/shuffled order
+     * 
+     * @var int
+     */
+    const ORDER_RANDOM = 5;
+    
+    /**
      * get first vertex (optionally ordered by given criterium $by) from given array of vertices
      *
      * @param array[Vertex]|Graph $vertices array of vertices to scan for 'first' vertex
@@ -57,6 +64,9 @@ class Vertex{
     public static function getFirst($vertices,$by=self::ORDER_FIFO,$desc=false){
         if($vertices instanceof Graph){
             $vertices = $vertices->getVertices();
+        }
+        if($by === self::ORDER_RANDOM && $vertices){ // random order and there are actually some vertices to shuffle
+            return $vertices[array_rand($vertices)]; // just return by random key (no need to check for DESC flag)
         }
         $ret = NULL;
         $best = NULL;
@@ -110,6 +120,10 @@ class Vertex{
         }
         if($by === self::ORDER_FIFO){
             return new ArrayIterator($desc ? array_reverse($vertices) : $vertices);
+        }
+        if($by === self::ORDER_RANDOM){
+            shuffle($vertices);
+            return new ArrayIterator($vertices); // create iterator for shuffled array (no need to check DESC flag)
         }
         $it = new SplPriorityQueue();
         foreach($vertices as $vertex){
