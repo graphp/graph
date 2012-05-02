@@ -2,6 +2,86 @@
 
 abstract class Edge{
     /**
+     * do not change order - FIFO : first in, first out
+     * 
+     * @var int
+     */
+    const ORDER_FIFO = 0;
+    
+    /**
+     * order by edge weight
+     * 
+     * @var int
+     * @see Edge::setWeight()
+     */
+    const ORDER_WEIGHT = 1;
+    
+    /**
+     * random/shuffled order
+     *
+     * @var int
+     */
+    const ORDER_RANDOM = 5;
+    
+    /**
+     * get first edge (optionally ordered by given criterium $by) from given array of edges
+     *
+     * @param array[Edge]|Graph $edges array of edges to scan for 'first' edge
+     * @param int               $by       criterium to sort by. see Edge::ORDER_WEIGHT, etc.
+     * @param boolean           $desc     whether to return biggest (true) instead of smallest (default:false)
+     * @return Edge
+     * @throws Exception if criterium is unknown or no edges exist
+     * @uses Edge::getAll()
+     */
+    public static function getFirst($edges,$by=NULL,$desc=false){
+        foreach(self::getAll($edges,$by,$desc) as $edge){
+            return $edge;
+        }
+        throw new Exception('No edge found');
+    }
+    
+    /**
+     * get all edges ordered by given criterium $by
+     *
+     * @param int     $by   criterium to sort by. see Edge::ORDER_WEIGHT, etc.
+     * @param boolean $desc whether to return biggest (true) instead of smallest (default:false)
+     * @return array
+     * @throws Exception if criterium is unknown
+     * @uses Edge::getWeight()
+     * @todo return Iterator and use SplPriorityQueue instead of temporary array
+     */
+    public static function getAll($edges,$by=NULL,$desc=false){
+        if($edges instanceof Graph){
+            $edges = $edges->getEdges();
+        }
+        if($by === self::ORDER_RANDOM){
+            shuffle($edges);
+            return new ArrayIterator($edges); // create iterator for shuffled array (no need to check DESC flag)
+        }
+        if($by === self::ORDER_FIFO){
+            return new ArrayIterator($desc ? array_reverse($edges) : $edges);
+        }
+        $temp = array(); // temporary indexed array to be sorted
+        foreach($edges as $eid=>$edge){
+            if($by === self::ORDER_WEIGHT){
+                $now = $edge->getWeight();
+            }else{
+                throw new Exception('Invalid sort criterium');
+            }
+            $temp[$eid] = $now;
+        }
+        if($desc){ // actually sort array ASC/DESC
+            arsort($temp);
+        }else{
+            asort($temp);
+        }
+        foreach($temp as $eid=>&$value){ // make sure resulting array is edigeId=>edge
+            $value = $edges[$eid];
+        }
+        return $temp;
+    }
+    
+    /**
      * weight of this edge
      * 
      * @var float|int|NULL
