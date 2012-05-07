@@ -323,6 +323,21 @@ class Vertex{
 	}
 	
 	/**
+	 * get ALL outgoing edges attached to this vertex
+	 *
+	 * @return array[Edge]
+	 */
+	public function getOutgoingEdges(){
+		$outgoingEdges = array();
+		foreach ($this->edges as $edge){
+			if ($edge->isOutgoingEdgeOf($this)){
+				$outgoingEdges[] = $edge;
+			}
+		}
+		return $outgoingEdges;
+	}
+	
+	/**
 	 * get edges FROM this vertex TO the given vertex
 	 * 
 	 * @param Vertex $vertex
@@ -337,6 +352,26 @@ class Vertex{
 	        }
 	    }
 	    return $ret;
+	}
+	
+	/**
+	 * get the cheapest edge FROM this vertex TO the given vertex
+	 *
+	 * @param Vertex $vertex
+	 * @return Edge
+	 * @uses Edge::getEdgesTo()
+	 */
+	public function getCheapestEdgeTo($vertex){
+		$cheapestEdge = NULL;
+		
+		foreach ($this->getEdgesTo($vertex) as $edge){
+			if ($cheapestEdge === NULL
+					|| $cheapestEdge->getWeight() > $edge->getWeight()){
+				$cheapestEdge = $edge;
+			}
+		}
+		
+		return $edge;
 	}
 	
 	/**

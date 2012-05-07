@@ -1,5 +1,5 @@
 <?php
 
-abstract class LoaderFile implements Loader{
+abstract class LoaderFile extends Loader{
     
 }

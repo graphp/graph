@@ -1,7 +1,13 @@
 <?php
 
-interface Loader{
+abstract class Loader{
 	
-	public function getGraph();
+	protected $directedEdges = false;
+	
+	public abstract function getGraph();
+	
+	public function setEnableDirectedEdges($directedEdges){
+		$this->directedEdges = $directedEdges;
+	}
 	
 }
