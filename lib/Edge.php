@@ -31,26 +31,54 @@ abstract class Edge{
      * @param boolean           $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Edge
      * @throws Exception if criterium is unknown or no edges exist
-     * @uses Edge::getAll()
+     * @uses Edge::getWeight()
      */
-    public static function getFirst($edges,$by=NULL,$desc=false){
-        foreach(self::getAll($edges,$by,$desc) as $edge){
-            return $edge;
+    public static function getFirst($edges,$by=self::ORDER_FIFO,$desc=false){
+        if($edges instanceof Graph){
+            $edges = $edges->getEdges();
         }
-        throw new Exception('No edge found');
+        if($by === self::ORDER_RANDOM && $edges){ // random order and there are actually some edges to shuffle
+            return $edges[array_rand($edges)]; // just return by random key (no need to check for DESC flag)
+        }
+        $ret = NULL;
+        $best = NULL;
+        foreach($edges as $edge){
+            if($by === self::ORDER_FIFO){        // do not sort - needs special handling
+                if($desc){            // always remember edge from last iteration
+                    $ret = $edge;
+                    continue;
+                }else{                // just return first edge right away
+                    return $edge;
+                }
+            }else if($by === self::ORDER_WEIGHT){
+                $now = $edge->getWeight();
+            }else{
+                throw new Exception('Invalid order flag "'.$by.'"');
+            }
+            if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
+                $ret = $edge;
+                $best = $now;
+            }
+        }
+        if($ret === NULL){
+            throw new Exception('No edge found');
+        }
+        return $ret;
     }
     
     /**
      * get all edges ordered by given criterium $by
-     *
-     * @param int     $by   criterium to sort by. see Edge::ORDER_WEIGHT, etc.
-     * @param boolean $desc whether to return biggest (true) instead of smallest (default:false)
+     * 
+     * @param array[Edge]|Graph $edges array of edges to sort
+     * @param int               $by    criterium to sort by. see Edge::ORDER_WEIGHT, etc.
+     * @param boolean           $desc  whether to return biggest (true) instead of smallest (default:false)
      * @return array
      * @throws Exception if criterium is unknown
      * @uses Edge::getWeight()
      * @todo return Iterator and use SplPriorityQueue instead of temporary array
+     * @link http://matthewturland.com/2010/05/20/new-spl-features-in-php-5-3/
      */
-    public static function getAll($edges,$by=NULL,$desc=false){
+    public static function getAll($edges,$by=self::ORDER_FIFO,$desc=false){
         if($edges instanceof Graph){
             $edges = $edges->getEdges();
         }
