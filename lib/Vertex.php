@@ -355,26 +355,6 @@ class Vertex{
 	}
 	
 	/**
-	 * get the cheapest edge FROM this vertex TO the given vertex
-	 *
-	 * @param Vertex $vertex
-	 * @return Edge
-	 * @uses Edge::getEdgesTo()
-	 */
-	public function getCheapestEdgeTo($vertex){
-		$cheapestEdge = NULL;
-		
-		foreach ($this->getEdgesTo($vertex) as $edge){
-			if ($cheapestEdge === NULL
-					|| $cheapestEdge->getWeight() > $edge->getWeight()){
-				$cheapestEdge = $edge;
-			}
-		}
-		
-		return $edge;
-	}
-	
-	/**
 	 * get edges FROM the given vertex TO this vertex
 	 *
 	 * @param Vertex $vertex

@@ -77,7 +77,7 @@ class AlgorithmSpDijkstra{
 					
 					echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH KOST: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
 					
-					$edge = $predecesVertex->getCheapestEdgeTo($vertex);					//get cheapest edge
+					$edge = Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
 					$returnGraph->createEdgeClone($edge);									//clone this edge
 				}
 			}
