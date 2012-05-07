@@ -20,8 +20,13 @@ class GraphViz{
         //echo "Generate picture ...";
         $tmp = $this->createImageFile();
         
+        static $next = 0;
+        if($next > microtime(true)){
+            echo '[delay flooding xdg-open]'; // wait some time between calling xdg-open because earlier calls will be ignored otherwise
+            sleep(1);
+        }
         exec('xdg-open '.escapeshellarg($tmp).' > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
-        
+        $next = microtime(true) + 1.0;
         //echo "... done\n";
 	}
 	
