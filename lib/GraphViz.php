@@ -30,7 +30,7 @@ class GraphViz{
 		$mark = array();
 			
 		foreach ($this->graph->getVertices() as $vertex){
-			foreach ($vertex->getEdges() as $currentEdge){
+			foreach ($vertex->getOutgoingEdges() as $currentEdge){
 			    $currentTargetVertex = $currentEdge->getVertexToFrom($vertex);
 				
 				if($currentTargetVertex !== $vertex && !isset($mark[$currentTargetVertex->getId()])){

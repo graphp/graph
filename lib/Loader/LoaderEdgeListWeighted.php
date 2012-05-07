@@ -33,7 +33,15 @@ class LoaderEdgeListWeighted extends LoaderFile{
 			$from = $graph->getVertex($edgeConnections[0]);
 			$to = $graph->getVertex($edgeConnections[1]);
 			
-			$edge = $from->createEdge($to);                                     //TODO directed
+			$edge;
+			
+			if ($this->directedEdges){
+				$edge = $from->createEdgeTo($to);
+			}
+			else {
+				$edge = $from->createEdge($to);
+			}
+			
 			$edge->setWeight((float)$edgeConnections[2]);
 		}
 		

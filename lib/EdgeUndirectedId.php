@@ -87,4 +87,8 @@ class EdgeUndirectedId extends Edge{
 			throw new Exception('Invalid end vertex');
 		}
 	}
+	
+	public function isOutgoingEdgeOf(Vertex $startVertex){
+		return ($this->graph->getVertex($this->a) === $startVertex || $this->graph->getVertex($this->b) === $startVertex);
+	}
 }

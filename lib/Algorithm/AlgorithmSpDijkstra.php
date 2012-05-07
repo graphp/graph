@@ -1,79 +1,88 @@
 <?php
 class AlgorithmSpDijkstra{
-	public function __construct(Graph $inputGraph, Vertex $startVertex){
-		$this->startGraph = $inputGraph;
-		$this->startVertex = $startVertex;
+	
+	private $graph;
+	private $startVertex;
+	
+	public function __construct(Graph $inputGraph){
+		$this->graph = $inputGraph;
 	}
-
+	
 	/**
 	 *
 	 * @return Graph
 	 */
-	public function getResultGraph(){
+	public function getResultGraph(Vertex $startVertex){
+		$this->startVertex = $startVertex;
+		
+		$totalCostOfCheapestPathTo  = Array();
+		$totalCostOfCheapestPathTo[$this->startVertex->getId()] = 0;			//Start node distance
 
-		// Initialise programm
-		$returnGraph = $this->startGraph->createGraphCloneEdgeless();
+		$cheapestVertex = new SplPriorityQueue();								//just to get the cheapest vertex in the right order
+		$cheapestVertex->insert($this->startVertex, 0);
+		
+		$predecesVertexOfCheapestPathTo  = Array();								//Vorgänger
+		$predecesVertexOfCheapestPathTo[$this->startVertex->getId()] = $this->startVertex;				
 
-		$distanceFromStartTo  = Array();
-		$distanceFromStartTo[$this->startVertex->getId()] = 0;
-
-		$predecessorTo  = Array();
-		$predecessorTo[$this->startVertex->getId()] = $this->startVertex;
-
-		$marked  = Array();
-
-		$nodePriorityQueue = new SplPriorityQueue();
-
-		// Add reachable Nodes
-		foreach ($this->startVertex->getEdges() as $edge){
-			foreach ($edge->getVertexToFrom($this->startVertex) as $targetVertex){
-				$distanceFromStartTo[$targetVertex->getId()] = $edge->getWeight();
-				$predecessorTo[$targetVertex->getId()] = $this->startVertex;
-				$nodePriorityQueue->insert($targetVertex, -$edge->getWeight());
-			}
-		}
-
+		$usedVertices  = Array();
 
 		// Repeat until all vertices have been marked
-		$countOfVertices = 0;
-		$totalCountOfVertices = $this->startGraph->count();
-		while ($countOfVertices< $totalCountOfVertices){
+		$totalCountOfVertices = $this->graph->count();
+		for ($i = 0; $i < $totalCountOfVertices; ++$i){
 
-			// Get next cheapest reachable node from priolist
-			$currentVertex = $nodePriorityQueue->extract();
-
-			$currentPredesessor = $predecessorTo[$currentVertex->getId()]; 			// mark predessessor (his cheapest path has been found)
-			if(!$marked[$currentPredesessor->getId()]){
-				$marked[$currentPredesessor->getId()] = true;
-				$countOfVertices++;													// only rise counter if fresh marked
+			$isEmpty = false;
+			do{
+				if ($cheapestVertex->isEmpty()){								//if the priority queue is empty there are isolated vertices but the algorithem visited all other vertices
+					$isEmpty = true;
+					break;
+				}
+				$currentVertex = $cheapestVertex->extract();					//Get cheapest unmarked vertex
+			}while( isset($usedVertices[$currentVertex->getId()]) );			//Vertices can be multiple times in the priorety queue with different path costs (if vertex is allready marked this position is an old unvalid value)
+			
+			if ($isEmpty){														//algorithem is done
+				break;
 			}
 			
-
-			foreach ($currentVertex->getEdges() as $edge){ 											// Add reachable nodes from currently added node and refresh the current possible distances
-				foreach ($edge->getVertexToFrom($currentVertex) as $targetVertex){
-
-					$costsToTargetVertex = $distanceFromStartTo[$currentVertex->getId()] + $edge->getWeight();
-
-					if(!isset($distanceFromStartTo[$targetVertex->getId()])){						// if not yet added -> add
+			$usedVertices[$currentVertex->getId()] = true;						//mark this vertex
+			
+			foreach ($currentVertex->getOutgoingEdges() as $edge){ 				//check for all edges of current vertex if there is a cheaper path IN OTHER WORDS Add reachable nodes from currently added node and refresh the current possible distances
+				$targetVertex = $edge->getVertexToFrom($currentVertex);
+				
+				if ( ! isset( $usedVertices[$targetVertex->getId()] ) )			//if the targetVertex is marked, the cheapest path for this vertex is allready found (no negatives edges)
+				{
+					$newCostsToTargetVertex = $totalCostOfCheapestPathTo[$currentVertex->getId()] + $edge->getWeight();	//calculate new cost to vertex
+					
+					if ( ( ! isset($predecesVertexOfCheapestPathTo[$targetVertex->getId()]) )
+							|| $totalCostOfCheapestPathTo[$targetVertex->getId()] > $newCostsToTargetVertex){	//is the new path cheaper?
 						
-						$distanceFromStartTo[$targetVertex->getId()] = $costsToTargetVertex;
-						$predecessorTo[$targetVertex->getId()] = $currentVertex;
+						$cheapestVertex->insert($targetVertex, - $newCostsToTargetVertex);			//Not an update just a new insert
+																									//With lower cost
+																									//so the lowest cost will be extraced first
+																									//and higher cost skipped during extraction
 						
-						$nodePriorityQueue->insert($targetVertex, -$costsToTargetVertex);
-						
-					} else if($distanceFromStartTo[$targetVertex->getId()] > $costsToTargetVertex){ // if new costs are lower -> update
-						
-						$distanceFromStartTo[$targetVertex->getId()] = $costsToTargetVertex;
-						$predecessorTo[$targetVertex->getId()] = $currentVertex;
-						
-						// TODO UPDATE VALUE IN PRIOQUEUE
-						// remove element from queue
-						// and add with new value
+						$totalCostOfCheapestPathTo[$targetVertex->getId()] = $newCostsToTargetVertex;	//set cost of the target vertex to new cheaper path
+						$predecesVertexOfCheapestPathTo[$targetVertex->getId()] = $currentVertex;		//set predecessor vertex of cheaper path
 					}
 				}
 			}
 		}
 		
-		// TODO Add correct edges to return graph or define better output (ex. costs and predesessor list)
+		//algorithm is done, build graph
+		$returnGraph = $this->graph->createGraphCloneEdgeless();				//Copy Graph
+		foreach($this->graph->getVertices() as $vertex){
+			echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
+			if ( $vertex !== $this->startVertex ){								//start vertex doesn't have a predecessor
+				if (isset( $predecesVertexOfCheapestPathTo[$vertex->getId()] )){
+					$predecesVertex = $predecesVertexOfCheapestPathTo[$vertex->getId()];	//get predecor
+					
+					echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH KOST: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
+					
+					$edge = $predecesVertex->getCheapestEdgeTo($vertex);					//get cheapest edge
+					$returnGraph->createEdgeClone($edge);									//clone this edge
+				}
+			}
+		}
+		
+		return $returnGraph;
 	}
 }

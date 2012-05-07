@@ -1,6 +1,6 @@
 <?php
 
-class LoaderCompleteGraph implements Loader{
+class LoaderCompleteGraph extends Loader{
 	
 	private $numberOfVertices;
 	

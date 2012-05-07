@@ -97,6 +97,14 @@ abstract class Edge{
 	abstract public function getTargetVertices();
 	
 	/**
+	 * return true if this edge is an outgoing edge of the given vertex
+	 * return false ; every other case
+	 *
+	 * @return boolean
+	 */
+	abstract public function isOutgoingEdgeOf(Vertex $startVertex);
+	
+	/**
 	 * Return string with edge visualisation
 	 *
 	 * @return string
