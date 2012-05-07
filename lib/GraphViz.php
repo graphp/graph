@@ -1,78 +1,192 @@
 <?php
 
 class GraphViz{
+    private $graph;
+    private $attributes = array();
+    
+    const EOL = PHP_EOL;
+    
 	public function __construct(Graph $graphToPlot){
 		$this->graph = $graphToPlot;
 	}
 	
+	/**
+	 * create and display image for this graph
+	 * 
+	 * @return void
+	 * @uses GraphViz::createImageFile()
+	 */
 	public function display(){
-        $script = $this->createUnDirectedGraphVizScript();
+        //echo "Generate picture ...";
+        $tmp = $this->createImageFile();
         
-        var_dump($script);
+        exec('xdg-open '.escapeshellarg($tmp).' > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
         
-        $tmp = tempnam('/tmp','graphviz');
-        file_put_contents($tmp,$script);
-        
-        
-        echo "Generate picture ...";
-        
-        exec('dot -Tpng '.$tmp.' -o '.$tmp.'.png'); // use program 'dot' to actually generate graph image
-        exec('xdg-open '.$tmp.'.png > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
-        
-        echo "... done\n";
+        //echo "... done\n";
 	}
-
-	/**
-	 * @return GraphViz script with one edge between every vertex
-	 */
-	public function createUndirectedGraphVizScript(){
-		$script = "graph G {\n";
-		$mark = array();
-			
-		foreach ($this->graph->getVertices() as $vertex){
-			foreach ($vertex->getEdges() as $currentEdge){
-			    $currentTargetVertex = $currentEdge->getVertexToFrom($vertex);
-				
-				if($currentTargetVertex !== $vertex && !isset($mark[$currentTargetVertex->getId()])){
-					$script .= $vertex->getId()." -- ".$currentTargetVertex->getId();
-					
-					$weight = $currentEdge->getWeight();
-					if($weight !== NULL){                                       // add weight as label (if set)
-					    $script .= " [label=".$weight."]";
-					}
-					$script .= ";\n";
-				}
-			}
-			$mark[$vertex->getId()] = true;
-		}
-		$script .= "\n}";
-			
-		return $script;
+	
+	public function setAttribute($where,$name,$value=NULL){
+	    if($where === 'vertex'){
+	        $where = 'node';
+	    }
+	    if(is_array($name)){
+	        foreach($name as $name=>$value){
+	            $this->attributes[$where][$name] = $value;
+	        }
+	        return $this;
+	    }
+	    $this->attributes[$where][$name] = $value;
+	    return $this;
 	}
-
+	
 	/**
-	 * @return GraphViz script with all given edges
+	 * create base64-encoded image src target data to be used for html images
+	 * 
+	 * @return string
+	 * @uses GraphViz::createImageFile()
 	 */
-	public function createDirectedGraphVizScript(){
-		$script = "digraph G {\n";
+	public function createImageSrc(){
+	    $file = $this->createImageFile();
+	    $base = base64_encode(file_get_contents($file));
+	    unlink($file);
+	    return 'data:image/png;base64,'.$base;
+	}
+	
+	/**
+	 * create image html code for this graph
+	 * 
+	 * @return string
+	 * @uses GraphViz::createImageSrc()
+	 */
+	public function createImageHtml(){
+	    return '<img src="'.$this->createImageSrc().'" />';
+	}
+	
+	/**
+	 * create image file for this graph
+	 * 
+	 * @return string filename
+	 * @throws Exception on error
+	 * @uses GraphViz::createScript()
+	 */
+	public function createImageFile(){
+        $script = $this->createScript();
+	    //var_dump($script);
+	    
+	    $tmp = tempnam('/tmp','graphviz');
+	    if($tmp === false){
+	        throw new Exception('Unable to get temporary file name for graphviz script');
+	    }
+	    
+	    $ret = file_put_contents($tmp.'.gv',$script,LOCK_EX);
+	    if($ret === false){
+	        throw new Exception('Unable to write graphviz script to temporary file');
+	    }
+	    
+	    $ret = 0;
+	    system('dot -Tpng '.escapeshellarg($tmp.'.gv').' -o '.escapeshellarg($tmp.'.png'),$ret); // use program 'dot' to actually generate graph image
+	    if($ret !== 0){
+	        throw new Exception('Unable to invoke "dot" to create image file (code '.$ret.')');
+	    }
+	    
+	    unlink($tmp.'.gv');
+	    
+	    return $tmp.'.png';
+	}
+	
+	/**
+	 * create graphviz script representing this graph
+	 * 
+	 * @return string
+	 * @uses Graph::isDirected()
+	 * @uses Graph::getVertices()
+	 * @uses Graph::getEdges()
+	 */
+	public function createScript(){
+	    $directed = $this->graph->isDirected();
+	    
+		$script = ($directed ? 'di':'') . 'graph G {'.self::EOL;
 		
-		foreach ($this->graph->getVertices() as $vertex){
-			foreach ($vertex->getEdges() as $currentEdge){
-			    $currentTargetVertex = $currentEdge->getVertexToFrom($vertex);
-						
-				if($currentTargetVertex !== $vertex){
-					$script .= $vertex->getId()." -> ".$currentTargetVertex->getId();
-					
-					$weight = $currentEdge->getWeight();
-					if($weight !== NULL){                                       // add weight as label (if set)
-					    $script .= " [label=".$weight."]";
-					}
-					$script .= "\n";
-				}
-			}
+		// add global attributes
+		foreach(array('graph','node','edge') as $where){
+    		if(isset($this->attributes[$where])){
+    		    $script .= '  ' . $where . ' ' . $this->escapeAttributes($this->attributes[$where]) . self::EOL;
+    		}
 		}
-		$script .= "\n}";
-
-		return $script;
+		
+		// explicitly add all isolated vertices (vertices with no edges)
+		// other vertices wil be added automatically due to below edge definitions
+		foreach ($this->graph->getVertices() as $vertex){
+		    if($vertex->isIsolated()){
+		        $script .= '  ' . $this->escapeId($vertex->getId()) . self::EOL;
+		    }
+		}
+		
+		$edgeop = $directed ? ' -> ' : ' -- ';
+		
+		// add all edges as directed edges
+		foreach ($this->graph->getEdges() as $currentEdge){
+		    $both = $currentEdge->getVertices();
+		    $currentStartVertex = $both[0];
+		    $currentTargetVertex = $both[1];
+		    
+		    $script .= '  ' . $this->escapeId($currentStartVertex->getId()) . $edgeop . $this->escapeId($currentTargetVertex->getId());
+	        
+		    $attrs = array();
+		    
+    	    $weight = $currentEdge->getWeight();
+    	    if($weight !== NULL){                                       // add weight as label (if set)
+    	        $attrs['label']  = $weight;
+     	        $attrs['weight'] = $weight;
+    	    }
+    	    // this edge also points to the opposite direction => this is actually an undirected edge
+    	    if($directed && $currentEdge->isConnection($currentTargetVertex,$currentStartVertex)){
+    	        $attrs['dir'] = 'none';
+    	    }
+    	    if($attrs){
+    	        $script .= ' '.$this->escapeAttributes($attrs);
+    	    }
+    	    
+    	    $script .= self::EOL;
+		}
+		$script .= '}'.self::EOL;
+	    return $script;
+	}
+	
+	/**
+	 * escape given id string and wrap in quotes if needed
+	 * 
+	 * @param string $id
+	 * @return string
+	 * @link http://graphviz.org/content/dot-language
+	 */
+	private function escapeId($id){
+	    // see @link: There is no semantic difference between abc_2 and "abc_2"
+	    if(preg_match('/^(?:\-?(?:\.\d+|\d+(?:\.\d+)?)|[a-z_][a-z0-9_]*)$/i',$id)){ // numeric or simple string, no need to quote (only for simplicity)
+	        return $id;
+	    }
+	    return '"'.str_replace(array('&','<','>','"',"'",'\\'),array('&amp;','&lt;','&gt;','&quot;','&apos;','\\\\'),$id).'"';
+	}
+	
+	/**
+	 * get escaped attribute string for given array of (unescaped) attributes
+	 * 
+	 * @param array $attrs
+	 * @return string
+	 * @uses GraphViz::escapeId()
+	 */
+	private function escapeAttributes($attrs){
+        $script = '[';
+        $first = true;
+        foreach($attrs as $name=>$value){
+            if($first){
+                $first = false;
+            }else{
+                $script .= ' ';
+            }
+            $script .= $name.'='.$this->escapeId($value);
+        }
+        $script .= ']';
+	    return $script;
 	}
 }
