@@ -95,11 +95,12 @@ class Graph implements Countable{
 	/**
 	 * create new clone of the given edge between adjacent vertices
 	 * 
-	 * @param EdgeUndirected $originalEdge original edge from old graph
-	 * @return EdgeUndirected new edge in this graph
+	 * @param Edge $originalEdge original edge from old graph
+	 * @return Edge new edge in this graph
 	 * @uses Edge::getVerticesId()
 	 * @uses Graph::getVertex()
-	 * @uses Vertex::createEdge()
+	 * @uses Vertex::createEdge() to create a new undirected edge if given edge was undrected
+	 * @uses Vertex::createEdgeTo() to create a new directed edge if given edge was directed
 	 * @uses Edge::getWeight()
 	 * @uses Edge::setWeight()
 	 */
@@ -109,7 +110,11 @@ class Graph implements Countable{
 	    $a = $this->getVertex($ends[0]); // get start vertex from old start vertex id
 	    $b = $this->getVertex($ends[1]); // get target vertex from old target vertex id
 	    
-	    $newEdge = $a->createEdge($b); // create new edge between new a and b
+	    if($originalEdge instanceof EdgeDirected){
+	        $newEdge = $a->createEdgeTo($b);
+	    }else{
+	        $newEdge = $a->createEdge($b); // create new edge between new a and b
+	    }
 	    // TODO: copy edge attributes
 	    $newEdge->setWeight($originalEdge->getWeight());
 	    
