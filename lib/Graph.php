@@ -18,17 +18,22 @@ class Graph implements Countable{
 	/**
 	 * create a new Vertex in the Graph
 	 * 
-	 * @param int|NULL $vertex instance of Vertex or new vertex ID to use
+	 * @param int|NULL $vertex          instance of Vertex or new vertex ID to use
+	 * @param boolean  $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
 	 * @return Vertex (chainable)
+	 * @throws Exception if given vertex $id is invalid or already exists
 	 * @uses Vertex::getId()
 	 */
-	public function createVertex($id=NULL){
+	public function createVertex($id=NULL,$returnDuplicate=false){
 	    if($id === NULL){    // no ID given
 	        $id = $this->getNextId();
 	    }else if(!is_int($id) && !is_string($id)){
 	        throw new Exception('Vertex ID has to be of type integer or string');
 	    }
 	    if(isset($this->vertices[$id])){
+	        if($returnDuplicate){
+	            return $this->vertices[$id];
+	        }
 	        throw new Exception('ID must be unique');
 	    }
 	    $vertex = new Vertex($id,$this);
