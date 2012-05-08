@@ -70,12 +70,11 @@ class AlgorithmSpDijkstra{
 		//algorithm is done, build graph
 		$returnGraph = $this->graph->createGraphCloneEdgeless();				//Copy Graph
 		foreach($this->graph->getVertices() as $vertex){
-			echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
 			if ( $vertex !== $this->startVertex ){								//start vertex doesn't have a predecessor
 				if (isset( $predecesVertexOfCheapestPathTo[$vertex->getId()] )){
 					$predecesVertex = $predecesVertexOfCheapestPathTo[$vertex->getId()];	//get predecor
 					
-					echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH KOST: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
+// 					echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH KOST: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
 					
 					$edge = Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
 					$returnGraph->createEdgeClone($edge);									//clone this edge
