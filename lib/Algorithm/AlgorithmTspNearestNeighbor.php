@@ -1,10 +1,10 @@
 <?php
 class AlgorithmTspNearestNeighbor{
 	
-	private $graph;
+	private $vertex;
 	
-	public function __construct(Graph $inputGraph){
- 		$this->graph = $inputGraph;
+	public function __construct(Vertex $startVertex){
+ 		$this->vertex = $startVertex;
 	}
 	
 	/**
@@ -12,12 +12,12 @@ class AlgorithmTspNearestNeighbor{
 	 * @param Vertex $startVertex
 	 * @return Graph
 	 */
-	public function getResultGraph(Vertex $startVertex){
-		$resultGraph = $this->graph->createGraphCloneEdgeless();
+	public function getResultGraph(){
+		$resultGraph = $this->vertex->getGraph()->createGraphCloneEdgeless();
 		
-		$n = count($this->graph);
-
-		$vertex = $startVertex;
+		$n = $this->vertex->getGraph()->getNumberOfVertices();
+        
+		$vertex = $this->vertex;
 		$visitedVertices = array($vertex->getId() => true);
 		
 		for (	$i = 0; $i < $n - 1; ++$i,
@@ -53,7 +53,7 @@ class AlgorithmTspNearestNeighbor{
 		//check if there is a way from end edge to start edge
 		//get first connecting edge
 		//connect the last vertex with the start vertex
-		$resultGraph->createEdgeClone(Edge::getFirst($vertex->getEdgesTo($startVertex)));
+		$resultGraph->createEdgeClone(Edge::getFirst($vertex->getEdgesTo($this->vertex)));
 		
 		return $resultGraph;
 	}
