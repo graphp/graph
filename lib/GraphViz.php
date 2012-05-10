@@ -4,10 +4,29 @@ class GraphViz{
     private $graph;
     private $attributes = array();
     
+    /**
+     * file output format to use
+     * 
+     * @var string
+     * @see GraphViz::setFormat()
+     */
+    private $format = 'png';
+    
     const EOL = PHP_EOL;
     
 	public function __construct(Graph $graphToPlot){
 		$this->graph = $graphToPlot;
+	}
+	
+	/**
+	 * set graph image output format
+	 * 
+	 * @param string $format png, svg, ps2, etc. (see 'man dot' for details on parameter '-T') 
+	 * @return GraphViz $this (chainable)
+	 */
+	public function setFormat($format){
+	    $this->format = $format;
+	    return $this;
 	}
 	
 	/**
@@ -89,14 +108,14 @@ class GraphViz{
 	    }
 	    
 	    $ret = 0;
-	    system('dot -Tpng '.escapeshellarg($tmp.'.gv').' -o '.escapeshellarg($tmp.'.png'),$ret); // use program 'dot' to actually generate graph image
+	    system('dot -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp.'.gv').' -o '.escapeshellarg($tmp.'.'.$this->format),$ret); // use program 'dot' to actually generate graph image
 	    if($ret !== 0){
 	        throw new Exception('Unable to invoke "dot" to create image file (code '.$ret.')');
 	    }
 	    
 	    unlink($tmp.'.gv');
 	    
-	    return $tmp.'.png';
+	    return $tmp.'.'.$this->format;
 	}
 	
 	/**
