@@ -420,6 +420,21 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * checks whether this graph has any loops (edges from vertex to itself)
+	 * 
+	 * @return boolean
+	 * @uses Edge::isLoop()
+	 */
+	public function hasLoop(){
+	    foreach($this->edges as $edge){
+	        if($edge->isLoop()){
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	/**
 	 * adds a new Edge to the Graph (MUST NOT be called manually!)
 	 *
 	 * @param Edge $edge instance of the new Edge

@@ -505,6 +505,21 @@ class Vertex{
 	}
 	
 	/**
+	 * checks whether this vertex has a loop (edge to itself)
+	 * 
+	 * @return boolean
+	 * @uses Edge::isLoop()
+	 */
+	public function hasLoop(){
+	    foreach($this->edges as $edge){
+	        if($edge->isLoop()){
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	/**
 	 * Breadth-first search (BFS)
 	 *
 	 * @return array[Vertex]
