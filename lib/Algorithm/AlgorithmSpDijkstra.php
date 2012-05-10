@@ -1,20 +1,17 @@
 <?php
 class AlgorithmSpDijkstra{
 	
-	private $graph;
 	private $startVertex;
 	
-	public function __construct(Graph $inputGraph){
-		$this->graph = $inputGraph;
+	public function __construct(Vertex $startVertex){
+		$this->startVertex = $startVertex;
 	}
 	
 	/**
 	 *
 	 * @return Graph
 	 */
-	public function getResultGraph(Vertex $startVertex){
-		$this->startVertex = $startVertex;
-		
+	public function getResultGraph(){
 		$totalCostOfCheapestPathTo  = Array();
 		$totalCostOfCheapestPathTo[$this->startVertex->getId()] = 0;			//Start node distance
 
@@ -27,7 +24,7 @@ class AlgorithmSpDijkstra{
 		$usedVertices  = Array();
 
 		// Repeat until all vertices have been marked
-		$totalCountOfVertices = $this->graph->count();
+		$totalCountOfVertices = $this->startVertex->getGraph()->getNumberOfVertices();
 		for ($i = 0; $i < $totalCountOfVertices; ++$i){
 
 			$isEmpty = false;
@@ -68,8 +65,8 @@ class AlgorithmSpDijkstra{
 		}
 		
 		//algorithm is done, build graph
-		$returnGraph = $this->graph->createGraphCloneEdgeless();				//Copy Graph
-		foreach($this->graph->getVertices() as $vertex){
+		$returnGraph = $this->startVertex->getGraph()->createGraphCloneEdgeless();				//Copy Graph
+		foreach($this->startVertex->getGraph()->getVertices() as $vertex){
 			echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
 			if ( $vertex !== $this->startVertex ){								//start vertex doesn't have a predecessor
 				if (isset( $predecesVertexOfCheapestPathTo[$vertex->getId()] )){
