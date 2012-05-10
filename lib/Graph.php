@@ -180,6 +180,25 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * return first vertex found
+	 * 
+	 * some algorithms do not need a particular vertex, but merely a (random)
+	 * starting point. this is a convenience function to just pick the first
+	 * vertex from the list of known vertices.
+	 *
+	 * @return Vertex first vertex found in this graph
+	 * @throws Exception if Graph has no vertices
+	 * @see Vertex::getFirst() if you need to apply ordering first
+	 */
+	public function getVertexFirst(){
+	    foreach ($this->vertices as $vertex){
+	        return $vertex;
+	    }
+	    
+	    throw new Exception("Graph has no vertices");
+	}
+	
+	/**
 	 * returns an array of all Vertices
 	 * 
 	 * @return array[Vertex]
@@ -225,7 +244,7 @@ class Graph implements Countable{
 	 * @uses Vertex::getOutdegree()
 	 */
 	public function getDegree(){
-	    $degree = $this->getAnyVertex()->getIndegree(); // get initial degree of any start vertex to compare others to
+	    $degree = $this->getVertexFirst()->getIndegree(); // get initial degree of any start vertex to compare others to
 	    
 	    foreach($this->vertices as $vertex){
 	        $i = $vertex->getIndegree();
@@ -460,20 +479,6 @@ class Graph implements Countable{
 	        throw new Exception('Given edge does NOT exist');
 	    }
 	    unset($this->edges[$id]);
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Vertex any vertex in this graph
-	 * @throws Exception if Graph has no vertices
-	 */
-	public function getAnyVertex(){
-		foreach ($this->vertices as $vertex){
-			return $vertex;
-		}
-		
-		throw new Exception("Graph has no vertices");
 	}
 	
     /**
