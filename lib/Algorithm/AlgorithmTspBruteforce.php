@@ -86,7 +86,7 @@ class AlgorithmTspBruteforce{
         // numEdges 3-12 should work
         
         $this->bestWeight = $this->upperLimit;
-        $this->startVertex = $this->graph->getVertex(0);
+        $this->startVertex = $this->graph->getAnyVertex(); // actual start doesn't really matter as we're only considering complete graphs here
         
         $result = $this->step($this->startVertex,
                               0,
