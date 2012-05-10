@@ -50,12 +50,12 @@ class AlgorithmSpMooreBellmanFord{
 	}
 	
 	/**
-	 * Calculate the Moore-Bellman-Ford-Algorithm and returns the result Graph
+	 * Calculate the Moore-Bellman-Ford-Algorithm and get all edges on shortest path for this vertex
 	 * 
+	 * @return array[Edge]
 	 * @throws Exception if there is a negative cycle
-	 * @return Graph
 	 */
-	public function getResultGraph(){
+	public function getEdges(){
 		$totalCostOfCheapestPathTo  = Array();
 		$totalCostOfCheapestPathTo[$this->startVertex->getId()] = 0;					//Start node distance
 		
@@ -77,17 +77,19 @@ class AlgorithmSpMooreBellmanFord{
 		}
 		
 		//algorithm is done, build graph										//THIS IS THE SAME AS DIJKSTRA (EXCTRACT TO A FUNCTION?????????)
-		$returnGraph = $this->startVertex->getGraph()->createGraphCloneEdgeless();				//Copy Graph
-		foreach($this->startVertex->getGraph()->getVertices() as $vertex){
-			if ( $vertex !== $this->startVertex ){									//start vertex doesn't have a predecessor
-				if (isset( $predecessorVertexOfCheapestPathTo[$vertex->getId()] )){
-					$predecessor = $predecessorVertexOfCheapestPathTo[$vertex->getId()];			//get predecor
 		
-					$edge = Edge::getFirst($predecessor->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
-					$returnGraph->createEdgeClone($edge);						//clone this edge
-				}
-			}
+		$vertices = $this->startVertex->getGraph()->getVertices();
+		unset($vertices[$this->startVertex->getId()]);                          //start vertex doesn't have a predecessor
+		
+		$returnEdges = array();
+		foreach($vertices as $vertex){
+	        if (isset( $predecessorVertexOfCheapestPathTo[$vertex->getId()] )){
+	            $predecessor = $predecessorVertexOfCheapestPathTo[$vertex->getId()];			//get predecor
+	            
+	            $returnEdges []= Edge::getFirst($predecessor->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
+	        }
 		}
+		
 		
 		//Check for negative cycles
 		//TODO: what if there are more as one negative cycle??? (this one we found can maybe not effect all vertices but an other does???)
@@ -102,6 +104,22 @@ class AlgorithmSpMooreBellmanFord{
 			}
 		}
 		
-		return $returnGraph;
+		return $returnEdges;
+	}
+	
+	/**
+	 * create new resulting graph with only edges on shortest path
+	 *
+	 * @return Graph
+	 * @uses Graph::createGraphCloneEdgeless()
+	 * @uses AlgorithmSpMooreBellmanFord::getEdges()
+	 * @uses Graph::createEdgeClone()
+	 */
+	public function getResultGraph(){
+	    $returnGraph = $this->startVertex->getGraph()->createGraphCloneEdgeless();				//Copy Graph
+	    foreach($this->getEdges() as $edge){
+	        $returnGraph->createEdgeClone($edge);
+	    }
+	    return $returnGraph;
 	}
 }
