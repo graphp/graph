@@ -8,11 +8,16 @@ class AlgorithmSpMooreBellmanFord{
 	private $graph;
 	
 	/**
-	 * 
-	 * @param Graph $inputGraph
+	 * @var Vertex
 	 */
-	public function __construct(Graph $inputGraph){
-		$this->graph = $inputGraph;
+	private $startVertex;
+	
+	/**
+	 * 
+	 * @param Vertex $startVertex the vertex where the algorithm is calculating the shortest ways for
+	 */
+	public function __construct(Vertex $startVertex){
+		$this->startVertex = $startVertex;
 	}
 
 	/**
@@ -47,21 +52,20 @@ class AlgorithmSpMooreBellmanFord{
 	/**
 	 * Calculate the Moore-Bellman-Ford-Algorithm and returns the result Graph
 	 * 
-	 * @param Vertex $startVertex the vertex where the algorithm is calculating the shortest ways for
 	 * @throws Exception if there is a negative cycle
 	 * @return Graph
 	 */
-	public function getResultGraph(Vertex $startVertex){
+	public function getResultGraph(){
 		$totalCostOfCheapestPathTo  = Array();
-		$totalCostOfCheapestPathTo[$startVertex->getId()] = 0;					//Start node distance
+		$totalCostOfCheapestPathTo[$this->startVertex->getId()] = 0;					//Start node distance
 		
 		$predecessorVertexOfCheapestPathTo  = Array();							//Vorgänger
-		$predecessorVertexOfCheapestPathTo[$startVertex->getId()] = $startVertex;
+		$predecessorVertexOfCheapestPathTo[$this->startVertex->getId()] = $this->startVertex;
 		
 		$usedVertices  = Array();												//marked vertices
 		
-		$totalCountOfVertices = $this->graph->count();
-		$edges = $this->graph->getEdges();
+		$totalCountOfVertices = $this->startVertex->getGraph()->getNumberOfVertices();
+		$edges = $this->startVertex->getGraph()->getEdges();
 		for ($i = 0; $i < $totalCountOfVertices - 1; ++$i){						//repeat n-1 times
 			foreach ($edges as $edge){												//check for all edges
 				foreach($edge->getTargetVertices() as $toVertex){						//check for all "ends" of this edge (or for all targetes)
@@ -73,9 +77,9 @@ class AlgorithmSpMooreBellmanFord{
 		}
 		
 		//algorithm is done, build graph										//THIS IS THE SAME AS DIJKSTRA (EXCTRACT TO A FUNCTION?????????)
-		$returnGraph = $this->graph->createGraphCloneEdgeless();				//Copy Graph
-		foreach($this->graph->getVertices() as $vertex){
-			if ( $vertex !== $startVertex ){									//start vertex doesn't have a predecessor
+		$returnGraph = $this->startVertex->getGraph()->createGraphCloneEdgeless();				//Copy Graph
+		foreach($this->startVertex->getGraph()->getVertices() as $vertex){
+			if ( $vertex !== $this->startVertex ){									//start vertex doesn't have a predecessor
 				if (isset( $predecessorVertexOfCheapestPathTo[$vertex->getId()] )){
 					$predecessor = $predecessorVertexOfCheapestPathTo[$vertex->getId()];			//get predecor
 		
