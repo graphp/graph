@@ -212,11 +212,11 @@ class Vertex{
 	 * 
 	 * @param Vertex $vertex
 	 * @return boolean
-	 * @throws Exception
+	 * @uses AlgorithmSpBreadthFirst::hasVertex()
 	 */
-	public function hasPathTo($vertex){			//Tobias: I think this will be a algorithm later in the lecture
-	    throw new Exception('TODO');
-	    return true;
+	public function hasPathTo($vertex){
+	    $alg = new AlgorithmSpBreadthFirst($this);
+	    return $alg->hasVertex($vertex);
 	}
 	
 	/**
@@ -228,6 +228,28 @@ class Vertex{
 	 */
 	public function hasPathFrom($vertex){
 	    return $vertex->hasPathTo($this);
+	}
+	
+	/**
+	 * get array of vertices this vertex has a path to
+	 * 
+	 * @return array[Vertex]
+	 * @uses AlgorithmSpBreadthFirst::getVertices()
+	 */
+	public function getVerticesPathTo(){
+	    $alg = new AlgorithmSpBreadthFirst($this);
+	    return $alg->getVertices();
+	}
+	
+	/**
+	 * get array of vertices that have a path to this vertex
+	 * 
+	 * @return array[Vertex]
+	 * @uses AlgorithmSpBreadthFirst::getVertices()
+	 */
+	public function getVerticesPathFrom(){
+	    $alg = new AlgorithmSpBreadthFirst($this,true);
+	    return $alg->getVertices();
 	}
 	
 	/**
