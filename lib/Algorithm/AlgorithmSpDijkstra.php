@@ -8,10 +8,11 @@ class AlgorithmSpDijkstra{
 	}
 	
 	/**
-	 *
-	 * @return Graph
+	 * get all edges on shortest path for this vertex
+	 * 
+	 * @return array[Edge]
 	 */
-	public function getResultGraph(){
+	public function getEdges(){
 		$totalCostOfCheapestPathTo  = Array();
 		$totalCostOfCheapestPathTo[$this->startVertex->getId()] = 0;			//Start node distance
 
@@ -64,8 +65,9 @@ class AlgorithmSpDijkstra{
 			}
 		}
 		
-		//algorithm is done, build graph
-		$returnGraph = $this->startVertex->getGraph()->createGraphCloneEdgeless();				//Copy Graph
+		//algorithm is done, return resulting edges
+		
+		$edges = array();
 		foreach($this->startVertex->getGraph()->getVertices() as $vertex){
 			echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
 			if ( $vertex !== $this->startVertex ){								//start vertex doesn't have a predecessor
@@ -74,12 +76,27 @@ class AlgorithmSpDijkstra{
 					
 					echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH KOST: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
 					
-					$edge = Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
-					$returnGraph->createEdgeClone($edge);									//clone this edge
+					$edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
 				}
 			}
 		}
 		
-		return $returnGraph;
+		return $edges;
+	}
+	
+	/**
+	 * create new resulting graph with only edges on shortest path
+	 * 
+	 * @return Graph
+	 * @uses Graph::createGraphCloneEdgeless()
+	 * @uses AlgorithmSpDijkstra::getEdges()
+	 * @uses Graph::createEdgeClone()
+	 */
+	public function getResultGraph(){
+	    $returnGraph = $this->startVertex->getGraph()->createGraphCloneEdgeless();				//Copy Graph
+	    foreach($this->getEdges() as $edge){
+	        $returnGraph->createEdgeClone($edge);
+	    }
+	    return $returnGraph;
 	}
 }
