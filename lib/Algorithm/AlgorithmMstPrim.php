@@ -1,7 +1,11 @@
 <?php
 class AlgorithmMstPrim{
-	public function __construct(Graph $inputGraph, Vertex $startVertice){
-		$this->startGraph = $inputGraph;
+    /**
+     * @var Vertex
+     */
+    private $startVertice;
+    
+	public function __construct(Vertex $startVertice){
 		$this->startVertice = $startVertice;
 	}
 
@@ -13,7 +17,7 @@ class AlgorithmMstPrim{
 	public function getResultGraph(){
 
 		// Initialize program
-		$returnGraph = $this->startGraph->createGraphCloneEdgeless();
+		$returnGraph = $this->startVertice->getGraph()->createGraphCloneEdgeless();
 		
 		$edgeQueue = new SplPriorityQueue();
 									
@@ -41,7 +45,7 @@ class AlgorithmMstPrim{
 		// BEGIN algorithm
 		
 		$startVerticeId = $this->startVertice->getId();							// set start vertex id 
- 		foreach ($this->startGraph->getVertices() as $value) {					// iterate n times over edges form know nodes
+ 		foreach ($this->startVertice->getGraph()->getVertices() as $value) {					// iterate n times over edges form know nodes
 			
  			if($value->getId() == $startVerticeId){								// skip the first entry to run only n-1 times 
 				continue;
