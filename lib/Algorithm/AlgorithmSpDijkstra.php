@@ -23,11 +23,13 @@ class AlgorithmSpDijkstra{
 		$predecesVertexOfCheapestPathTo[$this->startVertex->getId()] = $this->startVertex;				
 
 		$usedVertices  = Array();
+		
 
 		// Repeat until all vertices have been marked
 		$totalCountOfVertices = $this->startVertex->getGraph()->getNumberOfVertices();
 		for ($i = 0; $i < $totalCountOfVertices; ++$i){
-
+            $currentVertex = NULL;
+            $currentVertexId = NULL;
 			$isEmpty = false;
 			do{
 				if ($cheapestVertex->isEmpty()){								//if the priority queue is empty there are isolated vertices but the algorithem visited all other vertices
@@ -35,31 +37,33 @@ class AlgorithmSpDijkstra{
 					break;
 				}
 				$currentVertex = $cheapestVertex->extract();					//Get cheapest unmarked vertex
-			}while( isset($usedVertices[$currentVertex->getId()]) );			//Vertices can be multiple times in the priorety queue with different path costs (if vertex is allready marked this position is an old unvalid value)
+				$currentVertexId = $currentVertex->getId();
+			}while( isset($usedVertices[$currentVertexId]) );			        //Vertices can be multiple times in the priorety queue with different path costs (if vertex is allready marked this position is an old unvalid value)
 			
 			if ($isEmpty){														//algorithem is done
 				break;
 			}
 			
-			$usedVertices[$currentVertex->getId()] = true;						//mark this vertex
+			$usedVertices[$currentVertexId] = true;				        		//mark this vertex
 			
 			foreach ($currentVertex->getOutgoingEdges() as $edge){ 				//check for all edges of current vertex if there is a cheaper path IN OTHER WORDS Add reachable nodes from currently added node and refresh the current possible distances
 				$targetVertex = $edge->getVertexToFrom($currentVertex);
+				$targetVertexId = $targetVertex->getId();
 				
-				if ( ! isset( $usedVertices[$targetVertex->getId()] ) )			//if the targetVertex is marked, the cheapest path for this vertex is allready found (no negatives edges)
+				if ( ! isset( $usedVertices[$targetVertexId] ) )			        //if the targetVertex is marked, the cheapest path for this vertex is allready found (no negatives edges)
 				{
-					$newCostsToTargetVertex = $totalCostOfCheapestPathTo[$currentVertex->getId()] + $edge->getWeight();	//calculate new cost to vertex
+					$newCostsToTargetVertex = $totalCostOfCheapestPathTo[$currentVertexId] + $edge->getWeight();	//calculate new cost to vertex
 					
-					if ( ( ! isset($predecesVertexOfCheapestPathTo[$targetVertex->getId()]) )
-							|| $totalCostOfCheapestPathTo[$targetVertex->getId()] > $newCostsToTargetVertex){	//is the new path cheaper?
+					if ( ( ! isset($predecesVertexOfCheapestPathTo[$targetVertexId]) )
+							|| $totalCostOfCheapestPathTo[$targetVertexId] > $newCostsToTargetVertex){	//is the new path cheaper?
 						
 						$cheapestVertex->insert($targetVertex, - $newCostsToTargetVertex);			//Not an update just a new insert
 																									//With lower cost
 																									//so the lowest cost will be extraced first
 																									//and higher cost skipped during extraction
 						
-						$totalCostOfCheapestPathTo[$targetVertex->getId()] = $newCostsToTargetVertex;	//set cost of the target vertex to new cheaper path
-						$predecesVertexOfCheapestPathTo[$targetVertex->getId()] = $currentVertex;		//set predecessor vertex of cheaper path
+						$totalCostOfCheapestPathTo[$targetVertexId] = $newCostsToTargetVertex;	//set cost of the target vertex to new cheaper path
+						$predecesVertexOfCheapestPathTo[$targetVertexId] = $currentVertex;		//set predecessor vertex of cheaper path
 					}
 				}
 			}
@@ -67,17 +71,18 @@ class AlgorithmSpDijkstra{
 		
 		//algorithm is done, return resulting edges
 		
+		$vertices = $this->startVertex->getGraph()->getVertices();
+		unset($vertices[$this->startVertex->getId()]);                          //start vertex doesn't have a predecessor
+		
 		$edges = array();
-		foreach($this->startVertex->getGraph()->getVertices() as $vertex){
-			echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
-			if ( $vertex !== $this->startVertex ){								//start vertex doesn't have a predecessor
-				if (isset( $predecesVertexOfCheapestPathTo[$vertex->getId()] )){
-					$predecesVertex = $predecesVertexOfCheapestPathTo[$vertex->getId()];	//get predecor
-					
-					echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH KOST: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
-					
-					$edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
-				}
+		foreach($vertices as $vid=>$vertex){
+			//echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
+			if (isset( $predecesVertexOfCheapestPathTo[$vid] )){
+				$predecesVertex = $predecesVertexOfCheapestPathTo[$vid];	//get predecor
+				
+				//echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH KOST: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
+				
+				$edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
 			}
 		}
 		
