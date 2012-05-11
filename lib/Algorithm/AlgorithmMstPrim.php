@@ -16,15 +16,17 @@ class AlgorithmMstPrim{
 	 */
 	public function getEdges(){
 		$edgeQueue = new SplPriorityQueue();
+		
+		$startVertexId = $this->startVertex->getId();							// set start vertex id
 
 		//debug output?
 		if($this->debugMode){
-			print "Init start vertex: ".$this->startVertex->getId()."\n";
+			print "Init start vertex: ".$startVertexId."\n";
 		}
 		
 		// Initialize algorithm 
 		
-		$markInserted = array($this->startVertex->getId() => true);			    // Color starting vertex
+		$markInserted = array($startVertexId => true);			    // Color starting vertex
 					
 		foreach ($this->startVertex->getEdges() as $currentEdge) {				// Add all edges from startvertex
 			if($this->debugMode){
@@ -39,14 +41,10 @@ class AlgorithmMstPrim{
 		
 		$returnEdges = array();
 		
-		$startVertexId = $this->startVertex->getId();							// set start vertex id 
- 		foreach ($this->startVertex->getGraph()->getVertices() as $value) {					// iterate n times over edges form know nodes
-			
- 			if($value->getId() == $startVertexId){								// skip the first entry to run only n-1 times 
-				continue;
-			}
-			
-			
+		$vertices = $this->startVertex->getGraph()->getVertices();
+		unset($vertiices[$startVertexId]);                                      // skip the first entry to run only n-1 times 
+		
+ 		foreach ($vertices as $value) {					                        // iterate n times over edges form know nodes
 			$cheapestEdge = $edgeQueue->extract();								// Get next cheapest edge
 
 			// BEGIN Check if edge is is: [visiteted]->[unvisited]
@@ -83,7 +81,7 @@ class AlgorithmMstPrim{
 			$returnEdges []= $cheapestEdge;
 
 			// BEGIN get unvisited vertex of the edge and add edges from new vertex
-			if($newTargetVertex->getId() != $this->startVertex->getId()){
+			if($newTargetVertex->getId() != $startVertexId){
 				if($this->debugMode){
 					print "Adding Vertex with ID:".$newTargetVertex->getId()."\n";
 				}
