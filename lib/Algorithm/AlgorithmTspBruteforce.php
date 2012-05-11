@@ -72,12 +72,12 @@ class AlgorithmTspBruteforce{
     }
     
     /**
-     * get resulting graph with the (first) best circle of edges connecting all vertices
+     * get resulting (first) best circle of edges connecting all vertices
      * 
      * @throws Exception on error
-     * @return Graph
+     * @return array[Edge]
      */
-    public function getResultGraph(){
+    public function getEdges(){
         $this->numEdges = $this->graph->getNumberOfVertices();
         if($this->numEdges < 3){
             throw new Exception('Needs at least 3 vertices');
@@ -98,11 +98,19 @@ class AlgorithmTspBruteforce{
             throw new Exception('No resulting solution for TSP found');
         }
         
-        $graph = $this->graph->createGraphCloneEdgeless();
-        foreach($result as $edge){
-            $graph->createEdgeClone($edge);
-        }
-        return $graph;
+        return $result;
+    }
+    
+    /**
+     * get resulting graph with the (first) best circle of edges connecting all vertices
+     *
+     * @throws Exception on error
+     * @return Graph
+     * @uses AlgorithmTspBruteforce::getEdges()
+     * @uses Graph::createGraphCloneEdges()
+     */
+    public function getResultGraph(){
+        return $this->graph->createGraphCloneEdges($this->getEdges());
     }
     
     /**
