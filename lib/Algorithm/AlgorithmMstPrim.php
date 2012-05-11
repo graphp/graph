@@ -3,10 +3,10 @@ class AlgorithmMstPrim{
     /**
      * @var Vertex
      */
-    private $startVertice;
+    private $startVertex;
     
-	public function __construct(Vertex $startVertice){
-		$this->startVertice = $startVertice;
+	public function __construct(Vertex $startVertex){
+		$this->startVertex = $startVertex;
 	}
 
 	private $debugMode = false;
@@ -19,14 +19,14 @@ class AlgorithmMstPrim{
 
 		//debug output?
 		if($this->debugMode){
-			print "Init start vertex: ".$this->startVertice->getId()."\n";
+			print "Init start vertex: ".$this->startVertex->getId()."\n";
 		}
 		
 		// Initialize algorithm 
 		
-		$markInserted = array($this->startVertice->getId() => true);			// Color starting vertex
+		$markInserted = array($this->startVertex->getId() => true);			    // Color starting vertex
 					
-		foreach ($this->startVertice->getEdges() as $currentEdge) {				// Add all edges from startvertex
+		foreach ($this->startVertex->getEdges() as $currentEdge) {				// Add all edges from startvertex
 			if($this->debugMode){
 				print "\t Init adding Edge: ".$currentEdge->toString()."\n";	
 			}
@@ -39,10 +39,10 @@ class AlgorithmMstPrim{
 		
 		$returnEdges = array();
 		
-		$startVerticeId = $this->startVertice->getId();							// set start vertex id 
- 		foreach ($this->startVertice->getGraph()->getVertices() as $value) {					// iterate n times over edges form know nodes
+		$startVertexId = $this->startVertex->getId();							// set start vertex id 
+ 		foreach ($this->startVertex->getGraph()->getVertices() as $value) {					// iterate n times over edges form know nodes
 			
- 			if($value->getId() == $startVerticeId){								// skip the first entry to run only n-1 times 
+ 			if($value->getId() == $startVertexId){								// skip the first entry to run only n-1 times 
 				continue;
 			}
 			
@@ -83,7 +83,7 @@ class AlgorithmMstPrim{
 			$returnEdges []= $cheapestEdge;
 
 			// BEGIN get unvisited vertex of the edge and add edges from new vertex
-			if($newTargetVertex->getId() != $this->startVertice->getId()){
+			if($newTargetVertex->getId() != $this->startVertex->getId()){
 				if($this->debugMode){
 					print "Adding Vertex with ID:".$newTargetVertex->getId()."\n";
 				}
@@ -113,6 +113,6 @@ class AlgorithmMstPrim{
 	 * @uses Graph::createGraphCloneEdges()
 	 */
 	public function getResultGraph(){
-	    return $this->startVertice->getGraph()->createGraphCloneEdges($this->getEdges());				//Copy Graph
+	    return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());				//Copy Graph
 	}
 }
