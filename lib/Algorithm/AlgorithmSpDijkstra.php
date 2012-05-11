@@ -93,15 +93,10 @@ class AlgorithmSpDijkstra{
 	 * create new resulting graph with only edges on shortest path
 	 * 
 	 * @return Graph
-	 * @uses Graph::createGraphCloneEdgeless()
 	 * @uses AlgorithmSpDijkstra::getEdges()
-	 * @uses Graph::createEdgeClone()
+	 * @uses Graph::createGraphCloneEdges()
 	 */
 	public function getResultGraph(){
-	    $returnGraph = $this->startVertex->getGraph()->createGraphCloneEdgeless();				//Copy Graph
-	    foreach($this->getEdges() as $edge){
-	        $returnGraph->createEdgeClone($edge);
-	    }
-	    return $returnGraph;
+	    return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());
 	}
 }
