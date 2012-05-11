@@ -78,18 +78,29 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * create new clone/copy of this graph - copy all attributes, vertices and edges
+	 * create new clone/copy of this graph - copy all attributes and vertices. but only copy all given edges
 	 *
+	 * @param array[Edge] $edge array of edges to be cloned
 	 * @return Graph
 	 * @uses Graph::createGraphCloneEdgeless()
-	 * @uses Graph::createEdgeClone()
+	 * @uses Graph::createEdgeClone() for each edge to be cloned
 	 */
-	public function createGraphClone(){
+	public function createGraphCloneEdges($edges){
 	    $graph = $this->createGraphCloneEdgeless();
-	    foreach($this->edges as $edge){
+	    foreach($edges as $edge){
 	        $graph->createEdgeClone($edge);
 	    }
 	    return $graph;
+	}
+	
+	/**
+	 * create new clone/copy of this graph - copy all attributes, vertices and edges
+	 *
+	 * @return Graph
+	 * @uses Graph::createGraphCloneEdges() to clone graph with current edges
+	 */
+	public function createGraphClone(){
+	    return $this->createGraphCloneEdges($this->edges);
 	}
 	
 	/**
