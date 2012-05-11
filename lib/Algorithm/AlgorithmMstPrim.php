@@ -12,17 +12,10 @@ class AlgorithmMstPrim{
 	private $debugMode = false;
 	/**
 	 *
-	 * @return Graph
+	 * @return array[Edge]
 	 */
-	public function getResultGraph(){
-
-		// Initialize program
-		$returnGraph = $this->startVertice->getGraph()->createGraphCloneEdgeless();
-		
+	public function getEdges(){
 		$edgeQueue = new SplPriorityQueue();
-									
-		// END Initialize program
-		
 
 		//debug output?
 		if($this->debugMode){
@@ -43,6 +36,8 @@ class AlgorithmMstPrim{
 
 
 		// BEGIN algorithm
+		
+		$returnEdges = array();
 		
 		$startVerticeId = $this->startVertice->getId();							// set start vertex id 
  		foreach ($this->startVertice->getGraph()->getVertices() as $value) {					// iterate n times over edges form know nodes
@@ -80,12 +75,12 @@ class AlgorithmMstPrim{
 			
 			// BEGIN Cheapest Edge found, add new vertex and edge to returnGraph
 			if($this->debugMode){
-				print "\t\t Choosed cheapest edge: ".$newEdge->toString()."\n";
+				print "\t\t Choosed cheapest edge: ".$cheapestEdge->toString()."\n";
 			}
 			
 			$markInserted[$newTargetVertex->getId()] = true;
 				
-			$newEgde = $returnGraph->createEdgeClone($cheapestEdge);
+			$returnEdges []= $cheapestEdge;
 
 			// BEGIN get unvisited vertex of the edge and add edges from new vertex
 			if($newTargetVertex->getId() != $this->startVertice->getId()){
@@ -107,7 +102,17 @@ class AlgorithmMstPrim{
 		if($this->debugMode){
 		    print "done".PHP_EOL;
 		}
-		return $returnGraph;
+		return $returnEdges;
 	}
-
+	
+	/**
+	 * create new resulting graph with only edges on minimum spanning tree
+	 *
+	 * @return Graph
+	 * @uses AlgorithmMstPrim::getEdges()
+	 * @uses Graph::createGraphCloneEdges()
+	 */
+	public function getResultGraph(){
+	    return $this->startVertice->getGraph()->createGraphCloneEdges($this->getEdges());				//Copy Graph
+	}
 }
