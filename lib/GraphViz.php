@@ -1,7 +1,14 @@
 <?php
 
 class GraphViz{
+    /**
+     * original graph
+     * 
+     * @var Graph
+     * @see GraphViz::getGraph()
+     */
     private $graph;
+    
     private $attributes = array();
     
     /**
@@ -12,10 +19,24 @@ class GraphViz{
      */
     private $format = 'png';
     
+    /**
+     * end-of-line to be appended to each line
+     * 
+     * @var string
+     */
     const EOL = PHP_EOL;
     
 	public function __construct(Graph $graphToPlot){
 		$this->graph = $graphToPlot;
+	}
+	
+	/**
+	 * get original graph (with no layout and styles)
+	 *
+	 * @return Graph
+	 */
+	public function getGraph(){
+	    return $this->graph;
 	}
 	
 	/**
@@ -41,7 +62,7 @@ class GraphViz{
         
         static $next = 0;
         if($next > microtime(true)){
-            echo '[delay flooding xdg-open]'; // wait some time between calling xdg-open because earlier calls will be ignored otherwise
+            echo '[delay flooding xdg-open]'.PHP_EOL; // wait some time between calling xdg-open because earlier calls will be ignored otherwise
             sleep(1);
         }
         exec('xdg-open '.escapeshellarg($tmp).' > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
