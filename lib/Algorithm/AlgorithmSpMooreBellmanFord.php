@@ -92,7 +92,6 @@ class AlgorithmSpMooreBellmanFord{
 		
 		
 		//Check for negative cycles
-		//TODO: what if there are more as one negative cycle??? (this one we found can maybe not effect all vertices but an other does???)
 		foreach ($edges as $edge){												//check for all edges. Step n (check for negative cycles
 			foreach($edge->getTargetVertices() as $toVertex){						//check for all "ends" of this edge (or for all targetes)
 				$fromVertex = $edge->getVertexFromTo($toVertex);
