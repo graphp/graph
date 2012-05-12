@@ -1,3 +1,7 @@
-#Wed Mar 21 13:29:24 CET 2012
+#Sun May 13 00:31:04 CEST 2012
 eclipse.preferences.version=1
 include_path=0;/graph-php
+org.eclipse.php.core.phpForamtterIndentationSize=4
+org.eclipse.php.core.phpForamtterUseTabs=false
+phpVersion=php5.3
+useShortTags=false
