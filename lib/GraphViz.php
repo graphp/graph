@@ -9,7 +9,10 @@ class GraphViz{
      */
     private $graph;
     
-    private $attributes = array();
+    private $layoutGraph = array();
+    private $layoutVertex = array();
+    private $layoutEdge = array();
+    private $layoutObject;
     
     /**
      * file output format to use
@@ -26,8 +29,13 @@ class GraphViz{
      */
     const EOL = PHP_EOL;
     
+    const LAYOUT_GRAPH = 1;
+    const LAYOUT_EDGE = 2;
+    const LAYOUT_VERTEX = 3;
+    
 	public function __construct(Graph $graphToPlot){
 		$this->graph = $graphToPlot;
+		$this->layoutObject = new SplObjectStorage();
 	}
 	
 	/**
@@ -49,6 +57,64 @@ class GraphViz{
 	    $this->format = $format;
 	    return $this;
 	}
+    
+	/**
+	 * set attribute/layout/style for given element(s)
+	 * 
+	 * @param Vertex|Edge|array|int $where
+	 * @param string|array          $layout
+	 * @param mixed                 $value
+	 * @return GraphViz $this (chainable)
+	 * @throws Exception
+	 */
+	public function setAttribute($where,$layout,$value=NULL){
+	    if(!is_array($where)){
+	        $where = array($where);
+	    }
+	    if(func_num_args() > 2){
+	        $layout = array($layout=>$value);
+	    }
+	    foreach($where as $where){
+	        if($where === self::LAYOUT_GRAPH){
+	            $this->mergeLayout($this->layoutGraph,$layout);
+	        }else if($where === self::LAYOUT_EDGE){
+	            $this->mergeLayout($this->layoutEdge,$layout);
+	        }else if($where === self::LAYOUT_VERTEX){
+	            $this->mergeLayout($this->layoutVertex,$layout);
+	        }else if($where instanceof Edge || $where instanceof Vertex){
+	            $temp = isset($this->layoutObject[$where]) ? $this->layoutObject[$where] : array();
+	            $this->mergeLayout($temp,$layout);
+	            if($temp){
+	                $this->layoutObject[$where] = $temp;
+	            }else{
+	                unset($this->layoutObject[$where]);
+	            }
+	        }else{
+	            throw new Exception('Invalid layout identifier');
+	        }
+	    }
+	    return $this;
+	    
+	    // example code:
+	
+	    // set global graph layout
+	    $this->setLayout(self::LAYOUT_GRAPH,'bgcolor','transparent');
+	
+	    // assign multiple layout settings to all vertices
+	    $this->setLayout(self::LAYOUT_VERTEX,array('size'=>8,'color'=>'blue'));
+	
+	    // assign layout to single edge
+	    $this->setLayout($graph->getVertexFirst(),'shape','square');
+	
+	    // assign multiple layout settings to multiple edges
+	    $this->setLayout($alg->getEdges(),array('color'=>'red','style'=>'bold'));
+	
+	    // ?? assign layout to vertexm, then delete vertex
+	    $vertex = $graph->createVertex();
+	    $this->setLayout($vertex,'color','red');
+	    $vertex->destroy();
+	    $this->display();
+	}
 	
 	/**
 	 * create and display image for this graph
@@ -68,20 +134,6 @@ class GraphViz{
         exec('xdg-open '.escapeshellarg($tmp).' > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
         $next = microtime(true) + 1.0;
         //echo "... done\n";
-	}
-	
-	public function setAttribute($where,$name,$value=NULL){
-	    if($where === 'vertex'){
-	        $where = 'node';
-	    }
-	    if(is_array($name)){
-	        foreach($name as $name=>$value){
-	            $this->attributes[$where][$name] = $value;
-	        }
-	        return $this;
-	    }
-	    $this->attributes[$where][$name] = $value;
-	    return $this;
 	}
 	
 	/**
@@ -167,17 +219,25 @@ class GraphViz{
 		$script = ($directed ? 'di':'') . 'graph G {'.self::EOL;
 		
 		// add global attributes
-		foreach(array('graph','node','edge') as $where){
-    		if(isset($this->attributes[$where])){
-    		    $script .= '  ' . $where . ' ' . $this->escapeAttributes($this->attributes[$where]) . self::EOL;
-    		}
+		if($this->layoutGraph){
+			$script .= '  graph ' . $this->escapeAttributes($this->layoutGraph) . self::EOL;
+		}
+		if($this->layoutVertex){
+			$script .= '  node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
+		}
+		if($this->layoutEdge){
+			$script .= '  edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
 		}
 		
-		// explicitly add all isolated vertices (vertices with no edges)
+		// explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
 		// other vertices wil be added automatically due to below edge definitions
 		foreach ($this->graph->getVertices() as $vertex){
-		    if($vertex->isIsolated()){
-		        $script .= '  ' . $this->escapeId($vertex->getId()) . self::EOL;
+		    if($vertex->isIsolated() || isset($this->layoutObject[$vertex])){
+		        $script .= '  ' . $this->escapeId($vertex->getId());
+				if(isset($this->layoutObject[$vertex])){
+					$script .= ' ' . $this->escapeAttributes($this->layoutObject[$vertex]);
+				}
+				$script .= self::EOL;
 		    }
 		}
 		
@@ -191,12 +251,12 @@ class GraphViz{
 		    
 		    $script .= '  ' . $this->escapeId($currentStartVertex->getId()) . $edgeop . $this->escapeId($currentTargetVertex->getId());
 	        
-		    $attrs = array();
+		    $attrs = isset($this->layoutObject[$currentEdge]) ? $this->layoutObject[$currentEdge] : array();
 		    
     	    $weight = $currentEdge->getWeight();
     	    if($weight !== NULL){                                       // add weight as label (if set)
     	        $attrs['label']  = $weight;
-     	        $attrs['weight'] = $weight;
+     	        //$attrs['weight'] = $weight;
     	    }
     	    // this edge also points to the opposite direction => this is actually an undirected edge
     	    if($directed && $currentEdge->isConnection($currentTargetVertex,$currentStartVertex)){
@@ -247,5 +307,19 @@ class GraphViz{
         }
         $script .= ']';
 	    return $script;
+	}
+	
+	private function mergeLayout(&$old,$new){
+	    if($new === NULL){
+	        $old = array();
+	    }else{
+	        foreach($new as $key=>$value){
+	            if($value === NULL){
+	                unset($old[$key]);
+	            }else{
+	                $old[$key] = $value;
+	            }
+	        }
+	    }
 	}
 }
