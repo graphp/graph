@@ -116,18 +116,18 @@ class GraphViz{
 	        throw new Exception('Unable to get temporary file name for graphviz script');
 	    }
 	    
-	    $ret = file_put_contents($tmp.'.gv',$script,LOCK_EX);
+	    $ret = file_put_contents($tmp,$script,LOCK_EX);
 	    if($ret === false){
-	        throw new Exception('Unable to write graphviz script to temporary file');
+	        throw new Exception('Unable to write graphviz script to temporary file "'.$tmp.'"');
 	    }
 	    
 	    $ret = 0;
-	    system('dot -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp.'.gv').' -o '.escapeshellarg($tmp.'.'.$this->format),$ret); // use program 'dot' to actually generate graph image
+	    system('dot -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp).' -o '.escapeshellarg($tmp.'.'.$this->format),$ret); // use program 'dot' to actually generate graph image
 	    if($ret !== 0){
 	        throw new Exception('Unable to invoke "dot" to create image file (code '.$ret.')');
 	    }
 	    
-	    unlink($tmp.'.gv');
+	    unlink($tmp);
 	    
 	    return $tmp.'.'.$this->format;
 	}
