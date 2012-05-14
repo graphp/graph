@@ -360,6 +360,21 @@ class Vertex{
 	}
 	
 	/**
+	 * get ALL ingoing edges attached to this vertex
+	 *
+	 * @return array[Edge]
+	 */
+	public function getIngoingEdges(){
+		$ingoingEdges = array() ;
+		foreach ($this->edges as $edge){
+			if (!$edge->isOutgoingEdgeOf($this)){                               // if its not the outgoing it must be the ingoing
+				$ingoingEdges[] = $edge;
+			}
+		}
+		return $ingoingEdges;
+	}
+	
+	/**
 	 * get edges FROM this vertex TO the given vertex
 	 * 
 	 * @param Vertex $vertex
