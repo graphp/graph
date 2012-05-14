@@ -33,8 +33,8 @@ class AlgorithmMaxFlowEdmondsKarp{
 	    $currentGraph = $this->mergeParallelEdges($this->graph);                // remove parallel edges
 	    
 	    do{
-	        //1. Get Shortes path if NULL-> Done
-	        $path=$this->getGraphShortestPath($currentGraph);
+	        
+	        $path=$this->getGraphShortestPath($currentGraph);                   // Get Shortes path if NULL-> Done
 	        if($path){
 	            $currentGraph=$this->getResidualGraph($currentGraph, $path);
 	        }
@@ -61,7 +61,11 @@ class AlgorithmMaxFlowEdmondsKarp{
 	
 	private function getGraphShortestPath($currentGraph)
 	{
+	    // TODO 
 	    // 1. Search shortest path from s -> t
+	    $breadthSearchAlg = new AlgorithmSearchBreadthFirst($this->startVertex);
+	    $path = $breadthSearchAlg->getGraphPathTo($this->destinationVertex);
+	    
 	    // 2. get max flow from path
 	    // 3. create graph with shortest path and max flow as edge values
 	    return new graph;
@@ -69,6 +73,7 @@ class AlgorithmMaxFlowEdmondsKarp{
 	
 	private function getResidualGraph($currentGraph, $path)
 	{
+	    //TODO 
 		// 1. Substract $path values from $graph
 		// 2. add in reversed direction of $path values to the $graph
 		return new graph();
