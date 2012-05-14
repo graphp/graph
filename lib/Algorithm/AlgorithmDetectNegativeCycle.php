@@ -35,7 +35,7 @@ class AlgorithmDetectNegativeCycle{
 	 */
 	private function searchNextDepth(Vertex $vertex, array $visitedVertices){
 		//suche ob zycle
-			//checke ob negativer zycle
+		//checke ob negativer zycle
 		//baue graph zusammen
 		//gebe graph zurück
 		
