@@ -98,7 +98,7 @@ class AlgorithmSpMooreBellmanFord{
 				
 				if ($this->doStep($edge, $fromVertex, $toVertex, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)){	//If a path is getting cheaper
 					//search for negative cycle
-					throw new Exception("Negative Cycle TODO");
+					throw new Exception("Negative Cycle");
 				}
 			}
 		}
