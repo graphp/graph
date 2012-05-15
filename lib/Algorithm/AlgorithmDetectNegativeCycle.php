@@ -34,13 +34,26 @@ class AlgorithmDetectNegativeCycle{
 	 * @return Graph the result graph if a negative cycle is found or NULL
 	 */
 	private function searchNextDepth(Vertex $vertex, array $visitedVertices){
-		//suche ob zycle
-		//checke ob negativer zycle
-		//baue graph zusammen
-		//gebe graph zurück
+		if ( isset($visitedVertices[$vertex->getId()]) ){                       //cycle
+		    $id = $vertex->getId();
+		    //checke ob negativer zycle
+		    
+		    //baue graph zusammen
+		    //gebe graph zurück
+		    
+		    return $graph;
+		}
 		
-		//gehe für alle vorgänger von diesem vertex einen schritt tiefer
-		
+	    $vertices = $this->startVertex->getVerticesEdgeFrom();					//get next level of vertices
+	    foreach ($vertices as $vertex){											//checke for all vertices if the found the negative cycle
+	    	$graph = $this->searchNextDepth($vertex, $visitedVertices);
+	    
+	    	if ($graph != NULL){												//If they found the negative cycle return the result graph
+	    		return $graph;
+	    	}
+	    }
+	    
+	    return NULL;                                                            //otherwise return NULL
 	}
 	
 	/**

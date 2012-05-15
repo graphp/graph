@@ -239,6 +239,25 @@ abstract class Edge{
 	    }
 	}
 	
+	private $layout = array();
+	
+	public function getLayout(){
+		return $this->layout;
+	}
+	
+	public function setLayoutRaw($name,$value){
+		if($value === NULL){
+			unset($this->layout[$name]);
+		}else{
+			$this->layout[$name] = $value;
+		}
+		return $this;
+	}
+	
+	public function setLayout($name,$value){
+		return $this->setLayoutRaw($name,GraphViz::escape($value));
+	}
+	
 	/**
 	 * do NOT allow cloning of objects
 	 * 
