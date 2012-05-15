@@ -34,11 +34,11 @@ class AlgorithmSpMooreBellmanFord{
 	private function doStep(& $edge, & $fromVertex, & $toVertex, & $totalCostOfCheapestPathTo, & $predecessorVertexOfCheapestPathTo){
 		$isCheaper = false;
 		
-		if (isset($totalCostOfCheapestPathTo[$fromVertex->getId()])){			//If the fromVertex has allready a path
-			$newCost = $totalCostOfCheapestPathTo[$fromVertex->getId()] + $edge->getWeight();//New possible cost of this path
+		if (isset($totalCostOfCheapestPathTo[$fromVertex->getId()])){			//If the fromVertex already has a path
+			$newCost = $totalCostOfCheapestPathTo[$fromVertex->getId()] + $edge->getWeight(); //New possible costs of this path
 	
-			if (! isset($totalCostOfCheapestPathTo[$toVertex->getId()])				//No path was found
-					|| $totalCostOfCheapestPathTo[$toVertex->getId()] > $newCost){		//OR this path is cheaper as the old path
+			if (! isset($totalCostOfCheapestPathTo[$toVertex->getId()])				//No path has been found yet
+					|| $totalCostOfCheapestPathTo[$toVertex->getId()] > $newCost){		//OR this path is cheaper than the old path
 	
 				$isCheaper = true;
 				$totalCostOfCheapestPathTo[$toVertex->getId()] = $newCost;
@@ -57,9 +57,9 @@ class AlgorithmSpMooreBellmanFord{
 	 */
 	public function getEdges(){
 		$totalCostOfCheapestPathTo  = Array();
-		$totalCostOfCheapestPathTo[$this->startVertex->getId()] = 0;					//Start node distance
+		$totalCostOfCheapestPathTo[$this->startVertex->getId()] = 0;		    //start node distance
 		
-		$predecessorVertexOfCheapestPathTo  = Array();							//Vorgänger
+		$predecessorVertexOfCheapestPathTo  = Array();							//predecessor
 		$predecessorVertexOfCheapestPathTo[$this->startVertex->getId()] = $this->startVertex;
 		
 		$usedVertices  = Array();												//marked vertices
@@ -71,7 +71,7 @@ class AlgorithmSpMooreBellmanFord{
 				foreach($edge->getTargetVertices() as $toVertex){						//check for all "ends" of this edge (or for all targetes)
 					$fromVertex = $edge->getVertexFromTo($toVertex);
 					
-					$this->doStep($edge, $fromVertex, $toVertex, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo);	//Do normal step
+					$this->doStep($edge, $fromVertex, $toVertex, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo);	//do normal step
 				}
 			}
 		}
