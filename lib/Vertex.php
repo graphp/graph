@@ -578,6 +578,25 @@ class Vertex{
 		return $alg->getVertices();
 	}
 	
+	private $layout = array();
+	
+	public function getLayout(){
+	    return $this->layout;
+	}
+	
+	public function setLayoutRaw($name,$value){
+	    if($value === NULL){
+	    	unset($this->layout[$name]);
+	    }else{
+	    	$this->layout[$name] = $value;
+	    }
+	    return $this;
+	}
+	
+	public function setLayout($name,$value){
+	    return $this->setLayoutRaw($name,GraphViz::escape($value));
+	}
+	
 	/**
 	 * destroy vertex and all edges connected to it and remove reference from graph
 	 *
