@@ -411,8 +411,14 @@ class Vertex{
 	public function getVerticesEdgeTo(){
 	    $ret = array();
 	    foreach($this->edges as $edge){
-	        $vertex = $edge->getVertexToFrom($this);
-	        $ret[$vertex->getId()] = $vertex;
+	        try {
+	            $vertex = $edge->getVertexToFrom($this);
+	            $ret[$vertex->getId()] = $vertex;
+	        } catch (Exception $e) {
+	            
+	        }
+	        
+	       
 	    }
 	    return $ret;
 	}
