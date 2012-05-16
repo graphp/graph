@@ -65,21 +65,21 @@ class AlgorithmMaxFlowEdmondsKarp{
             
             //get the Original vertices to find the propper edge
             $originalStartVertexArray = $edge->getStartVertices();
-            $originalStartVertex = array_shift($startVertexArray);
-            
+            $originalStartVertex = array_shift($originalStartVertexArray);
+         
             $originalTargetVertexArray = $edge->getTargetVertices();
-            $originalTargetVertex = array_shift($targetVertexArray);
+            $originalTargetVertex = array_shift($originalTargetVertexArray);
             
             //if vertices in resultgrpah not existing create them
             
             $residualGraphEdgeTargetVertex = $residualGraph->getVertex($originalStartVertex->getId());
             if(!isset($residualGraphEdgeTargetVertex)){
-                $residualGraphEdgeTargetVertex=$resultGraph->createVertexClone($originalStartVertex);
+                $residualGraphEdgeTargetVertex=$resultGraph->createVertexClone($originalStartVertex->getId());
             };
             
             $residualGraphEdgeStartVertex = $residualGraph->getVertex($originalTargetVertex->getId());
             if(!isset($residualGraphEdgeStartVertex)){
-                $residualGraphEdgeStartVertex=$resultGraph->createVertexClone($originalTargetVertex);
+                $residualGraphEdgeStartVertex=$resultGraph->createVertexClone($originalTargetVertex->getId());
             };
             
             //vertices are existing now create the edge
@@ -87,10 +87,10 @@ class AlgorithmMaxFlowEdmondsKarp{
             //check if residual graph has backward edge
             $residualEdgeArray= $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
             
-            $newFlowEdge = $residualGraph->createEdgeClone($edge);
+            $newFlowEdge = $resultGraph->createEdgeClone($edge);
                         
             if(isset($residualEdgeArray)){
-                $residualEdge = array_unshift($residualEdgeArray);
+                $residualEdge = array_shift($residualEdgeArray);
                 $newFlowEdge->setWeight($residualEdge->getWeight());
             }
             else{
