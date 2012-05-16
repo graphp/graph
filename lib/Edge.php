@@ -207,6 +207,22 @@ abstract class Edge{
 	}
 	
 	/**
+	 * return weight of edge
+	 *
+	 * @return boolean
+	 */
+	public function hasParallelEdge(){
+	    $targets = $this->getTargetVertices();
+	    $starts = $this->getStartVertices();
+	    
+	    foreach ($targets as $targetVertex){
+	        $targetVertex->getEdgesTo($vertex);
+	    }
+	    
+		return $this->weight;
+	}
+	
+	/**
 	 * get all vertices this edge connects
 	 * 
 	 * @return array[Vertex]
