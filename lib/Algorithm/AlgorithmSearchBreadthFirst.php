@@ -73,6 +73,10 @@ class AlgorithmSearchBreadthFirst{
 
         } while($queue);															//untill queue is empty
          
+        measure(function() use ($deepSearchThree){
+        	return $deepSearchThree;
+        },'AlgorithmMaxFlowEdmondsKarp');
+        
         if($pathToDestinationVertexFound){
 
             //remove not used edges
