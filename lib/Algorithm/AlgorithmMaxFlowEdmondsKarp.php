@@ -95,11 +95,19 @@ class AlgorithmMaxFlowEdmondsKarp{
                 $newFlowEdge->setWeight(0);
             }
             
+           
             
             //if not existing remove the edge
             
         }
-
+        
+       $resultGraphStartVertex = $resultGraph->getVertex($this->startVertex->getId());
+       $resultGraphOutgoingEdgesArray = $resultGraphStartVertex->getOutgoingEdges();
+       $maxFlow=0;
+       foreach ($resultGraphOutgoingEdgesArray as $edge){
+           $maxFlow=$maxFlow+$edge->getWeight();
+       }
+        echo "Max Flow is: ".$maxFlow."\n";
         return $resultGraph;
     }
 
