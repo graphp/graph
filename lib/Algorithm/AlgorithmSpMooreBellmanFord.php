@@ -85,15 +85,4 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
 		
 		return $returnEdges;
 	}
-	
-	/**
-	 * create new resulting graph with only edges on shortest path
-	 *
-	 * @return Graph
-	 * @uses AlgorithmSpMooreBellmanFord::getEdges()
-	 * @uses Graph::createGraphCloneEdges()
-	 */
-	public function getResultGraph(){
-	    return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());				//Copy Graph
-	}
 }

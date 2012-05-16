@@ -77,4 +77,8 @@ class AlgorithmSpBreadthFirst extends AlgorithmSp{
         }
         return $ret;
     }
+    
+    public function getEdges(){
+        throw new BadMethodCallException('TODO');
+    }
 }

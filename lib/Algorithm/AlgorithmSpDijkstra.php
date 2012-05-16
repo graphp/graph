@@ -82,15 +82,4 @@ class AlgorithmSpDijkstra extends AlgorithmSp{
 
         return $edges;
     }
-
-    /**
-     * create new resulting graph with only edges on shortest path
-     *
-     * @return Graph
-     * @uses AlgorithmSpDijkstra::getEdges()
-     * @uses Graph::createGraphCloneEdges()
-     */
-    public function getResultGraph(){
-        return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());
-    }
 }
