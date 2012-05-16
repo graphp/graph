@@ -2,11 +2,11 @@
 class AlgorithmMaxFlowEdmondsKarp{
 
     /**
+     *
      * @var Graph
      */
     private $graph;
 
-    
     /**
      * @var Vertex
      */
@@ -18,6 +18,7 @@ class AlgorithmMaxFlowEdmondsKarp{
     private $destinationVertex;
 
     /**
+     *
      * @param Vertex $startVertex the vertex where the flow search starts
      * @param Vertex $destinationVertex the vertex where the flow search ends the destination
      */
@@ -29,17 +30,20 @@ class AlgorithmMaxFlowEdmondsKarp{
     }
 
     private function start(){
-        $currentGraph = $this->mergeParallelEdges($this->workingGraph);         // No parallel edges in graph allowed
+         
         
+        $currentGraph = $this->mergeParallelEdges($this->workingGraph);         // remove parallel edges
         do{
-            $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get shortes path by count of edges, if NULL/none we're done
+            $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get Shortes path if NULL-> Done
              
             if($pathFlow){
                  $currentGraph = $this->getResidualGraph($currentGraph, $pathFlow);
             }
         } while($pathFlow);
 
-        return $this->getFlowGraphFromResidualGraph($currentGraph);            // Convert final residualgraph to flowGraph and return
+        //return flow sum of outgoing flows
+        return $this->getFlowGraphFromResidualGraph($currentGraph);
+        //return $currentGraph;
     }
 
 
@@ -56,7 +60,7 @@ class AlgorithmMaxFlowEdmondsKarp{
         },'bla');
     
         
-        $resultGraph=new Graph();
+        $resultGraph=$this->graph->createGraphCloneEdgeless();
         
         $originalGraphEdgesArray=$this->graph->getEdges();
         foreach ($originalGraphEdgesArray as $edge){
@@ -71,26 +75,20 @@ class AlgorithmMaxFlowEdmondsKarp{
             $originalTargetVertex = array_shift($originalTargetVertexArray);
             
             //if vertices in resultgrpah not existing create them
-            
+           
             $residualGraphEdgeTargetVertex = $residualGraph->getVertex($originalStartVertex->getId());
-            if(!isset($residualGraphEdgeTargetVertex)){
-                $residualGraphEdgeTargetVertex=$resultGraph->createVertexClone($originalStartVertex->getId());
-            };
-            
             $residualGraphEdgeStartVertex = $residualGraph->getVertex($originalTargetVertex->getId());
-            if(!isset($residualGraphEdgeStartVertex)){
-                $residualGraphEdgeStartVertex=$resultGraph->createVertexClone($originalTargetVertex->getId());
-            };
-            
+           
             //vertices are existing now create the edge
             
             //check if residual graph has backward edge
             $residualEdgeArray= $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
+                     
+            $residualEdge = array_shift($residualEdgeArray);
             
             $newFlowEdge = $resultGraph->createEdgeClone($edge);
-                        
-            if(isset($residualEdgeArray)){
-                $residualEdge = array_shift($residualEdgeArray);
+            if($residualEdge){
+                
                 $newFlowEdge->setWeight($residualEdge->getWeight());
             }
             else{
