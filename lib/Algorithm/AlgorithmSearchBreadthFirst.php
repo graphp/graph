@@ -39,7 +39,7 @@ class AlgorithmSearchBreadthFirst{
      */
     public function getGraphPathTo($destinationVertex){
         $originGraph=$this->vertex->getGraph();
-        
+
         $queue = array($this->vertex);                                          //Start vertex
         $mark = array($this->vertex->getId() => true);							//to not add vertices twice in array visited
          
@@ -51,7 +51,7 @@ class AlgorithmSearchBreadthFirst{
         do{
             $t = array_shift($queue);											//get first from queue
             $visited[$t->getId()]= $t;											//save as visited
-            
+
             $vertices = $t->getVerticesEdgeTo();								//get next vertices
             foreach($vertices as $id=>$vertex){
                 if(!isset($mark[$id])){											//if not "toughed" before
@@ -60,9 +60,9 @@ class AlgorithmSearchBreadthFirst{
                      
                     $oldEdgeArray=$t->getEdgesTo($vertex);
                     $oldEdge=array_shift($oldEdgeArray);
-                    
+
                     $newEdge=$deepSearchThree->createEdgeClone($oldEdge);
-                    
+
                 }
             }
 
@@ -73,10 +73,6 @@ class AlgorithmSearchBreadthFirst{
 
         } while($queue);															//untill queue is empty
          
-        measure(function() use ($deepSearchThree){
-        	return $deepSearchThree;
-        },'AlgorithmMaxFlowEdmondsKarp');
-        
         if($pathToDestinationVertexFound){
 
             //remove not used edges
@@ -95,7 +91,7 @@ class AlgorithmSearchBreadthFirst{
                 $upperVertex=$edge[0]->getVertexFromTo($currentVertex);
                 $path->createVertexClone($upperVertex);                             // clone upper vertex to graph
                 $path->createEdgeClone($edge[0]);                                   // clone connecting edge
-             
+                 
                 $currentVertex=$upperVertex;
 
             } while($currentVertex->getId()!==$this->vertex->getId());

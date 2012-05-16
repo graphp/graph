@@ -48,18 +48,8 @@ class AlgorithmMaxFlowEdmondsKarp{
 
 
     private function getFlowGraphFromResidualGraph($residualGraph){
-        //TODO generate flow $returnGraph from $residualGraph and $this->graph
+        
         //run over original graph and create a new graph with the flow 
-        echo "\nMissing function to remove not used edges and rotate the used edges.\n\n";
-        
-        $input=$this->graph;
-        measure(function() use ($input){
-            echo "bla";
-            return $input;
-        	
-        },'bla');
-    
-        
         $resultGraph=$this->graph->createGraphCloneEdgeless();
         
         $originalGraphEdgesArray=$this->graph->getEdges();
@@ -132,16 +122,8 @@ class AlgorithmMaxFlowEdmondsKarp{
         $startVertex = $currentGraph->getVertex($this->startVertex->getId());
         
         // 1. Search shortest path from s -> t
-       
-//         measure(function() use ($currentGraph){
-//         	return $currentGraph;
-//         },'getGraphShortestPathFlow');
         $breadthSearchAlg = new AlgorithmSearchBreadthFirst($startVertex);
         $path = $breadthSearchAlg->getGraphPathTo($currentGraph->getVertex($this->destinationVertex->getId()));
-
-//         measure(function() use ($path){        
-//         	return $path;
-//         },'getGraphShortestPathFlow');
         
         if(isset($path)){
             // 2. get max flow from path
