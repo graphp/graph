@@ -6,6 +6,7 @@ class AlgorithmMaxFlowEdmondsKarp{
      */
     private $graph;
 
+    
     /**
      * @var Vertex
      */

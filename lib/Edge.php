@@ -216,7 +216,7 @@ abstract class Edge{
 	    $starts = $this->getStartVertices();
 	    
 	    foreach ($targets as $targetVertex){
-	        $targetVertex->getEdgesTo($vertex)
+	        $targetVertex->getEdgesTo($vertex);
 	    }
 	    
 		return $this->weight;
