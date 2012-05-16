@@ -264,7 +264,7 @@ class GraphViz{
 	    if(preg_match('/^(?:\-?(?:\.\d+|\d+(?:\.\d+)?))$/i',$id)){ // numeric or simple string, no need to quote (only for simplicity)
 	        return $id;
 	    }
-	    return '"'.str_replace(array('&','<','>','"',"'",'\\'),array('&amp;','&lt;','&gt;','&quot;','&apos;','\\\\'),$id).'"';
+	    return '"'.str_replace(array('&','<','>','"',"'",'\\',"\n"),array('&amp;','&lt;','&gt;','&quot;','&apos;','\\\\','\\l'),$id).'"';
 	}
 	
 	/**
