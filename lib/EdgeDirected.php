@@ -27,6 +27,10 @@ class EdgeDirected extends Edge{
 		return array($this->to);
 	}
 	
+	public function getStartVertices(){
+	    return array($this->from);
+	}
+	
 	public function getVertices(){
 	    return array($this->from,$this->to);
 	}
