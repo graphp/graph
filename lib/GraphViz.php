@@ -180,10 +180,10 @@ class GraphViz{
 	    $ret = 0;
 	    $dotExecutable='dot';
 	    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-	    	echo 'This is a server using Windows!';
+	    	//echo 'This is a server using Windows!';
 	    	$dotExecutable='dot.exe';
 	    } else {
-	    	echo 'This is a server not using Windows!';
+	    	//echo 'This is a server not using Windows!';
 	    }
 	    system($dotExecutable.' -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp).' -o '.escapeshellarg($tmp.'.'.$this->format),$ret); // use program 'dot' to actually generate graph image
 	    if($ret !== 0){
