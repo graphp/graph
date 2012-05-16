@@ -32,7 +32,7 @@ class AlgorithmMaxFlowEdmondsKarp{
     private function start(){
          
         
-        $currentGraph = $this->mergeParallelEdges($this->workingGraph);                // remove parallel edges
+        $currentGraph = $this->mergeParallelEdges($this->workingGraph);         // remove parallel edges
         do{
             $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get Shortes path if NULL-> Done
              
@@ -41,6 +41,7 @@ class AlgorithmMaxFlowEdmondsKarp{
             }
         } while($pathFlow);
 
+        //return flow sum of outgoing flows
         return $this->getFlowGraphFromResidualGraph($currentGraph);
     }
 
