@@ -1,6 +1,6 @@
 <?php
 
-class AlgorithmSearchDepthFirst{
+class AlgorithmSearchDepthFirst extends Algorithm{
 
     /**
      * Start vertex for this algorithm

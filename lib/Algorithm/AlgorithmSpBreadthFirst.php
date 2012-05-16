@@ -1,6 +1,6 @@
 <?php
 
-class AlgorithmSpBreadthFirst{
+class AlgorithmSpBreadthFirst extends AlgorithmSp{
     /**
      * start vertex this algorithm operates on
      * 

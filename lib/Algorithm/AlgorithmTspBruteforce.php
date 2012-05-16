@@ -1,6 +1,6 @@
 <?php
 
-class AlgorithmTspBruteforce{
+class AlgorithmTspBruteforce extends AlgorithmTsp{
     /**
      * 
      * @var Graph

@@ -1,5 +1,5 @@
 <?php
-class AlgorithmTspMst{
+class AlgorithmTspMst extends AlgorithmTsp{
     
 	private $graph;
 

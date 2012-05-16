@@ -1,12 +1,6 @@
 <?php
-class AlgorithmSpDijkstra{
-
-    private $startVertex;
-
-    public function __construct(Vertex $startVertex){
-        $this->startVertex = $startVertex;
-    }
-
+class AlgorithmSpDijkstra extends AlgorithmSp{
+    
     /**
      * get all edges on shortest path for this vertex
      *

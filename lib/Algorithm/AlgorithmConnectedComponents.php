@@ -1,6 +1,6 @@
 <?php
 
-class AlgorithmConnectedComponents{
+class AlgorithmConnectedComponents extends Algorithm{
 	
 	/**
 	 * 

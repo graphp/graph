@@ -1,6 +1,6 @@
 <?php
 
-class AlgorithmDetectNegativeCycle{
+class AlgorithmDetectNegativeCycle extends Algorithm{
 	
 	/**
 	 * 

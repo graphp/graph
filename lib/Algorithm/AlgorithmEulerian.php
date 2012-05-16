@@ -1,6 +1,6 @@
 <?php
 
-class AlgorithmEulerian{
+class AlgorithmEulerian extends Algorithm{
     public function __construct($graph){
         $this->graph = $graph;
     }

@@ -1,5 +1,5 @@
 <?php
-class AlgorithmMstPrim{
+class AlgorithmMstPrim extends AlgorithmMst{
     /**
      * @var Vertex
      */

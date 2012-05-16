@@ -1,25 +1,5 @@
 <?php
-class AlgorithmSpMooreBellmanFord{
-	
-	/**
-	 * 
-	 * @var Graph
-	 */
-	private $graph;
-	
-	/**
-	 * @var Vertex
-	 */
-	private $startVertex;
-	
-	/**
-	 * 
-	 * @param Vertex $startVertex the vertex where the algorithm is calculating the shortest ways for
-	 */
-	public function __construct(Vertex $startVertex){
-		$this->startVertex = $startVertex;
-	}
-
+class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
 	/**
 	 * 
 	 * 

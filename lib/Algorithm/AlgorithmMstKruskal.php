@@ -1,5 +1,5 @@
 <?php
-class AlgorithmMstKruskal{
+class AlgorithmMstKruskal extends AlgorithmMst{
 	
 	private $graph;
 	

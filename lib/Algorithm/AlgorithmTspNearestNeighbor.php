@@ -1,5 +1,5 @@
 <?php
-class AlgorithmTspNearestNeighbor{
+class AlgorithmTspNearestNeighbor extends AlgorithmTsp{
 	
 	private $vertex;
 	

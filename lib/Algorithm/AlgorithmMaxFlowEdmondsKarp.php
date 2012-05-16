@@ -1,5 +1,5 @@
 <?php
-class AlgorithmMaxFlowEdmondsKarp{
+class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 	
 	/**
 	 * 
