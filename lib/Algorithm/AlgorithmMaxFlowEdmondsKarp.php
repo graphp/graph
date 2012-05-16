@@ -2,7 +2,6 @@
 class AlgorithmMaxFlowEdmondsKarp{
 
     /**
-     *
      * @var Graph
      */
     private $graph;
@@ -18,7 +17,6 @@ class AlgorithmMaxFlowEdmondsKarp{
     private $destinationVertex;
 
     /**
-     *
      * @param Vertex $startVertex the vertex where the flow search starts
      * @param Vertex $destinationVertex the vertex where the flow search ends the destination
      */
@@ -30,19 +28,17 @@ class AlgorithmMaxFlowEdmondsKarp{
     }
 
     private function start(){
-         
+        $currentGraph = $this->mergeParallelEdges($this->workingGraph);         // No parallel edges in graph allowed
         
-        $currentGraph = $this->mergeParallelEdges($this->workingGraph);         // remove parallel edges
         do{
-            $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get Shortes path if NULL-> Done
+            $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get shortes path by count of edges, if NULL/none we're done
              
             if($pathFlow){
                  $currentGraph = $this->getResidualGraph($currentGraph, $pathFlow);
             }
         } while($pathFlow);
 
-        //return flow sum of outgoing flows
-        return $this->getFlowGraphFromResidualGraph($currentGraph);
+        return $this->getFlowGraphFromResidualGraph($currentGraph);            // Convert final residualgraph to flowGraph and return
     }
 
 
