@@ -43,6 +43,7 @@ class AlgorithmMaxFlowEdmondsKarp{
 
         //return flow sum of outgoing flows
         return $this->getFlowGraphFromResidualGraph($currentGraph);
+        //return $currentGraph;
     }
 
 
@@ -50,8 +51,62 @@ class AlgorithmMaxFlowEdmondsKarp{
         //TODO generate flow $returnGraph from $residualGraph and $this->graph
         //run over original graph and create a new graph with the flow 
         echo "\nMissing function to remove not used edges and rotate the used edges.\n\n";
+        
+        $input=$this->graph;
+        measure(function() use ($input){
+            echo "bla";
+            return $input;
+        	
+        },'bla');
+    
+        
+        $resultGraph=new Graph();
+        
+        $originalGraphEdgesArray=$this->graph->getEdges();
+        foreach ($originalGraphEdgesArray as $edge){
+            //For each edge of the residual graph, which goes in the opposite way
+            //than the original edge, insert the edge reverted residual edge in the new graph
+            
+            //get the Original vertices to find the propper edge
+            $originalStartVertexArray = $edge->getStartVertices();
+            $originalStartVertex = array_shift($startVertexArray);
+            
+            $originalTargetVertexArray = $edge->getTargetVertices();
+            $originalTargetVertex = array_shift($targetVertexArray);
+            
+            //if vertices in resultgrpah not existing create them
+            
+            $residualGraphEdgeTargetVertex = $residualGraph->getVertex($originalStartVertex->getId());
+            if(!isset($residualGraphEdgeTargetVertex)){
+                $residualGraphEdgeTargetVertex=$resultGraph->createVertexClone($originalStartVertex);
+            };
+            
+            $residualGraphEdgeStartVertex = $residualGraph->getVertex($originalTargetVertex->getId());
+            if(!isset($residualGraphEdgeStartVertex)){
+                $residualGraphEdgeStartVertex=$resultGraph->createVertexClone($originalTargetVertex);
+            };
+            
+            //vertices are existing now create the edge
+            
+            //check if residual graph has backward edge
+            $residualEdgeArray= $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
+            
+            $newFlowEdge = $residualGraph->createEdgeClone($edge);
+                        
+            if(isset($residualEdgeArray)){
+                $residualEdge = array_unshift($residualEdgeArray);
+                $newFlowEdge->setWeight($residualEdge->getWeight());
+            }
+            else{
+                $newFlowEdge->setWeight(0);
+            }
+            
+            
+            //if not existing remove the edge
+            
+        }
 
-        return $residualGraph;
+        return $resultGraph;
     }
 
 
@@ -72,12 +127,19 @@ class AlgorithmMaxFlowEdmondsKarp{
     private function getGraphShortestPathFlow($currentGraph)
     {
         
-        $startVertex= $currentGraph->getVertex($this->startVertex->getId());
+        $startVertex = $currentGraph->getVertex($this->startVertex->getId());
         
         // 1. Search shortest path from s -> t
+       
+//         measure(function() use ($currentGraph){
+//         	return $currentGraph;
+//         },'getGraphShortestPathFlow');
         $breadthSearchAlg = new AlgorithmSearchBreadthFirst($startVertex);
-        $path = $breadthSearchAlg->getGraphPathTo($this->destinationVertex);
+        $path = $breadthSearchAlg->getGraphPathTo($currentGraph->getVertex($this->destinationVertex->getId()));
 
+//         measure(function() use ($path){        
+//         	return $path;
+//         },'getGraphShortestPathFlow');
         
         if(isset($path)){
             // 2. get max flow from path
@@ -98,6 +160,13 @@ class AlgorithmMaxFlowEdmondsKarp{
         }
     }
 
+    /**
+     * Returns creates from the currentgraph an a path a residual graph
+     * @param unknown_type $currentGraph
+     * @param unknown_type $path
+     * @return unknown
+     */
+    
     private function getResidualGraph($currentGraph, $path)
     {
         // 1. Substract $path values from $graph
@@ -137,7 +206,8 @@ class AlgorithmMaxFlowEdmondsKarp{
                        
             //if the value of the original edge is 0, remove the edge
             if ($currentGraphEdge->getWeight()==0){
-            	$currentGraph->removeEdge($currentGraphEdge);
+            	//$currentGraph->removeEdge($currentGraphEdge);
+            	$currentGraphEdge->destroy();
             }
         }
         return $currentGraph;
