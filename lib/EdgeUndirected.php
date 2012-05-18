@@ -1,7 +1,18 @@
 <?php
 
 class EdgeUndirected extends Edge{
-	private $a;
+    /**
+     * vertex a
+     *
+     * @var Vertex
+     */
+    private $a;
+    
+    /**
+     * vertex b
+     *
+     * @var Vertex
+     */
 	private $b;
 
 	public function __construct($a,$b){

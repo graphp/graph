@@ -1,7 +1,18 @@
 <?php
 
 class EdgeDirected extends Edge{
+    /**
+     * source/start vertex
+     * 
+     * @var Vertex
+     */
 	private $from;
+	
+	/**
+	 * target/end vertex
+	 * 
+	 * @var Vertex
+	 */
 	private $to;
 
 	/**

@@ -1,8 +1,25 @@
 <?php
 
 class EdgeUndirectedId extends Edge{
+    /**
+     * vertex ID of point a
+     *
+     * @var string
+     */
 	private $a;
+	
+	/**
+	 * Vertex ID of point b
+	 * 
+	 * @var string
+	 */
 	private $b;
+	
+	/**
+	 * parent graph
+	 * 
+	 * @var Graph
+	 */
 	private $graph;
 
 	public function __construct($a,$b){
