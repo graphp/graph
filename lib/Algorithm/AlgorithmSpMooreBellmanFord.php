@@ -50,18 +50,14 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
 	 * @throws Exception if there is a negative cycle
 	 */
 	public function getEdges(){
-		$totalCostOfCheapestPathTo  = Array();
-		$totalCostOfCheapestPathTo[$this->startVertex->getId()] = 0;		    //start node distance
+		$totalCostOfCheapestPathTo  = array($this->startVertex->getId() => 0);		    //start node distance
 		
-		$predecessorVertexOfCheapestPathTo  = Array();							//predecessor
-		$predecessorVertexOfCheapestPathTo[$this->startVertex->getId()] = $this->startVertex;
+		$predecessorVertexOfCheapestPathTo  = array($this->startVertex->getId() => $this->startVertex);	//predecessor
 		
-		$usedVertices  = Array();												//marked vertices
-		
-		$totalCountOfVertices = $this->startVertex->getGraph()->getNumberOfVertices();
+		$numSteps = $this->startVertex->getGraph()->getNumberOfVertices() - 1; // repeat (n-1) times
 		$edges = $this->startVertex->getGraph()->getEdges();
 		$changed = true;
-		for ($i = 0; $i < $totalCountOfVertices - 1 && $changed; ++$i){						//repeat n-1 times
+		for ($i = 0; $i < $numSteps && $changed; ++$i){						//repeat n-1 times
 			$changed = $this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo);
 		}
 		
