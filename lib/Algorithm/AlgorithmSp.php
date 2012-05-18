@@ -102,6 +102,34 @@ abstract class AlgorithmSp extends Algorithm {
     }
     
     /**
+     * get cheapest edges (lowest weight) for given map of vertex predecessors
+     * 
+     * @param array[Vertex] $predecessor
+     * @return array[Edge]
+     * @uses Graph::getVertices()
+     * @uses Vertex::getEdgesTo()
+     * @uses Edge::getFirst()
+     */
+    protected function getEdgesCheapestPredecesor($predecessor){
+        $vertices = $this->startVertex->getGraph()->getVertices();
+        unset($vertices[$this->startVertex->getId()]);                          //start vertex doesn't have a predecessor
+        
+        $edges = array();
+        foreach($vertices as $vid=>$vertex){
+        	//echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
+        	if (isset( $predecessor[$vid] )){
+        		$predecesVertex = $predecessor[$vid];	//get predecor
+        
+        		//echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH COSTS: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
+        
+        		$edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
+        	}
+        }
+        
+        return $edges;
+    }
+    
+    /**
      * get all edges on shortest path for this vertex
      * 
      * @return array[Edge]

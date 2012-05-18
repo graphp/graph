@@ -62,24 +62,8 @@ class AlgorithmSpDijkstra extends AlgorithmSp{
             }
         }
 
-       
+        
         //algorithm is done, return resulting edges
-
-        $vertices = $this->startVertex->getGraph()->getVertices();
-        unset($vertices[$this->startVertex->getId()]);                          //start vertex doesn't have a predecessor
-
-        $edges = array();
-        foreach($vertices as $vid=>$vertex){
-            //echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
-            if (isset( $predecesVertexOfCheapestPathTo[$vid] )){
-                $predecesVertex = $predecesVertexOfCheapestPathTo[$vid];	//get predecor
-
-                //echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH COSTS: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
-
-                $edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
-            }
-        }
-
-        return $edges;
+        return $this->getEdgesCheapestPredecesor($predecesVertexOfCheapestPathTo);
     }
 }

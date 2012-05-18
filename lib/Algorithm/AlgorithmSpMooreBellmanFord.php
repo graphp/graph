@@ -56,20 +56,8 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
 			}
 		}
 		
-		//algorithm is done, build graph										//THIS IS THE SAME AS DIJKSTRA (EXCTRACT TO A FUNCTION?????????)
-		
-		$vertices = $this->startVertex->getGraph()->getVertices();
-		unset($vertices[$this->startVertex->getId()]);                          //start vertex doesn't have a predecessor
-		
-		$returnEdges = array();
-		foreach($vertices as $vertex){
-	        if (isset( $predecessorVertexOfCheapestPathTo[$vertex->getId()] )){
-	            $predecessor = $predecessorVertexOfCheapestPathTo[$vertex->getId()];			//get predecor
-	            
-	            $returnEdges []= Edge::getFirst($predecessor->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
-	        }
-		}
-		
+		//algorithm is done, build graph
+		$returnEdges = $this->getEdgesCheapestPredecesor($predecessorVertexOfCheapestPathTo);
 		
 		//Check for negative cycles
 		foreach ($edges as $edge){												//check for all edges. Step n (check for negative cycles
