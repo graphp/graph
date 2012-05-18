@@ -60,15 +60,16 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
 		
 		$totalCountOfVertices = $this->startVertex->getGraph()->getNumberOfVertices();
 		$edges = $this->startVertex->getGraph()->getEdges();
-		for ($i = 0; $i < $totalCountOfVertices - 1; ++$i){						//repeat n-1 times
-			$this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo);
+		$changed = true;
+		for ($i = 0; $i < $totalCountOfVertices - 1 && $changed; ++$i){						//repeat n-1 times
+			$changed = $this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo);
 		}
 		
 		//algorithm is done, build graph
 		$returnEdges = $this->getEdgesCheapestPredecesor($predecessorVertexOfCheapestPathTo);
 		
-		//Check for negative cycles
-	    if($this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo)){ // something is still changing...
+		//Check for negative cycles (only if last step didn't already finish anyway)
+	    if($changed && $this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo)){ // something is still changing...
 		    throw new Exception("Negative Cycle");
 		}
 		
