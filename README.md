@@ -1,5 +1,5 @@
 # graph-php
-Something useful related to graphs!
+A mathematical graph library in PHP
 
 ## Documentation
 [EclipseGitHubEinrichtung](https://github.com/Flos/graph-php/wiki/EclipseGitHubEinrichtung)
@@ -7,8 +7,6 @@ Something useful related to graphs!
 [CodingGuidelines](https://github.com/Flos/graph-php/wiki/CodingGuidelines)
 
 ## Features
-* Loading from adjacency lists
-* Loading from edge lists
-* Doing depth search on a graph
-* Doing breadth search
-* Plotting with GraphViz (local installation needet [linux only])
+* Loading graphs (from plain text adjacency lists or edge lists)
+* Run standart algorithms (ex.: deep-/breadth-search, travelling salesman, Kruskal, Prim, Dijkstra, Edmonds-Karp)
+* Plotting with GraphViz (additional local installation needet)
