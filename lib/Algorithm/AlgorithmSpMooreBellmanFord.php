@@ -29,6 +29,20 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
 		return $isCheaper;
 	}
 	
+	private function bigStep(&$edges,&$totalCostOfCheapestPathTo,&$predecessorVertexOfCheapestPathTo){
+		$changed = false;
+		foreach ($edges as $edge){												//check for all edges
+			foreach($edge->getTargetVertices() as $toVertex){						//check for all "ends" of this edge (or for all targetes)
+				$fromVertex = $edge->getVertexFromTo($toVertex);
+	
+				if($this->doStep($edge, $fromVertex, $toVertex, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)){	//do normal step
+					$changed = true;
+				}
+			}
+		}
+		return $changed;
+	}
+	
 	/**
 	 * Calculate the Moore-Bellman-Ford-Algorithm and get all edges on shortest path for this vertex
 	 * 
@@ -47,28 +61,15 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
 		$totalCountOfVertices = $this->startVertex->getGraph()->getNumberOfVertices();
 		$edges = $this->startVertex->getGraph()->getEdges();
 		for ($i = 0; $i < $totalCountOfVertices - 1; ++$i){						//repeat n-1 times
-			foreach ($edges as $edge){												//check for all edges
-				foreach($edge->getTargetVertices() as $toVertex){						//check for all "ends" of this edge (or for all targetes)
-					$fromVertex = $edge->getVertexFromTo($toVertex);
-					
-					$this->doStep($edge, $fromVertex, $toVertex, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo);	//do normal step
-				}
-			}
+			$this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo);
 		}
 		
 		//algorithm is done, build graph
 		$returnEdges = $this->getEdgesCheapestPredecesor($predecessorVertexOfCheapestPathTo);
 		
 		//Check for negative cycles
-		foreach ($edges as $edge){												//check for all edges. Step n (check for negative cycles
-			foreach($edge->getTargetVertices() as $toVertex){						//check for all "ends" of this edge (or for all targetes)
-				$fromVertex = $edge->getVertexFromTo($toVertex);
-				
-				if ($this->doStep($edge, $fromVertex, $toVertex, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)){	//If a path is getting cheaper
-					//search for negative cycle
-					throw new Exception("Negative Cycle TODO");
-				}
-			}
+	    if($this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo)){ // something is still changing...
+		    throw new Exception("Negative Cycle");
 		}
 		
 		return $returnEdges;
