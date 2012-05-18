@@ -58,7 +58,15 @@ class GraphViz{
             echo '[delay flooding xdg-open]'.PHP_EOL; // wait some time between calling xdg-open because earlier calls will be ignored otherwise
             sleep(1);
         }
-        exec('xdg-open '.escapeshellarg($tmp).' > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
+        
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            echo "ausgabe\n";
+        	exec($tmp.' >NUL');
+        } else {
+        	exec('xdg-open '.escapeshellarg($tmp).' > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
+        
+        }
+      
         $next = microtime(true) + 1.0;
         //echo "... done\n";
 	}
@@ -159,7 +167,7 @@ class GraphViz{
         $script = $this->createScript();
 	    //var_dump($script);
 	    
-	    $tmp = tempnam('/tmp','graphviz');
+	    $tmp = tempnam(sys_get_temp_dir(),'graphviz');
 	    if($tmp === false){
 	        throw new Exception('Unable to get temporary file name for graphviz script');
 	    }
@@ -170,7 +178,14 @@ class GraphViz{
 	    }
 	    
 	    $ret = 0;
-	    system('dot -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp).' -o '.escapeshellarg($tmp.'.'.$this->format),$ret); // use program 'dot' to actually generate graph image
+	    $dotExecutable='dot';
+	    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+	    	//echo 'This is a server using Windows!';
+	    	$dotExecutable='dot.exe';
+	    } else {
+	    	//echo 'This is a server not using Windows!';
+	    }
+	    system($dotExecutable.' -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp).' -o '.escapeshellarg($tmp.'.'.$this->format),$ret); // use program 'dot' to actually generate graph image
 	    if($ret !== 0){
 	        throw new Exception('Unable to invoke "dot" to create image file (code '.$ret.')');
 	    }

@@ -29,7 +29,11 @@ class EdgeUndirected extends Edge{
 	//     }
 
 	public function getTargetVertices(){
-		return array($this->a,$this->b);
+		return array($this->b,$this->a);
+	}
+	
+	public function getStartVertices(){
+		return  array($this->a,$this->b);
 	}
 	
 	public function getVertices(){

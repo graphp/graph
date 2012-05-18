@@ -125,6 +125,13 @@ abstract class Edge{
 	abstract public function getTargetVertices();
 	
 	/**
+	 * get Vertices that are the start of this edge
+	 *
+	 * @return array[Vertex]
+	 */
+	abstract public function getStartVertices();
+	
+	/**
 	 * return true if this edge is an outgoing edge of the given vertex
 	 * return false ; every other case
 	 *
@@ -197,6 +204,22 @@ abstract class Edge{
 	    }
 	    $this->weight = $weight;
 	    return $this;
+	}
+	
+	/**
+	 * return weight of edge
+	 *
+	 * @return boolean
+	 */
+	public function hasParallelEdge(){
+	    $targets = $this->getTargetVertices();
+	    $starts = $this->getStartVertices();
+	    
+	    foreach ($targets as $targetVertex){
+	        $targetVertex->getEdgesTo($vertex);
+	    }
+	    
+		return $this->weight;
 	}
 	
 	/**

@@ -16,7 +16,7 @@ class AlgorithmSpDijkstra extends AlgorithmSp{
         $predecesVertexOfCheapestPathTo  = Array();								//predecessor
         $predecesVertexOfCheapestPathTo[$this->startVertex->getId()] = $this->startVertex;
 
-        $usedVertices  = Array();                                              //mark vertices when their cheapest path has been found
+        $usedVertices  = Array();                                               //mark vertices when their cheapest path has been found
 
 
         // Repeat until all vertices have been marked
@@ -44,7 +44,7 @@ class AlgorithmSpDijkstra extends AlgorithmSp{
                 $targetVertex = $edge->getVertexToFrom($currentVertex);
                 $targetVertexId = $targetVertex->getId();
 
-                if ( ! isset( $usedVertices[$targetVertexId] ) )			        //if the targetVertex is marked, the cheapest path for this vertex has already been found (no negative edges)
+                if ( ! isset( $usedVertices[$targetVertexId] ) )			    //if the targetVertex is marked, the cheapest path for this vertex has already been found (no negative edges)
                 {
                     $newCostsToTargetVertex = $totalCostOfCheapestPathTo[$currentVertexId] + $edge->getWeight();	//calculate new cost to vertex
                     	
