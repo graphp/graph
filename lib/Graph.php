@@ -293,17 +293,6 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * Sets the edge weights of the graph to the given value
-	 * @param $value to set all edge weights to
-	 */
-	public function setAllEdgeWeights($value){
-	    foreach($this->edges as $edge){
-	    	$edge->setWeight($value);
-	    };
-	    return $this;
-	}
-	
-	/**
 	 * checks whether this graph is regular, i.e. each vertex has the same indegree/outdegree
 	 * 
 	 * @return boolean
@@ -457,30 +446,6 @@ class Graph implements Countable{
 	        }
 	    }
 	    return $weight;
-	}
-	
-	/**
-	 * get the minimal weight of all edges in graph
-	 *
-	 * @return mininmal weight 
-	 */
-	public function getMinEdgeValue(){
-
-	    $minWeight = NULL;
-
-	    foreach($this->edges as $edge){
-	        //TODO optimise ?
-	        if(!isset($minWeight) ){
-	        	$minWeight = $edge->getWeight();
-	        }
-	        
-	        $w = $edge->getWeight();
-	        
-	        if(isset($w) && $w < $minWeight){
-	            $minWeight = $w;
-	        }
-	    }
-	    return $minWeight;
 	}
 	
 	/**

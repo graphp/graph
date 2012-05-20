@@ -45,8 +45,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         return $this->getFlowGraphFromResidualGraph($currentGraph);
         //return $currentGraph;
     }
-
-
+    
     private function getFlowGraphFromResidualGraph($residualGraph){
         
         //run over original graph and create a new graph with the flow 
@@ -100,16 +99,13 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         echo "Max Flow is: ".$maxFlow."\n";
         return $resultGraph;
     }
-
-
-
-
+    
     private function mergeParallelEdges($currentGraph){
         //TODO 1. find and merge parallel edges
         // alg works only without prarallel edges
         return $currentGraph;
     }
-
+    
     /**
      * get the shortest path flow (by count of edges)
      *
@@ -127,14 +123,16 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         
         if(isset($path)){
             // 2. get max flow from path
-            $maxFlowValue = $path->getMinEdgeValue();
+            $maxFlowValue = Edge::getFirst($path->getEdges(),Edge::ORDER_WEIGHT)->getWeight();
             if($maxFlowValue==0){
                 //echo "stop flow value is 0\n";
                 return null;
             }
              
             // 3. create graph with shortest path and max flow as edge values
-            $path->setAllEdgeWeights($maxFlowValue);
+            foreach($path->getEdges() as $edge){
+                $edge->setWeight($maxFlowValue);
+            }
              
             return $path;
         }
@@ -196,10 +194,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         }
         return $currentGraph;
     }
-
-
-
-
+    
     /**
      * returns max flow graph
      *
