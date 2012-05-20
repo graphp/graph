@@ -134,16 +134,27 @@ class GraphViz{
 	// end
 	
 	/**
-	 * create base64-encoded image src target data to be used for html images
+	 * create image file data contents for this graph
 	 * 
 	 * @return string
 	 * @uses GraphViz::createImageFile()
 	 */
-	public function createImageSrc(){
+	public function createImageData(){
 	    $file = $this->createImageFile();
-	    $base = base64_encode(file_get_contents($file));
+	    $data = file_get_contents($file);
 	    unlink($file);
-	    return 'data:image/png;base64,'.$base;
+	    return $data;
+	}
+	
+	/**
+	 * create base64-encoded image src target data to be used for html images
+	 * 
+	 * @return string
+	 * @uses GraphViz::createImageData()
+	 */
+	public function createImageSrc(){
+	    $format = ($this->format === 'svg' || $this->format === 'svgz') ? 'svg+xml' : $this->format;
+	    return 'data:image/'.$format.';base64,'.base64_encode($this->createImageData());
 	}
 	
 	/**
@@ -153,6 +164,9 @@ class GraphViz{
 	 * @uses GraphViz::createImageSrc()
 	 */
 	public function createImageHtml(){
+	    if($this->format === 'svg' || $this->format === 'svgz'){
+	        return '<object type="image/svg+xml" data="'.$this->createImageSrc().'"></object>';
+	    }
 	    return '<img src="'.$this->createImageSrc().'" />';
 	}
 	
