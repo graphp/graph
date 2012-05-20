@@ -207,19 +207,38 @@ abstract class Edge{
 	}
 	
 	/**
-	 * return weight of edge
-	 *
+	 * checks whether this edge has any parallel edges
+	 * 
 	 * @return boolean
+	 * @uses Edge::getEdgesParallel()
 	 */
-	public function hasParallelEdge(){
-	    $targets = $this->getTargetVertices();
-	    $starts = $this->getStartVertices();
+	public function hasEdgeParallel(){
+	    return !!$this->getEdgesParallel();
+	}
+	
+	/**
+	 * get all edges parallel to this edge (excluding self)
+	 * 
+	 * @return array[Edge]
+	 * @throws Exception
+	 */
+	public function getEdgesParallel(){
+	    $ends = $this->getVertices();
 	    
-	    foreach ($targets as $targetVertex){
-	        $targetVertex->getEdgesTo($vertex);
+	    $edges = $ends[0]->getEdgesTo($ends[1]);                            // get all edges between this edge's endpoints
+	    if($this->isConnection($ends[1],$ends[0])){                         // edge points into both directions (undirected/bidirectional edge)
+	    	$edges = array_unique(array_merge($edges,$ends[1]->getEdgesTo($ends[0])));    // also get all edges in other direction
 	    }
 	    
-		return $this->weight;
+	    $pos = array_search($this,$edges,true);
+	    if($pos === false){
+	        throw new Exception('Internal error: Current edge not found');
+	    }
+	    
+	    unset($edges[$pos]);                                                // exclude current edge from parallel edges
+	    $edges = array_values($edges);
+	    
+	    return $edges;
 	}
 	
 	/**
