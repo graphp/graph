@@ -1,6 +1,11 @@
 <?php
 
 abstract class AlgorithmSp extends Algorithm {
+    /**
+     * start vertex to build shortest paths to
+     * 
+     * @var Vertex
+     */
     protected $startVertex;
     
     public function __construct(Vertex $startVertex){
@@ -11,15 +16,25 @@ abstract class AlgorithmSp extends Algorithm {
      * get array of edges (path) from start vertex to given end vertex
      *
      * @param Vertex     $endVertex
-     * @param NULL|array $edges     (optional) array of all input edges to operate on
+     * @throws Exception
+     * @return array[Edge]
+     * @uses AlgorithmSp::getEdges()
+     * @uses AlgorithmSp::getEdgesToInternal()
+     */
+    public function getEdgesTo($endVertex){
+    	return $this->getEdgesToInternal($endVertex,$this->getEdges());
+    }
+    
+    /**
+     * get array of edges (path) from start vertex to given end vertex
+     *
+     * @param Vertex $endVertex
+     * @param array  $edges     array of all input edges to operate on
      * @throws Exception
      * @return array[Edge]
      * @uses AlgorithmSp::getEdges() if no edges were given
      */
-    public function getEdgesTo($endVertex,$edges=NULL){
-    	if($edges === NULL){
-    		$edges = $this->getEdges();
-    	}
+    protected function getEdgesToInternal($endVertex,$edges){
     	$currentVertex = $endVertex;
     	$path = array();
     	while($currentVertex !== $this->startVertex){
@@ -61,7 +76,7 @@ abstract class AlgorithmSp extends Algorithm {
      *
      * @return array[float]
      * @uses AlgorithmSp::getEdges()
-     * @uses AlgorithmSp::getEdgesTo()
+     * @uses AlgorithmSp::getEdgesToInternal()
      * @uses AlgorithmSp::sumEdges()
      */
     public function getDistanceMap(){
@@ -69,7 +84,7 @@ abstract class AlgorithmSp extends Algorithm {
     	$ret = array();
     	foreach($this->startVertex->getGraph()->getVertices() as $vid=>$vertex){
     		try{
-    			$ret[$vid] = $this->sumEdges($this->getEdgesTo($vertex,$edges));
+    			$ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex,$edges));
     		}
     		catch(Exception $ignore){
     		} // ignore vertices that can not be reached
