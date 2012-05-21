@@ -1,6 +1,10 @@
 <?php
 class AlgorithmTspNearestNeighbor extends AlgorithmTsp{
 	
+    /**
+     * 
+     * @var Vertex
+     */
 	private $vertex;
 	
 	public function __construct(Vertex $startVertex){
@@ -9,11 +13,10 @@ class AlgorithmTspNearestNeighbor extends AlgorithmTsp{
 	
 	/**
 	 *
-	 * @param Vertex $startVertex
-	 * @return Graph
+	 * @return array[Edge]
 	 */
-	public function getResultGraph(){
-		$resultGraph = $this->vertex->getGraph()->createGraphCloneEdgeless();
+	public function getEdges(){
+		$returnEdges = array();
 		
 		$n = $this->vertex->getGraph()->getNumberOfVertices();
         
@@ -46,15 +49,15 @@ class AlgorithmTspNearestNeighbor extends AlgorithmTsp{
 			
 			$visitedVertices[ $nextVertex->getId() ] = TRUE;
 			
-			$resultGraph->createEdgeClone($edge);								//clone edge in new Graph
+			$returnEdges []= $edge;								                //clone edge in new Graph
 			
 		}
 		
 		//check if there is a way from end edge to start edge
 		//get first connecting edge
 		//connect the last vertex with the start vertex
-		$resultGraph->createEdgeClone(Edge::getFirst($vertex->getEdgesTo($this->vertex)));
+		$returnEdges []= Edge::getFirst($vertex->getEdgesTo($this->vertex));
 		
-		return $resultGraph;
+		return $returnEdges;
 	}
 }

@@ -1,6 +1,9 @@
 <?php
 class AlgorithmTspMst extends AlgorithmTsp{
-    
+    /**
+     * 
+     * @var Graph
+     */
 	private $graph;
 
 	public function __construct(Graph $inputGraph){
@@ -9,11 +12,10 @@ class AlgorithmTspMst extends AlgorithmTsp{
 
 	/**
 	 *
-	 * @param Vertex $startVertex
-	 * @return Graph
+	 * @return array[Edge]
 	 */
-	public function getResultGraph(){
-		$returnGraph = $this->graph->createGraphCloneEdgeless();				// Copy vertices of original graph
+	public function getEdges(){
+		$returnEdges = array();
 
 		$minimumSpanningTreeAlgorithm = new AlgorithmMstKruskal($this->graph);		// Create minimum spanning tree
 		$minimumSpanningTree = $minimumSpanningTreeAlgorithm->getResultGraph();
@@ -32,7 +34,7 @@ class AlgorithmTspMst extends AlgorithmTsp{
 			}
 			else {
 			    // get edge(s) to clone, multiple edges are possible (returns an array if undirected edge)
-				$returnGraph->createEdgeClone(Edge::getFirst($oldVertex->getEdgesTo($vertex)));
+				$returnEdges []= Edge::getFirst($oldVertex->getEdgesTo($vertex));
 			}
 				
 			$oldVertex = $vertex;
@@ -40,8 +42,8 @@ class AlgorithmTspMst extends AlgorithmTsp{
 		
 		// connect last vertex with start vertex
 		// multiple edges are possible (returns an array if undirected edge)
-		$returnGraph->createEdgeClone(Edge::getFirst($oldVertex->getEdgesTo($startVertex)));
+		$returnEdges []= Edge::getFirst($oldVertex->getEdgesTo($startVertex));
 		
-		return $returnGraph;
+		return $returnEdges;
 	}
 }

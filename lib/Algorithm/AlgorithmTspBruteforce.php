@@ -47,7 +47,7 @@ class AlgorithmTspBruteforce extends AlgorithmTsp{
     
     /**
      * 
-     * @param unknown_type $graph
+     * @param Graph $graph
      */
     public function __construct($graph){
         $this->graph = $graph;
@@ -99,18 +99,6 @@ class AlgorithmTspBruteforce extends AlgorithmTsp{
         }
         
         return $result;
-    }
-    
-    /**
-     * get resulting graph with the (first) best circle of edges connecting all vertices
-     *
-     * @throws Exception on error
-     * @return Graph
-     * @uses AlgorithmTspBruteforce::getEdges()
-     * @uses Graph::createGraphCloneEdges()
-     */
-    public function getResultGraph(){
-        return $this->graph->createGraphCloneEdges($this->getEdges());
     }
     
     /**
