@@ -1,6 +1,6 @@
 <?php
 
-abstract class Edge{
+abstract class Edge extends Layoutable{
     /**
      * do not change order - FIFO : first in, first out
      * 
@@ -279,25 +279,6 @@ abstract class Edge{
 	    foreach($this->getVertices() as $vertex){
 	        $vertex->removeEdge($this);
 	    }
-	}
-	
-	private $layout = array();
-	
-	public function getLayout(){
-		return $this->layout;
-	}
-	
-	public function setLayoutRaw($name,$value){
-		if($value === NULL){
-			unset($this->layout[$name]);
-		}else{
-			$this->layout[$name] = $value;
-		}
-		return $this;
-	}
-	
-	public function setLayout($name,$value){
-		return $this->setLayoutRaw($name,GraphViz::escape($value));
 	}
 	
 	/**

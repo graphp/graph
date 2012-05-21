@@ -1,6 +1,6 @@
 <?php
 
-class Vertex{
+class Vertex extends Layoutable{
     /**
      * do not change order - FIFO : first in, first out
      * 
@@ -582,25 +582,6 @@ class Vertex{
 	public function searchDepthFirst(){
 		$alg = new AlgorithmSearchDepthFirst($this);
 		return $alg->getVertices();
-	}
-	
-	private $layout = array();
-	
-	public function getLayout(){
-	    return $this->layout;
-	}
-	
-	public function setLayoutRaw($name,$value){
-	    if($value === NULL){
-	    	unset($this->layout[$name]);
-	    }else{
-	    	$this->layout[$name] = $value;
-	    }
-	    return $this;
-	}
-	
-	public function setLayout($name,$value){
-	    return $this->setLayoutRaw($name,GraphViz::escape($value));
 	}
 	
 	/**
