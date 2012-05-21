@@ -23,6 +23,9 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      * @param Vertex $destinationVertex the vertex where the flow search ends the destination
      */
     public function __construct(Vertex $startVertex, Vertex $destinationVertex){
+        if($startVertex->getGraph() !== $destinationVertex->getGraph()){
+            throw new Exception('Start and target vertex have to be in the same graph instance');
+        }
         $this->startVertex = $startVertex;
         $this->destinationVertex = $destinationVertex;
         $this->graph = $startVertex->getGraph();
