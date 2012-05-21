@@ -341,6 +341,40 @@ class Graph implements Countable{
 	}
 	
 	/**
+	 * checks whether this graph is symmetric (for every edge a->b there's also an edge b->a)
+	 * 
+	 * @return boolean
+	 * @uses EdgeDirected::getVertexStart()
+	 * @uses EdgeDirected::getVertedEnd()
+	 * @uses Vertex::hasEdgeTo()
+	 */
+	public function isSymmetric(){
+	    foreach($this->edges as $edge){ // check all edges
+	        if($edge instanceof EdgeDirected){ // only check directed edges (undirected ones are symmetric by definition)
+	            if(!$edge->getVertexEnd()->hasEdgeTo($edge->getVertexStart())){ // check if end also has an edge to start
+	                return false;
+	            }
+	        }
+	    }
+	    return true;
+	}
+	
+	/**
+	 * checks whether this graph has any parallel edges (aka multigraph)
+	 * 
+	 * @return boolean
+	 * @uses Edge::hasEdgeParallel() for every edge
+	 */
+	public function hasEdgeParallel(){
+	    foreach($this->edges as $edge){
+	        if($edge->hasEdgeParallel()){
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	/**
 	 * checks whether this graph is empty (no vertex - and thus no edges, aka null graph)
 	 * 
 	 * @return boolean
