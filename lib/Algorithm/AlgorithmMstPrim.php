@@ -102,15 +102,4 @@ class AlgorithmMstPrim extends AlgorithmMst{
 		}
 		return $returnEdges;
 	}
-	
-	/**
-	 * create new resulting graph with only edges on minimum spanning tree
-	 *
-	 * @return Graph
-	 * @uses AlgorithmMstPrim::getEdges()
-	 * @uses Graph::createGraphCloneEdges()
-	 */
-	public function getResultGraph(){
-	    return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());				//Copy Graph
-	}
 }

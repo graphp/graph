@@ -10,9 +10,9 @@ class AlgorithmMstKruskal extends AlgorithmMst{
 	private $debugMode = false;
 	/**
 	 *
-	 * @return Graph
+	 * @return array[Edge]
 	 */
-	public function getResultGraph(){
+	public function getEdges(){
 		//Sortiere Kanten im Graphen
 		
 	    $sortedEdges = new SplPriorityQueue();
@@ -36,7 +36,7 @@ class AlgorithmMstKruskal extends AlgorithmMst{
 	    
 	    //$sortedEdges = $this->graph->getEdgesOrdered('weight');
 		
-		$newGraph = $this->graph->createGraphCloneEdgeless();
+		$returnEdges = array();
 		
 		$colorNext = 0;    // next color to assign
 		$colorVertices = array(); // array(color1=>array(vid1,vid2,...),color2=>...)
@@ -65,7 +65,7 @@ class AlgorithmMstKruskal extends AlgorithmMst{
 				
 				++$colorNext;
 				
-				$newGraph->createEdgeClone($edge);                              // connect both vertices
+				$returnEdges []= $edge;                                         // connect both vertices
 			}
 			//4. start xor end gehören zu einem graphen
 				//=> erweitere diesesn Graphen
@@ -73,13 +73,13 @@ class AlgorithmMstKruskal extends AlgorithmMst{
 				$colorOfVertices[$aId] = $bColor;                               // paint a in b's color
 				$colorVertices[$bColor][]=$aId;
 				
-				$newGraph->createEdgeClone($edge);
+				$returnEdges []= $edge;
 			}
 			else if ($aColor !== NULL && $bColor === NULL){						//Only a has color
 				$colorOfVertices[$bId] = $aColor;                               // paint b in a's color
 				$colorVertices[$aColor][]=$bId;
 				
-				$newGraph->createEdgeClone($edge);
+				$returnEdges []= $edge;
 			}
 			//3. start und end gehören zu unterschiedlichen graphen
 				//=> vereinigung
@@ -98,7 +98,7 @@ class AlgorithmMstKruskal extends AlgorithmMst{
 				}
 				unset($colorVertices[$worseColor]);                             // delete old color
 			    
-			    $newGraph->createEdgeClone($edge);
+			    $returnEdges []= $edge;
 			}
 			//2. start und end gehören zum gleichen graphen => zirkel
 			//=> nichts machen
@@ -106,10 +106,10 @@ class AlgorithmMstKruskal extends AlgorithmMst{
 		
 		// definition of spanning tree: number of edges = number of vertices - 1
 		// above algorithm does not check isolated edges or may otherwise return multiple connected components => force check
-		if ($newGraph->getNumberOfEdges() !== ( $newGraph->getNumberOfVertices() - 1 ) ){
+		if (count($returnEdges) !== ( $this->graph->getNumberOfVertices() - 1 ) ){
 			throw new Exception('Graph is not connected');
 		}
 		
-		return $newGraph;
+		return $returnEdges;
 	}
 }
