@@ -46,6 +46,24 @@ class EdgeDirected extends Edge{
 	    return array($this->from,$this->to);
 	}
 	
+	/**
+	 * get end/target vertex
+	 * 
+	 * @return Vertex
+	 */
+	public function getVertexEnd(){
+	    return $this->to;
+	}
+	
+	/**
+	 * get start vertex
+	 * 
+	 * @return Vertex
+	 */
+	public function getVertexStart(){
+	    return $this->from;
+	}
+	
 	public function toString(){
 		return $this->from->getId()." -> ".$this->to->getId()." Weight: ".$this->weight;
 	}
