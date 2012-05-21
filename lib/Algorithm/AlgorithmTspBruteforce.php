@@ -137,13 +137,8 @@ class AlgorithmTspBruteforce extends AlgorithmTsp{
         
         $bestResult = NULL;
         
-        foreach($vertex->getEdges() as $edge){                                  // weiter verzweigen in alle vertices
-            try{
-                $target = $edge->getVertexToFrom($vertex);                      // get target vertex of this edge
-            }
-            catch(Exception $ignore){                                           // ignore checking directed edges from wrong side
-                continue;
-            }
+        foreach($vertex->getOutgoingEdges() as $edge){                          // weiter verzweigen in alle vertices
+            $target = $edge->getVertexToFrom($vertex);                          // get target vertex of this edge
             
             $weight = $edge->getWeight();
             if($weight < 0){
