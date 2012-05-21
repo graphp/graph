@@ -262,10 +262,17 @@ abstract class Edge extends Layoutable{
 	    return $ret;
 	}
 	
-	private function getGraph(){
+	/**
+	 * get graph instance this edge is attached to
+	 * 
+	 * @return Graph
+	 * @throws Exception
+	 */
+	public function getGraph(){
 	    foreach($this->getVertices() as $vertex){
 	        return $vertex->getGraph();
 	    }
+	    throw new Exception('Internal error: should not be reached');
 	}
 	
 	/**
