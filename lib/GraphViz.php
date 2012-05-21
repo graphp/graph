@@ -1,6 +1,10 @@
 <?php
 
 class GraphViz{
+    /**
+     * 
+     * @var Graph
+     */
     private $graph;
     
     /**
@@ -14,8 +18,6 @@ class GraphViz{
     private $layoutGraph = array();
     private $layoutVertex = array();
     private $layoutEdge = array();
-    
-    private $meta = array();
     
     const EOL = PHP_EOL;
     

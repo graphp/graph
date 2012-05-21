@@ -8,8 +8,7 @@ class AlgorithmMstPrim extends AlgorithmMst{
 	public function __construct(Vertex $startVertex){
 		$this->startVertex = $startVertex;
 	}
-
-	private $debugMode = false;
+	
 	/**
 	 *
 	 * @return array[Edge]
@@ -18,20 +17,12 @@ class AlgorithmMstPrim extends AlgorithmMst{
 		$edgeQueue = new SplPriorityQueue();
 		
 		$startVertexId = $this->startVertex->getId();							// set start vertex id
-
-		//debug output?
-		if($this->debugMode){
-			print "Init start vertex: ".$startVertexId."\n";
-		}
 		
 		// Initialize algorithm 
 		
 		$markInserted = array($startVertexId => true);			    // Color starting vertex
 					
 		foreach ($this->startVertex->getEdges() as $currentEdge) {				// Add all edges from startvertex
-			if($this->debugMode){
-				print "\t Init adding Edge: ".$currentEdge->toString()."\n";	
-			}
 			$edgeQueue->insert($currentEdge, -$currentEdge->getWeight());		// Add edges to priority queue with inverted weights (priority queue has high values at the front)
 		}
 		// END Initialize algorithm
@@ -50,10 +41,6 @@ class AlgorithmMstPrim extends AlgorithmMst{
 			// BEGIN Check if edge is is: [visiteted]->[unvisited]
 			$cheapestEdgeIsOk = false;											// 
 			while($cheapestEdgeIsOk == false) {
-				if($this->debugMode){
-					print "\t Checking: ".$cheapestEdge->toString()."\n";
-				}
-					
 				foreach ($cheapestEdge->getTargetVertices() as $currentTarget){	// run over both vertices
 
 					$cheapestEdgeIsOkOld = $cheapestEdgeIsOk;					
@@ -72,9 +59,6 @@ class AlgorithmMstPrim extends AlgorithmMst{
 
 			
 			// BEGIN Cheapest Edge found, add new vertex and edge to returnGraph
-			if($this->debugMode){
-				print "\t\t Choosed cheapest edge: ".$cheapestEdge->toString()."\n";
-			}
 			
 			$markInserted[$newTargetVertex->getId()] = true;
 				
@@ -82,24 +66,14 @@ class AlgorithmMstPrim extends AlgorithmMst{
 
 			// BEGIN get unvisited vertex of the edge and add edges from new vertex
 			if($newTargetVertex->getId() != $startVertexId){
-				if($this->debugMode){
-					print "Adding Vertex with ID:".$newTargetVertex->getId()."\n";
-				}
 						
 				foreach ($newTargetVertex->getEdges() as $currentEdge) {		// Add all edges from $currentVertex to priority queue
-					if($this->debugMode){
-						print "\t Adding Edge: ".$currentEdge->toString()."\n";
-					}
 					$edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
 				}
 			}
 			// END get unvisited vertex of the edge and add edges from new vertex
 		}
 		// END algorithm
-
-		if($this->debugMode){
-		    print "done".PHP_EOL;
-		}
 		return $returnEdges;
 	}
 }

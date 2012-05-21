@@ -12,7 +12,7 @@ class AlgorithmConnectedComponents extends Algorithm{
 	 * 
 	 * @param Graph $graph
 	 */
-	public function __construct($graph){
+	public function __construct(Graph $graph){
 		$this->graph = $graph;
 	}
 	

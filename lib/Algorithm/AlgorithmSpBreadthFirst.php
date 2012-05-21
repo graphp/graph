@@ -8,9 +8,13 @@ class AlgorithmSpBreadthFirst extends AlgorithmSp{
      */
     private $vertex;
     
+    /**
+     * 
+     * @var boolean
+     */
     private $inverse;
     
-    public function __construct($startVertex,$inverse=false){
+    public function __construct(Vertex $startVertex,$inverse=false){
         $this->vertex = $startVertex;
         $this->inverse = $inverse;
     }

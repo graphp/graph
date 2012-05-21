@@ -49,7 +49,7 @@ class AlgorithmTspBruteforce extends AlgorithmTsp{
      * 
      * @param Graph $graph
      */
-    public function __construct($graph){
+    public function __construct(Graph $graph){
         $this->graph = $graph;
     }
     

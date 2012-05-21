@@ -1,7 +1,13 @@
 <?php
 
 class AlgorithmEulerian extends Algorithm{
-    public function __construct($graph){
+    /**
+     * 
+     * @var Graph
+     */
+    private $graph;
+    
+    public function __construct(Graph $graph){
         $this->graph = $graph;
     }
     

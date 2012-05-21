@@ -1,13 +1,16 @@
 <?php
 class AlgorithmMstKruskal extends AlgorithmMst{
 	
+    /**
+     * 
+     * @var Graph
+     */
 	private $graph;
 	
 	public function __construct(Graph $inputGraph){
  		$this->graph = $inputGraph;
 	}
-
-	private $debugMode = false;
+	
 	/**
 	 *
 	 * @return array[Edge]

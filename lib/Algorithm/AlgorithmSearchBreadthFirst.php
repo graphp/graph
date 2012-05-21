@@ -1,6 +1,12 @@
 <?php
 
 class AlgorithmSearchBreadthFirst extends Algorithm{
+    /**
+     * 
+     * @var Vertex
+     */
+    private $startVertex;
+    
     public function __construct(Vertex $startVertex){
         $this->vertex = $startVertex;
     }
