@@ -1,6 +1,6 @@
 <?php
 
-class Graph implements Countable{
+class Graph extends Layoutable implements Countable{
     /**
      * array of all edges in this graph
      * 

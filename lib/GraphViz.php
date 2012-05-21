@@ -15,7 +15,6 @@ class GraphViz{
      */
     private $format = 'png';
     
-    private $layoutGraph = array();
     private $layoutVertex = array();
     private $layoutEdge = array();
     
@@ -100,12 +99,12 @@ class GraphViz{
 		}
 		foreach($where as $where){
 			if($where === self::LAYOUT_GRAPH){
-				$this->mergeLayout($this->layoutGraph,$layout);
+				$this->graph->setLayout($name,$value);
 			}else if($where === self::LAYOUT_EDGE){
 				$this->mergeLayout($this->layoutEdge,$layout);
 			}else if($where === self::LAYOUT_VERTEX){
 				$this->mergeLayout($this->layoutVertex,$layout);
-			}else if($where instanceof Edge || $where instanceof Vertex){
+			}else if($where instanceof Layoutable){
 			    $where->setLayout($name,$value);
 			}else{
 				throw new Exception('Invalid layout identifier');
@@ -225,8 +224,9 @@ class GraphViz{
 		$script = ($directed ? 'di':'') . 'graph G {'.self::EOL;
 		
 		// add global attributes
-		if($this->layoutGraph){
-			$script .= '  graph ' . $this->escapeAttributes($this->layoutGraph) . self::EOL;
+		$layout = $this->graph->getLayout();
+		if($layout){
+			$script .= '  graph ' . $this->escapeAttributes($lalyout) . self::EOL;
 		}
 		if($this->layoutVertex){
 			$script .= '  node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
