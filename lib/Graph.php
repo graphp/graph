@@ -18,7 +18,7 @@ class Graph implements Countable{
 	/**
 	 * create a new Vertex in the Graph
 	 * 
-	 * @param int|NULL $vertex          instance of Vertex or new vertex ID to use
+	 * @param int|NULL $id              new vertex ID to use (defaults to NULL: use next free numeric ID)
 	 * @param boolean  $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
 	 * @return Vertex (chainable)
 	 * @throws Exception if given vertex $id is invalid or already exists
@@ -44,7 +44,7 @@ class Graph implements Countable{
 	/**
 	 * create a new Vertex in this Graph from the given input Vertex of another graph
 	 * 
-	 * @param Vertex $vertex
+	 * @param Vertex $originalVertex
 	 * @return Vertex new vertex in this graph
 	 * @throws Exception
 	 */
@@ -80,7 +80,7 @@ class Graph implements Countable{
 	/**
 	 * create new clone/copy of this graph - copy all attributes and vertices. but only copy all given edges
 	 *
-	 * @param array[Edge] $edge array of edges to be cloned
+	 * @param array[Edge] $edges array of edges to be cloned
 	 * @return Graph
 	 * @uses Graph::createGraphCloneEdgeless()
 	 * @uses Graph::createEdgeClone() for each edge to be cloned
@@ -503,7 +503,7 @@ class Graph implements Countable{
 	 * @param Edge $edge instance of the new Edge
 	 * @return void
 	 * @private
-	 * @see Vertex::createEdge()
+	 * @see Vertex::createEdge() instead!
 	 */
 	public function addEdge($edge){
 	    $this->edges []= $edge;
@@ -529,6 +529,7 @@ class Graph implements Countable{
 	 * remove the given vertex from list of known vertices (MUST NOT be called manually!)
 	 *
 	 * @param Vertex $vertex
+	 * @return void
 	 * @private
 	 * @see Vertex::destroy() instead!
 	 */
@@ -544,7 +545,6 @@ class Graph implements Countable{
 	 * returns an array of ALL Edges in this graph
 	 *
 	 * @return array[Edge]
-	 * @private
 	 */
 	public function getEdges(){
 	    return $this->edges;
@@ -552,6 +552,7 @@ class Graph implements Countable{
 	
 	/**
 	 * @return int number of components of this graph
+	 * @uses AlgorithmConnectedComponents::getNumberOfComponents()
 	 */
 	public function getNumberOfComponents(){
 		$alg = new AlgorithmConnectedComponents($this);
@@ -559,9 +560,10 @@ class Graph implements Countable{
 	}
 	
 	/**
-	 * do NOT allow cloning of objects
+	 * do NOT allow cloning of objects (MUST NOT be called!)
 	 *
 	 * @throws Exception
+	 * @see Graph::createGraphClone() instead
 	 */
 	private function __clone(){
 	    throw new Exception();
