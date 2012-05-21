@@ -1,42 +1,31 @@
 <?php
 class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
-	/**
-	 * 
-	 * 
-	 * @param Edge $edge
-	 * @param Vertex $fromVertex
-	 * @param Vertex $toVertex
-	 * @param array[int] $totalCostOfCheapestPathTo
-	 * @param array[Vertex] $predecessorVertexOfCheapestPathTo
-	 * 
-	 * @return boolean
-	 */
-	private function doStep(& $edge, & $fromVertex, & $toVertex, & $totalCostOfCheapestPathTo, & $predecessorVertexOfCheapestPathTo){
-		$isCheaper = false;
-		
-		if (isset($totalCostOfCheapestPathTo[$fromVertex->getId()])){			//If the fromVertex already has a path
-			$newCost = $totalCostOfCheapestPathTo[$fromVertex->getId()] + $edge->getWeight(); //New possible costs of this path
 	
-			if (! isset($totalCostOfCheapestPathTo[$toVertex->getId()])				//No path has been found yet
-					|| $totalCostOfCheapestPathTo[$toVertex->getId()] > $newCost){		//OR this path is cheaper than the old path
-	
-				$isCheaper = true;
-				$totalCostOfCheapestPathTo[$toVertex->getId()] = $newCost;
-				$predecessorVertexOfCheapestPathTo[$toVertex->getId()] = $fromVertex;
-			}
-		}
-		
-		return $isCheaper;
-	}
-	
+    /**
+     *
+     *
+     * @param array[Edge]   $edges
+     * @param array[int]    $totalCostOfCheapestPathTo
+     * @param array[Vertex] $predecessorVertexOfCheapestPathTo
+     *
+     * @return boolean
+     */
 	private function bigStep(&$edges,&$totalCostOfCheapestPathTo,&$predecessorVertexOfCheapestPathTo){
 		$changed = false;
 		foreach ($edges as $edge){												//check for all edges
 			foreach($edge->getTargetVertices() as $toVertex){						//check for all "ends" of this edge (or for all targetes)
 				$fromVertex = $edge->getVertexFromTo($toVertex);
-	
-				if($this->doStep($edge, $fromVertex, $toVertex, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)){	//do normal step
-					$changed = true;
+				
+				if (isset($totalCostOfCheapestPathTo[$fromVertex->getId()])){			//If the fromVertex already has a path
+					$newCost = $totalCostOfCheapestPathTo[$fromVertex->getId()] + $edge->getWeight(); //New possible costs of this path
+				
+					if (! isset($totalCostOfCheapestPathTo[$toVertex->getId()])				//No path has been found yet
+							|| $totalCostOfCheapestPathTo[$toVertex->getId()] > $newCost){		//OR this path is cheaper than the old path
+				        
+						$changed = true;
+						$totalCostOfCheapestPathTo[$toVertex->getId()] = $newCost;
+						$predecessorVertexOfCheapestPathTo[$toVertex->getId()] = $fromVertex;
+					}
 				}
 			}
 		}
