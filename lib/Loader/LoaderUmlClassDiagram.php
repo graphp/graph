@@ -3,6 +3,7 @@
 /**
  * 
  * @author clue
+ * @link http://www.johndeacon.net/UML/UML_Appendix/Generated/UML_Appendix.asp
  * @link http://www.ffnn.nl/pages/articles/media/uml-diagrams-using-graphviz-dot.php
  * @link http://www.holub.com/goodies/uml/
  */
@@ -215,7 +216,14 @@ class LoaderUmlClassDiagram extends Loader{
     }
     
     private function getParameterType(ReflectionParameter $parameter){
-    	$class = $parameter->getClass();
+    	$class = NULL;
+    	try{
+            $class = $parameter->getClass(); // get class hint for parameter
+    	}
+    	catch(Exception $ignore){ // will fail if specified class does not exist
+    	    return '«invalidClass»';
+    	}
+    	
     	if($class !== NULL){
     		return $class->getName();
     	}
