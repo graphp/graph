@@ -31,11 +31,19 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         $this->graph = $startVertex->getGraph();
         $this->workingGraph = $this->graph->createGraphClone();
     }
-
-    private function start(){
-         
+    
+    /**
+     * returns max flow graph
+     *
+     * @return Graph
+     */
+    public function getResultGraph(){
+        $currentGraph = $this->workingGraph;
         
-        $currentGraph = $this->mergeParallelEdges($this->workingGraph);         // remove parallel edges
+        if($currentGraph->hasEdgeParallel()){
+        	throw new Exception('Parallel edges ');
+        }
+        
         do{
             $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get Shortes path if NULL-> Done
              
@@ -101,12 +109,6 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
        }
         echo "Max Flow is: ".$maxFlow."\n";
         return $resultGraph;
-    }
-    
-    private function mergeParallelEdges($currentGraph){
-        //TODO 1. find and merge parallel edges
-        // alg works only without prarallel edges
-        return $currentGraph;
     }
     
     /**
@@ -196,15 +198,5 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
             }
         }
         return $currentGraph;
-    }
-    
-    /**
-     * returns max flow graph
-     *
-     * @return Graph
-     */
-    public function getResultGraph(){
-
-        return $this->start();
     }
 }
