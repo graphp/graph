@@ -171,10 +171,33 @@ class LoaderUmlClassDiagram extends Loader{
         return $this->graph;
     }
     
-    private function getType($type){
-    	return $type;
+    private function getType($ret){
+        if($ret === NULL){
+            return NULL;
+        }
+        if(preg_match('/^array\[(\w+)\]$/',$ret,$match)){
+        	return $this->getType($match[1]).'[]';
+        }
+        if(!preg_match('/^\w+$/',$ret)){
+        	return 'mixed';
+        }
+        if($ret === 'integer'){
+            $ret = 'int';
+        }else if($ret === 'double'){
+            $ret = 'float';
+        }else if($ret === 'boolean'){
+            return 'bool';
+        }
+        return $ret;
     }
     
+    /**
+     * get given value casted to string (and escaped in double quotes it needed)
+     * 
+     * @param mixed $value
+     * @return string
+     * @uses LoaderUmlClassDiagram::escape()
+     */
     private function getCasted($value){
         if($value === NULL){
         	return 'NULL';
@@ -183,13 +206,15 @@ class LoaderUmlClassDiagram extends Loader{
         }else if(is_bool($value)){
         	return $value ? 'true' : 'false';
         }else if(is_int($value) || is_float($value)){
-        	return $value;
+        	return (string)$value;
         }else if(is_array($value)){
             if($value === array()){
                 return '[]';
             }else{
                 return '[…]';
             }
+        }else if(is_object($var)){
+            return get_class($var).'{…}';
         }
         return '…';
     }
