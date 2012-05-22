@@ -12,6 +12,7 @@ class LoaderUmlClassDiagram extends Loader{
     private $options = array(
 		'only-self'   => true, // whether to only show methods/properties that are actually defined in this class (and not those merely inherited from base)
 		'only-public' => false, // whether to only show public methods/properties (or also include private/protected ones)
+        'show-constants' => true, // whether to show class constants as readonly static variables (or just omit them completely)
     );
     
     public function __construct(){
@@ -72,6 +73,14 @@ class LoaderUmlClassDiagram extends Loader{
         }
         
         $label .= $this->escape($class).'|';
+        
+        if($this->options['show-constants']){
+        	foreach($reflection->getConstants() as $name=>$value){
+        		if($this->options['only-self'] && $parent && $parent->getConstant($name) === $value) continue;
+        
+        		$label .= '+ «static» '.self::escape($name).' : '.$this->escape($this->getType(gettype($value))).' = '.$this->getCasted($value).' \\{readOnly\\}\\l';
+        	}
+        }
         
         $defaults = $reflection->getDefaultProperties();
         foreach($reflection->getProperties() as $property){
@@ -160,6 +169,10 @@ class LoaderUmlClassDiagram extends Loader{
     
     public function getGraph(){
         return $this->graph;
+    }
+    
+    private function getType($type){
+    	return $type;
     }
     
     private function getCasted($value){
