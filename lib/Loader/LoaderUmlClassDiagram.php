@@ -94,9 +94,9 @@ class LoaderUmlClassDiagram extends Loader{
             }
             $label .= ' ' . $this->escape($property->getName());
             
-            $type = NULL; // TODO: parse docblock for parameter type
+            $type = $this->getDocBlockVar($property);
             if($type !== NULL){
-            	$label .= ' : '.$type;
+            	$label .= ' : '.$this->escape($type);
             }
             
             if(isset($defaults[$property->getName()])){ // only show non-NULL values
@@ -136,9 +136,9 @@ class LoaderUmlClassDiagram extends Loader{
                 
                 $label .= $this->escape($parameter->getName());
                 
-                $type = NULL; // TODO: parse docblock for parameter type
+                $type = $this->getParameterType($parameter);
                 if($type !== NULL){
-                    $label .= ' : '.$type;
+                    $label .= ' : '.$this->escape($type);
                 }
                 
                 if($parameter->isOptional()){
@@ -152,9 +152,9 @@ class LoaderUmlClassDiagram extends Loader{
             }
             $label .= ')';
             
-            $type = NULL; // TODO: parse docblock for return value
+            $type = $this->getDocBlockReturn($method);
             if($type !== NULL){
-                $label .= ' : '.$type;
+                $label .= ' : '.$this->escape($type);
             }
             
             $label .= '\\l'; // align this line to the left
@@ -169,6 +169,60 @@ class LoaderUmlClassDiagram extends Loader{
     
     public function getGraph(){
         return $this->graph;
+    }
+    
+    private function getDocBlock($ref){
+    	$doc = $ref->getDocComment();
+    	if($doc !== false){
+    		return trim(preg_replace('/(^(?:\h*\*)\h*|\h+$)/m','',substr($doc,3,-2)));
+    	}
+    	return NULL;
+    }
+    
+    private function getDocBlockVar($ref){
+    	return $this->getType($this->getDocBlockSingle($ref,'var'));
+    }
+    
+    private function getDocBlockReturn($ref){
+    	return $this->getType($this->getDocBlockSingle($ref,'return'));
+    }
+    
+    private function getParameterType(ReflectionParameter $parameter){
+    	$class = $parameter->getClass();
+    	if($class !== NULL){
+    		return $class->getName();
+    	}
+    
+    	$pos = $parameter->getPosition();
+    	$refFn = $parameter->getDeclaringFunction();
+    	$params = $this->getDocBlockMulti($refFn,'param');
+    	if(count($params) === $refFn->getNumberOfParameters()){
+    		return $this->getType($params[$pos]);
+    	}
+    	return NULL;
+    }
+    
+    private function getDocBlockMulti($ref,$what){
+    	$doc = $this->getDocBlock($ref);
+    	if($doc === NULL){
+    		//return 'nah';
+    		return NULL;
+    	}
+    	preg_match_all('/^@'.$what.' ([^\s]+)/m',$doc,$matches,PREG_SET_ORDER);
+    	$ret = array();
+    	foreach($matches as $match){
+    		$ret []= trim($match[1]);
+    	}
+    	return $ret;
+    }
+    
+    private function getDocBlockSingle($ref,$what){
+    	$multi = $this->getDocBlockMulti($ref, $what);
+    	if(count($multi) !== 1){
+    		//return json_encode($matches);
+    		return NULL;
+    	}
+    	return $multi[0];
     }
     
     private function getType($ret){
