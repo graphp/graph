@@ -134,6 +134,10 @@ class LoaderUmlClassDiagram extends Loader{
                     $label .= ', ';
                 }
                 
+                if($parameter->isPassedByReference()){
+                	$label .= 'inout ';
+                }
+                
                 $label .= $this->escape($parameter->getName());
                 
                 $type = $this->getParameterType($parameter);
