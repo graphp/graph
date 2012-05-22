@@ -36,13 +36,23 @@ abstract class Layoutable {
     /**
      * set layout option
      * 
-     * @param string $name
-     * @param mixed  $value
+     * @param string|array $name
+     * @param mixed        $value
      * @return Layoutable|Graph|Vertex|Edge $this (chainable)
      * @uses GraphViz::escape()
      * @uses Layoutable::setLayoutRaw()
      */
-    public function setLayout($name,$value){
-    	return $this->setLayoutRaw($name,GraphViz::escape($value));
+    public function setLayout($name,$value=NULL){
+        if($name === NULL){
+            $this->layout = array();
+            return $this;
+        }
+        if(!is_array($name)){
+            $name = array($name,$value);
+        }
+        foreach($name as $key=>$value){
+            $this->setLayoutRaw($key,GraphViz::escape($value));
+        }
+    	return $this;
     }
 }

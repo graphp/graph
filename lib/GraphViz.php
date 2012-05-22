@@ -99,7 +99,7 @@ class GraphViz{
 		}
 		foreach($where as $where){
 			if($where === self::LAYOUT_GRAPH){
-				$this->graph->setLayout($name,$value);
+				$this->graph->setLayout($layout,$value);
 			}else if($where === self::LAYOUT_EDGE){
 				$this->mergeLayout($this->layoutEdge,$layout);
 			}else if($where === self::LAYOUT_VERTEX){
