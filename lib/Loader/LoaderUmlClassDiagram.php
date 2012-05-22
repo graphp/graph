@@ -167,6 +167,29 @@ class LoaderUmlClassDiagram extends Loader{
         return $vertex;
     }
     
+    /**
+     * create new uml note (attached to given class vertex)
+     * 
+     * @param string      $note
+     * @param Vertex|NULL $for
+     * @return LoaderUmlClassDiagram $this (chainable)
+     */
+    public function createVertexNote($note,$for=NULL){
+    	$vertex = $this->graph->createVertex()->setLayout('label',$note."\n")
+                                        	  ->setLayout('shape','note')
+                                          	  ->setLayout('fontsize',8)
+                                        	  //->setLayout('margin','0 0')
+                                        	  ->setLayout('style','filled')
+                                        	  ->setLayout('fillcolor','yellow');
+    
+    	if($for !== NULL){
+    		$vertex->createEdgeTo($for)->setLayout('len',1)
+    		->setLayout('style','dashed')
+    		->setLayout('arrowhead','none');
+    	}
+    	return $vertex;
+    }
+    
     public function getGraph(){
         return $this->graph;
     }
