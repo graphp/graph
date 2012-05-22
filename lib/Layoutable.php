@@ -48,7 +48,7 @@ abstract class Layoutable {
             return $this;
         }
         if(!is_array($name)){
-            $name = array($name,$value);
+            $name = array($name=>$value);
         }
         foreach($name as $key=>$value){
             $this->setLayoutRaw($key,GraphViz::escape($value));
