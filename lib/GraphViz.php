@@ -226,7 +226,7 @@ class GraphViz{
 		// add global attributes
 		$layout = $this->graph->getLayout();
 		if($layout){
-			$script .= '  graph ' . $this->escapeAttributes($lalyout) . self::EOL;
+			$script .= '  graph ' . $this->escapeAttributes($layout) . self::EOL;
 		}
 		if($this->layoutVertex){
 			$script .= '  node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
