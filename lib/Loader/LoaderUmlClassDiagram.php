@@ -8,8 +8,22 @@
  */
 class LoaderUmlClassDiagram extends Loader{
     private $graph;
+    
+    private $options = array(
+		'only-self'   => true, // whether to only show methods/properties that are actually defined in this class (and not those merely inherited from base)
+		'only-public' => false, // whether to only show public methods/properties (or also include private/protected ones)
+    );
+    
     public function __construct(){
         $this->graph = new Graph();
+    }
+    
+    public function setOption($name,$flag){
+    	if(!isset($this->options[$name])){
+    		throw new Exception('Invalid option name "'.$name.'"');
+    	}
+    	$this->options[$name] = !!$flag;
+    	return $this;
     }
     
     public function hasClass($class){
@@ -61,7 +75,9 @@ class LoaderUmlClassDiagram extends Loader{
         
         $defaults = $reflection->getDefaultProperties();
         foreach($reflection->getProperties() as $property){
-            if($property->getDeclaringClass()->getName() !== $class) continue;
+            if($this->options['only-self'] && $property->getDeclaringClass()->getName() !== $class) continue;
+            
+            if($this->options['only-public'] && !$property->isPublic()) continue;
             
             $label .= $this->visibility($property);
             if($property->isStatic()){
@@ -84,7 +100,9 @@ class LoaderUmlClassDiagram extends Loader{
         $label .= '|';
         
         foreach($reflection->getMethods() as $method){
-            if($method->getDeclaringClass()->getName() !== $class) continue; // method not defined in this class (inherited from parent), so skip
+            if($this->options['only-self'] && $method->getDeclaringClass()->getName() !== $class) continue; // method not defined in this class (inherited from parent), so skip
+            
+            if($this->options['only-public'] && !$method->isPublic()) continue;
             
 //             $ref = preg_replace('/[^a-z0-9]/i','',$method->getName());
 //             $label .= '<"'.$ref.'">';
