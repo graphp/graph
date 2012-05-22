@@ -563,28 +563,6 @@ class Vertex extends Layoutable{
 	}
 	
 	/**
-	 * Breadth-first search (BFS)
-	 *
-	 * @return array[Vertex]
-	 * @uses AlgorithmSearchBreadthFirst::getVertices()
-	 */
-	public function searchBreadthFirst(){
-	    $alg = new AlgorithmSearchBreadthFirst($this);
-	    return $alg->getVertices();
-	}
-	
-	/**
-	 * Depth-first search (recursive DFS)
-	 * 
-	 * @return array[Vertex]
-	 * @uses AlgorithmSearchDepthFirst::getVertices()
-	 */
-	public function searchDepthFirst(){
-		$alg = new AlgorithmSearchDepthFirst($this);
-		return $alg->getVertices();
-	}
-	
-	/**
 	 * destroy vertex and all edges connected to it and remove reference from graph
 	 *
 	 * @uses Edge::destroy()

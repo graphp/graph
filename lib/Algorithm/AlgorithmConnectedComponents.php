@@ -31,7 +31,7 @@ class AlgorithmConnectedComponents extends Algorithm{
 	/**
 	 * @return int number of components
 	 * @uses Graph::getVertices()
-	 * @uses Vertex::searchDepthFirst()
+	 * @uses AlgorithmSearchDepthFirst::getVertices()
 	 */
 	public function getNumberOfComponents(){
 		$visitedVertices = array();
@@ -40,7 +40,8 @@ class AlgorithmConnectedComponents extends Algorithm{
 		foreach ($this->graph->getVertices() as $vertex){						//for each vertices
 			if ( ! isset( $visitedVertices[$vertex->getId()] ) ){					//did I visit this vertex before?
 				
-				$newVertices = $vertex->searchDepthFirst();							//get all vertices of this component
+			    $alg = new AlgorithmSearchDepthFirst($vertex);
+				$newVertices = $alg->getVertices();							        //get all vertices of this component
 				
 				$components++;
 				
