@@ -44,8 +44,6 @@ class AlgorithmSearchBreadthFirst extends Algorithm{
      * @return Graph with lowest vertex count between start and destination OR NUll if no path exists
      */
     public function getGraphPathTo($destinationVertex){
-        $originGraph=$this->vertex->getGraph();
-
         $queue = array($this->vertex);                                          //Start vertex
         $mark = array($this->vertex->getId() => true);							//to not add vertices twice in array visited
          
@@ -79,34 +77,32 @@ class AlgorithmSearchBreadthFirst extends Algorithm{
 
         } while($queue);															//untill queue is empty
          
-        if($pathToDestinationVertexFound){
-
-            //remove not used edges
-            $destinationVertexInNewGraph = $deepSearchThree->getVertex($destinationVertex->getId());
-             
-             
-            // create path
-            $path = new Graph();
-            $path->createVertexClone($destinationVertex);                 //add clone of destination vertex to path
-            $currentVertex=$destinationVertexInNewGraph;
-
-            //run over the tree
-            do{                                                                     // run from the buttom to top to the tree and add the predecessor until the startvertex is reached
-                $edge=$currentVertex->getIngoingEdges();                            // can only one because of the deepsearch tree
-
-                $upperVertex=$edge[0]->getVertexFromTo($currentVertex);
-                $path->createVertexClone($upperVertex);                             // clone upper vertex to graph
-                $path->createEdgeClone($edge[0]);                                   // clone connecting edge
-                 
-                $currentVertex=$upperVertex;
-
-            } while($currentVertex->getId()!==$this->vertex->getId());
-
-            return $path;
-
-        } else {
+        if(!$pathToDestinationVertexFound){
             return NULL;
         }
+
+        //remove not used edges
+        $destinationVertexInNewGraph = $deepSearchThree->getVertex($destinationVertex->getId());
+         
+         
+        // create path
+        $path = new Graph();
+        $path->createVertexClone($destinationVertex);                 //add clone of destination vertex to path
+        $currentVertex=$destinationVertexInNewGraph;
+
+        //run over the tree
+        do{                                                                     // run from the buttom to top to the tree and add the predecessor until the startvertex is reached
+            $edge=$currentVertex->getIngoingEdges();                            // can only one because of the deepsearch tree
+
+            $upperVertex=$edge[0]->getVertexFromTo($currentVertex);
+            $path->createVertexClone($upperVertex);                             // clone upper vertex to graph
+            $path->createEdgeClone($edge[0]);                                   // clone connecting edge
+             
+            $currentVertex=$upperVertex;
+
+        } while($currentVertex->getId()!==$this->vertex->getId());
+        
+        return $path;
     }
 
     public function getVerticesIds(){
