@@ -20,9 +20,12 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
     /**
      *
      * @param Vertex $startVertex the vertex where the flow search starts
-     * @param Vertex $destinationVertex the vertex where the flow search ends the destination
+     * @param Vertex $destinationVertex the vertex where the flow search ends (destination)
      */
     public function __construct(Vertex $startVertex, Vertex $destinationVertex){
+        if($startVertex === $destinationVertex){
+            throw new Exception('Start and destination must not be the same vertex');
+        }
         if($startVertex->getGraph() !== $destinationVertex->getGraph()){
             throw new Exception('Start and target vertex have to be in the same graph instance');
         }
@@ -40,7 +43,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         $currentGraph = $this->graph->createGraphClone();
         
         do{
-            $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get Shortes path if NULL-> Done
+            $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get Shortest path if NULL-> Done
              
             if($pathFlow){
                  $currentGraph = $this->getResidualGraph($currentGraph, $pathFlow);
@@ -71,7 +74,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         $originalGraphEdgesArray=$this->graph->getEdges();
         foreach ($originalGraphEdgesArray as $edge){
             //For each edge of the residual graph, which goes in the opposite way
-            //than the original edge, insert the edge reverted residual edge in the new graph
+            //than the original edge, insert the edge reverted (residual edge) in the new graph
             
             $edge = $this->getEdgeCloned($edge,$residualGraph,true);
             
@@ -84,7 +87,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
                 $newFlowEdge->setWeight(0);
             }
             
-            //if not existing remove the edge
+            //if not existing => remove the edge
             
         }
         return $resultGraph;
@@ -101,7 +104,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         
         $startVertex = $currentGraph->getVertex($this->startVertex->getId());
         
-        // 1. Search shortest path from s -> t
+        // 1. Search _shortest_ (number of hops and cheapest) path from s -> t
         $breadthSearchAlg = new AlgorithmSearchBreadthFirst($startVertex);
         $path = $breadthSearchAlg->getGraphPathTo($currentGraph->getVertex($this->destinationVertex->getId()));
         
@@ -127,11 +130,11 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 
     /**
      * Returns creates from the currentgraph an a path a residual graph
-     * @param unknown_type $currentGraph
-     * @param unknown_type $path
-     * @return unknown
+     * 
+     * @param Graph $currentGraph
+     * @param Graph $path
+     * @return Graph
      */
-    
     private function getResidualGraph($currentGraph, $path)
     {
         // 1. Substract $path values from $graph
@@ -151,11 +154,11 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
             $edgeArray=$currentGraphEndVertex->getEdgesTo($currentGraphStartVertex);
             $reverseEdge=array_shift($edgeArray);
             if(!isset($reverseEdge)){
-                //no edge in reverese direction existing, create a new one
+                //no edge in reverese direction existing => create a new one
                 $reverseEdge=$currentGraphEndVertex->createEdgeTo($currentGraphStartVertex);
                 $reverseEdge->setWeight(0);
             };
-            //add the weight to the reveresd edge
+            //add the weight to the reversed edge
             $reverseEdge->setWeight($reverseEdge->getWeight()+$flowEdge->getWeight());
                        
             //if the value of the original edge is 0, remove the edge
@@ -168,7 +171,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
     }
     
     private function getEdgeCloned($edge,$newGraph,$inverse=false){
-        //get the Original vertices to find the propper edge
+        //get the Original vertices to find the proper edge
         $originalStartVertexArray = $edge->getStartVertices();
         $originalStartVertex = array_shift($originalStartVertexArray);
         
@@ -181,14 +184,12 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
             $originalTargetVertex = $temp;
         }
         
-        //if vertices in resultgrpah not existing create them
+        //get original vertices from resultgraph
         
         $residualGraphEdgeStartVertex = $newGraph->getVertex($originalStartVertex->getId());
         $residualGraphEdgeTargetVertex = $newGraph->getVertex($originalTargetVertex->getId());
         
-        //vertices are existing now create the edge
-        
-        //check if residual graph has backward edge
+        // now create the edge ; check if residual graph has backward edge
         $residualEdgeArray = $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
         if(count($residualEdgeArray) !== 1){
             throw new Exception('More than one cloned edge? Parallel edges (multigraph) not supported');
