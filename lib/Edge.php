@@ -118,6 +118,22 @@ abstract class Edge extends Layoutable{
 	protected $weight = NULL;
 	
 	/**
+	 * maximum capacity (maximum flow)
+	 * 
+	 * @var float|int|NULL
+	 * @see Edge::getCapacity()
+	 */
+	protected $capacity = NULL;
+	
+	/**
+	 * flow (capacity currently in use)
+	 *
+	 * @var float|int|NULL
+	 * @see Edge::getFlow()
+	 */
+	protected $flow = NULL;
+	
+	/**
 	 * get Vertices that are a target of this edge
 	 *
 	 * @return array[Vertex]
@@ -200,10 +216,74 @@ abstract class Edge extends Layoutable{
 	 */
 	public function setWeight($weight){
 	    if($weight !== NULL && !is_float($weight) && !is_int($weight)){
-	        throw new Exception('Invalid weight given - must be numeric or NULL');
+	    	throw new Exception('Invalid weight given - must be numeric or NULL');
 	    }
 	    $this->weight = $weight;
 	    return $this;
+	}
+	
+	/**
+	 * get total capacity of this edge
+	 * 
+	 * @return float|int|NULL numeric capacity or NULL=not set
+	 */
+	public function getCapacity(){
+	    return $this->capacity;
+	}
+	
+	/**
+	 * set new total capacity of this edge
+	 * 
+	 * @param float|int|NULL $capacity
+	 * @return Edge $this (chainable)
+	 * @throws Exception if $capacity is invalid or current flow exceeds new capacity
+	 */
+	public function setCapacity($capacity){
+	    if($capacity !== NULL){
+	        if(!is_float($capacity) && !is_int($capacity)){
+	            throw new Exception('Invalid capacity given - must be numeric');
+	        }
+	        if($capacity < 0){
+	            throw new Exception('Capacity must not be negative');
+	        }
+	        if($this->flow !== NULL && $this->flow > $capacity){
+	        	throw new Exception('Current flow of '.$this->flow.' exceeds new capacity');
+	        }
+	    }
+	    $this->capacity = $capacity;
+	    return $this;
+	}
+	
+	/**
+	 * get current flow (capacity currently in use)
+	 *
+	 * @return float|int|NULL numeric flow or NULL=not set
+	 */
+	public function getFlow(){
+		return $this->flow;
+	}
+	
+	/**
+	 * set new total flow (capacity currently in use)
+	 *
+	 * @param float|int|NULL $flow
+	 * @return Edge $this (chainable)
+	 * @throws Exception if $flow is invalid or flow exceeds maximum capacity
+	 */
+	public function setFlow($flow){
+		if($flow !== NULL){
+			if(!is_float($flow) && !is_int($flow)){
+				throw new Exception('Invalid flow given - must be numeric');
+			}
+			if($flow < 0){
+				throw new Exception('Flow must not be negative');
+			}
+			if($this->capacity !== NULL && $flow > $this->capacity){
+				throw new Exception('New flow exceeds maximum capacity');
+			}
+		}
+		$this->flow = $flow;
+		return $this;
 	}
 	
 	/**
