@@ -260,10 +260,27 @@ class GraphViz{
 	        
 		    $attrs = $currentEdge->getLayout();
 		    
+		    $label = NULL;                                              // use flow/capacity/weight as edge label
+    	    
+    	    $flow = $currentEdge->getFlow();
+    	    $capacity = $currentEdge->getCapacity();
+    	    if($flow !== NULL){                                         // flow is set
+    	        $label = $flow .'/'.($capacity === NULL ? '∞' : $capacity); // NULL capacity = infinite capacity
+    	    }else if($capacity !== NULL){                               // capacity set, but not flow (assume zero flow)
+    	        $label = '0/'.$capacity;
+    	    }
+    	    
     	    $weight = $currentEdge->getWeight();
-    	    if($weight !== NULL){                                       // add weight as label (if set)
-    	        $attrs['label']  = $weight;
-     	        //$attrs['weight'] = $weight;
+    	    if($weight !== NULL){                                       // weight is set
+    	    	if($label === NULL){
+    	    	    $label = $weight;
+    	    	}else{
+    	    	    $label .= '/'.$weight;
+    	    	}
+    	    }
+    	    
+    	    if($label !== NULL){
+    	        $attrs['label'] = self::escape($label);
     	    }
     	    // this edge also points to the opposite direction => this is actually an undirected edge
     	    if($directed && $currentEdge->isConnection($currentTargetVertex,$currentStartVertex)){
