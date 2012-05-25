@@ -287,6 +287,18 @@ abstract class Edge extends Layoutable{
 	}
 	
 	/**
+	 * add given flow to current flow (new totalflow = oldflow + given flow)
+	 * 
+	 * @param float|int $flow
+	 * @return Edge $this (chainable)
+	 * @throws Exception if flow is invalid or flow exceeds maximum capacity
+	 * @uses Edge::setFlow()
+	 */
+	public function addFlow($flow){
+	    return $this->setFlow($this->flow + $flow);
+	}
+	
+	/**
 	 * checks whether this edge has any parallel edges
 	 * 
 	 * @return boolean
