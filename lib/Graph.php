@@ -114,6 +114,10 @@ class Graph extends Layoutable implements Countable{
 	 * @uses Vertex::createEdgeTo() to create a new directed edge if given edge was directed
 	 * @uses Edge::getWeight()
 	 * @uses Edge::setWeight()
+	 * @uses Edge::getFlow()
+	 * @uses Edge::setFlow()
+	 * @uses Edge::getCapacity()
+	 * @uses Edge::setCapacity()
 	 */
 	public function createEdgeClone($originalEdge){
 	    $ends = $originalEdge->getVerticesId();
@@ -128,6 +132,8 @@ class Graph extends Layoutable implements Countable{
 	    }
 	    // TODO: copy edge attributes
 	    $newEdge->setWeight($originalEdge->getWeight());
+	    $newEdge->setFlow($originalEdge->getFlow());
+	    $newEdge->setCapacity($originalEdge->getCapacity());
 	    
 	    return $newEdge;
 	}
