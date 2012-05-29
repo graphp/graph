@@ -106,7 +106,31 @@ class Graph extends Layoutable implements Countable{
 	/**
 	 * create new clone of the given edge between adjacent vertices
 	 * 
+	 * @param Edge $originalEdge original edge (not neccessarily from this graph)
+	 * @return Edge new edge in this graph
+	 * @uses Graph::createEdgeCloneInternal()
+	 */
+	public function createEdgeClone($originalEdge){
+	    return $this->createEdgeCloneInternal($originalEdge,0,1);
+	}
+	
+	/**
+	 * create new clone of the given edge inverted (in opposite direction) between adjacent vertices
+	 *
+	 * @param Edge $originalEdge original edge (not neccessarily from this graph)
+	 * @return Edge new edge in this graph
+	 * @uses Graph::createEdgeCloneInternal()
+	 */
+	public function createEdgeCloneInverted($originalEdge){
+	    return $this->createEdgeCloneInternal($originalEdge,1,0);
+	}
+	
+	/**
+	 * create new clone of the given edge between adjacent vertices
+	 *
 	 * @param Edge $originalEdge original edge from old graph
+	 * @param int  $ia           index of start vertex
+	 * @param int  $ib           index of end vertex
 	 * @return Edge new edge in this graph
 	 * @uses Edge::getVerticesId()
 	 * @uses Graph::getVertex()
@@ -119,23 +143,23 @@ class Graph extends Layoutable implements Countable{
 	 * @uses Edge::getCapacity()
 	 * @uses Edge::setCapacity()
 	 */
-	public function createEdgeClone($originalEdge){
-	    $ends = $originalEdge->getVerticesId();
-	    
-	    $a = $this->getVertex($ends[0]); // get start vertex from old start vertex id
-	    $b = $this->getVertex($ends[1]); // get target vertex from old target vertex id
-	    
-	    if($originalEdge instanceof EdgeDirected){
-	        $newEdge = $a->createEdgeTo($b);
-	    }else{
-	        $newEdge = $a->createEdge($b); // create new edge between new a and b
-	    }
-	    // TODO: copy edge attributes
-	    $newEdge->setWeight($originalEdge->getWeight());
-	    $newEdge->setFlow($originalEdge->getFlow());
-	    $newEdge->setCapacity($originalEdge->getCapacity());
-	    
-	    return $newEdge;
+	private function createEdgeCloneInternal($originalEdge,$ia,$ib){
+		$ends = $originalEdge->getVerticesId();
+	
+		$a = $this->getVertex($ends[$ia]); // get start vertex from old start vertex id
+		$b = $this->getVertex($ends[$ib]); // get target vertex from old target vertex id
+	
+		if($originalEdge instanceof EdgeDirected){
+			$newEdge = $a->createEdgeTo($b);
+		}else{
+			$newEdge = $a->createEdge($b); // create new edge between new a and b
+		}
+		// TODO: copy edge attributes
+		$newEdge->setWeight($originalEdge->getWeight());
+		$newEdge->setFlow($originalEdge->getFlow());
+		$newEdge->setCapacity($originalEdge->getCapacity());
+	
+		return $newEdge;
 	}
 	
 	/**
