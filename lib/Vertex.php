@@ -162,6 +162,12 @@ class Vertex extends Layoutable{
 	private $graph;
 	
 	/**
+	 * 
+	 * @var any kind of Value
+	 */
+	private $value;
+	
+	/**
 	 * Creates a Vertex
 	 * 
 	 * @param int   $id    Identifier (int, string, what you want) $id
@@ -179,6 +185,22 @@ class Vertex extends Layoutable{
 	 */
 	public function getGraph(){
 	    return $this->graph;
+	}
+	
+	/**
+	 * get the value attached to the vertex
+	 * 
+	 *  @return any kind of value
+	 */
+	public function getValue(){
+	    return $this->value;
+	}
+	
+	/**
+	 * stores any value in the vertex
+	 */
+	public function setValue($value){
+	    $this->value=$value;
 	}
 	
 	/**
