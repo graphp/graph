@@ -252,6 +252,15 @@ abstract class Edge extends Layoutable{
 	}
 
 	/**
+	 * get the left capacity of this edge
+	 * 
+	 * @return float|int|NULL numeric or left capacity
+	 */
+	public function getLeftCapacity(){
+		return $this->capacity - $this->flow;
+	}
+	
+	/**
 	 * set new total capacity of this edge
 	 *
 	 * @param float|int|NULL $capacity
