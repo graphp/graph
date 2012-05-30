@@ -32,6 +32,15 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 		return $sumOfFlow;
 	}
 	
+	/**
+	 * @uses AlgorithmMCFSuccessiveShortestPath::flow(Vertex $vertex)
+	 * @uses Graph::createGraphClone()
+	 * @uses AlgorithmResidualGraph::getResultGraph()
+	 * @uses AlgorithmSearchBreadthFirst::getVertices()
+	 * @uses AlgorithmSpMooreBellmanFord::getEdgesTo(Vertex $targetVertex)
+	 * 
+	 * @see AlgorithmMCF::getResultGraph()
+	 */
 	public function getResultGraph() {
 		
 		$resultGraph = $this->graph->createGraphClone();
