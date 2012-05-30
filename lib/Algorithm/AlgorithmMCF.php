@@ -7,7 +7,7 @@ abstract class AlgorithmMCF extends Algorithm {
 	 * 
 	 * @var Graph
 	 */
-	private $graph;
+	protected $graph;
 	
     public function __construct(Graph $graph){
     	$this->graph = $graph;
