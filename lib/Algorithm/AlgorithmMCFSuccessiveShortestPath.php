@@ -18,6 +18,8 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 			$edge->setFlow($flow);
 		}
 		
+		//while no more paths
+		{
 			//Erstelle ResidualGraph
 		
 			//Suche Quelle
@@ -27,8 +29,10 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 			//Berechne Kürzesten Weg zwischen Quelle und Senke
 		
 			//Verändere den Fluss zwischen Quelle und Senke
-			
-		//Gebe Graph zurück
+
+		}
+		
+		return $resultGraph;
 	}
 	
 }
