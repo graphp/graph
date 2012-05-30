@@ -44,9 +44,9 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 	public function getResultGraph() {
 		
 		$resultGraph = $this->graph->createGraphClone();
-		//initial-zustand setzten, 0 für Positiv gewichtete Kanten max für negaitv gewichtete Kanten
 		
-		$edges = $resultGraph->getEdges();										//initial flow of edges
+		//initial flow of edges
+		$edges = $resultGraph->getEdges();
 		foreach ($edges as $edge){
 			$flow = 0;															//0 if weight of edge is positiv
 			
