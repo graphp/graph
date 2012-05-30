@@ -115,8 +115,6 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 			//TODO Verändere den Fluss zwischen Quelle und Senke
 			
 		}
-		
-		return $resultGraph;
 	}
 	
 }
