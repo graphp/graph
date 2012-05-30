@@ -469,22 +469,7 @@ class Graph extends Layoutable implements Countable{
 	    }
 	    return false;
 	}
-	
-	/**
-	 *  Sets the Flow of all edges to capacity or 0
-	 */
-	public function initFlow(){
-	    //initial flow of edges
-	    foreach ($this->getEdges() as $edge){
-	        $flow = 0;															//0 if weight of edge is positiv
-    		if ($edge->getWeight() < 0){										//maximal flow if weight of edge is negative
-    			$flow = $edge->getCapacity();
-    		}
-        	$edge->setFlow($flow);
-    	}
-    }
-	
-	
+		
 	/**
 	 * checks whether this graph has any weighted edges
 	 * 
