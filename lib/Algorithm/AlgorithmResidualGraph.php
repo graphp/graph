@@ -14,7 +14,7 @@ class AlgorithmResidualGraph extends Algorithm{
     }
     
     /**
-     * create redisual graph
+     * create residual graph
      * 
      * @throws Exception if input graph has undirected edges or flow/capacity is not set
      * @return Graph
@@ -23,15 +23,19 @@ class AlgorithmResidualGraph extends Algorithm{
      * @uses Graph::createEdgeCloneInverted()
      */
     public function getResultGraph(){
+    	
         $newgraph = $this->graph->createGraphCloneEdgeless();
+        
         foreach($this->graph->getEdges() as $edge){
             if(!($edge instanceof EdgeDirected)){
                 throw new Exception('Edge is undirected');
             }
-            $flow     = $edge->getFlow();
+            
+            $flow = $edge->getFlow();
             if($flow === NULL){
             	throw new Exception('Flow not set');
             }
+            
             $capacity = $edge->getCapacity();
             if($capacity === NULL){
                 throw new Exception('Capacity not set');

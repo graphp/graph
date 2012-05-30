@@ -32,6 +32,10 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 		$this->startVertex = $startVertex;
 		$this->destinationVertex = $destinationVertex;
 		$this->graph = $startVertex->getGraph();
+		
+		foreach ($this->graph->getEdges() as $edge){
+			$edge->setFlow(0);
+		}
 	}
 
 	/**
@@ -43,16 +47,24 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 		$currentGraph = $this->graph->createGraphClone();
 
 		do{
-			$pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get Shortest path if NULL-> Done
-			 
-			if($pathFlow){
-				$currentGraph = $this->getResidualGraph($currentGraph, $pathFlow);
+			$pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get shortest path if NULL-> Done
+
+			if($pathFlow){														// If path exists add the new flow to graph
+				$edgeFromFlowPath = Edge::getFirst($pathFlow->getEdges(),Edge::ORDER_RANDOM);
+				$newFlowValue = $edgeFromFlowPath->getFlow();
+				
+				foreach ($pathFlow->getEdges() as $edge){
+					$originalEdge = $this->getEdgeSimilarFromGraph($edge, $currentGraph);
+					$originalEdge->setFlow($originalEdge->getFlow() + $newFlowValue);
+				}
+				
+				$residualAlgorithm = new AlgorithmResidualGraph($currentGraph); 	
+				$currentGraph = $residualAlgorithm->getResultGraph();			// Generate new residual graph and repeat
 			}
 		} while($pathFlow);
 
-		//return flow sum of outgoing flows
+		// Generate the full flow graph from the final residual graph (handled internal: with the initialGraph)
 		return $this->getFlowGraphFromResidualGraph($currentGraph);
-		//return $currentGraph;
 	}
 
 	/**
@@ -87,7 +99,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 
 			// Add inversed edge to return graph
 			$newFlowEdge = $resultGraph->createEdgeClone($edge);
-			
+				
 			// Set flow of the edge
 			if($residualEdge){
 				$newFlowEdge->setWeight($residualEdge->getWeight());
@@ -128,60 +140,71 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 			//echo "stop flow value is 0\n";
 			return null;
 		}
-		 
+			
 		// 3. create graph with shortest path and max flow as edge values
 		foreach($path->getEdges() as $edge){
 			$edge->setWeight($maxFlowValue);
 		}
-		 
+			
 		return $path;
 	}
 
+	// 	/**
+	// 	 * Returns creates from the currentgraph an a path a residual graph
+	// 	 *
+	// 	 * @param Graph $currentGraph
+	// 	 * @param Graph $path
+	// 	 * @return Graph
+	// 	 */
+	// 	private function getResidualGraph($currentGraph, $path)
+	// 	{
+	// 		// 1. Substract $path values from $graph
+	// 		foreach($path->getEdges() as $flowEdge){
+
+	// // 			$flowEdgeEndArray = $flowEdge->getTargetVertices();
+	// // 			$flowEdgeEndVertex =  array_shift($flowEdgeEndArray);
+	// // 			$currentGraphEndVertex = $currentGraph->getVertex($flowEdgeEndVertex->getId());
+		
+	// // 			$flowEdgeStartArray = $flowEdge->getVertexFromTo($flowEdgeEndVertex);
+	// // 			$flowEdgeStartVertex = $flowEdgeStartArray;
+	// // 			$currentGraphStartVertex= $currentGraph->getVertex($flowEdgeStartVertex->getId());
+		
+	// 			// find edge in original graph
+	// 			$currentGraphEdge = $this->getEdgeSimilarFromGraph($flowEdge, $currentGraph);
+
+	// 			//lower the value of the original graph
+	// 			$currentGraphEdge->setWeight($currentGraphEdge->getWeight()-$flowEdge->getWeight()); //substract weight
+
+
+
+	// 			// 2. add in reversed direction of $path values to the $graph
+
+	// 			// Find out if reverse edge already exists
+	// 			$edgeArray = $currentGraphEndVertex->getEdgesTo($currentGraphStartVertex);
+	// 			$reverseEdge = array_shift($edgeArray);
+		
+	// 			//$reverseEdge = Edge::getFirst($currentGraph,Edge::ORDER_FIFO);
+		
+	// 			if(!isset($reverseEdge)){
+	// 				//no edge in reverese direction existing => create a new one
+	// 				$reverseEdge=$currentGraphEndVertex->createEdgeTo($currentGraphStartVertex);
+	// 				$reverseEdge->setWeight(0);
+	// 			};
+	// 			//add the weight to the reversed edge
+	// 			$reverseEdge->setWeight($reverseEdge->getWeight()+$flowEdge->getWeight());
+
+	// 			//if the value of the original edge is 0, remove the edge
+	// 			if ($currentGraphEdge->getWeight()==0){
+	// 				//$currentGraph->removeEdge($currentGraphEdge);
+	// 				$currentGraphEdge->destroy();
+	// 			}
+	// 		}
+	// 		return $currentGraph;
+	// 	}
+
+
 	/**
-	 * Returns creates from the currentgraph an a path a residual graph
-	 *
-	 * @param Graph $currentGraph
-	 * @param Graph $path
-	 * @return Graph
-	 */
-	private function getResidualGraph($currentGraph, $path)
-	{
-		// 1. Substract $path values from $graph
-		foreach($path->getEdges() as $flowEdge){
-
-			// find edge in original graph
-			$currentGraphEdge = $this->getEdgeSimilarFromGraph($flowEdge, $currentGraph);
-
-			//lower the value of the original graph
-			$currentGraphEdge->setWeight($currentGraphEdge->getWeight()-$flowEdge->getWeight()); //substract weight
-
-
-
-			// 2. add in reversed direction of $path values to the $graph
-
-			// Find out if reverse edge already exists
-			$edgeArray=$currentGraphEndVertex->getEdgesTo($currentGraphStartVertex);
-			$reverseEdge=array_shift($edgeArray);
-			if(!isset($reverseEdge)){
-				//no edge in reverese direction existing => create a new one
-				$reverseEdge=$currentGraphEndVertex->createEdgeTo($currentGraphStartVertex);
-				$reverseEdge->setWeight(0);
-			};
-			//add the weight to the reversed edge
-			$reverseEdge->setWeight($reverseEdge->getWeight()+$flowEdge->getWeight());
-			 
-			//if the value of the original edge is 0, remove the edge
-			if ($currentGraphEdge->getWeight()==0){
-				//$currentGraph->removeEdge($currentGraphEdge);
-				$currentGraphEdge->destroy();
-			}
-		}
-		return $currentGraph;
-	}
-
-	
-	/**
-	 * Extracts a (optional: inversed) edge from the given graph 
+	 * Extracts a (optional: inversed) edge from the given graph
 	 *
 	 * @param Graph $edge
 	 * @param Graph $newGraph
@@ -209,7 +232,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 
 		// Now get the edge
 		$residualEdgeArray = $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
-		
+
 		// Check for parallel edges
 		if(count($residualEdgeArray) !== 1){
 			throw new Exception('More than one cloned edge? Parallel edges (multigraph) not supported');
