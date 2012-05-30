@@ -43,20 +43,19 @@ class AlgorithmResidualGraph extends Algorithm{
 
 			// capacity is still available, clone remaining capacity into new edge
 			if($this->keepNullCapacity || $flow < $capacity){
-				$newEdge = $newgraph->createEdgeClone($edge)->setFlow(0)
-												 ->setCapacity($capacity - $flow);
+				$newEdge = $newgraph->createEdgeClone($edge)->setFlow(0)->setCapacity($capacity - $flow);
 				$this->mergeParallelEdges($newEdge);
 			}
 
 			// flow is set, clone current flow as capacity for back-flow into new inverted edge (opposite direction)
 			if($this->keepNullCapacity || $flow > 0){
-				$newEdge = $newgraph->createEdgeCloneInverted($edge)->setFlow(0)
-																	->setCapacity($flow);
+				$newEdge = $newgraph->createEdgeCloneInverted($edge)->setFlow(0)->setCapacity($flow);
 				$this->mergeParallelEdges($newEdge);
+				// if weight is set, use negative weight for back-edges
+				if($newEdge->getWeight() !== NULL){
+					$newEdge->setWeight(-$newEdge->getWeight());
+				}
 			}
-
-			
-			
 		}
 		return $newgraph;
 	}
