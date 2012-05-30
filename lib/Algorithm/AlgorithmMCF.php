@@ -38,6 +38,7 @@ abstract class AlgorithmMCF extends Algorithm {
     /**
      * create new resulting graph with minimum-cost flow on edges
      *
+     * @throws Exception if the graph has not enough capacity for the minimum-cost flow
      * @return Graph
      */
     abstract public function getResultGraph();
