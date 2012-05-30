@@ -69,7 +69,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 			$sourceVertex = null;
 			foreach ($vertices as $vertex){										//forall (just use the first found)
 				
-				if ($this->flow($vertex) > 0){									//if flow of vertex is positiv = source
+				if ($this->flow($vertex) > 0){									//if flow of vertex is positiv => source
 					$sourceVertex = $vertex;
 					break;
 				}
@@ -83,8 +83,9 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 			$vertices = $algBFS->getVertices();
 			
 			$targetVertex = null;
-			foreach ($vertices as $vertex){
-				if ($this->flow($vertex) < 0){									//if flow of vertex is negative = target
+			foreach ($vertices as $vertex){										//forall (just use the first found)
+				
+				if ($this->flow($vertex) < 0){									//if flow of vertex is negative => target
 					$targetVertex = $vertex;
 					break;
 				}
