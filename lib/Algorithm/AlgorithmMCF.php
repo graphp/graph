@@ -9,6 +9,12 @@ abstract class AlgorithmMCF extends Algorithm {
 	 */
 	protected $graph;
 	
+	/**
+	 * The given graph where the algorithm should operate on
+	 * 
+	 * @param Graph $graph
+	 * @throws Exception if the given graph is not balanced
+	 */
     public function __construct(Graph $graph){
     	$this->graph = $graph;
     	
@@ -19,7 +25,7 @@ abstract class AlgorithmMCF extends Algorithm {
     		$balance += $vertex->getValue();
     	}
     	if ($balance !== 0) {													//If the sum is 0 => same "in-flow" as "out-flow"
-    		throw new Exception("The graph is not balanced");
+    		throw new Exception("The given graph is not balanced");
     	}
     }
     
