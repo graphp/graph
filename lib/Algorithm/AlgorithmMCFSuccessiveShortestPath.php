@@ -57,7 +57,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 			$edge->setFlow($flow);
 		}
 		
-		while(true)//while no more paths
+		while(true)																//return or Exception insite this while
 		{
 			//create residual graph
 			$algRG = new AlgorithmResidualGraph($resultGraph);
