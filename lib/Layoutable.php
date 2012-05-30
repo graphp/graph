@@ -55,4 +55,14 @@ abstract class Layoutable {
         }
     	return $this;
     }
+    
+    /**
+     * checks whether layout option with given name is set
+     * 
+     * @param string $name
+     * @return boolean
+     */
+    public function hasLayout($name){
+        return isset($this->layout[$name]);
+    }
 }
