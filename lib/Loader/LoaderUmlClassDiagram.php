@@ -264,18 +264,21 @@ class LoaderUmlClassDiagram extends Loader{
         if($ret === NULL){
             return NULL;
         }
-        if(preg_match('/^array\[(\w+)\]$/',$ret,$match)){
+        if(preg_match('/^array\[(\w+)\]$/i',$ret,$match)){
         	return $this->getType($match[1]).'[]';
         }
         if(!preg_match('/^\w+$/',$ret)){
         	return 'mixed';
         }
-        if($ret === 'integer'){
+        $low = strtolower($ret);
+        if($low === 'integer'){
             $ret = 'int';
-        }else if($ret === 'double'){
+        }else if($low === 'double'){
             $ret = 'float';
-        }else if($ret === 'boolean'){
+        }else if($low === 'boolean'){
             return 'bool';
+        }else if(in_array($low,array('int','float','bool','string','null','resource','array','void','mixed'))){
+            return $low;
         }
         return $ret;
     }
