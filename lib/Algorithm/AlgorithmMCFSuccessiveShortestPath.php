@@ -96,7 +96,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 			
 			//calculate shortest path between source- and target-vertex
 			$algSP = new AlgorithmSpMooreBellmanFord($sourceVertex);
-			$edges = $algSP->getEdgesTo($targetVertex);
+			$edgesOnFlow = $algSP->getEdgesTo($targetVertex);
 																				//new flow is the maximal possible flow for this path
 			$newflow    = $sourceVertex->getValue() - $this->flow($sourceVertex);
 			$targetFlow = - ($targetVertex->getValue() - $this->flow($targetVertex));
@@ -105,7 +105,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 				$newflow = $targetFlow;
 			}
 			
-			foreach ($edges as $edge){											//minimum of left capacity at path
+			foreach ($edgesOnFlow as $edge){									//minimum of left capacity at path
 				$edgeFlow = $edge->getLeftCapacity();
 				
 				if ($newflow > $edgeFlow){
