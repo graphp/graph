@@ -4,17 +4,8 @@ class LoaderCompleteGraph extends Loader{
 	
 	private $numberOfVertices;
 	
-	private $debugMode = false;
-	
 	public function __construct($n){
 	    $this->numberOfVertices = $n;
-	}
-	
-	private function writeDebugMessage($messageString){
-		if($this->debugMode){
-			echo $messageString;
-		}
-	
 	}
 	
 	public function getGraph(){

@@ -1,21 +1,6 @@
 <?php
 
 class LoaderEdgeListWithWeightedCapacityAndBalance extends LoaderFile{
-	
-	private $debugMode = false;
-	
-	private $fileName;
-	
-	private function writeDebugMessage($messageString){
-		if($this->debugMode){
-			echo $messageString;
-		}
-	}
-	
-	public function __construct($filename){
-	    $this->fileName = $filename;
-	}
-	
 	/**
 	 * 
 	 */
@@ -23,7 +8,7 @@ class LoaderEdgeListWithWeightedCapacityAndBalance extends LoaderFile{
 		
 		$graph = new Graph();
 		
-		$file = file($this->fileName, FILE_IGNORE_NEW_LINES);
+		$file = $this->getLines();
 		$vertexCount = $file[0];
 		$edgeCounter = 0;
 		

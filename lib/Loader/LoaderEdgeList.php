@@ -1,26 +1,11 @@
 <?php
 
 class LoaderEdgeList extends LoaderFile{
-	
-	private $debugMode = false;
-	
-	private $fileName;
-	
-	public function __construct($filename){
-	    $this->fileName = $filename;
-	}
-	
-	private function writeDebugMessage($messageString){
-		if($this->debugMode){
-			echo $messageString;
-		}
-	}
-	
 	public function getGraph(){
 		
 		$graph = new Graph();
 		
-		$file = file($this->fileName, FILE_IGNORE_NEW_LINES);
+		$file = $this->getLines();
 		$vertexCount = $file[0];
 		$edgeCounter = 0;
 		
