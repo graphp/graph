@@ -239,6 +239,14 @@ class GraphViz{
 		// other vertices wil be added automatically due to below edge definitions
 		foreach ($this->graph->getVertices() as $vertex){
 		    $layout = $vertex->getLayout();
+		    
+		    $balance = $vertex->getBalance();
+		    if($balance !== NULL){
+		        if($balance > 0){
+		            $balance = '+'.$balance;
+		        }
+		        $layout['label'] = self::escape($balance);
+		    }
 		    if($vertex->isIsolated() || $layout){
 		        $script .= '  ' . $this->escapeId($vertex->getId());
 				if($layout){
