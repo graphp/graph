@@ -19,7 +19,7 @@ class LoaderEdgeListWithWeightedCapacityAndBalance extends LoaderFile{
 		$zeile=1;
 		foreach ($graph->getVertices() as $vertex)
 		{
-		    $vertex->setValue($file[$zeile]);
+		    $vertex->setBalance((float)$file[$zeile]);
 		    unset($file[$zeile]);
 		    ++$zeile;
 		}

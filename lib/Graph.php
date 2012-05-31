@@ -55,7 +55,7 @@ class Graph extends Layoutable implements Countable{
 	    }
 	    $newVertex = new Vertex($id,$this);
 	    // TODO: properly set attributes of vertex
-	    $newVertex->setValue($originalVertex->getValue());
+	    $newVertex->getBalance($originalVertex->getBalance());
 	    $this->vertices[$id] = $newVertex;
 	    return $newVertex;
 	}
@@ -510,6 +510,14 @@ class Graph extends Layoutable implements Countable{
 	        }
 	    }
 	    return $weight;
+	}
+	
+	public function getBalance(){
+	    $balance = 0;
+	    foreach ($this->getVertices() as $vertex) {								//Sum for all vertices of value
+	        $balance += $vertex->getBalance();
+	    }
+	    return $balance;
 	}
 	
 	/**

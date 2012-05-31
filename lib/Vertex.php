@@ -162,10 +162,12 @@ class Vertex extends Layoutable{
 	private $graph;
 	
 	/**
+	 * vertex balance
 	 * 
-	 * @var any kind of Value
+	 * @var float|NULL
+	 * @see Vertex::setBalance()
 	 */
-	private $value;
+	private $balance;
 	
 	/**
 	 * Creates a Vertex
@@ -187,20 +189,16 @@ class Vertex extends Layoutable{
 	    return $this->graph;
 	}
 	
-	/**
-	 * get the value attached to the vertex
-	 * 
-	 *  @return any kind of value
-	 */
-	public function getValue(){
-	    return $this->value;
+	public function getBalance(){
+	    return $this->balance;
 	}
 	
-	/**
-	 * stores any value in the vertex
-	 */
-	public function setValue($value){
-	    $this->value=$value;
+	public function setBalance($balance){
+	    if($balance !== NULL && !is_float($balance) && !is_int($balance)){
+	        throw new Exception();
+	    }
+	    $this->balance = $balance;
+	    return $this;
 	}
 	
 	/**
