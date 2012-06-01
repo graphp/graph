@@ -73,35 +73,41 @@ class EdgeUndirectedId extends Edge{
 	}
 	
 	public function isConnection($from, $to){
+	    if($from->getGraph() !== $this->graph || $to->getGraph() !== $this->graph){
+	        return false;
+	    }
 		//							  one way				or						other way
 		return ( ( $this->a === $from->getId() && $this->b === $to->getId() ) || ( $this->b === $from->getId() && $this->a === $to->getId() ) );
 	}
 
 	public function getVertexToFrom($startVertex){
-		if ($this->a === $startVertex->getId()){
-			return $this->graph->getVertex($this->b);
+		if($startVertex->getGraph() === $this->graph){
+    	    if ($this->a === $startVertex->getId()){
+    			return $this->graph->getVertex($this->b);
+    		}
+    		else if($this->b === $startVertex->getId()){
+    			return $this->graph->getVertex($this->a);
+    		}
 		}
-		else if($this->b === $startVertex->getId()){
-			return $this->graph->getVertex($this->a);
-		}
-		else{
-			throw new Exception('Invalid start vertex');
-		}
+		throw new Exception('Invalid start vertex');
 	}
 
 	public function getVertexFromTo($endVertex){
-		if ($this->a === $endVertex->getId()){
-			return $this->graph->getVertex($this->b);
+		if($endVertex->getGraph() === $this->graph){
+    	    if ($this->a === $endVertex->getId()){
+    			return $this->graph->getVertex($this->b);
+    		}
+    		else if($this->b === $endVertex->getId()){
+    			return $this->graph->getVertex($this->a);
+    		}
 		}
-		else if($this->b === $endVertex->getId()){
-			return $this->graph->getVertex($this->a);
-		}
-		else{
-			throw new Exception('Invalid end vertex');
-		}
+		throw new Exception('Invalid end vertex');
 	}
 	
 	public function hasVertexStart(Vertex $startVertex){
+	    if($startVertex->getGraph() !== $this->graph){
+	        return false;
+	    }
 		return ($this->graph->getVertex($this->a) === $startVertex || $this->graph->getVertex($this->b) === $startVertex);
 	}
 }
