@@ -28,14 +28,6 @@ class EdgeUndirectedId extends Edge{
 		$this->graph = $a->getGraph();
 	}
 
-	//     public function getVerticesFrom(){
-	//         return array($this->a,$this->b);
-	//     }
-
-	//     public function getVerticesTo(){
-	//         return array($this->a,$this->b);
-	//     }
-
 	public function getGraph(){
 	    return $this->graph;
 	}

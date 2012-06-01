@@ -195,9 +195,7 @@ abstract class Edge extends Layoutable{
 	 * @return boolean
 	 */
 	abstract public function isLoop();
-
-	// 	abstract public function getVerticesTo();
-
+	
 	/**
 	 * get target vertex we can reach with this edge from the given start vertex
 	 *
@@ -207,7 +205,7 @@ abstract class Edge extends Layoutable{
 	 * @see Edge::hasEdgeFrom() to check if given start is valid
 	 */
 	abstract public function getVertexToFrom($startVertex);
-
+	
 	/**
 	 * get start vertex which can reach us(the given end vertex) with this edge
 	 *
@@ -217,9 +215,7 @@ abstract class Edge extends Layoutable{
 	 * @see Edge::hasEdgeFrom() to check if given start is valid
 	 */
 	abstract public function getVertexFromTo($endVertex);
-
-	// 	abstract public function getVerticesFrom();
-
+	
 	/**
 	 * return weight of edge
 	 *
