@@ -20,16 +20,25 @@ abstract class Layoutable {
     /**
      * set raw layout without applying escaping rules
      * 
-     * @param string $name
-     * @param mixed  $value
+     * @param string|array $name
+     * @param mixed        $value
      * @return Layoutable|Graph|Vertex|Edge $this (chainable)
      */
-    public function setLayoutRaw($name,$value){
-    	if($value === NULL){
-    		unset($this->layout[$name]);
-    	}else{
-    		$this->layout[$name] = $value;
-    	}
+    public function setLayoutRaw($name,$value=NULL){
+        if($name === NULL){
+            $this->layout = array();
+            return $this;
+        }
+        if(!is_array($name)){
+            $name = array($name=>$value);
+        }
+        foreach($name as $key=>$value){
+            if($value === NULL){
+                unset($this->layout[$key]);
+            }else{
+                $this->layout[$key] = $value;
+            }
+        }
     	return $this;
     }
     
@@ -40,7 +49,6 @@ abstract class Layoutable {
      * @param mixed        $value
      * @return Layoutable|Graph|Vertex|Edge $this (chainable)
      * @uses GraphViz::escape()
-     * @uses Layoutable::setLayoutRaw()
      */
     public function setLayout($name,$value=NULL){
         if($name === NULL){
@@ -51,7 +59,11 @@ abstract class Layoutable {
             $name = array($name=>$value);
         }
         foreach($name as $key=>$value){
-            $this->setLayoutRaw($key,GraphViz::escape($value));
+            if($value === NULL){
+            	unset($this->layout[$key]);
+            }else{
+            	$this->layout[$key] = GraphViz::escape($value);
+            }
         }
     	return $this;
     }

@@ -55,7 +55,8 @@ class Graph extends Layoutable implements Countable{
 	    }
 	    $newVertex = new Vertex($id,$this);
 	    // TODO: properly set attributes of vertex
-	    $newVertex->getBalance($originalVertex->getBalance());
+	    $newVertex->setLayoutRaw($originalVertex->getLayout());
+	    $newVertex->setBalance($originalVertex->getBalance());
 	    $this->vertices[$id] = $newVertex;
 	    return $newVertex;
 	}
@@ -69,6 +70,7 @@ class Graph extends Layoutable implements Countable{
 	 */
 	public function createGraphCloneEdgeless(){
 	    $graph = new Graph();
+	    $graph->setLayoutRaw($this->getLayout());
 	    // TODO: set additional graph attributes
 	    foreach($this->getVertices() as $originalVertex){
 	        $vertex = $graph->createVertexClone($originalVertex);
@@ -155,6 +157,7 @@ class Graph extends Layoutable implements Countable{
 			$newEdge = $a->createEdge($b); // create new edge between new a and b
 		}
 		// TODO: copy edge attributes
+		$newEdge->setLayoutRaw($originalEdge->getLayout());
 		$newEdge->setWeight($originalEdge->getWeight());
 		$newEdge->setFlow($originalEdge->getFlow());
 		$newEdge->setCapacity($originalEdge->getCapacity());
