@@ -79,7 +79,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         
         $start = $resultGraph->getVertex($this->startVertex->getId());
         $maxFlow = 0;
-        foreach ($start->getEdgesOutgoing() as $edge){
+        foreach ($start->getEdgesOut() as $edge){
             $maxFlow = $maxFlow + $edge->getWeight();
         }
         return $maxFlow;

@@ -40,7 +40,7 @@ class AlgorithmSpDijkstra extends AlgorithmSp{
                 
             $usedVertices[$currentVertexId] = true;                                //mark this vertex
                 
-            foreach ($currentVertex->getEdgesOutgoing() as $edge){                 //check for all edges of current vertex if there is a cheaper path (or IN OTHER WORDS: Add reachable nodes from currently added node and refresh the current possible distances)
+            foreach ($currentVertex->getEdgesOut() as $edge){                 //check for all edges of current vertex if there is a cheaper path (or IN OTHER WORDS: Add reachable nodes from currently added node and refresh the current possible distances)
                 $targetVertex = $edge->getVertexToFrom($currentVertex);
                 $targetVertexId = $targetVertex->getId();
 

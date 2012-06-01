@@ -125,7 +125,7 @@ class AlgorithmTspBruteforce extends AlgorithmTsp{
         
         $bestResult = NULL;
         
-        foreach($vertex->getEdgesOutgoing() as $edge){                          // weiter verzweigen in alle vertices
+        foreach($vertex->getEdgesOut() as $edge){                          // weiter verzweigen in alle vertices
             $target = $edge->getVertexToFrom($vertex);                          // get target vertex of this edge
             
             $weight = $edge->getWeight();

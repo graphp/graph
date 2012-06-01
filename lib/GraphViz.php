@@ -245,7 +245,7 @@ class GraphViz{
                 if($balance > 0){
                     $balance = '+'.$balance;
                 }
-                $layout['label'] = self::escape($balance);
+                $layout['label'] = self::escape($vertex->getId() .' ('.$balance.')');
             }
             if($vertex->isIsolated() || $layout){
                 $script .= '  ' . $this->escapeId($vertex->getId());
