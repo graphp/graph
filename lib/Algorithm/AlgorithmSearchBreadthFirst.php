@@ -92,7 +92,7 @@ class AlgorithmSearchBreadthFirst extends Algorithm{
 
         //run over the tree
         do{                                                                     // run from the buttom to top to the tree and add the predecessor until the startvertex is reached
-            $edge=$currentVertex->getIngoingEdges();                            // can only one because of the deepsearch tree
+            $edge=$currentVertex->getEdgesIngoing();                            // can only one because of the deepsearch tree
 
             $upperVertex=$edge[0]->getVertexFromTo($currentVertex);
             $path->createVertexClone($upperVertex);                             // clone upper vertex to graph
