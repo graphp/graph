@@ -6,20 +6,19 @@ class MaxFlowEdmondsKarpTest extends PHPUnit_Framework_TestCase
 {
     private $testedGraph = null;
 
-    public function testLoadingRelatedGraph()
+    // Run this code without crashing
+    public function testRunningAlgorithm()
     {
         $file = "Fluss.txt";
 
-        // Run this code without crashing
         $LoaderEdgeListWithCapacity = new LoaderEdgeListWithCapacity(PATH_DATA.$file);
         $LoaderEdgeListWithCapacity->setEnableDirectedEdges(true);
 
-        $this->testedGraph = $LoaderEdgeListWithCapacity->getGraph();
-
+        $this->testedGraph = $LoaderEdgeListWithCapacity->createGraph();
 
         $alg = new AlgorithmMaxFlowEdmondsKarp($this->testedGraph->getVertex(0),$this->testedGraph->getVertex(7));
-        $newGraph =  $alg->getResultGraph();
+        $newGraph =  $alg->createGraph();
 
-        $this->assertEquals(0, $alg->getMaxFlowValue());
+        $this->assertEquals(4, $alg->getMaxFlowValue());
     }
 }
