@@ -41,7 +41,7 @@ class AlgorithmMstPrim extends AlgorithmMst{
 			// BEGIN Check if edge is is: [visiteted]->[unvisited]
 			$cheapestEdgeIsOk = false;											// 
 			while($cheapestEdgeIsOk == false) {
-				foreach ($cheapestEdge->getTargetVertices() as $currentTarget){	// run over both vertices
+				foreach ($cheapestEdge->getVerticesTarget() as $currentTarget){	// run over both vertices
 
 					$cheapestEdgeIsOkOld = $cheapestEdgeIsOk;					
 

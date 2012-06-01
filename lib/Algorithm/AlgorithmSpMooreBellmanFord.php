@@ -13,7 +13,7 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
 	private function bigStep(&$edges,&$totalCostOfCheapestPathTo,&$predecessorVertexOfCheapestPathTo){
 		$changed = false;
 		foreach ($edges as $edge){												//check for all edges
-			foreach($edge->getTargetVertices() as $toVertex){						//check for all "ends" of this edge (or for all targetes)
+			foreach($edge->getVerticesTarget() as $toVertex){						//check for all "ends" of this edge (or for all targetes)
 				$fromVertex = $edge->getVertexFromTo($toVertex);
 				
 				if (isset($totalCostOfCheapestPathTo[$fromVertex->getId()])){			//If the fromVertex already has a path

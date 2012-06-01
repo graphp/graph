@@ -40,11 +40,11 @@ class EdgeUndirectedId extends Edge{
 	    return $this->graph;
 	}
 	
-	public function getStartVertices(){
+	public function getVerticesStart(){
 		return array($this->graph->getVertex($this->a),$this->graph->getVertex($this->b));
 	}
 	
-	public function getTargetVertices(){
+	public function getVerticesTarget(){
 		return array($this->graph->getVertex($this->b),$this->graph->getVertex($this->a));
 	}
 	

@@ -158,14 +158,14 @@ abstract class Edge extends Layoutable{
 	 *
 	 * @return array[Vertex]
 	 */
-	abstract public function getTargetVertices();
+	abstract public function getVerticesTarget();
 
 	/**
 	 * get Vertices that are the start of this edge
 	 *
 	 * @return array[Vertex]
 	 */
-	abstract public function getStartVertices();
+	abstract public function getVerticesStart();
 
 	/**
 	 * return true if this edge is an outgoing edge of the given vertex

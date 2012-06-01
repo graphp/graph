@@ -169,10 +169,10 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 	*/
 	private function getEdgeSimilarFromGraph($edge,$newGraph,$inverse=false){
 		// Extract endpoints from edge
-		$originalStartVertexArray = $edge->getStartVertices();
+		$originalStartVertexArray = $edge->getVerticesStart();
 		$originalStartVertex = array_shift($originalStartVertexArray);
 
-		$originalTargetVertexArray = $edge->getTargetVertices();
+		$originalTargetVertexArray = $edge->getVerticesTarget();
 		$originalTargetVertex = array_shift($originalTargetVertexArray);
 
 		// swap them if inverse wanted
