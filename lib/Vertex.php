@@ -459,25 +459,18 @@ class Vertex extends Layoutable{
 	}
 	
 	/**
-	 * get degree of this vertex (number of edges)
+	 * get degree of this vertex (total number of edges)
 	 * 
-	 * vertex degree is NOT defined for directed graphs (digraphs) and will
-	 * throw an exception! use indegree and outdegree instead
+	 * vertex degree counts the total number of edges attached to this vertex
+	 * regardless of whether they're directed or not. loop edges are counted
+	 * twice as both start and end form a 'line' to the same vertex.
 	 * 
 	 * @return int
-	 * @throws Exception
 	 * @see Vertex::getDegreeIn()
 	 * @see Vertex::getDegreeOut()
 	 */
 	public function getDegree(){
-	    $n = 0;
-	    foreach($this->edges as $edge){
-	        if($edge instanceof EdgeDirected){
-	            throw new Exception('Degree not supported for directed edges');
-	        }
-	        ++$n;
-	    }
-	    return $n;
+	    return count($this->edges);
 	}
 	
 	/**
