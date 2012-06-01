@@ -52,10 +52,6 @@ class EdgeUndirectedId extends Edge{
 		return $this->a." <-> ".$this->b." Weight: ".$this->weight;
 	}
 	
-	//     public function hasVertexTo($vertex){
-	//         return ($this->a === $vertex || $this->b === $vertex);
-	//     }
-
 	public function isLoop(){
 	    return ($this->a === $this->b);
 	}
@@ -97,5 +93,9 @@ class EdgeUndirectedId extends Edge{
 	        return false;
 	    }
 		return ($this->graph->getVertex($this->a) === $startVertex || $this->graph->getVertex($this->b) === $startVertex);
+	}
+	
+	public function hasVertexTarget(Vertex $targetVertex){
+	    return $this->hasVertexStart($targetVertex); // same implementation as direction does not matter
 	}
 }

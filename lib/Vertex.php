@@ -333,7 +333,7 @@ class Vertex extends Layoutable{
 	 * 
 	 * @param Vertex $vertex
 	 * @return boolean
-	 * @uses Edge::hasVertexTo()
+	 * @uses Edge::hasVertexTarget()
 	 */
 	public function hasEdgeTo($vertex){
 	    foreach($this->edges as $edge){
@@ -399,7 +399,7 @@ class Vertex extends Layoutable{
 	 * 
 	 * @param Vertex $vertex
 	 * @return array[Edge]
-	 * @uses Edge::hasVertexTo()
+	 * @uses Edge::hasVertexTarget()
 	 */
 	public function getEdgesTo($vertex){
 	    $ret = array();
@@ -498,13 +498,13 @@ class Vertex extends Layoutable{
 	 * get indegree of this vertex (number of edges TO this vertex)
 	 * 
 	 * @return int
-	 * @uses Edge::hasVertexTo()
+	 * @uses Edge::hasVertexTarget()
 	 * @see Vertex::getDegree()
 	 */
 	public function getDegreeIn(){
 	    $n = 0;
 	    foreach($this->edges as $edge){
-	        if($edge->hasVertexTo($this)){
+	        if($edge->hasVertexTarget($this)){
 	            ++$n;
 	        }
 	    }
@@ -532,12 +532,12 @@ class Vertex extends Layoutable{
 	 * checks whether this vertex is a source, i.e. its indegree is zero
 	 * 
 	 * @return boolean
-	 * @uses Edge::hasVertexTo()
+	 * @uses Edge::hasVertexTarget()
 	 * @see Vertex::getDegreeIn()
 	 */
 	public function isSource(){
 	    foreach($this->edges as $edge){
-	        if($edge->hasVertexTo($this)){
+	        if($edge->hasVertexTarget($this)){
 	            return false;
 	        }
 	    }

@@ -168,22 +168,43 @@ abstract class Edge extends Layoutable{
 	abstract public function getVerticesStart();
 
 	/**
-	 * return true if this edge is an outgoing edge of the given vertex
-	 * return false ; every other case
+	 * return true if this edge is an outgoing edge of the given vertex (i.e. the given vertex is a valid start vertex of this edge)
 	 * 
 	 * @param Vertex $startVertex
 	 * @return boolean
+	 * @uses Vertex::getVertexToFrom()
 	 */
-	abstract public function hasVertexStart(Vertex $startVertex);
-
+	public function hasVertexStart(Vertex $startVertex){
+	    try{
+	        $this->getVertexToFrom($startVertex);
+	        return true;
+	    }
+	    catch(Exception $ignore){ }
+	    return false;
+	}
+	
+	/**
+	 * return true if this edge is an ingoing edge of the given vertex (i.e. the given vertex is a valid end vertex of this edge)
+	 *
+	 * @param Vertex $targetVertex
+	 * @return boolean
+	 * @uses Vertex::getVertexFromTo()
+	 */
+	public function hasVertexTarget(Vertex $targetVertex){
+		try{
+			$this->getVertexFromTo($targetVertex);
+			return true;
+		}
+		catch(Exception $ignore){ }
+		return false;
+	}
+	
 	/**
 	 * Return string with edge visualisation
 	 *
 	 * @return string
 	 */
 	abstract function toString();
-
-	// 	abstract public function hasVertexTo($vertex);
 	
 	abstract public function isConnection($from, $to);
 

@@ -60,10 +60,6 @@ class EdgeDirected extends Edge{
 		return $this->from->getId()." -> ".$this->to->getId()." Weight: ".$this->weight;
 	}
 	
-	//     public function hasVertexTo($vertex){
-	//         return ($this->to === $vertex);
-	//     }
-
 	public function isConnection($from, $to){
 		return ($this->to === $to && $this->from === $from);
 	}

@@ -36,10 +36,6 @@ class EdgeUndirected extends Edge{
 		return $this->a->getId()." <-> ".$this->b->getId()." Weight: ".$this->weight;
 	}
 	
-	//     public function hasVertexTo($vertex){
-	//         return ($this->a === $vertex || $this->b === $vertex);
-	//     }
-
 	public function isConnection($from, $to){
 		//							  one way				or						other way
 		return ( ( $this->a === $from && $this->b === $to ) || ( $this->b === $from && $this->a === $to ) );
