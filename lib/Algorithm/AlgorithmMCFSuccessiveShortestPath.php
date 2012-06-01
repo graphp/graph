@@ -106,7 +106,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 			}
 			
 			foreach ($edgesOnFlow as $edge){									//minimum of left capacity at path
-				$edgeFlow = $edge->getLeftCapacity();
+				$edgeFlow = $edge->getCapacityRemaining();
 				
 				if ($newflow > $edgeFlow){
 					$newflow = $edgeFlow;

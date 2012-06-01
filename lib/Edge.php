@@ -252,11 +252,14 @@ abstract class Edge extends Layoutable{
 	}
 
 	/**
-	 * get the left capacity of this edge
+	 * get the capacity remaining (total capacity - current flow)
 	 * 
-	 * @return float|int|NULL numeric or left capacity
+	 * @return float|int|NULL numeric capacity remaining or NULL=no upper capacity set
 	 */
-	public function getLeftCapacity(){
+	public function getCapacityRemaining(){
+	    if($this->capacity === NULL){
+	        return NULL;
+	    }
 		return $this->capacity - $this->flow;
 	}
 	
