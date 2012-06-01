@@ -1,5 +1,5 @@
 # graph-php
-A mathematical graph library in PHP
+A mathematical graph/network library written in PHP
 
 ## Documentation
 [EclipseGitHubEinrichtung](https://github.com/Flos/graph-php/wiki/EclipseGitHubEinrichtung)
@@ -8,5 +8,12 @@ A mathematical graph library in PHP
 
 ## Features
 * Loading graphs (from plain text adjacency lists or edge lists)
-* Run standart algorithms (ex.: deep-/breadth-search, travelling salesman, Kruskal, Prim, Dijkstra, Edmonds-Karp)
-* Plotting with GraphViz (additional local installation needet)
+* Run algorithms
+ * Deep-/Breadth search
+ * Travelling salesman
+ * Minimal spanning tree: Kruskal, Prim
+ * Shortest path: Dijkstra, Moore-Bellman-Ford
+ * Maximum flow: Edmonds-Karp
+ * Minimum cost flow: Cycle cancelling, Successive shortest path
+ * .. more to come
+* Plotting with GraphViz (local installation needet)
