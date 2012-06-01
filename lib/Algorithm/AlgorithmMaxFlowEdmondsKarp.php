@@ -43,7 +43,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      *
      * @return Graph
      */
-    public function getResultGraph(){
+    public function createGraph(){
         $currentGraph = $this->graph->createGraphClone();
 
         $i = 0;
@@ -61,7 +61,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 
                 $residualAlgorithm = new AlgorithmResidualGraph($currentGraph);
                 $residualAlgorithm->setMergeParallelEdges(true);
-                $currentGraph = $residualAlgorithm->getResultGraph(true);		// Generate new residual graph and repeat
+                $currentGraph = $residualAlgorithm->createGraph(true);		// Generate new residual graph and repeat
             }
 
         } while($pathFlow);
@@ -75,7 +75,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      * @return double
      */
     public function getMaxFlowValue(){
-        $resultGraph = $this->getResultGraph();
+        $resultGraph = $this->createGraph();
         
         $start = $resultGraph->getVertex($this->startVertex->getId());
         $maxFlow = 0;

@@ -65,7 +65,7 @@ class AlgorithmTspBruteforce extends AlgorithmTsp{
     public function setUpperLimit($limit){
         if($limit === true){
             $alg = new AlgorithmTspMst($this->graph);
-            $limit = $alg->getResultGraph()->getWeight();
+            $limit = $alg->createGraph()->getWeight();
         }
         $this->upperLimit = $limit;
         return $this;

@@ -9,7 +9,7 @@ abstract class AlgorithmTsp extends Algorithm {
      * @uses AlgorithmTsp::getEdges()
      * @uses Graph::createGraphCloneEdges()
      */
-    public function getResultGraph(){
+    public function createGraph(){
     	return $this->graph->createGraphCloneEdges($this->getEdges());
     }
     

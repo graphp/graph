@@ -112,7 +112,7 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses AlgorithmSp::getEdges()
      * @uses Graph::createGraphCloneEdges()
      */
-    public function getResultGraph(){
+    public function createGraph(){
     	return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());
     }
     

@@ -18,7 +18,7 @@ class AlgorithmTspMst extends AlgorithmTsp{
 		$returnEdges = array();
 
 		$minimumSpanningTreeAlgorithm = new AlgorithmMstKruskal($this->graph);		// Create minimum spanning tree
-		$minimumSpanningTree = $minimumSpanningTreeAlgorithm->getResultGraph();
+		$minimumSpanningTree = $minimumSpanningTreeAlgorithm->createGraph();
 
 		$alg = new AlgorithmSearchDepthFirst($minimumSpanningTree->getVertexFirst());
 		$depthFirstSearch = $alg->getVertices();	                            // Depth first search in minmum spanning tree (for the eulerian path)

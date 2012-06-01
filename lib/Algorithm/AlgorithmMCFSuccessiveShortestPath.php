@@ -35,13 +35,13 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 	/**
 	 * @uses AlgorithmMCFSuccessiveShortestPath::flow(Vertex $vertex)
 	 * @uses Graph::createGraphClone()
-	 * @uses AlgorithmResidualGraph::getResultGraph()
+	 * @uses AlgorithmResidualGraph::createGraph()
 	 * @uses AlgorithmSearchBreadthFirst::getVertices()
 	 * @uses AlgorithmSpMooreBellmanFord::getEdgesTo(Vertex $targetVertex)
 	 * 
-	 * @see AlgorithmMCF::getResultGraph()
+	 * @see AlgorithmMCF::createGraph()
 	 */
-	public function getResultGraph() {
+	public function createGraph() {
 		
 		$resultGraph = $this->graph->createGraphClone();
 		
@@ -61,7 +61,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 		{
 			//create residual graph
 			$algRG = new AlgorithmResidualGraph($resultGraph);
-			$residualGraph = $algRG->getResultGraph();
+			$residualGraph = $algRG->createGraph();
 			
 			//search for a source	
 			$vertices = $residualGraph->getVertices();

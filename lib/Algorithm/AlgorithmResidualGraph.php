@@ -28,7 +28,7 @@ class AlgorithmResidualGraph extends Algorithm{
      * @uses Graph::createEdgeClone()
      * @uses Graph::createEdgeCloneInverted()
      */
-    public function getResultGraph(){
+    public function createGraph(){
 
         $newgraph = $this->graph->createGraphCloneEdgeless();
 
