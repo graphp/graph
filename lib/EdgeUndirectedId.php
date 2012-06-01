@@ -113,7 +113,7 @@ class EdgeUndirectedId extends Edge{
 		}
 	}
 	
-	public function isOutgoingEdgeOf(Vertex $startVertex){
+	public function hasVertexStart(Vertex $startVertex){
 		return ($this->graph->getVertex($this->a) === $startVertex || $this->graph->getVertex($this->b) === $startVertex);
 	}
 }

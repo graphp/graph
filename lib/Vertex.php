@@ -372,7 +372,7 @@ class Vertex extends Layoutable{
 	public function getEdgesOutgoing(){
 		$outgoingEdges = array();
 		foreach ($this->edges as $edge){
-			if ($edge->isOutgoingEdgeOf($this)){
+			if ($edge->hasVertexStart($this)){
 				$outgoingEdges[] = $edge;
 			}
 		}
@@ -387,7 +387,7 @@ class Vertex extends Layoutable{
 	public function getEdgesIngoing(){
 		$ingoingEdges = array() ;
 		foreach ($this->edges as $edge){
-			if (!$edge->isOutgoingEdgeOf($this)){                               // if its not the outgoing it must be the ingoing
+			if (!$edge->hasVertexStart($this)){                               // if its not the outgoing it must be the ingoing
 				$ingoingEdges[] = $edge;
 			}
 		}

@@ -170,10 +170,11 @@ abstract class Edge extends Layoutable{
 	/**
 	 * return true if this edge is an outgoing edge of the given vertex
 	 * return false ; every other case
-	 *
+	 * 
+	 * @param Vertex $startVertex
 	 * @return boolean
 	 */
-	abstract public function isOutgoingEdgeOf(Vertex $startVertex);
+	abstract public function hasVertexStart(Vertex $startVertex);
 
 	/**
 	 * Return string with edge visualisation

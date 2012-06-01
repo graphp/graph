@@ -98,7 +98,7 @@ class EdgeDirected extends Edge{
 		return $this->from;
 	}
 	
-	public function isOutgoingEdgeOf(Vertex $startVertex){
+	public function hasVertexStart(Vertex $startVertex){
 		return ($this->from === $startVertex);
 	}
 }

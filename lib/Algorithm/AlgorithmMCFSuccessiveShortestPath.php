@@ -21,7 +21,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
 				throw new Exception("TODO: undirected edges not suported jet");
 			}
 			
-			if ($edge->isOutgoingEdgeOf($vertex)){
+			if ($edge->hasVertexStart($vertex)){ // edge is an outgoing edge of this vertex
 				$sumOfFlow -= $edge->getFlow();
 			}
 			else{
