@@ -68,7 +68,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 
         return $this->getFlowGraphFromResidualGraph($currentGraph);				// Generate the full flow graph from the final residual graph (handled internal: with the initialGraph)
     }
-    
+
     /**
      * Returns max flow value
      *
@@ -76,10 +76,10 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      */
     public function getMaxFlowValue(){
         $resultGraph = $this->getResultGraph();
-        
+
         $start = $resultGraph->getVertex($this->startVertex->getId());
         $maxFlow = 0;
-        foreach ($start->getOutgoingEdges() as $edge){
+        foreach ($start->getEdgesOutgoing() as $edge){
             $maxFlow = $maxFlow + $edge->getWeight();
         }
         return $maxFlow;
@@ -151,10 +151,10 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         foreach($path->getEdges() as $edge){
             $edge->setFlow($maxFlowValue);
         }
-        
+
         return $path;
     }
-    
+
     /**
      * Extracts (optional: inversed) edge from the given graph
      *
@@ -165,10 +165,10 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      */
     private function getEdgeSimilarFromGraph($edge, $newGraph, $inverse=false){
         // Extract endpoints from edge
-        $originalStartVertexArray = $edge->getStartVertices();
+        $originalStartVertexArray = $edge->getVerticesStart();
         $originalStartVertex = array_shift($originalStartVertexArray);
 
-        $originalTargetVertexArray = $edge->getTargetVertices();
+        $originalTargetVertexArray = $edge->getVerticesTarget();
         $originalTargetVertex = array_shift($originalTargetVertexArray);
 
         // swap them if inverse wanted
