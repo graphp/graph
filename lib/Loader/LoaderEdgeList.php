@@ -1,7 +1,7 @@
 <?php
 
 class LoaderEdgeList extends LoaderFile{
-	public function getGraph(){
+	public function createGraph(){
 		
 		$graph = new Graph();
 		

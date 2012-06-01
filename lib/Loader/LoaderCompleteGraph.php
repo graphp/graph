@@ -8,7 +8,7 @@ class LoaderCompleteGraph extends Loader{
 	    $this->numberOfVertices = $n;
 	}
 	
-	public function getGraph(){
+	public function createGraph(){
 		$start = microtime(true);
 		
 		$graph = new Graph();

@@ -195,8 +195,8 @@ class LoaderUmlClassDiagram extends Loader{
     	return $vertex;
     }
     
-    public function getGraph(){
-        return $this->graph;
+    public function createGraph(){
+        return $this->graph->createGraphClone();
     }
     
     private function getDocBlock($ref){

@@ -6,7 +6,7 @@ abstract class Loader{
     
 	protected $directedEdges = false;
 	
-	public abstract function getGraph();
+	public abstract function createGraph();
 	
 	public function setEnableDirectedEdges($directedEdges){
 		$this->directedEdges = $directedEdges;
