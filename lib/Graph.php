@@ -281,16 +281,16 @@ class Graph extends Layoutable implements Countable{
 	 * 
 	 * @return int
 	 * @throws Exception if graph is empty or not regular (i.e. vertex degrees are not equal)
-	 * @uses Vertex::getIndegree()
-	 * @uses Vertex::getOutdegree()
+	 * @uses Vertex::getDegreeIn()
+	 * @uses Vertex::getDegreeOut()
 	 */
 	public function getDegree(){
-	    $degree = $this->getVertexFirst()->getIndegree(); // get initial degree of any start vertex to compare others to
+	    $degree = $this->getVertexFirst()->getDegreeIn(); // get initial degree of any start vertex to compare others to
 	    
 	    foreach($this->vertices as $vertex){
-	        $i = $vertex->getIndegree();
+	        $i = $vertex->getDegreeIn();
 	        
-	        if($i !== $degree || $i !== $vertex->getOutdegree()){ // degree same (and for digraphs: indegree=outdegree)
+	        if($i !== $degree || $i !== $vertex->getDegreeOut()){ // degree same (and for digraphs: indegree=outdegree)
 	            throw new Exception('Graph is not k-regular');
 	        }
 	    }
@@ -306,7 +306,7 @@ class Graph extends Layoutable implements Countable{
 	 * @uses Vertex::getFirst()
 	 * @uses Vertex::getDegree()
 	 */
-	public function getMinDegree(){
+	public function getDegreeMin(){
 	    return Vertex::getFirst($this->vertices,Vertex::ORDER_DEGREE)->getDegree();
 	}
 	
@@ -318,7 +318,7 @@ class Graph extends Layoutable implements Countable{
 	 * @uses Vertex::getFirst()
 	 * @uses Vertex::getDegree()
 	 */
-	public function getMaxDegree(){
+	public function getDegreeMax(){
 	    return Vertex::getFirst($this->vertices,Vertex::ORDER_DEGREE,true)->getDegree();
 	}
 	
@@ -444,12 +444,12 @@ class Graph extends Layoutable implements Countable{
 	 * checks whether the indegree of every vertex equals its outdegree
 	 * 
 	 * @return boolean
-	 * @uses Vertex::getIndegree()
-	 * @uses Vertex::getOutdegree()
+	 * @uses Vertex::getDegreeIn()
+	 * @uses Vertex::getDegreeOut()
 	 */
 	public function isBalanced(){
 	    foreach($this->vertices as $vertex){
-	        if($vertex->getIndegree() !== $vertex->getOutdegree()){
+	        if($vertex->getDegreeIn() !== $vertex->getDegreeOut()){
 	            return false;
 	        }
 	    }

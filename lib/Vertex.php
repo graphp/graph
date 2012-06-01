@@ -28,7 +28,7 @@ class Vertex extends Layoutable{
      * order by indegree of vertex
      * 
      * @var int
-     * @see Vertex::getIndegree()
+     * @see Vertex::getDegreeIn()
      */
     const ORDER_INDEGREE = 3;
     
@@ -36,7 +36,7 @@ class Vertex extends Layoutable{
      * order by outdegree of vertex
      * 
      * @var int
-     * @see Vertex::getOutdegree()
+     * @see Vertex::getDegreeOut()
      */
     const ORDER_OUTDEGREE = 4;
     
@@ -58,8 +58,8 @@ class Vertex extends Layoutable{
      * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
      * @uses Vertex::getDegree()
-     * @uses Vertex::getIndegree()
-     * @uses Vertex::getOutdegree()
+     * @uses Vertex::getDegreeIn()
+     * @uses Vertex::getDegreeOut()
      */
     public static function getFirst($vertices,$by=self::ORDER_FIFO,$desc=false){
         if($vertices instanceof Graph){
@@ -83,9 +83,9 @@ class Vertex extends Layoutable{
             }else if($by === self::ORDER_DEGREE){
                 $now = $vertex->getDegree();
             }else if($by === self::ORDER_INDEGREE){
-                $now = $vertex->getIndegree();
+                $now = $vertex->getDegreeIn();
             }else if($by === self::ORDER_OUTDEGREE){
-                $now = $vertex->getOutdegree();
+                $now = $vertex->getDegreeOut();
             }else{
                 throw new Exception('Invalid order flag "'.$by.'"');
             }
@@ -111,8 +111,8 @@ class Vertex extends Layoutable{
      * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
      * @uses Vertex::getDegree()
-     * @uses Vertex::getIndegree()
-     * @uses Vertex::getOutdegree()
+     * @uses Vertex::getDegreeIn()
+     * @uses Vertex::getDegreeOut()
      */
     public static function getAll($vertices,$by=self::ORDER_FIFO,$desc=false){
         if($vertices instanceof Graph){
@@ -135,9 +135,9 @@ class Vertex extends Layoutable{
             }else if($by === self::ORDER_DEGREE){
                 $now = $vertex->getDegree();
             }else if($by === self::ORDER_INDEGREE){
-                $now = $vertex->getIndegree();
+                $now = $vertex->getDegreeIn();
             }else if($by === self::ORDER_OUTDEGREE){
-                $now = $vertex->getOutdegree();
+                $now = $vertex->getDegreeOut();
             }else{
                 throw new Exception('Invalid order flag "'.$by.'"');
             }
@@ -466,8 +466,8 @@ class Vertex extends Layoutable{
 	 * 
 	 * @return int
 	 * @throws Exception
-	 * @see Vertex::getIndegree()
-	 * @see Vertex::getOutdegree()
+	 * @see Vertex::getDegreeIn()
+	 * @see Vertex::getDegreeOut()
 	 */
 	public function getDegree(){
 	    $n = 0;
@@ -508,7 +508,7 @@ class Vertex extends Layoutable{
 	 * @uses Edge::hasVertexTo()
 	 * @see Vertex::getDegree()
 	 */
-	public function getIndegree(){
+	public function getDegreeIn(){
 	    $n = 0;
 	    foreach($this->edges as $edge){
 	        if($edge->hasVertexTo($this)){
@@ -525,7 +525,7 @@ class Vertex extends Layoutable{
 	 * @uses Edge::hasVertexFrom()
 	 * @see Vertex::getDegree()
 	 */
-	public function getOutdegree(){
+	public function getDegreeOut(){
 	    $n = 0;
 	    foreach($this->edges as $edge){
 	        if($edge->hasVertexFrom($this)){
@@ -540,7 +540,7 @@ class Vertex extends Layoutable{
 	 * 
 	 * @return boolean
 	 * @uses Edge::hasVertexTo()
-	 * @see Vertex::getIndegree()
+	 * @see Vertex::getDegreeIn()
 	 */
 	public function isSource(){
 	    foreach($this->edges as $edge){
@@ -556,7 +556,7 @@ class Vertex extends Layoutable{
 	 * 
 	 * @return boolean
 	 * @uses Edge::hasVertexFrom()
-	 * @see Vertex::getOutdegree()
+	 * @see Vertex::getDegreeOut()
 	 */
 	public function isSink(){
 	    foreach($this->edge as $edge){
