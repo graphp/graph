@@ -101,18 +101,6 @@ class EdgeUndirectedId extends Edge{
 		}
 	}
 	
-	public function getVertexFromToById($endVertex){
-		if ($this->a == $endVertex->getId()){
-			return $this->graph->getVertex($this->b);
-		}
-		if ($this->b == $endVertex->getId()){
-			return $this->graph->getVertex($this->a);
-		}
-		else{
-			throw new Exception('Invalid end vertex');
-		}
-	}
-	
 	public function hasVertexStart(Vertex $startVertex){
 		return ($this->graph->getVertex($this->a) === $startVertex || $this->graph->getVertex($this->b) === $startVertex);
 	}
