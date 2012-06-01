@@ -26,7 +26,7 @@ class AlgorithmTspNearestNeighbor extends AlgorithmTsp{
         for (    $i = 0; $i < $n - 1; ++$i,
                                     $vertex = $nextVertex){                        //n-1 steps (spanning tree)
             
-            $edges = $vertex->getEdgesOutgoing();                                //get all edges from the aktuel vertex
+            $edges = $vertex->getEdgesOut();                                //get all edges from the aktuel vertex
             
             $sortedEdges = new SplPriorityQueue();
             
