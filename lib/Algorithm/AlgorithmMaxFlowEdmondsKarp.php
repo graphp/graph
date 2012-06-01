@@ -60,7 +60,8 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 				}
 
 				$residualAlgorithm = new AlgorithmResidualGraph($currentGraph);
-				$currentGraph = $residualAlgorithm->getResultGraph();			// Generate new residual graph and repeat
+				$residualAlgorithm->setMergeParallelEdges(true);
+				$currentGraph = $residualAlgorithm->getResultGraph(true);		// Generate new residual graph and repeat
 			}
 
 		} while($pathFlow);
@@ -91,7 +92,6 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 	 * @return Graph graph with maximal flow
 	 */
 	private function getFlowGraphFromResidualGraph($residualGraph){
-
 
 		$resultGraph = $this->graph->createGraphCloneEdgeless();				// Process original graph and create a new graph that contains the flow
 
