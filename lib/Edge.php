@@ -184,9 +184,7 @@ abstract class Edge extends Layoutable{
 	abstract function toString();
 
 	// 	abstract public function hasVertexTo($vertex);
-
-	// 	abstract public function hasVertexFrom($vertex);
-
+	
 	abstract public function isConnection($from, $to);
 
 	/**

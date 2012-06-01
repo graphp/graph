@@ -35,11 +35,7 @@ class EdgeUndirected extends Edge{
 	public function toString(){
 		return $this->a->getId()." <-> ".$this->b->getId()." Weight: ".$this->weight;
 	}
-
-	//     public function hasVertexFrom($vertex){
-	//         return ($this->a === $vertex || $this->b === $vertex);
-	//     }
-
+	
 	//     public function hasVertexTo($vertex){
 	//         return ($this->a === $vertex || $this->b === $vertex);
 	//     }

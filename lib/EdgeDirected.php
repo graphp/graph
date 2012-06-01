@@ -59,11 +59,7 @@ class EdgeDirected extends Edge{
 	public function toString(){
 		return $this->from->getId()." -> ".$this->to->getId()." Weight: ".$this->weight;
 	}
-
-	//     public function hasVertexFrom($vertex){
-	//         return ($this->from === $vertex);
-	//     }
-
+	
 	//     public function hasVertexTo($vertex){
 	//         return ($this->to === $vertex);
 	//     }

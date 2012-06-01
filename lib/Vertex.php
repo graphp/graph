@@ -515,13 +515,13 @@ class Vertex extends Layoutable{
 	 * get outdegree of this vertex (number of edges FROM this vertex TO other vertices)
 	 * 
 	 * @return int
-	 * @uses Edge::hasVertexFrom()
+	 * @uses Edge::hasVertexStart()
 	 * @see Vertex::getDegree()
 	 */
 	public function getDegreeOut(){
 	    $n = 0;
 	    foreach($this->edges as $edge){
-	        if($edge->hasVertexFrom($this)){
+	        if($edge->hasVertexStart($this)){
 	            ++$n;
 	        }
 	    }
@@ -548,12 +548,12 @@ class Vertex extends Layoutable{
 	 * checks whether this vertex is a sink, i.e. its outdegree is zero
 	 * 
 	 * @return boolean
-	 * @uses Edge::hasVertexFrom()
+	 * @uses Edge::hasVertexStart()
 	 * @see Vertex::getDegreeOut()
 	 */
 	public function isSink(){
 	    foreach($this->edge as $edge){
-	        if($edge->hasVertexFrom($this)){
+	        if($edge->hasVertexStart($this)){
 	            return false;
 	        }
 	    }
