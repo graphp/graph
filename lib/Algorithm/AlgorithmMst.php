@@ -10,7 +10,7 @@ abstract class AlgorithmMst extends Algorithm {
      * @uses Graph::createGraphCloneEdges()
      */
     public function createGraph(){
-    	return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());				//Copy Graph
+        return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());                //Copy Graph
     }
     
     /**

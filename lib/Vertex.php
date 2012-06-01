@@ -149,451 +149,451 @@ class Vertex extends Layoutable{
         return $it;
     }
     
-	private $id;
-	
-	/**
-	 * @var array[Edge]
-	 */
-	private $edges = array();
-	
-	/**
-	 * @var Graph
-	 */
-	private $graph;
-	
-	/**
-	 * vertex balance
-	 * 
-	 * @var float|NULL
-	 * @see Vertex::setBalance()
-	 */
-	private $balance;
-	
-	/**
-	 * Creates a Vertex
-	 * 
-	 * @param int   $id    Identifier (int, string, what you want) $id
-	 * @param Graph $graph graph to be added to
-	 */
-	public function __construct($id, $graph){
-		$this->id = $id;
-		$this->graph = $graph;
-	}
-	
-	/**
-	 * get graph this vertex is attached to
-	 * 
-	 * @return Graph
-	 */
-	public function getGraph(){
-	    return $this->graph;
-	}
-	
-	public function getBalance(){
-	    return $this->balance;
-	}
-	
-	public function setBalance($balance){
-	    if($balance !== NULL && !is_float($balance) && !is_int($balance)){
-	        throw new Exception();
-	    }
-	    $this->balance = $balance;
-	    return $this;
-	}
-	
-	/**
-	 * Return string with vertex visualisation
-	 *
-	 * @return string
-	 */
-	public function toString(){
-		$return = "Edges of vertex ".$this->id.":\n";
-		
-		foreach ($this->edges as $edge){
-			$return .= "\t".$edge->toString()."\n"; 
-		}
-		
-		return $return;
-	}
-	
+    private $id;
+    
+    /**
+     * @var array[Edge]
+     */
+    private $edges = array();
+    
+    /**
+     * @var Graph
+     */
+    private $graph;
+    
+    /**
+     * vertex balance
+     * 
+     * @var float|NULL
+     * @see Vertex::setBalance()
+     */
+    private $balance;
+    
+    /**
+     * Creates a Vertex
+     * 
+     * @param int   $id    Identifier (int, string, what you want) $id
+     * @param Graph $graph graph to be added to
+     */
+    public function __construct($id, $graph){
+        $this->id = $id;
+        $this->graph = $graph;
+    }
+    
+    /**
+     * get graph this vertex is attached to
+     * 
+     * @return Graph
+     */
+    public function getGraph(){
+        return $this->graph;
+    }
+    
+    public function getBalance(){
+        return $this->balance;
+    }
+    
+    public function setBalance($balance){
+        if($balance !== NULL && !is_float($balance) && !is_int($balance)){
+            throw new Exception();
+        }
+        $this->balance = $balance;
+        return $this;
+    }
+    
+    /**
+     * Return string with vertex visualisation
+     *
+     * @return string
+     */
+    public function toString(){
+        $return = "Edges of vertex ".$this->id.":\n";
+        
+        foreach ($this->edges as $edge){
+            $return .= "\t".$edge->toString()."\n"; 
+        }
+        
+        return $return;
+    }
+    
 //getter setter
-	
-	/**
-	 * returns id of this Vertex
-	 * 
-	 * @return int
-	 */
-	public function getId(){
-		return $this->id;
-	}
-	
-	/**
-	 * checks whether this start vertex has a path to the given target vertex
-	 * 
-	 * @param Vertex $vertex
-	 * @return boolean
-	 * @uses AlgorithmSpBreadthFirst::hasVertex()
-	 */
-	public function hasPathTo($vertex){
-	    $alg = new AlgorithmSpBreadthFirst($this);
-	    return $alg->hasVertex($vertex);
-	}
-	
-	/**
-	 * checks whether the given vertex has a path TO THIS vertex
-	 * 
-	 * @param Vertex $vertex
-	 * @return boolean
-	 * @uses Vertex::hasPathTo()
-	 */
-	public function hasPathFrom($vertex){
-	    return $vertex->hasPathTo($this);
-	}
-	
-	/**
-	 * get array of vertices this vertex has a path to
-	 * 
-	 * @return array[Vertex]
-	 * @uses AlgorithmSpBreadthFirst::getVertices()
-	 */
-	public function getVerticesPathTo(){
-	    $alg = new AlgorithmSpBreadthFirst($this);
-	    return $alg->getVertices();
-	}
-	
-	/**
-	 * get array of vertices that have a path to this vertex
-	 * 
-	 * @return array[Vertex]
-	 * @uses AlgorithmSpBreadthFirst::getVertices()
-	 */
-	public function getVerticesPathFrom(){
-	    $alg = new AlgorithmSpBreadthFirst($this,true);
-	    return $alg->getVertices();
-	}
-	
-	/**
-	 * create new directed edge from this start vertex to given target vertex
-	 * 
-	 * @param Vertex $vertex target vertex
-	 * @return EdgeDirected
-	 * @throws Exception
-	 * @uses Graph::addEdge()
-	 */
-	public function createEdgeTo($vertex){
-	    if($vertex->getGraph() !== $this->graph){
-	        throw new Exception('Target vertex has to be within the same graph');
-	    }
-	    
-	    $edge = new EdgeDirected($this,$vertex);
-	    $this->edges []= $edge;
-	    $vertex->edges []= $edge;
-	    $this->graph->addEdge($edge);
-	    return $edge;
-	}
-	
-	/**
-	 * add new undirected (bidirectional) edge between this vertex and given vertex
-	 * 
-	 * @param Vertex $vertex
-	 * @return EdgeUndirected
-	 * @throws Exception
-	 * @uses Graph::addEdge()
-	 */
-	public function createEdge($vertex){
-	    if($vertex->getGraph() !== $this->graph){
-	        throw new Exception('Target vertex has to be within the same graph');
-	    }
-	    
-	    $edge = new EdgeUndirectedId($this,$vertex);
-	    $this->edges []= $edge;
-	    $vertex->edges []= $edge;
-	    $this->graph->addEdge($edge);
-	    return $edge;
-	}
-	
-	/**
-	 * remove the given edge from list of connected edges (MUST NOT be called manually)
-	 * 
-	 * @param Edge $edge
-	 * @return void
-	 * @private
-	 * @see Edge::destroy() instead!
-	 */
-	public function removeEdge($edge){
-	    $id = array_search($edge,$this->edges,true);
-	    if($id === false){
-	        throw new Exception('Given edge does NOT exist');				//Tobias: if edge gets Id => output of id
-	    }
-	    unset($this->edges[$id]);
-	}
-	
-	/**
-	 * check whether this vertex has a direct edge to given $vertex
-	 * 
-	 * @param Vertex $vertex
-	 * @return boolean
-	 * @uses Edge::hasVertexTarget()
-	 */
-	public function hasEdgeTo($vertex){
-	    foreach($this->edges as $edge){
+    
+    /**
+     * returns id of this Vertex
+     * 
+     * @return int
+     */
+    public function getId(){
+        return $this->id;
+    }
+    
+    /**
+     * checks whether this start vertex has a path to the given target vertex
+     * 
+     * @param Vertex $vertex
+     * @return boolean
+     * @uses AlgorithmSpBreadthFirst::hasVertex()
+     */
+    public function hasPathTo($vertex){
+        $alg = new AlgorithmSpBreadthFirst($this);
+        return $alg->hasVertex($vertex);
+    }
+    
+    /**
+     * checks whether the given vertex has a path TO THIS vertex
+     * 
+     * @param Vertex $vertex
+     * @return boolean
+     * @uses Vertex::hasPathTo()
+     */
+    public function hasPathFrom($vertex){
+        return $vertex->hasPathTo($this);
+    }
+    
+    /**
+     * get array of vertices this vertex has a path to
+     * 
+     * @return array[Vertex]
+     * @uses AlgorithmSpBreadthFirst::getVertices()
+     */
+    public function getVerticesPathTo(){
+        $alg = new AlgorithmSpBreadthFirst($this);
+        return $alg->getVertices();
+    }
+    
+    /**
+     * get array of vertices that have a path to this vertex
+     * 
+     * @return array[Vertex]
+     * @uses AlgorithmSpBreadthFirst::getVertices()
+     */
+    public function getVerticesPathFrom(){
+        $alg = new AlgorithmSpBreadthFirst($this,true);
+        return $alg->getVertices();
+    }
+    
+    /**
+     * create new directed edge from this start vertex to given target vertex
+     * 
+     * @param Vertex $vertex target vertex
+     * @return EdgeDirected
+     * @throws Exception
+     * @uses Graph::addEdge()
+     */
+    public function createEdgeTo($vertex){
+        if($vertex->getGraph() !== $this->graph){
+            throw new Exception('Target vertex has to be within the same graph');
+        }
+        
+        $edge = new EdgeDirected($this,$vertex);
+        $this->edges []= $edge;
+        $vertex->edges []= $edge;
+        $this->graph->addEdge($edge);
+        return $edge;
+    }
+    
+    /**
+     * add new undirected (bidirectional) edge between this vertex and given vertex
+     * 
+     * @param Vertex $vertex
+     * @return EdgeUndirected
+     * @throws Exception
+     * @uses Graph::addEdge()
+     */
+    public function createEdge($vertex){
+        if($vertex->getGraph() !== $this->graph){
+            throw new Exception('Target vertex has to be within the same graph');
+        }
+        
+        $edge = new EdgeUndirectedId($this,$vertex);
+        $this->edges []= $edge;
+        $vertex->edges []= $edge;
+        $this->graph->addEdge($edge);
+        return $edge;
+    }
+    
+    /**
+     * remove the given edge from list of connected edges (MUST NOT be called manually)
+     * 
+     * @param Edge $edge
+     * @return void
+     * @private
+     * @see Edge::destroy() instead!
+     */
+    public function removeEdge($edge){
+        $id = array_search($edge,$this->edges,true);
+        if($id === false){
+            throw new Exception('Given edge does NOT exist');                //Tobias: if edge gets Id => output of id
+        }
+        unset($this->edges[$id]);
+    }
+    
+    /**
+     * check whether this vertex has a direct edge to given $vertex
+     * 
+     * @param Vertex $vertex
+     * @return boolean
+     * @uses Edge::hasVertexTarget()
+     */
+    public function hasEdgeTo($vertex){
+        foreach($this->edges as $edge){
             if($edge->isConnection($this, $vertex)){
-	            return true;
-	        }
-	    }
-	    return false;
-	}
-	
-	/**
-	 * check whether the given vertex has a direct edge to THIS vertex
-	 * 
-	 * @param Vertex $vertex
-	 * @return boolean
-	 * @uses Vertex::hasEdgeTo()
-	 */
-	public function hasEdgeFrom($vertex){
-	    return $vertex->hasEdgeTo($this);
-	}
-	
-	/**
-	 * get ALL edges attached to this vertex
-	 * 
-	 * @return array[Edge]
-	 */
-	public function getEdges(){
-	    return $this->edges;
-	}
-	
-	/**
-	 * get ALL outgoing edges attached to this vertex
-	 *
-	 * @return array[Edge]
-	 */
-	public function getEdgesOutgoing(){
-		$outgoingEdges = array();
-		foreach ($this->edges as $edge){
-			if ($edge->hasVertexStart($this)){
-				$outgoingEdges[] = $edge;
-			}
-		}
-		return $outgoingEdges;
-	}
-	
-	/**
-	 * get ALL ingoing edges attached to this vertex
-	 *
-	 * @return array[Edge]
-	 */
-	public function getEdgesIngoing(){
-		$ingoingEdges = array() ;
-		foreach ($this->edges as $edge){
-			if (!$edge->hasVertexStart($this)){                               // if its not the outgoing it must be the ingoing
-				$ingoingEdges[] = $edge;
-			}
-		}
-		return $ingoingEdges;
-	}
-	
-	/**
-	 * get edges FROM this vertex TO the given vertex
-	 * 
-	 * @param Vertex $vertex
-	 * @return array[Edge]
-	 * @uses Edge::hasVertexTarget()
-	 */
-	public function getEdgesTo($vertex){
-	    $ret = array();
-	    foreach($this->edges as $edge){
-	        if($edge->isConnection($this, $vertex)){
-	            $ret[] = $edge;
-	        }
-	    }
-	    return $ret;
-	}
-	
-	/**
-	 * get edges FROM the given vertex TO this vertex
-	 *
-	 * @param Vertex $vertex
-	 * @return array[Edge]
-	 * @uses Vertex::getEdgesTo()
-	 */
-	public function getEdgesFrom($vertex){
-	    return $vertex->getEdgesTo($this);
-	}
-	
-	/**
-	 * get all vertices this vertex has an edge to
-	 * 
-	 * @return array[Vertex]
-	 * @uses Edge::getVerticesToFrom()
-	 */
-	public function getVerticesEdgeTo(){
-	    $ret = array();
-	    foreach($this->edges as $edge){
-	        try {
-	            $vertex = $edge->getVertexToFrom($this);
-	            $ret[$vertex->getId()] = $vertex;
-	        } catch (Exception $e) {
-	            
-	        }
-	        
-	       
-	    }
-	    return $ret;
-	}
-	
-	/**
-	 * get all vertices that have an edge TO this vertex
-	 * 
-	 * @return array[Vertex]
-	 * @uses Edge::getVerticesFromTo()
-	 */
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * check whether the given vertex has a direct edge to THIS vertex
+     * 
+     * @param Vertex $vertex
+     * @return boolean
+     * @uses Vertex::hasEdgeTo()
+     */
+    public function hasEdgeFrom($vertex){
+        return $vertex->hasEdgeTo($this);
+    }
+    
+    /**
+     * get ALL edges attached to this vertex
+     * 
+     * @return array[Edge]
+     */
+    public function getEdges(){
+        return $this->edges;
+    }
+    
+    /**
+     * get ALL outgoing edges attached to this vertex
+     *
+     * @return array[Edge]
+     */
+    public function getEdgesOutgoing(){
+        $outgoingEdges = array();
+        foreach ($this->edges as $edge){
+            if ($edge->hasVertexStart($this)){
+                $outgoingEdges[] = $edge;
+            }
+        }
+        return $outgoingEdges;
+    }
+    
+    /**
+     * get ALL ingoing edges attached to this vertex
+     *
+     * @return array[Edge]
+     */
+    public function getEdgesIngoing(){
+        $ingoingEdges = array() ;
+        foreach ($this->edges as $edge){
+            if (!$edge->hasVertexStart($this)){                               // if its not the outgoing it must be the ingoing
+                $ingoingEdges[] = $edge;
+            }
+        }
+        return $ingoingEdges;
+    }
+    
+    /**
+     * get edges FROM this vertex TO the given vertex
+     * 
+     * @param Vertex $vertex
+     * @return array[Edge]
+     * @uses Edge::hasVertexTarget()
+     */
+    public function getEdgesTo($vertex){
+        $ret = array();
+        foreach($this->edges as $edge){
+            if($edge->isConnection($this, $vertex)){
+                $ret[] = $edge;
+            }
+        }
+        return $ret;
+    }
+    
+    /**
+     * get edges FROM the given vertex TO this vertex
+     *
+     * @param Vertex $vertex
+     * @return array[Edge]
+     * @uses Vertex::getEdgesTo()
+     */
+    public function getEdgesFrom($vertex){
+        return $vertex->getEdgesTo($this);
+    }
+    
+    /**
+     * get all vertices this vertex has an edge to
+     * 
+     * @return array[Vertex]
+     * @uses Edge::getVerticesToFrom()
+     */
+    public function getVerticesEdgeTo(){
+        $ret = array();
+        foreach($this->edges as $edge){
+            try {
+                $vertex = $edge->getVertexToFrom($this);
+                $ret[$vertex->getId()] = $vertex;
+            } catch (Exception $e) {
+                
+            }
+            
+           
+        }
+        return $ret;
+    }
+    
+    /**
+     * get all vertices that have an edge TO this vertex
+     * 
+     * @return array[Vertex]
+     * @uses Edge::getVerticesFromTo()
+     */
     public function getVerticesEdgeFrom(){
-	    $ret = array();
-	    foreach($this->edges as $edge){
-	        $vertex = $edge->getVerticesFromTo($this);
+        $ret = array();
+        foreach($this->edges as $edge){
+            $vertex = $edge->getVerticesFromTo($this);
             $ret[$vertex->getId()] = $vertex;
-	    }
-	    return $ret;
-	}
-	
-	/**
-	 * get degree of this vertex (total number of edges)
-	 * 
-	 * vertex degree counts the total number of edges attached to this vertex
-	 * regardless of whether they're directed or not. loop edges are counted
-	 * twice as both start and end form a 'line' to the same vertex.
-	 * 
-	 * @return int
-	 * @see Vertex::getDegreeIn()
-	 * @see Vertex::getDegreeOut()
-	 */
-	public function getDegree(){
-	    return count($this->edges);
-	}
-	
-	/**
-	 * check whether this vertex is isolated (i.e. has no edges attached)
-	 * 
-	 * @return boolean
-	 */
-	public function isIsolated(){
-	    return !$this->edges;
-	}
-	
-	/**
-	 * check whether this is a leaf node (i.e. has only one edge)
-	 * 
-	 * @return boolean
-	 * @throws Exception if this is directed graph
-	 * @uses Vertex::getDegree()
-	 * @todo check logic! should be indegree=1 and outdegree=0 for directed and degree=indegree=outdegree=1 for undirected?
-	 */
-	public function isLeaf(){
-	    return ($this->getDegree() === 1);
-	}
-	
-	/**
-	 * get indegree of this vertex (number of edges TO this vertex)
-	 * 
-	 * @return int
-	 * @uses Edge::hasVertexTarget()
-	 * @see Vertex::getDegree()
-	 */
-	public function getDegreeIn(){
-	    $n = 0;
-	    foreach($this->edges as $edge){
-	        if($edge->hasVertexTarget($this)){
-	            ++$n;
-	        }
-	    }
-	    return $n;
-	}
-	
-	/**
-	 * get outdegree of this vertex (number of edges FROM this vertex TO other vertices)
-	 * 
-	 * @return int
-	 * @uses Edge::hasVertexStart()
-	 * @see Vertex::getDegree()
-	 */
-	public function getDegreeOut(){
-	    $n = 0;
-	    foreach($this->edges as $edge){
-	        if($edge->hasVertexStart($this)){
-	            ++$n;
-	        }
-	    }
-	    return $n;
-	}
-	
-	/**
-	 * checks whether this vertex is a source, i.e. its indegree is zero
-	 * 
-	 * @return boolean
-	 * @uses Edge::hasVertexTarget()
-	 * @see Vertex::getDegreeIn()
-	 */
-	public function isSource(){
-	    foreach($this->edges as $edge){
-	        if($edge->hasVertexTarget($this)){
-	            return false;
-	        }
-	    }
-	    return true; // reach this point: no edge to this vertex
-	}
-	
-	/**
-	 * checks whether this vertex is a sink, i.e. its outdegree is zero
-	 * 
-	 * @return boolean
-	 * @uses Edge::hasVertexStart()
-	 * @see Vertex::getDegreeOut()
-	 */
-	public function isSink(){
-	    foreach($this->edge as $edge){
-	        if($edge->hasVertexStart($this)){
-	            return false;
-	        }
-	    }
-	    return true; // reach this point: no edge away from this vertex
-	}
-	
-	/**
-	 * checks whether this vertex has a loop (edge to itself)
-	 * 
-	 * @return boolean
-	 * @uses Edge::isLoop()
-	 */
-	public function hasLoop(){
-	    foreach($this->edges as $edge){
-	        if($edge->isLoop()){
-	            return true;
-	        }
-	    }
-	    return false;
-	}
-	
-	/**
-	 * destroy vertex and all edges connected to it and remove reference from graph
-	 *
-	 * @uses Edge::destroy()
-	 * @uses Graph::removeVertex()
-	 */
-	public function destroy(){
-	    foreach($this->edges as $edge){
-	        $edge->destroy();
-	    }
-	    $this->graph->removeVertex($this);
-	}
-	
-	/**
-	 * do NOT allow cloning of objects
-	 *
-	 * @throws Exception
-	 */
-	private function __clone(){
-	    throw new Exception();
-	}
+        }
+        return $ret;
+    }
+    
+    /**
+     * get degree of this vertex (total number of edges)
+     * 
+     * vertex degree counts the total number of edges attached to this vertex
+     * regardless of whether they're directed or not. loop edges are counted
+     * twice as both start and end form a 'line' to the same vertex.
+     * 
+     * @return int
+     * @see Vertex::getDegreeIn()
+     * @see Vertex::getDegreeOut()
+     */
+    public function getDegree(){
+        return count($this->edges);
+    }
+    
+    /**
+     * check whether this vertex is isolated (i.e. has no edges attached)
+     * 
+     * @return boolean
+     */
+    public function isIsolated(){
+        return !$this->edges;
+    }
+    
+    /**
+     * check whether this is a leaf node (i.e. has only one edge)
+     * 
+     * @return boolean
+     * @throws Exception if this is directed graph
+     * @uses Vertex::getDegree()
+     * @todo check logic! should be indegree=1 and outdegree=0 for directed and degree=indegree=outdegree=1 for undirected?
+     */
+    public function isLeaf(){
+        return ($this->getDegree() === 1);
+    }
+    
+    /**
+     * get indegree of this vertex (number of edges TO this vertex)
+     * 
+     * @return int
+     * @uses Edge::hasVertexTarget()
+     * @see Vertex::getDegree()
+     */
+    public function getDegreeIn(){
+        $n = 0;
+        foreach($this->edges as $edge){
+            if($edge->hasVertexTarget($this)){
+                ++$n;
+            }
+        }
+        return $n;
+    }
+    
+    /**
+     * get outdegree of this vertex (number of edges FROM this vertex TO other vertices)
+     * 
+     * @return int
+     * @uses Edge::hasVertexStart()
+     * @see Vertex::getDegree()
+     */
+    public function getDegreeOut(){
+        $n = 0;
+        foreach($this->edges as $edge){
+            if($edge->hasVertexStart($this)){
+                ++$n;
+            }
+        }
+        return $n;
+    }
+    
+    /**
+     * checks whether this vertex is a source, i.e. its indegree is zero
+     * 
+     * @return boolean
+     * @uses Edge::hasVertexTarget()
+     * @see Vertex::getDegreeIn()
+     */
+    public function isSource(){
+        foreach($this->edges as $edge){
+            if($edge->hasVertexTarget($this)){
+                return false;
+            }
+        }
+        return true; // reach this point: no edge to this vertex
+    }
+    
+    /**
+     * checks whether this vertex is a sink, i.e. its outdegree is zero
+     * 
+     * @return boolean
+     * @uses Edge::hasVertexStart()
+     * @see Vertex::getDegreeOut()
+     */
+    public function isSink(){
+        foreach($this->edge as $edge){
+            if($edge->hasVertexStart($this)){
+                return false;
+            }
+        }
+        return true; // reach this point: no edge away from this vertex
+    }
+    
+    /**
+     * checks whether this vertex has a loop (edge to itself)
+     * 
+     * @return boolean
+     * @uses Edge::isLoop()
+     */
+    public function hasLoop(){
+        foreach($this->edges as $edge){
+            if($edge->isLoop()){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * destroy vertex and all edges connected to it and remove reference from graph
+     *
+     * @uses Edge::destroy()
+     * @uses Graph::removeVertex()
+     */
+    public function destroy(){
+        foreach($this->edges as $edge){
+            $edge->destroy();
+        }
+        $this->graph->removeVertex($this);
+    }
+    
+    /**
+     * do NOT allow cloning of objects
+     *
+     * @throws Exception
+     */
+    private function __clone(){
+        throw new Exception();
+    }
 }

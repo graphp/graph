@@ -14,7 +14,7 @@ abstract class Layoutable {
      * @return array
      */
     public function getLayout(){
-    	return $this->layout;
+        return $this->layout;
     }
     
     /**
@@ -39,7 +39,7 @@ abstract class Layoutable {
                 $this->layout[$key] = $value;
             }
         }
-    	return $this;
+        return $this;
     }
     
     /**
@@ -60,12 +60,12 @@ abstract class Layoutable {
         }
         foreach($name as $key=>$value){
             if($value === NULL){
-            	unset($this->layout[$key]);
+                unset($this->layout[$key]);
             }else{
-            	$this->layout[$key] = GraphViz::escape($value);
+                $this->layout[$key] = GraphViz::escape($value);
             }
         }
-    	return $this;
+        return $this;
     }
     
     /**

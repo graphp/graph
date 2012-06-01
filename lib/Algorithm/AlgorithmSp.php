@@ -9,7 +9,7 @@ abstract class AlgorithmSp extends Algorithm {
     protected $startVertex;
     
     public function __construct(Vertex $startVertex){
-    	$this->startVertex = $startVertex;
+        $this->startVertex = $startVertex;
     }
     
     /**
@@ -22,7 +22,7 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses AlgorithmSp::getEdgesToInternal()
      */
     public function getEdgesTo($endVertex){
-    	return $this->getEdgesToInternal($endVertex,$this->getEdges());
+        return $this->getEdgesToInternal($endVertex,$this->getEdges());
     }
     
     /**
@@ -35,25 +35,25 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses AlgorithmSp::getEdges() if no edges were given
      */
     protected function getEdgesToInternal($endVertex,$edges){
-    	$currentVertex = $endVertex;
-    	$path = array();
-    	while($currentVertex !== $this->startVertex){
-    		$pre = NULL;
-    		foreach($edges as $edge){ // check all edges to search for edge that points TO current vertex
-    			try{
-    				$pre = $edge->getVertexFromTo($currentVertex); // get start point of this edge (fails if current vertex is not its end point)
-    				$path []= $edge;
-    				$currentVertex = $pre;
-    				break;
-    			}
-    			catch(Exception $ignore){
-    			} // ignore: this edge does not point TO current vertex
-    		}
-    		if($pre === NULL){
-    			throw new Exception('No edge leading to vertex');
-    		}
-    	}
-    	return array_reverse($path);
+        $currentVertex = $endVertex;
+        $path = array();
+        while($currentVertex !== $this->startVertex){
+            $pre = NULL;
+            foreach($edges as $edge){ // check all edges to search for edge that points TO current vertex
+                try{
+                    $pre = $edge->getVertexFromTo($currentVertex); // get start point of this edge (fails if current vertex is not its end point)
+                    $path []= $edge;
+                    $currentVertex = $pre;
+                    break;
+                }
+                catch(Exception $ignore){
+                } // ignore: this edge does not point TO current vertex
+            }
+            if($pre === NULL){
+                throw new Exception('No edge leading to vertex');
+            }
+        }
+        return array_reverse($path);
     }
     
     /**
@@ -64,11 +64,11 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses Edge::getWeight()
      */
     private function sumEdges($edges){
-    	$sum = 0;
-    	foreach($edges as $edge){
-    		$sum += $edge->getWeight();
-    	}
-    	return $sum;
+        $sum = 0;
+        foreach($edges as $edge){
+            $sum += $edge->getWeight();
+        }
+        return $sum;
     }
     
     /**
@@ -80,16 +80,16 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses AlgorithmSp::sumEdges()
      */
     public function getDistanceMap(){
-    	$edges = $this->getEdges();
-    	$ret = array();
-    	foreach($this->startVertex->getGraph()->getVertices() as $vid=>$vertex){
-    		try{
-    			$ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex,$edges));
-    		}
-    		catch(Exception $ignore){
-    		} // ignore vertices that can not be reached
-    	}
-    	return $ret;
+        $edges = $this->getEdges();
+        $ret = array();
+        foreach($this->startVertex->getGraph()->getVertices() as $vid=>$vertex){
+            try{
+                $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex,$edges));
+            }
+            catch(Exception $ignore){
+            } // ignore vertices that can not be reached
+        }
+        return $ret;
     }
     
     /**
@@ -102,7 +102,7 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses AlgorithmSp::sumEdges()
      */
     public function getDistance($endVertex){
-    	return $this->sumEdges($this->getEdgesTo($endVertex));
+        return $this->sumEdges($this->getEdgesTo($endVertex));
     }
     
     /**
@@ -113,7 +113,7 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses Graph::createGraphCloneEdges()
      */
     public function createGraph(){
-    	return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());
+        return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());
     }
     
     /**
@@ -131,14 +131,14 @@ abstract class AlgorithmSp extends Algorithm {
         
         $edges = array();
         foreach($vertices as $vid=>$vertex){
-        	//echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
-        	if (isset( $predecessor[$vid] )){
-        		$predecesVertex = $predecessor[$vid];	//get predecor
+            //echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
+            if (isset( $predecessor[$vid] )){
+                $predecesVertex = $predecessor[$vid];    //get predecor
         
-        		//echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH COSTS: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
+                //echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH COSTS: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
         
-        		$edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);	//get cheapest edge
-        	}
+                $edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);    //get cheapest edge
+            }
         }
         
         return $edges;

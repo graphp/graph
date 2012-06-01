@@ -50,7 +50,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         do{
             $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get shortest path if NULL-> Done
 
-            if($pathFlow){														// If path exists add the new flow to graph
+            if($pathFlow){                                                        // If path exists add the new flow to graph
                 $edgeFromFlowPath = Edge::getFirst($pathFlow->getEdges());
                 $newFlowValue = $edgeFromFlowPath->getFlow();
 
@@ -61,12 +61,12 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 
                 $residualAlgorithm = new AlgorithmResidualGraph($currentGraph);
                 $residualAlgorithm->setMergeParallelEdges(true);
-                $currentGraph = $residualAlgorithm->createGraph(true);		// Generate new residual graph and repeat
+                $currentGraph = $residualAlgorithm->createGraph(true);        // Generate new residual graph and repeat
             }
 
         } while($pathFlow);
 
-        return $this->getFlowGraphFromResidualGraph($currentGraph);				// Generate the full flow graph from the final residual graph (handled internal: with the initialGraph)
+        return $this->getFlowGraphFromResidualGraph($currentGraph);                // Generate the full flow graph from the final residual graph (handled internal: with the initialGraph)
     }
 
     /**
@@ -93,7 +93,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      */
     private function getFlowGraphFromResidualGraph($residualGraph){
 
-        $resultGraph = $this->graph->createGraphCloneEdgeless();				// Process original graph and create a new graph that contains the flow
+        $resultGraph = $this->graph->createGraphCloneEdgeless();                // Process original graph and create a new graph that contains the flow
 
         $originalGraphEdgesArray = $this->graph->getEdges();
 
@@ -187,7 +187,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 
         // Check for parallel edges
         $countOfFoundEdges = count($residualEdgeArray);
-        if($countOfFoundEdges === 0){											// If no edge found
+        if($countOfFoundEdges === 0){                                            // If no edge found
             return NULL;
         } else if($countOfFoundEdges !== 1){
             throw new Exception('More than one cloned edge? Parallel edges (multigraph) not supported');

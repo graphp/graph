@@ -11,8 +11,8 @@ class LoaderUmlClassDiagram extends Loader{
     private $graph;
     
     private $options = array(
-		'only-self'   => true, // whether to only show methods/properties that are actually defined in this class (and not those merely inherited from base)
-		'only-public' => false, // whether to only show public methods/properties (or also include private/protected ones)
+        'only-self'   => true, // whether to only show methods/properties that are actually defined in this class (and not those merely inherited from base)
+        'only-public' => false, // whether to only show public methods/properties (or also include private/protected ones)
         'show-constants' => true, // whether to show class constants as readonly static variables (or just omit them completely)
     );
     
@@ -21,11 +21,11 @@ class LoaderUmlClassDiagram extends Loader{
     }
     
     public function setOption($name,$flag){
-    	if(!isset($this->options[$name])){
-    		throw new Exception('Invalid option name "'.$name.'"');
-    	}
-    	$this->options[$name] = !!$flag;
-    	return $this;
+        if(!isset($this->options[$name])){
+            throw new Exception('Invalid option name "'.$name.'"');
+        }
+        $this->options[$name] = !!$flag;
+        return $this;
     }
     
     public function hasClass($class){
@@ -55,10 +55,10 @@ class LoaderUmlClassDiagram extends Loader{
         
         foreach($reflection->getInterfaceNames() as $interface){
             try{
-            	$parentVertex = $this->graph->getVertex($interface);
+                $parentVertex = $this->graph->getVertex($interface);
             }
             catch(Exception $ignore){
-            	$parentVertex = $this->createVertexClass($interface);
+                $parentVertex = $this->createVertexClass($interface);
             }
             $vertex->createEdgeTo($parentVertex)->setLayout('arrowhead','empty')->setLayout('style','dashed');
         }
@@ -76,11 +76,11 @@ class LoaderUmlClassDiagram extends Loader{
         $label .= $this->escape($class).'|';
         
         if($this->options['show-constants']){
-        	foreach($reflection->getConstants() as $name=>$value){
-        		if($this->options['only-self'] && $parent && $parent->getConstant($name) === $value) continue;
+            foreach($reflection->getConstants() as $name=>$value){
+                if($this->options['only-self'] && $parent && $parent->getConstant($name) === $value) continue;
         
-        		$label .= '+ «static» '.self::escape($name).' : '.$this->escape($this->getType(gettype($value))).' = '.$this->getCasted($value).' \\{readOnly\\}\\l';
-        	}
+                $label .= '+ «static» '.self::escape($name).' : '.$this->escape($this->getType(gettype($value))).' = '.$this->getCasted($value).' \\{readOnly\\}\\l';
+            }
         }
         
         $defaults = $reflection->getDefaultProperties();
@@ -91,13 +91,13 @@ class LoaderUmlClassDiagram extends Loader{
             
             $label .= $this->visibility($property);
             if($property->isStatic()){
-            	$label .= ' «static»';
+                $label .= ' «static»';
             }
             $label .= ' ' . $this->escape($property->getName());
             
             $type = $this->getDocBlockVar($property);
             if($type !== NULL){
-            	$label .= ' : '.$this->escape($type);
+                $label .= ' : '.$this->escape($type);
             }
             
             if(isset($defaults[$property->getName()])){ // only show non-NULL values
@@ -120,10 +120,10 @@ class LoaderUmlClassDiagram extends Loader{
             $label .= $this->visibility($method);
             
             if(!$isInterface && $method->isAbstract()){
-            	$label .= ' «abstract»';
+                $label .= ' «abstract»';
             }
             if($method->isStatic()){
-            	$label .= ' «static»';
+                $label .= ' «static»';
             }
             $label .= ' ' . $this->escape($method->getName()).'(';
             
@@ -136,7 +136,7 @@ class LoaderUmlClassDiagram extends Loader{
                 }
                 
                 if($parameter->isPassedByReference()){
-                	$label .= 'inout ';
+                    $label .= 'inout ';
                 }
                 
                 $label .= $this->escape($parameter->getName());
@@ -180,19 +180,19 @@ class LoaderUmlClassDiagram extends Loader{
      * @return LoaderUmlClassDiagram $this (chainable)
      */
     public function createVertexNote($note,$for=NULL){
-    	$vertex = $this->graph->createVertex()->setLayout('label',$note."\n")
-                                        	  ->setLayout('shape','note')
-                                          	  ->setLayout('fontsize',8)
-                                        	  //->setLayout('margin','0 0')
-                                        	  ->setLayout('style','filled')
-                                        	  ->setLayout('fillcolor','yellow');
+        $vertex = $this->graph->createVertex()->setLayout('label',$note."\n")
+                                              ->setLayout('shape','note')
+                                                ->setLayout('fontsize',8)
+                                              //->setLayout('margin','0 0')
+                                              ->setLayout('style','filled')
+                                              ->setLayout('fillcolor','yellow');
     
-    	if($for !== NULL){
-    		$vertex->createEdgeTo($for)->setLayout('len',1)
-    		->setLayout('style','dashed')
-    		->setLayout('arrowhead','none');
-    	}
-    	return $vertex;
+        if($for !== NULL){
+            $vertex->createEdgeTo($for)->setLayout('len',1)
+            ->setLayout('style','dashed')
+            ->setLayout('arrowhead','none');
+        }
+        return $vertex;
     }
     
     public function createGraph(){
@@ -200,64 +200,64 @@ class LoaderUmlClassDiagram extends Loader{
     }
     
     private function getDocBlock($ref){
-    	$doc = $ref->getDocComment();
-    	if($doc !== false){
-    		return trim(preg_replace('/(^(?:\h*\*)\h*|\h+$)/m','',substr($doc,3,-2)));
-    	}
-    	return NULL;
+        $doc = $ref->getDocComment();
+        if($doc !== false){
+            return trim(preg_replace('/(^(?:\h*\*)\h*|\h+$)/m','',substr($doc,3,-2)));
+        }
+        return NULL;
     }
     
     private function getDocBlockVar($ref){
-    	return $this->getType($this->getDocBlockSingle($ref,'var'));
+        return $this->getType($this->getDocBlockSingle($ref,'var'));
     }
     
     private function getDocBlockReturn($ref){
-    	return $this->getType($this->getDocBlockSingle($ref,'return'));
+        return $this->getType($this->getDocBlockSingle($ref,'return'));
     }
     
     private function getParameterType(ReflectionParameter $parameter){
-    	$class = NULL;
-    	try{
+        $class = NULL;
+        try{
             $class = $parameter->getClass(); // get class hint for parameter
-    	}
-    	catch(Exception $ignore){ // will fail if specified class does not exist
-    	    return '«invalidClass»';
-    	}
-    	
-    	if($class !== NULL){
-    		return $class->getName();
-    	}
+        }
+        catch(Exception $ignore){ // will fail if specified class does not exist
+            return '«invalidClass»';
+        }
+        
+        if($class !== NULL){
+            return $class->getName();
+        }
     
-    	$pos = $parameter->getPosition();
-    	$refFn = $parameter->getDeclaringFunction();
-    	$params = $this->getDocBlockMulti($refFn,'param');
-    	if(count($params) === $refFn->getNumberOfParameters()){
-    		return $this->getType($params[$pos]);
-    	}
-    	return NULL;
+        $pos = $parameter->getPosition();
+        $refFn = $parameter->getDeclaringFunction();
+        $params = $this->getDocBlockMulti($refFn,'param');
+        if(count($params) === $refFn->getNumberOfParameters()){
+            return $this->getType($params[$pos]);
+        }
+        return NULL;
     }
     
     private function getDocBlockMulti($ref,$what){
-    	$doc = $this->getDocBlock($ref);
-    	if($doc === NULL){
-    		//return 'nah';
-    		return NULL;
-    	}
-    	preg_match_all('/^@'.$what.' ([^\s]+)/m',$doc,$matches,PREG_SET_ORDER);
-    	$ret = array();
-    	foreach($matches as $match){
-    		$ret []= trim($match[1]);
-    	}
-    	return $ret;
+        $doc = $this->getDocBlock($ref);
+        if($doc === NULL){
+            //return 'nah';
+            return NULL;
+        }
+        preg_match_all('/^@'.$what.' ([^\s]+)/m',$doc,$matches,PREG_SET_ORDER);
+        $ret = array();
+        foreach($matches as $match){
+            $ret []= trim($match[1]);
+        }
+        return $ret;
     }
     
     private function getDocBlockSingle($ref,$what){
-    	$multi = $this->getDocBlockMulti($ref, $what);
-    	if(count($multi) !== 1){
-    		//return json_encode($matches);
-    		return NULL;
-    	}
-    	return $multi[0];
+        $multi = $this->getDocBlockMulti($ref, $what);
+        if(count($multi) !== 1){
+            //return json_encode($matches);
+            return NULL;
+        }
+        return $multi[0];
     }
     
     private function getType($ret){
@@ -265,10 +265,10 @@ class LoaderUmlClassDiagram extends Loader{
             return NULL;
         }
         if(preg_match('/^array\[(\w+)\]$/i',$ret,$match)){
-        	return $this->getType($match[1]).'[]';
+            return $this->getType($match[1]).'[]';
         }
         if(!preg_match('/^\w+$/',$ret)){
-        	return 'mixed';
+            return 'mixed';
         }
         $low = strtolower($ret);
         if($low === 'integer'){
@@ -292,13 +292,13 @@ class LoaderUmlClassDiagram extends Loader{
      */
     private function getCasted($value){
         if($value === NULL){
-        	return 'NULL';
+            return 'NULL';
         }else if(is_string($value)){
-        	return '\\"'.$this->escape(str_replace('"','\\"',$value)).'\\"';
+            return '\\"'.$this->escape(str_replace('"','\\"',$value)).'\\"';
         }else if(is_bool($value)){
-        	return $value ? 'true' : 'false';
+            return $value ? 'true' : 'false';
         }else if(is_int($value) || is_float($value)){
-        	return (string)$value;
+            return (string)$value;
         }else if(is_array($value)){
             if($value === array()){
                 return '[]';
@@ -313,11 +313,11 @@ class LoaderUmlClassDiagram extends Loader{
     
     private function visibility($ref){
         if($ref->isPublic()){
-        	return '+';
+            return '+';
         }else if($ref->isProtected()){
-        	return '#';
+            return '#';
         }else if($ref->isPrivate()){
-        	return "\342\200\223"; // U+2013 EN DASH "–"
+            return "\342\200\223"; // U+2013 EN DASH "–"
         }
         return '?';
     }

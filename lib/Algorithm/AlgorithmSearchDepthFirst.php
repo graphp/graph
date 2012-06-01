@@ -27,13 +27,13 @@ class AlgorithmSearchDepthFirst extends Algorithm{
      */
     private function recursiveDepthFirstSearch($vertex, & $visitedVertices){
 
-        if ( ! isset($visitedVertices[$vertex->getId()]) ){						//	If I didn't visited this vertex before
-            $visitedVertices[$vertex->getId()] = $vertex;						//		Add Vertex to already visited vertices
-            	
-            $nextVertices = $vertex->getVerticesEdgeTo();						//		Get next vertices
-            	
+        if ( ! isset($visitedVertices[$vertex->getId()]) ){                        //    If I didn't visited this vertex before
+            $visitedVertices[$vertex->getId()] = $vertex;                        //        Add Vertex to already visited vertices
+                
+            $nextVertices = $vertex->getVerticesEdgeTo();                        //        Get next vertices
+                
             foreach ($nextVertices as $nextVertix){
-                $this->recursiveDepthFirstSearch($nextVertix, $visitedVertices);//			recursive call for next vertices
+                $this->recursiveDepthFirstSearch($nextVertix, $visitedVertices);//            recursive call for next vertices
             }
         }
     }

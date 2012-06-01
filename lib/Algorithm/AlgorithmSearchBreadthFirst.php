@@ -17,22 +17,22 @@ class AlgorithmSearchBreadthFirst extends Algorithm{
      */
     public function getVertices(){
         $queue = array($this->vertex);
-        $mark = array($this->vertex->getId() => true);							//to not add vertices twice in array visited
-        $visited = array();														//visited vertices
+        $mark = array($this->vertex->getId() => true);                            //to not add vertices twice in array visited
+        $visited = array();                                                        //visited vertices
 
         do{
-            $t = array_shift($queue);												// get first from queue
-            $visited[$t->getId()]= $t;												//save as visited
+            $t = array_shift($queue);                                                // get first from queue
+            $visited[$t->getId()]= $t;                                                //save as visited
 
-            $vertices = $t->getVerticesEdgeTo();									//get next vertices
+            $vertices = $t->getVerticesEdgeTo();                                    //get next vertices
             foreach($vertices as $id=>$vertex){
-                if(!isset($mark[$id])){													//if not "toughed" before
-                    $queue[] = $vertex;														//add to queue
-                    $mark[$id] = true;														//and mark
+                if(!isset($mark[$id])){                                                    //if not "toughed" before
+                    $queue[] = $vertex;                                                        //add to queue
+                    $mark[$id] = true;                                                        //and mark
                 }
             }
 
-        }while($queue);															//untill queue is empty
+        }while($queue);                                                            //untill queue is empty
 
         return $visited;
     }
@@ -45,22 +45,22 @@ class AlgorithmSearchBreadthFirst extends Algorithm{
      */
     public function getGraphPathTo($destinationVertex){
         $queue = array($this->vertex);                                         //Start vertex
-        $mark = array($this->vertex->getId() => true);							//to not add vertices twice in array visited
+        $mark = array($this->vertex->getId() => true);                            //to not add vertices twice in array visited
          
         $deepSearchThree = $this->vertex->getGraph()->createGraphCloneEdgeless();   //create copy of graph without edges
-        $visited = array();														//visited vertices
+        $visited = array();                                                        //visited vertices
 
         $pathToDestinationVertexFound = false;
 
         do{
-            $t = array_shift($queue);											//get first from queue
-            $visited[$t->getId()]= $t;											//save as visited
+            $t = array_shift($queue);                                            //get first from queue
+            $visited[$t->getId()]= $t;                                            //save as visited
 
-            $vertices = $t->getVerticesEdgeTo();								//get next vertices
+            $vertices = $t->getVerticesEdgeTo();                                //get next vertices
             foreach($vertices as $id=>$vertex){
-                if(!isset($mark[$id])){											//if not "toughed" before
-                    $queue[] = $vertex;											//add to queue
-                    $mark[$id] = true;			                                //and mark
+                if(!isset($mark[$id])){                                            //if not "toughed" before
+                    $queue[] = $vertex;                                            //add to queue
+                    $mark[$id] = true;                                            //and mark
                      
                     $oldEdgeArray=$t->getEdgesTo($vertex);
                     $oldEdge=array_shift($oldEdgeArray);
@@ -75,7 +75,7 @@ class AlgorithmSearchBreadthFirst extends Algorithm{
                 $pathToDestinationVertexFound = true;
             }
 
-        } while($queue);															//untill queue is empty
+        } while($queue);                                                            //untill queue is empty
          
         if(!$pathToDestinationVertexFound){
             return NULL;
