@@ -39,7 +39,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 	}
 
 	/**
-	 * returns max flow graph
+	 * Returns max flow graph
 	 *
 	 * @return Graph
 	 */
@@ -62,21 +62,14 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 				$residualAlgorithm = new AlgorithmResidualGraph($currentGraph);
 				$currentGraph = $residualAlgorithm->getResultGraph();			// Generate new residual graph and repeat
 			}
-				
-				
-				
+
 		} while($pathFlow);
 
-		measure(function() use (&$currentGraph){
-			return $currentGraph;
-		},'FINALResidualgraph');
-		
-		// Generate the full flow graph from the final residual graph (handled internal: with the initialGraph)
-		return $this->getFlowGraphFromResidualGraph($currentGraph);
+		return $this->getFlowGraphFromResidualGraph($currentGraph);				// Generate the full flow graph from the final residual graph (handled internal: with the initialGraph)
 	}
 
 	/**
-	 * returns max flow value
+	 * Returns max flow value
 	 *
 	 * @return double
 	 */
@@ -91,19 +84,25 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 		return $maxFlow;
 	}
 
+	/**
+	 * Merges a residual graph with initial graph
+	 *
+	 * @param $residualGraph
+	 * @return Graph graph with maximal flow
+	 */
 	private function getFlowGraphFromResidualGraph($residualGraph){
 
-		//process the original graph and create a new graph that contains the flow
-		$resultGraph = $this->graph->createGraphCloneEdgeless();
+
+		$resultGraph = $this->graph->createGraphCloneEdgeless();				// Process original graph and create a new graph that contains the flow
 
 		$originalGraphEdgesArray = $this->graph->getEdges();
-		foreach ($originalGraphEdgesArray as $edge){
-			// For every edge in the residual graph,
-			// that has an inversed edge in the original graph:
-			// Insert the inversed residual edge into the new graph
 
+		// For every edge in the residual graph,
+		// that has an inversed edge in the original graph:
+		// Insert the inversed residual edge into the new graph
+		foreach ($originalGraphEdgesArray as $edge){
 			// Inverse the edge
-			$residualEdge = $this->getEdgeSimilarFromGraph($edge,$residualGraph,true);
+			$residualEdge = $this->getEdgeSimilarFromGraph($edge, $residualGraph, true);
 
 			// Add inversed edge to return graph
 			$newFlowEdge = $resultGraph->createEdgeClone($edge);
@@ -120,14 +119,13 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 	}
 
 	/**
-	 * get the shortest path flow (by count of edges)
+	 * Get the shortest path flow (by count of edges)
 	 *
 	 * @param Graph $currentGraph
 	 * @return Graph if path exists OR NULL
 	 */
 	private function getGraphShortestPathFlow($currentGraph)
 	{
-
 		$startVertex = $currentGraph->getVertex($this->startVertex->getId());
 		$destinationVertex = $currentGraph->getVertex($this->destinationVertex->getId());
 
@@ -157,17 +155,15 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
 		return $path;
 	}
 
-
-	
 	/**
-	 * Extracts a (optional: inversed) edge from the given graph
-	*
-	* @param Graph $edge
-	* @param Graph $newGraph
-	* @param Boolean $inverse
-	* @return Graph
-	*/
-	private function getEdgeSimilarFromGraph($edge,$newGraph,$inverse=false){
+	 * Extracts (optional: inversed) edge from the given graph
+	 *
+	 * @param Graph $edge
+	 * @param Graph $newGraph
+	 * @param Boolean $inverse
+	 * @return Graph
+	 */
+	private function getEdgeSimilarFromGraph($edge, $newGraph, $inverse=false){
 		// Extract endpoints from edge
 		$originalStartVertexArray = $edge->getStartVertices();
 		$originalStartVertex = array_shift($originalStartVertexArray);
