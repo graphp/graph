@@ -42,7 +42,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
      * @see AlgorithmMCF::createGraph()
      */
     public function createGraph() {
-        
+        $this->checkBalance();
         $resultGraph = $this->graph->createGraphClone();
         
         //initial flow of edges

@@ -9,8 +9,6 @@ abstract class AlgorithmMCF extends Algorithm {
      */
     protected $graph;
     
-    
-    
     /**
      * The given graph where the algorithm should operate on
      * 
@@ -19,21 +17,22 @@ abstract class AlgorithmMCF extends Algorithm {
      */
     public function __construct(Graph $graph){
         $this->graph = $graph;
-        
-        //Check if balance is ok
-        $vertices = $this->graph->getVertices();
-        $balance = 0;
-        foreach ($vertices as $vertex) {                                        //Sum for all vertices of value
-            $balance += $vertex->getValue();
-        }
-        $toleranz=0;
-        if (($balance > 0+$toleranz || $balance < 0-$toleranz)) {                                                    //If the sum is 0 => same "in-flow" as "out-flow"
-            throw new Exception("The given graph is not balanced value is: ".$balance);
-        }
-        
     }
     
-   
+    /**
+     * check if balance is okay and throw exception otherwise
+     * 
+     * @throws Exception
+     * @return AlgorithmMCF $this (chainable)
+     */
+    protected function checkBalance(){
+        $balance = $this->graph->getBalance();
+        $tolerance = 0.000001;
+        if($balance >= $tolerance || $balance <= -$tolerance){
+            throw new Exception("The given graph is not balanced value is: ".$balance);
+        }
+        return $this;
+    }
     
     /**
      * create new resulting graph with minimum-cost flow on edges
