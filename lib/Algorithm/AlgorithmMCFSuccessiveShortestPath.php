@@ -1,39 +1,8 @@
 <?php
 
 class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
-
     /**
-     * Calculates the flow for the given Vertex: sum(inflow) - sum(outflow)
-     * 
-     * @param Vertex $vertex where the flow is calculated for
-     * 
-     * @return double flow of Vertex
-     * 
-     * @throws Exception if they are undirected edges
-     */
-    private function flow(Vertex $vertex){
-        $edges = $vertex->getEdges();
-        
-        $sumOfFlow = 0;
-        
-        foreach ($edges as $edge){
-            if ( ! ($edge instanceof EdgeDirected)){
-                throw new Exception("TODO: undirected edges not suported jet");
-            }
-            
-            if ($edge->hasVertexStart($vertex)){ // edge is an outgoing edge of this vertex
-                $sumOfFlow -= $edge->getFlow();
-            }
-            else{
-                $sumOfFlow += $edge->getFlow();
-            }
-        }
-        
-        return $sumOfFlow;
-    }
-    
-    /**
-     * @uses AlgorithmMCFSuccessiveShortestPath::flow(Vertex $vertex)
+     * @uses Vertex::getFlow()
      * @uses Graph::createGraphClone()
      * @uses AlgorithmResidualGraph::createGraph()
      * @uses AlgorithmSearchBreadthFirst::getVertices()
@@ -69,7 +38,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             $sourceVertex = null;
             foreach ($vertices as $vertex){                                        //forall (just use the first found)
                 
-                if ($this->flow($vertex) > 0){                                    //if flow of vertex is positiv => source
+                if ($vertex->getFlow() > 0){                                    //if flow of vertex is positiv => source
                     $sourceVertex = $vertex;
                     break;
                 }
@@ -85,7 +54,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             $targetVertex = null;
             foreach ($vertices as $vertex){                                        //forall (just use the first found)
                 
-                if ($this->flow($vertex) < 0){                                    //if flow of vertex is negative => target
+                if ($vertex->getFlow() < 0){                                    //if flow of vertex is negative => target
                     $targetVertex = $vertex;
                     break;
                 }
@@ -98,8 +67,8 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             $algSP = new AlgorithmSpMooreBellmanFord($sourceVertex);
             $edgesOnFlow = $algSP->getEdgesTo($targetVertex);
                                                                                 //new flow is the maximal possible flow for this path
-            $newflow    = $sourceVertex->getBalance() - $this->flow($sourceVertex);
-            $targetFlow = - ($targetVertex->getBalance() - $this->flow($targetVertex));
+            $newflow    = $sourceVertex->getBalance() - $sourceVertex->getFlow();
+            $targetFlow = - ($targetVertex->getBalance() - $targetVertex->getFlow());
             
             if ($newflow > $targetFlow){                                        //minimum of source and target
                 $newflow = $targetFlow;

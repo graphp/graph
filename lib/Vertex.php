@@ -202,6 +202,39 @@ class Vertex extends Layoutable{
     }
     
     /**
+     * Calculates the flow for this Vertex: sum(inflow) - sum(outflow)
+     * 
+     * Usually, vertices should have a resulting flow of 0: The sum of flows
+     * entering a vertex must equal the sum of flows leaving a vertex. If the
+     * resulting flow is > 0, this vertex is considered a sink (i.e. there's
+     * too much flow into this vertex). If the resulting flow is < 0, this
+     * vertex is considered a "source" (i.e. there's more flow leaving this
+     * vertex).
+     * 
+     * @return float
+     * @throws Exception if they are undirected edges
+     * @see Vertex::getBalance()
+     */
+    public function getFlow(){
+        $sumOfFlow = 0;
+    
+        foreach ($this->edges as $edge){
+            if ( ! ($edge instanceof EdgeDirected)){
+                throw new Exception("TODO: undirected edges not suported yet");
+            }
+            
+            if ($edge->hasVertexStart($this)){ // edge is an outgoing edge of this vertex
+                $sumOfFlow -= $edge->getFlow(); // flowing out (flow is "pointing away")
+            }
+            else{                                // this is an ingoing edge
+                $sumOfFlow += $edge->getFlow(); // flowing in
+            }
+        }
+        
+        return $sumOfFlow;
+    }
+    
+    /**
      * Return string with vertex visualisation
      *
      * @return string
