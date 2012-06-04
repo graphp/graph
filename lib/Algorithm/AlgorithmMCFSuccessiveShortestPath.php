@@ -87,4 +87,46 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
         }
     }
     
+    /**
+     * check if balance on each vertex of the given graph matches the original graph's
+     * 
+     * @param Graph $graph
+     * @return boolean
+     * @throws Exception if given graph is not a clone of the original graph (each vertex has to be present in both graphs)
+     * @uses Graph::getNumberOfVertices()
+     * @uses Graph::getBalanace()
+     * @uses Graph::getVertex()
+     */
+    private function isBalanceReached(Graph $graph){
+        if($graph->getNumberOfVertices() !== $this->graph->getNumberOfVertices()){
+            throw new Exception('Given graph does not appear to be a clone of input graph');
+        }
+        foreach($this->graph->getVertices() as $vid=>$vertex){
+            if($vertex->getBalance() !== $graph->getVertex($vid)->getBalance()){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private function getVertexSource(Graph $graph){
+        foreach($graph->getVertices() as $vertex){
+            if($this->graph->getVertex($vid)->getBalance() > $vertex->getBalance()){
+                return $vertex;
+            }
+        }
+        throw new Exception('No source vertex found in graph');
+    }
+    
+    private function getVertexSink(Vertex $source){
+        $algBFS = new AlgorithmSearchBreadthFirst($source);            //search for reachable Vertices
+        
+        foreach($algBFS->getVertices() as $vid=>$vertex){
+            if($this->graph->getVertex($vid)->getBalance() < $vertex->getBalance()){
+                return $vertex;
+            }
+        }
+        throw new Exception('No sink vertex connected to given source vertex found');
+    }
+    
 }
