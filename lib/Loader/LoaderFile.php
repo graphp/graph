@@ -47,7 +47,7 @@ abstract class LoaderFile extends Loader{
      * @throws Exception
      */
     protected function readFloat($line){
-        if((string)(float)$line !== $line){
+        if((string)(float)$line != $line){
             throw new Exception('Invalid float');
         }
         return (float)$line;
