@@ -6,8 +6,7 @@ class LoaderEdgeList extends LoaderFile{
         $graph = new Graph();
         
         $file = $this->getLines();
-        $vertexCount = $file[0];
-        $edgeCounter = 0;
+        $vertexCount = $this->readInt($file[0]);
         
         $this->writeDebugMessage('create '.$vertexCount.' vertices');
         
@@ -17,12 +16,9 @@ class LoaderEdgeList extends LoaderFile{
         
         unset($file[0]);
         foreach ($file as $zeile) {
-            $edgeConnections = explode("\t", $zeile);
+            $ends = $this->readLine($zeile,array('from'=>'vertex','to'=>'vertex'),$graph);
             
-            $from = $graph->getVertex($edgeConnections[0]);
-            $to = $graph->getVertex($edgeConnections[1]);
-            
-            $from->createEdge($to);                                //TODO directed
+            $ends['from']->createEdge($ends['to']);    //TODO directed
         }
         
         return $graph;

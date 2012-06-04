@@ -6,10 +6,16 @@ class LoaderAdjacencyMatrix extends LoaderFile{
         $graph = new Graph();
 
         $file = $this->getLines();
-        $vertexCount = $file[0];
+        $vertexCount = $this->readInt($file[0]);
         $edgeCounter = 0;
         
+        if(count($file) !== ($vertexCount+1)){
+            throw new Exception('Expects '.($vertexCount+1).' lines, but found '.count($file));
+        }
+        
         $graph->createVertices($vertexCount);
+        
+        $parts = array_fill(0,$vertexCount,'int');
 
         for ($i=0;$i<$vertexCount;$i++){
 
@@ -18,7 +24,8 @@ class LoaderAdjacencyMatrix extends LoaderFile{
 
             $thisVertex = $graph->getVertex($i);
             
-            $currentEdgeList = explode("\t", $file[$i+1]);
+            $currentEdgeList = $this->readLine($file[$i+1],$parts);
+            //$currentEdgeList = explode("\t", $file[$i+1]);
 
             for ($k=0;$k<$vertexCount;$k++){
                 

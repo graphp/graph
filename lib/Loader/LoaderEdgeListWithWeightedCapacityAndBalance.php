@@ -9,39 +9,32 @@ class LoaderEdgeListWithWeightedCapacityAndBalance extends LoaderFile{
         $graph = new Graph();
         
         $file = $this->getLines();
-        $vertexCount = $file[0];
-        $edgeCounter = 0;
         
-        $graph->createVertices($vertexCount);
+        $graph->createVertices($this->readInt($file[0]));
         unset($file[0]);
         
         // set the value of the vertices
         $zeile=1;
         foreach ($graph->getVertices() as $vertex)
         {
-            $vertex->setBalance((float)$file[$zeile]);
+            $vertex->setBalance($this->readFloat($file[$zeile]));
             unset($file[$zeile]);
             ++$zeile;
         }
         
         
         foreach ($file as $zeile) {
-            $edgeConnections = explode("\t", $zeile);
-            
-            $from = $graph->getVertex($edgeConnections[0]);
-            $to = $graph->getVertex($edgeConnections[1]);
-            
-            $edge;
+            $parts = $this->readLine($zeile,array('vertex','vertex','float','float'),$graph);
             
             if ($this->directedEdges){
-                $edge = $from->createEdgeTo($to);
+                $edge = $parts[0]->createEdgeTo($parts[1]);
             }
             else {
-                $edge = $from->createEdge($to);
+                $edge = $parts[0]->createEdge($parts[1]);
             }
             
-            $edge->setWeight((float)$edgeConnections[2]);
-            $edge->setCapacity((float)$edgeConnections[3]);
+            $edge->setWeight($parts[2]);
+            $edge->setCapacity($parts[3]);
         }
         
         return $graph;

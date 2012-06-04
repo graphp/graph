@@ -6,28 +6,21 @@ class LoaderEdgeListWithCapacity extends LoaderFile{
         $graph = new Graph();
         
         $file = $this->getLines();
-        $vertexCount = $file[0];
-        $edgeCounter = 0;
         
-        $graph->createVertices($vertexCount);
+        $graph->createVertices($this->readInt($file[0]));
         
         unset($file[0]);
         foreach ($file as $zeile) {
-            $edgeConnections = explode("\t", $zeile);
-            
-            $from = $graph->getVertex($edgeConnections[0]);
-            $to = $graph->getVertex($edgeConnections[1]);
-            
-            $edge;
+            $parts = $this->readLine($zeile,array('vertex','vertex','float'),$graph);
             
             if ($this->directedEdges){
-                $edge = $from->createEdgeTo($to);
+                $edge = $parts[0]->createEdgeTo($parts[1]);
             }
             else {
-                $edge = $from->createEdge($to);
+                $edge = $parts[0]->createEdge($parts[1]);
             }
             
-            $edge->setCapacity((float)$edgeConnections[2]);
+            $edge->setCapacity($parts[2]);
         }
         
         return $graph;
