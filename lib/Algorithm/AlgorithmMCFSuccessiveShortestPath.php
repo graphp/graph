@@ -40,7 +40,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             }
             
             //search for reachble target from this source
-            $this->getVertexSink($sourceVertex);
+            $targetVertex = $this->getVertexSink($sourceVertex);
             
             if ($targetVertex === null){                                        //if no target is found the network has not enough capacity
                 throw new Exception("The graph has not enough capacity for the minimum-cost flow");
@@ -65,6 +65,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
                 }
             }
             
+            //add the new flow to the path
             //TODO Verändere den Fluss zwischen Quelle und Senke
             
         }
