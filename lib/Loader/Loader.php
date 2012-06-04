@@ -12,7 +12,7 @@ abstract class Loader{
         $this->directedEdges = $directedEdges;
     }
     
-    private function writeDebugMessage($messageString){
+    protected function writeDebugMessage($messageString){
         if($this->debugMode){
             echo $messageString;
         }
