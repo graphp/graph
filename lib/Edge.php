@@ -12,7 +12,7 @@ abstract class Edge extends Layoutable{
      * order by edge weight
      *
      * @var int
-     * @see Edge::setWeight()
+     * @see Edge::getWeight()
      */
     const ORDER_WEIGHT = 1;
 
@@ -20,17 +20,25 @@ abstract class Edge extends Layoutable{
      * order by edge capacity
      *
      * @var int
-     * @see Edge::setCapacity()
+     * @see Edge::getCapacity()
      */
     const ORDER_CAPACITY = 2;
+    
+    /**
+     * order by remaining capacity on edge (maximum capacity - current flow)
+     * 
+     * @var int
+     * @see Edge::getCapacityRemaining()
+     */
+    const ORDER_CAPACITY_REMAINING = 3;
     
     /**
      * order by edge flow
      *
      * @var int
-     * @see Edge::setFlow()
+     * @see Edge::getFlow()
      */
-    const ORDER_FLOW = 3;
+    const ORDER_FLOW = 4;
     
     /**
      * random/shuffled order
@@ -70,6 +78,8 @@ abstract class Edge extends Layoutable{
                 $now = $edge->getWeight();
             }else if($by === self::ORDER_CAPACITY){
                 $now = $edge->getCapacity();
+            }else if($by === self::ORDER_CAPACITY_REMAINING){
+                $now = $edge->getCapacityRemaining();
             }else if($by === self::ORDER_FLOW){
                 $now = $edge->getFlow();
             }else{
@@ -113,6 +123,12 @@ abstract class Edge extends Layoutable{
         foreach($edges as $eid=>$edge){
             if($by === self::ORDER_WEIGHT){
                 $now = $edge->getWeight();
+            }else if($by === self::ORDER_CAPACITY){
+            	$now = $edge->getCapacity();
+            }else if($by === self::ORDER_CAPACITY_REMAINING){
+            	$now = $edge->getCapacityRemaining();
+            }else if($by === self::ORDER_FLOW){
+            	$now = $edge->getFlow();
             }else{
                 throw new Exception('Invalid sort criterium');
             }
