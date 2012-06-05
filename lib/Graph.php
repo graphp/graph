@@ -524,6 +524,26 @@ class Graph extends Layoutable implements Countable{
     }
     
     /**
+     * get minimum weight assigned to all edges
+     * 
+     * minimum weight is often needed because some algorithms do not support
+     * negative weights or edges with zero weight.
+     * 
+     * @return float|NULL minimum edge weight or NULL if graph is not weighted or empty
+     */
+    public function getWeightMin(){
+        $min = NULL;
+        foreach($this->edges as $edge){
+            $weight = $edge->getWeight();
+            if($min === NULL || $weight < $min){
+                $min = $weight;
+            }
+        }
+        
+        return $min;
+    }
+    
+    /**
      * check if this graph has any flow set (any edge has a non-NULL flow)
      *
      * @return boolean
