@@ -367,7 +367,12 @@ abstract class Edge extends Layoutable{
          
         $edges = $ends[0]->getEdgesTo($ends[1]);                            // get all edges between this edge's endpoints
         if($this->isConnection($ends[1],$ends[0])){                         // edge points into both directions (undirected/bidirectional edge)
-            $edges = array_unique(array_merge($edges,$ends[1]->getEdgesTo($ends[0])));    // also get all edges in other direction
+            $back = $ends[1]->getEdgesTo($ends[0]);                             // also get all edges in other direction
+            foreach($back as $edge){
+                if(!in_array($edge,$edges)){
+                    $edges[] = $edge;
+                }
+            } // alternative implementation for array_unique(), because it requires casting edges to string
         }
          
         $pos = array_search($this,$edges,true);
