@@ -380,10 +380,8 @@ abstract class Edge extends Layoutable{
             throw new Exception('Internal error: Current edge not found');
         }
          
-        unset($edges[$pos]);                                                // exclude current edge from parallel edges
-        $edges = array_values($edges);
-         
-        return $edges;
+        unset($edges[$pos]);                                                   // exclude current edge from parallel edges
+        return array_values($edges);
     }
 
     /**

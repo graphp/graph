@@ -89,4 +89,31 @@ class EdgeDirected extends Edge{
     public function hasVertexTarget(Vertex $targetVertex){
         return ($this->to === $targetVertex);
     }
+    
+    public function hasEdgeParallel(){
+        foreach($this->from->getEdgesTo($this->to) as $edge){
+            if($edge !== $this){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * get all edges parallel to this edge (excluding self)
+     *
+     * @return array[Edge]
+     * @throws Exception
+     */
+    public function getEdgesParallel(){
+    	$edges = $this->from->getEdgesTo($this->to);                            // get all edges between this edge's endpoints
+    	
+    	$pos = array_search($this,$edges,true);
+    	if($pos === false){
+    		throw new Exception('Internal error: Current edge not found');
+    	}
+    	 
+    	unset($edges[$pos]);                                                   // exclude current edge from parallel edges
+    	return array_values($edges);
+    }
 }
