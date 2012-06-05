@@ -27,6 +27,17 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             
             if ($edge->getWeight() < 0){                                        //maximal flow if weight of edge is negative
                 $flow = $edge->getCapacity();
+                
+                if ($edge instanceof EdgeDirected){
+                    $startVertex = $edge->getVertexStart();
+                    $endVertex = $edge->getVertexEnd();
+                    
+                    $this->addBalance($startVertex, $flow);                     //add balance to start- and end-vertex
+                    $this->addBalance($endVertex, - $flow);
+                }
+                else {
+                    throw new Exception("Undirected Edges not suported");
+                }
             }
             
             $edge->setFlow($flow);
@@ -79,7 +90,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             foreach ($edgesOnFlow as $clonedEdge){
                 try {
             	    $edge = $resultGraph->getEdgeClone($clonedEdge);            //get edge from clone
-            	    $edge->addFlow($newflow);                                   //add flow
+            	    $edge->addFlow( $newflow );                                 //add flow
                 } catch(Exception $ignor) {                                     //if the edge doesn't exists use the residual edge
                     $edge = $resultGraph->getEdgeClone($clonedEdge, true);
                     $edge->addFlow( - $newflow);                                //remove flow
@@ -90,8 +101,8 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             $oriSourceVertex = $resultGraph->getVertex($sourceVertex->getId());
             $oriTargetVertex = $resultGraph->getVertex($targetVertex->getId());
             
-            $oriSourceVertex->setBalance($oriSourceVertex->getBalance() + $newflow);
-            $oriTargetVertex->setBalance($oriTargetVertex->getBalance() - $newflow);
+            $this->addBalance($oriSourceVertex, $newflow);
+            $this->addBalance($oriTargetVertex, - $newflow);
         }
     }
     
@@ -127,7 +138,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
      */
     private function getVertexSource(Graph $graph){
         foreach($graph->getVertices() as $vid=>$vertex){
-            if($this->graph->getVertex($vid)->getBalance() > $vertex->getBalance()){
+            if($this->graph->getVertex($vid)->getBalance() - $vertex->getBalance() > 0){
                 return $vertex;
             }
         }
@@ -146,11 +157,15 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
         $algBFS = new AlgorithmSearchBreadthFirst($source);                     //search for reachable Vertices
         
         foreach($algBFS->getVertices() as $vid=>$vertex){
-            if($this->graph->getVertex($vid)->getBalance() < $vertex->getBalance()){
+            if($this->graph->getVertex($vid)->getBalance() - $vertex->getBalance() < 0){
                 return $vertex;
             }
         }
         throw new Exception('No sink vertex connected to given source vertex found');
+    }
+    
+    private function addBalance(Vertex $vertex, $balance){
+        $vertex->setBalance($vertex->getBalance() + $balance);
     }
     
 }
