@@ -64,10 +64,14 @@ class AlgorithmMCFCycleCanceling extends AlgorithmMCF {
 
         //initial-zustand setzten, 0 für Positiv gewichtete Kanten max für negaitv gewichtete Kanten
 
+        $returnGraph->getVertex($superSink->getId())->destroy();
+        $returnGraph->getVertex($superSource->getId())->destroy();
         $superSink->destroy();
         $superSource->destroy();
 
-        $returnGraph = getFlowGraphFromResidualGraph($returnGraph);
+        //visualize($returnGraph);
+
+        //$returnGraph = $this->getFlowGraphFromResidualGraph($returnGraph);
         return $returnGraph;
     }
 
@@ -104,6 +108,24 @@ class AlgorithmMCFCycleCanceling extends AlgorithmMCF {
             }
         }
         return $resultGraph;
+    }
+
+
+    /**
+     * Extracts (optional: inversed) edge from the given graph
+     *
+     * @param Graph $edge
+     * @param Graph $newGraph
+     * @param Boolean $inverse
+     * @return Graph
+     */
+    private function getEdgeSimilarFromGraph($edge, $newGraph, $inverse=false){
+        try{
+            return $newGraph->getEdgeClone($edge,$inverse);
+        }
+        catch(Exception $ignore){
+        }
+        return NULL;
     }
 
 }

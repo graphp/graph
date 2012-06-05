@@ -34,19 +34,23 @@ class AlgorithmDetectNegativeCycle extends Algorithm{
      * @return Graph the result graph if a negative cycle is found or NULL
      */
     private function searchNextDepth(Vertex $currentVertex, array $visitedVertices, array $predessesors){
+
         if ( isset($visitedVertices[$currentVertex->getId()]) ){                       //cycle
             $id = $currentVertex->getId();
+
             //checke ob negativer cycle
             $cycle = $currentVertex->getGraph()->createGraphCloneEdgeless();
             $weight=0;
+            $tempVertex=$currentVertex;
             do{
-                $predesssorVertex = $predessesors[$currentVertex->getId()];
-                $edges = $predesssorVertex->getEdgesTo($currentVertex);
+                $predesssorVertex = $predessesors[$tempVertex->getId()];
+                $edges = $predesssorVertex->getEdgesTo($tempVertex);
                 $edge = $edges[0];
-                $weight=$weight+$edges->getWeight();
+                $weight = $weight + $edge->getWeight();
                 $cycle->createEdgeClone($edge);
+                $tempVertex=$predesssorVertex;
             }
-            while ($currentVertex!==$predesessors);
+            while ($currentVertex !== $predesssorVertex);
             //baue graph zusammen
             //gebe graph zurück
             if($weight<0){
@@ -56,9 +60,10 @@ class AlgorithmDetectNegativeCycle extends Algorithm{
             //else continue with search
         }
 
-        $vertices = $this->startVertex->getVerticesEdgeFrom();                    //get next level of vertices
+        $visitedVertices[$currentVertex->getId()] = true;
+
+        $vertices = $currentVertex->getVerticesEdgeTo();                    //get next level of vertices
         foreach ($vertices as $vertex){                                            //checke for all vertices if the found the negative cycle
-            $visitedVertices[$vertex->getId()]=true;
             $predessesors[$vertex->getId()]=$currentVertex;
             $graph = $this->searchNextDepth($vertex, $visitedVertices, $predessesors);
 
@@ -83,11 +88,12 @@ class AlgorithmDetectNegativeCycle extends Algorithm{
 
         $visitedVertices = array();
         $predessesors= array();
-        //$visitedVertices[$this->startVertex->getId()] = 0;                        //Visited Vertices with the cost to ???
+        $visitedVertices[$this->startVertex->getId()] = true;                        //Visited Vertices with the cost to ???
 
-        $vertices = $this->startVertex->getVerticesEdgeFrom();                    //get next level of vertices
+        $vertices = $this->startVertex->getVerticesEdgeTo();                    //get next level of vertices
 
         foreach ($vertices as $vertex){                                            //checke for all vertices if the found the negative cycle
+            $predessesors[$vertex->getId()] = $this->startVertex;
             $graph = $this->searchNextDepth($vertex, $visitedVertices, $predessesors);
 
             if ($graph != NULL){                                                //If they found the negative cycle return the result graph
