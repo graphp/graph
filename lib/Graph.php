@@ -1,6 +1,6 @@
 <?php
 
-class Graph extends Layoutable implements Countable{
+class Graph extends Layoutable{
     /**
      * array of all edges in this graph
      * 
@@ -249,16 +249,6 @@ class Graph extends Layoutable implements Countable{
      */
     public function getVertices(){
         return $this->vertices;
-    }
-    
-    /**
-     * return number of vertices (implements Countable, allows calling count($graph))
-     * 
-     * @return int
-     * @see Countable::count()
-     */
-    public function count(){
-        return count($this->vertices);
     }
     
     /**
