@@ -78,6 +78,17 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
     }
     
     private function throwCycle(Vertex $vertex,&$predecessorVertexOfCheapestPathTo){
+        //find a vertex in the cycle
+        $vid = $vertex->getId();
+        $startVertices = array();
+        do{
+        	$startVertices[$vid] = $vertex;
+        
+        	$vertex = $predecessorVertexOfCheapestPathTo[$vid];
+        	$vid = $vertex->getId();
+        }while(!isset($startVertices[$vid]));
+        
+        //find negative cycle
         $vid = $vertex->getId();
         $vertices = array();                                                   // build array of vertices in cycle
         do{
