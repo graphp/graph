@@ -459,19 +459,14 @@ class Vertex extends Layoutable{
      * get all vertices this vertex has an edge to
      * 
      * @return array[Vertex]
+     * @uses Vertex::getEdgesOut()
      * @uses Edge::getVerticesToFrom()
      */
     public function getVerticesEdgeTo(){
         $ret = array();
-        foreach($this->edges as $edge){
-            try {
-                $vertex = $edge->getVertexToFrom($this);
-                $ret[$vertex->getId()] = $vertex;
-            } catch (Exception $e) {
-                
-            }
-            
-           
+        foreach($this->getEdgesOut() as $edge){
+            $vertex = $edge->getVertexToFrom($this);
+            $ret[$vertex->getId()] = $vertex;
         }
         return $ret;
     }
@@ -480,11 +475,12 @@ class Vertex extends Layoutable{
      * get all vertices that have an edge TO this vertex
      * 
      * @return array[Vertex]
+     * @uses Vertex::getEdgesIn()
      * @uses Edge::getVerticesFromTo()
      */
     public function getVerticesEdgeFrom(){
         $ret = array();
-        foreach($this->edges as $edge){
+        foreach($this->getEdgesIn() as $edge){
             $vertex = $edge->getVertexFromTo($this);
             $ret[$vertex->getId()] = $vertex;
         }
