@@ -420,7 +420,7 @@ class Vertex extends Layoutable{
     public function getEdgesIn(){
         $ingoingEdges = array() ;
         foreach ($this->edges as $edge){
-            if (!$edge->hasVertexStart($this)){                               // if its not the outgoing it must be the ingoing
+            if ($edge->hasVertexTarget($this)){
                 $ingoingEdges[] = $edge;
             }
         }
@@ -485,7 +485,7 @@ class Vertex extends Layoutable{
     public function getVerticesEdgeFrom(){
         $ret = array();
         foreach($this->edges as $edge){
-            $vertex = $edge->getVerticesFromTo($this);
+            $vertex = $edge->getVertexFromTo($this);
             $ret[$vertex->getId()] = $vertex;
         }
         return $ret;
@@ -585,7 +585,7 @@ class Vertex extends Layoutable{
      * @see Vertex::getDegreeOut()
      */
     public function isSink(){
-        foreach($this->edge as $edge){
+        foreach($this->edges as $edge){
             if($edge->hasVertexStart($this)){
                 return false;
             }
