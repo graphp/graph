@@ -52,14 +52,9 @@ class AlgorithmMCFCycleCanceling2 extends AlgorithmMCF {
                 break;
             }
             
-            //calculate maximal possible flow
-            $newFlow = Edge::getFirst($clonedEdges)->getCapacityRemaining();
-            foreach ($clonedEdges as $clonedEdge) {
-                if ($newFlow > $clonedEdge->getCapacityRemaining()) {
-                    $newFlow = $clonedEdge->getCapacityRemaining();
-                }
-            }
-
+            //calculate maximal possible flow = minimum capacity remaining for all edges
+            $newFlow = Edge::getFirst($clonedEdges,Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
+            
             //set flow on original graph
             foreach ($clonedEdges as $clonedEdge) {
                 try {

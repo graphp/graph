@@ -74,16 +74,15 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             $newflow    =    $this->graph->getVertex($sourceVertex->getId())->getBalance() - $sourceVertex->getBalance();
             $targetFlow = - ($this->graph->getVertex($targetVertex->getId())->getBalance() - $targetVertex->getBalance());
             
-            if ($newflow > $targetFlow){                                        //minimum of source and target
+            // get minimum of source and target
+            if ($targetFlow < $newflow){
                 $newflow = $targetFlow;
             }
             
-            foreach ($edgesOnFlow as $edge){                                    //minimum of left capacity at path
-                $edgeFlow = $edge->getCapacityRemaining();
-                
-                if ($newflow > $edgeFlow){
-                    $newflow = $edgeFlow;
-                }
+            // get minimum of capacity remaining on path
+            $minCapacity = Edge::getFirst($edgesOnFlow,Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
+            if ($minCapacity < $newflow){
+                $newflow = $minCapacity;
             }
             
             //add the new flow to the path
