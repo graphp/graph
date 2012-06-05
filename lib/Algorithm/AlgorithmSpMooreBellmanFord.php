@@ -8,10 +8,10 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
      * @param array[int]    $totalCostOfCheapestPathTo
      * @param array[Vertex] $predecessorVertexOfCheapestPathTo
      *
-     * @return boolean
+     * @return Vertex|NULL
      */
     private function bigStep(&$edges,&$totalCostOfCheapestPathTo,&$predecessorVertexOfCheapestPathTo){
-        $changed = false;
+        $changed = NULL;
         foreach ($edges as $edge){                                                //check for all edges
             foreach($edge->getVerticesTarget() as $toVertex){                        //check for all "ends" of this edge (or for all targetes)
                 $fromVertex = $edge->getVertexFromTo($toVertex);
@@ -22,7 +22,7 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
                     if (! isset($totalCostOfCheapestPathTo[$toVertex->getId()])                //No path has been found yet
                             || $totalCostOfCheapestPathTo[$toVertex->getId()] > $newCost){        //OR this path is cheaper than the old path
                         
-                        $changed = true;
+                        $changed = $toVertex;
                         $totalCostOfCheapestPathTo[$toVertex->getId()] = $newCost;
                         $predecessorVertexOfCheapestPathTo[$toVertex->getId()] = $fromVertex;
                     }
@@ -36,7 +36,7 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
      * Calculate the Moore-Bellman-Ford-Algorithm and get all edges on shortest path for this vertex
      * 
      * @return array[Edge]
-     * @throws Exception if there is a negative cycle
+     * @throws NegativeCycleException if there is a negative cycle
      */
     public function getEdges(){
         $totalCostOfCheapestPathTo  = array($this->startVertex->getId() => 0);            //start node distance
@@ -54,10 +54,25 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
         $returnEdges = $this->getEdgesCheapestPredecesor($predecessorVertexOfCheapestPathTo);
         
         //Check for negative cycles (only if last step didn't already finish anyway)
-        if($changed && $this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo)){ // something is still changing...
-            throw new Exception("Negative Cycle");
+        if($changed && $changed = $this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo)){ // something is still changing...
+            $this->throwCycle($changed,$predecessorVertexOfCheapestPathTo);
         }
         
         return $returnEdges;
+    }
+    
+    private function throwCycle(Vertex $vertex,&$predecessorVertexOfCheapestPathTo){
+        $vid = $vertex->getId();
+        $vertices = array();                                                   // build array of vertices in cycle
+        do{
+        	$vertices[$vid] = $vertex;                                          // add new vertex to cycle
+        
+        	$vertex = $predecessorVertexOfCheapestPathTo[$vid];                 // get predecessor of vertex
+        	$vid = $vertex->getId();
+        }while(!isset($vertices[$vid]));                                      // continue until we find a vertex that's already in the circle (i.e. circle is closed)
+        
+        $vertices = array_reverse($vertices,true);                             // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
+        
+        throw new NegativeCycleException('Negative cycle found',$vertices);
     }
 }
