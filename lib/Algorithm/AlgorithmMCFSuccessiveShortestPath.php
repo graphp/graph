@@ -60,8 +60,8 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             
             //calculate the maximal possible flow
                                                                                 //new flow is the maximal possible flow for this path
-            $newflow    =    $this->graph->getVertex($sourceVertex->getId()) - $sourceVertex->getBalance();
-            $targetFlow = - ($this->graph->getVertex($targetVertex->getId()) - $targetVertex->getBalance());
+            $newflow    =    $this->graph->getVertex($sourceVertex->getId())->getBalance() - $sourceVertex->getBalance();
+            $targetFlow = - ($this->graph->getVertex($targetVertex->getId())->getBalance() - $targetVertex->getBalance());
             
             if ($newflow > $targetFlow){                                        //minimum of source and target
                 $newflow = $targetFlow;
