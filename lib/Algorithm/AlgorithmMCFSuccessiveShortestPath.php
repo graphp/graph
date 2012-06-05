@@ -66,8 +66,15 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             }
             
             //add the new flow to the path
-            //TODO Verändere den Fluss zwischen Quelle und Senke
-            
+            foreach ($edgesOnFlow as $clonedEdge){
+                try {
+            	    $edge = $resultGraph->getEdgeClone($clonedEdge);
+            	    $edge->addFlow($newflow);
+                } catch(Exception $ignor) {
+                    $edge = $resultGraph->getEdgeClone($clonedEdge, true);
+                    $edge->addFlow( - $newflow);
+                }
+            }
         }
     }
     
