@@ -35,6 +35,17 @@ abstract class AlgorithmMCF extends Algorithm {
     }
     
     /**
+     * calculate total weight along minimum-cost flow
+     * 
+     * @return float
+     * @uses AlgorithmMCF::createGraph()
+     * @uses Graph::getWeightFlow()
+     */
+    public function getWeightFlow(){
+        return $this->createGraph()->getWeightFlow();
+    }
+    
+    /**
      * create new resulting graph with minimum-cost flow on edges
      *
      * @throws Exception if the graph has not enough capacity for the minimum-cost flow
