@@ -111,9 +111,9 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
             if($residualEdge != NULL){
                 $newFlowEdge->setFlow($residualEdge->getCapacity());
             }
-            else{
-                $newFlowEdge->setWeight(0);
-            }
+//             else{
+//                 $newFlowEdge->setWeight(0);
+//             }
         }
         return $resultGraph;
     }
