@@ -14,6 +14,12 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
         $this->checkBalance();
         $resultGraph = $this->graph->createGraphClone();
         
+        //initial balance to 0
+        $vertices = $resultGraph->getVertices();
+        foreach ($vertices as $vertex){
+            $vertex->setBalance(0);
+        }
+        
         //initial flow of edges
         $edges = $resultGraph->getEdges();
         foreach ($edges as $edge){
@@ -33,25 +39,29 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             $residualGraph = $algRG->createGraph();
             
             //search for a source    
-            $sourceVertex = $this->getVertexSource($residualGraph);
-            
-            if ($sourceVertex === null){                                        //if no source is found the minimum-cost flow is found 
+            try {
+                $sourceVertex = $this->getVertexSource($residualGraph);
+            }
+            catch (Exception $ignore) {                                         //if no source is found the minimum-cost flow is found
                 return $resultGraph;
             }
             
-            //search for reachble target from this source
-            $targetVertex = $this->getVertexSink($sourceVertex);
-            
-            if ($targetVertex === null){                                        //if no target is found the network has not enough capacity
+            //search for reachble sink from this source
+            try {
+                $targetVertex = $this->getVertexSink($sourceVertex);
+            }
+            catch (Exception $ignore){                                          //if no target is found the network has not enough capacity
                 throw new Exception("The graph has not enough capacity for the minimum-cost flow");
             }
             
             //calculate shortest path between source- and target-vertex
             $algSP = new AlgorithmSpMooreBellmanFord($sourceVertex);
             $edgesOnFlow = $algSP->getEdgesTo($targetVertex);
+            
+            //calculate the maximal possible flow
                                                                                 //new flow is the maximal possible flow for this path
-            $newflow    = $sourceVertex->getBalance() - $sourceVertex->getFlow();
-            $targetFlow = - ($targetVertex->getBalance() - $targetVertex->getFlow());
+            $newflow    =    $this->graph->getVertex($sourceVertex->getId())->getBalance() - $sourceVertex->getBalance();
+            $targetFlow = - ($this->graph->getVertex($targetVertex->getId())->getBalance() - $targetVertex->getBalance());
             
             if ($newflow > $targetFlow){                                        //minimum of source and target
                 $newflow = $targetFlow;
@@ -66,8 +76,22 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             }
             
             //add the new flow to the path
-            //TODO Verändere den Fluss zwischen Quelle und Senke
+            foreach ($edgesOnFlow as $clonedEdge){
+                try {
+            	    $edge = $resultGraph->getEdgeClone($clonedEdge);            //get edge from clone
+            	    $edge->addFlow($newflow);                                   //add flow
+                } catch(Exception $ignor) {                                     //if the edge doesn't exists use the residual edge
+                    $edge = $resultGraph->getEdgeClone($clonedEdge, true);
+                    $edge->addFlow( - $newflow);                                //remove flow
+                }
+            }
             
+            //add balance to source and remove for the sink
+            $oriSourceVertex = $resultGraph->getVertex($sourceVertex->getId());
+            $oriTargetVertex = $resultGraph->getVertex($targetVertex->getId());
+            
+            $oriSourceVertex->setBalance($oriSourceVertex->getBalance() + $newflow);
+            $oriTargetVertex->setBalance($oriTargetVertex->getBalance() - $newflow);
         }
     }
     
@@ -93,16 +117,31 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
         return true;
     }
     
+    /**
+     * 
+     * 
+     * @param Graph $graph
+     * @throws Exception if there is no left source vertex
+     * 
+     * @return Vertex a source vertex in the given graph
+     */
     private function getVertexSource(Graph $graph){
-        foreach($graph->getVertices() as $vertex){
+        foreach($graph->getVertices() as $vid=>$vertex){
             if($this->graph->getVertex($vid)->getBalance() > $vertex->getBalance()){
                 return $vertex;
             }
         }
-        return null;
-        //throw new Exception('No source vertex found in graph');
+        throw new Exception('No source vertex found in graph');
     }
     
+    /**
+     * 
+     * 
+     * @param Vertex $source
+     * @throws Exception if there is no reachable sink vertex
+     * 
+     * @return Vertex a sink-vertex that is reachable from the source
+     */
     private function getVertexSink(Vertex $source){
         $algBFS = new AlgorithmSearchBreadthFirst($source);                     //search for reachable Vertices
         
@@ -111,8 +150,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
                 return $vertex;
             }
         }
-        return null;
-        //throw new Exception('No sink vertex connected to given source vertex found');
+        throw new Exception('No sink vertex connected to given source vertex found');
     }
     
 }
