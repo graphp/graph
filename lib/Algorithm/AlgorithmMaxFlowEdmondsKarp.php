@@ -164,35 +164,11 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      * @return Graph
      */
     private function getEdgeSimilarFromGraph($edge, $newGraph, $inverse=false){
-        // Extract endpoints from edge
-        $originalStartVertexArray = $edge->getVerticesStart();
-        $originalStartVertex = array_shift($originalStartVertexArray);
-
-        $originalTargetVertexArray = $edge->getVerticesTarget();
-        $originalTargetVertex = array_shift($originalTargetVertexArray);
-
-        // swap them if inverse wanted
-        if($inverse){
-            $temp = $originalStartVertex;
-            $originalStartVertex = $originalTargetVertex;
-            $originalTargetVertex = $temp;
+        try{
+            return $newGraph->getEdgeClone($edge,$inverse);
         }
-
-        // Get original vertices from resultgraph
-        $residualGraphEdgeStartVertex = $newGraph->getVertex($originalStartVertex->getId());
-        $residualGraphEdgeTargetVertex = $newGraph->getVertex($originalTargetVertex->getId());
-
-        // Now get the edge
-        $residualEdgeArray = $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
-
-        // Check for parallel edges
-        $countOfFoundEdges = count($residualEdgeArray);
-        if($countOfFoundEdges === 0){                                            // If no edge found
-            return NULL;
-        } else if($countOfFoundEdges !== 1){
-            throw new Exception('More than one cloned edge? Parallel edges (multigraph) not supported');
+        catch(Exception $ignore){
         }
-
-        return $residualEdgeArray[0];
+        return NULL;
     }
 }

@@ -660,6 +660,44 @@ class Graph extends Layoutable{
     }
     
     /**
+     * Extracts (optional: inversed) edge from this graph
+     *
+     * @param Edge $edge
+     * @param boolean $inverse
+     * @return Edge
+     * @throws Exception if no edge was found or multiple edges match
+     */
+    public function getEdgeClone($edge, $inverse=false){
+    	// Extract endpoints from edge
+    	$originalStartVertexArray = $edge->getVerticesStart();
+    	$originalStartVertex = array_shift($originalStartVertexArray);
+    
+    	$originalTargetVertexArray = $edge->getVerticesTarget();
+    	$originalTargetVertex = array_shift($originalTargetVertexArray);
+    
+    	// swap them if inverse wanted
+    	if($inverse){
+    		$temp = $originalStartVertex;
+    		$originalStartVertex = $originalTargetVertex;
+    		$originalTargetVertex = $temp;
+    	}
+    
+    	// Get original vertices from resultgraph
+    	$residualGraphEdgeStartVertex = $this->getVertex($originalStartVertex->getId());
+    	$residualGraphEdgeTargetVertex = $this->getVertex($originalTargetVertex->getId());
+    
+    	// Now get the edge
+    	$residualEdgeArray = $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
+    
+    	// Check for parallel edges
+    	if(count($residualEdgeArray) !== 1){
+    		throw new Exception('More than one cloned edge? Parallel edges (multigraph) not supported');
+    	}
+    
+    	return $residualEdgeArray[0];
+    }
+    
+    /**
      * @return int number of components of this graph
      * @uses AlgorithmConnectedComponents::getNumberOfComponents()
      */
