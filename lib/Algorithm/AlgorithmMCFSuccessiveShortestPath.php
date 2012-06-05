@@ -57,6 +57,8 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             //calculate shortest path between source- and target-vertex
             $algSP = new AlgorithmSpMooreBellmanFord($sourceVertex);
             $edgesOnFlow = $algSP->getEdgesTo($targetVertex);
+            
+            //calculate the maximal possible flow
                                                                                 //new flow is the maximal possible flow for this path
             $newflow    =    $this->graph->getVertex($sourceVertex->getId()) - $sourceVertex->getBalance();
             $targetFlow = - ($this->graph->getVertex($targetVertex->getId()) - $targetVertex->getBalance());
@@ -84,7 +86,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
                 }
             }
             
-            //add balance
+            //add balance to source and remove for the sink
             $oriSourceVertex = $resultGraph->getVertex($sourceVertex->getId());
             $oriTargetVertex = $resultGraph->getVertex($targetVertex->getId());
             
