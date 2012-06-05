@@ -22,9 +22,18 @@ class LoaderCompleteGraph extends Loader{
         for ($i = 0; $i < $n; ++$i){
         
             $vertex = $graph->getVertex($i);
-        
-            for ($j = $i + 1; $j < $n; ++$j){
-                $vertex->createEdge( $graph->getVertex($j) );
+            
+            if ($this->directedEdges){
+                for($j = 0; $j < $n; ++$j){
+                    if($j !== $i){
+            	        $vertex->createEdgeTo($graph->getVertex($j) );
+                    }
+                }
+            }
+            else {
+            	for ($j = $i + 1; $j < $n; ++$j){
+                    $vertex->createEdge( $graph->getVertex($j) );
+                }
             }
         }
         

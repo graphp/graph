@@ -18,7 +18,12 @@ class LoaderEdgeList extends LoaderFile{
         foreach ($file as $zeile) {
             $ends = $this->readLine($zeile,array('from'=>'vertex','to'=>'vertex'),$graph);
             
-            $ends['from']->createEdge($ends['to']);    //TODO directed
+            if ($this->directedEdges){
+            	$ends['from']->createEdgeTo($ends['to']);
+            }
+            else {
+            	$ends['from']->createEdge($ends['to']);
+            }
         }
         
         return $graph;
