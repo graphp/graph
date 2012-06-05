@@ -61,6 +61,22 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
         return $returnEdges;
     }
     
+    /**
+     * get negative cycle
+     * 
+     * @return NegativeCycleException
+     * @throws Exception
+     */
+    public function getCycleNegative(){
+        try{
+            $this->getEdges();
+        }
+        catch(NegativeCycleException $e){
+            return $e;
+        }
+        throw new Exception('No cycle found');
+    }
+    
     private function throwCycle(Vertex $vertex,&$predecessorVertexOfCheapestPathTo){
         $vid = $vertex->getId();
         $vertices = array();                                                   // build array of vertices in cycle
