@@ -50,8 +50,10 @@ class AlgorithmResidualGraph extends Algorithm{
             // capacity is still available, clone remaining capacity into new edge
             if($this->keepNullCapacity || $flow < $capacity){
                 $newEdge = $newgraph->createEdgeClone($edge)->setFlow(0)->setCapacity($capacity - $flow);
-
-                $this->mergeParallelEdges($newEdge);
+                
+                if($this->mergeParallelEdges){
+                    $this->mergeParallelEdges($newEdge);
+                }
             }
 
             // flow is set, clone current flow as capacity for back-flow into new inverted edge (opposite direction)
@@ -62,8 +64,10 @@ class AlgorithmResidualGraph extends Algorithm{
                 if($newEdge->getWeight() !== NULL){
                     $newEdge->setWeight(-$newEdge->getWeight());
                 }
-
-                $this->mergeParallelEdges($newEdge);
+                
+                if($this->mergeParallelEdges){
+                    $this->mergeParallelEdges($newEdge);
+                }
             }
         }
         return $newgraph;
@@ -75,13 +79,8 @@ class AlgorithmResidualGraph extends Algorithm{
      * @param Edge $newEdge
      */
     private function mergeParallelEdges(Edge $newEdge){
-        if($this->mergeParallelEdges === false){
-            return;
-        }
-
         $parallelEdges = $newEdge->getEdgesParallel();
-        $countParallelEdges = count($parallelEdges);
-        if($countParallelEdges > 0){
+        if($parallelEdges){
 
             $mergedCapacity = 0;
 
