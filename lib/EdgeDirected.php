@@ -85,4 +85,8 @@ class EdgeDirected extends Edge{
     public function hasVertexStart(Vertex $startVertex){
         return ($this->from === $startVertex);
     }
+    
+    public function hasVertexTarget(Vertex $targetVertex){
+        return ($this->to === $targetVertex);
+    }
 }

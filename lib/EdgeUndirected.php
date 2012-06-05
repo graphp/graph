@@ -72,4 +72,8 @@ class EdgeUndirected extends Edge{
     public function hasVertexStart(Vertex $startVertex){
         return ($this->a === $startVertex || $this->b === $startVertex);
     }
+    
+    public function hasVertexTarget(Vertex $targetVertex){
+        return $this->hasVertexStart($targetVertex); // same implementation as direction does not matter
+    }
 }
