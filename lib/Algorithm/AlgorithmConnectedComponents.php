@@ -22,10 +22,11 @@ class AlgorithmConnectedComponents extends Algorithm{
      * could be improved by not checking for actual number of components but stopping when there's more than one
      * 
      * @return boolean
-     * @uses AlgorithmConnectedComponents::getNumberOfComponents()
+     * @uses AlgorithmSearchBreadthFirst::getNumberOfVertices()
      */
     public function isSingle(){
-        return ($this->getNumberOfComponents() === 1);
+        $alg = new AlgorithmSearchBreadthFirst($this->graph->getVertexFirst());
+        return ($this->graph->getNumberOfVertices() === $alg->getNumberOfVertices());
     }
     
     /**
