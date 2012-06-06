@@ -72,6 +72,33 @@ abstract class AlgorithmSp extends Algorithm {
     }
     
     /**
+     * get array of all vertices the given start vertex has a path to
+     * 
+     * @return array[Vertex]
+     * @uses AlgorithmSp::getDistanceMap()
+     */
+    public function getVertices(){
+        $vertices = array();
+        $map = $this->getDistanceMap();
+        foreach($this->startVertex->getGraph()->getVertices() as $vid=>$vertex){
+            if(isset($map[$vid])){
+                $vertices[$vid] = $vertex;
+            }
+        }
+        return $vertices;
+    }
+    
+    /**
+     * get array of all vertices' IDs the given start vertex has a path to
+     * 
+     * @return array[int]
+     * @uses AlgorithmSp::getDistanceMap()
+     */
+    public function getVerticesId(){
+        return array_keys($this->getDistanceMap());
+    }
+    
+    /**
      * get map of vertex IDs to distance
      *
      * @return array[float]
