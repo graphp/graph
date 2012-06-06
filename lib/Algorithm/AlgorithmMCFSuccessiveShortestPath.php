@@ -54,7 +54,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
                 $sourceVertex = $this->getVertexSource($residualGraph);
             }
             catch (Exception $ignore) {                                         //if no source is found the minimum-cost flow is found
-                return $resultGraph;
+                break;
             }
             
             //search for reachble sink from this source
@@ -103,6 +103,7 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
             $this->addBalance($oriSourceVertex, $newflow);
             $this->addBalance($oriTargetVertex, - $newflow);
         }
+        return $resultGraph;
     }
     
     /**
@@ -166,5 +167,4 @@ class AlgorithmMCFSuccessiveShortestPath extends AlgorithmMCF {
     private function addBalance(Vertex $vertex, $balance){
         $vertex->setBalance($vertex->getBalance() + $balance);
     }
-    
 }

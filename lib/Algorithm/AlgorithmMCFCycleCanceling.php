@@ -47,7 +47,7 @@ class AlgorithmMCFCycleCanceling extends AlgorithmMCF {
             try {
                 $clonedEdges = $alg->getCycleNegative()->getEdges();
             }
-            catch (Exception $ignore) {
+            catch (Exception $ignore) {                                        // no negative cycle found => end algorithm
                 break;
             }
 
@@ -65,7 +65,8 @@ class AlgorithmMCFCycleCanceling extends AlgorithmMCF {
                 }
             }
         }
-
+        
+        // destroy temporary supersource and supersink again
         $resultGraph->getVertex($superSink->getId())->destroy();
         $resultGraph->getVertex($superSource->getId())->destroy();
 
