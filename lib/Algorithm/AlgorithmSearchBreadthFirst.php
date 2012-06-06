@@ -1,23 +1,13 @@
 <?php
 
-class AlgorithmSearchBreadthFirst extends Algorithm{
-    /**
-     * 
-     * @var Vertex
-     */
-    private $startVertex;
-    
-    public function __construct(Vertex $startVertex){
-        $this->vertex = $startVertex;
-    }
-
+class AlgorithmSearchBreadthFirst extends AlgorithmSearch{
     /**
      *
      * @return array[Vertex]
      */
     public function getVertices(){
-        $queue = array($this->vertex);
-        $mark = array($this->vertex->getId() => true);                            //to not add vertices twice in array visited
+        $queue = array($this->startVertex);
+        $mark = array($this->startVertex->getId() => true);                            //to not add vertices twice in array visited
         $visited = array();                                                        //visited vertices
 
         do{
@@ -44,10 +34,10 @@ class AlgorithmSearchBreadthFirst extends Algorithm{
      * @return Graph with lowest vertex count between start and destination OR NUll if no path exists
      */
     public function getGraphPathTo($destinationVertex){
-        $queue = array($this->vertex);                                         //Start vertex
-        $mark = array($this->vertex->getId() => true);                            //to not add vertices twice in array visited
+        $queue = array($this->startVertex);                                         //Start vertex
+        $mark = array($this->startVertex->getId() => true);                            //to not add vertices twice in array visited
          
-        $deepSearchThree = $this->vertex->getGraph()->createGraphCloneEdgeless();   //create copy of graph without edges
+        $deepSearchThree = $this->startVertex->getGraph()->createGraphCloneEdgeless();   //create copy of graph without edges
         $visited = array();                                                        //visited vertices
 
         $pathToDestinationVertexFound = false;
@@ -100,12 +90,8 @@ class AlgorithmSearchBreadthFirst extends Algorithm{
              
             $currentVertex=$upperVertex;
 
-        } while($currentVertex->getId()!==$this->vertex->getId());
+        } while($currentVertex->getId()!==$this->startVertex->getId());
         
         return $path;
-    }
-
-    public function getVerticesIds(){
-        return array_keys($this->getVertices());
     }
 }

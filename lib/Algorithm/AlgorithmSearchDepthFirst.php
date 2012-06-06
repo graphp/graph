@@ -1,21 +1,6 @@
 <?php
 
-class AlgorithmSearchDepthFirst extends Algorithm{
-
-    /**
-     * Start vertex for this algorithm
-     *
-     * @var Vertex
-     */
-    private $StartVertex = NULL;
-
-    /**
-     *
-     * @param Vertex $startVertex
-     */
-    public function __construct($startVertex){
-        $this->StartVertex = $startVertex;
-    }
+class AlgorithmSearchDepthFirst extends AlgorithmSearch{
 
     /**
      *
@@ -52,7 +37,7 @@ class AlgorithmSearchDepthFirst extends Algorithm{
         }
         return $visited;
     }
-
+    
     /**
      *
      * calculates a recursive depth-first search
@@ -60,10 +45,10 @@ class AlgorithmSearchDepthFirst extends Algorithm{
      * @return array[Vertex]
      */
     public function getVertices(){
-        return $this->iterativeDepthFirstSearch($this->StartVertex);
+        return $this->iterativeDepthFirstSearch($this->startVertex);
         
         $visitedVertices = array();
-        $this->recursiveDepthFirstSearch($this->StartVertex, $visitedVertices);
+        $this->recursiveDepthFirstSearch($this->startVertex, $visitedVertices);
         return $visitedVertices;
     }
 }
