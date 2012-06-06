@@ -13,7 +13,7 @@ class AlgorithmMCFCycleCanceling extends AlgorithmMCF {
 
         $sumBalance = 0;
 
-        // connect supersource s* and supersink* with all "normal" sources and sinks
+        // connect supersource s* and supersink t* with all "normal" sources and sinks
         foreach($resultGraph->getVertices() as $vertex){
             $flow = $vertex->getBalance(); //$vertex->getFlow();
             $b = abs($vertex->getBalance());
@@ -41,10 +41,9 @@ class AlgorithmMCFCycleCanceling extends AlgorithmMCF {
             //create residual graph
             $algRG = new AlgorithmResidualGraph($resultGraph);
             $residualGraph = $algRG->createGraph();
-            $cloneSink = $residualGraph->getVertex($superSink->getId());
 
             //get negative cycle
-            $alg = new AlgorithmSpMooreBellmanFord($cloneSink);
+            $alg = new AlgorithmDetectNegativeCycle($residualGraph);
             try {
                 $clonedEdges = $alg->getCycleNegative()->getEdges();
             }
