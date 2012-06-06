@@ -11,6 +11,10 @@ class AlgorithmMstKruskal extends AlgorithmMst{
          $this->graph = $inputGraph;
     }
     
+    public function createGraph(){
+    	return $this->graph->createGraphCloneEdges($this->getEdges());         //Copy Graph
+    }
+    
     /**
      *
      * @return array[Edge]
