@@ -7,8 +7,42 @@ abstract class AlgorithmSearch extends Algorithm{
      */
     protected $startVertex;
     
+    const DIRECTION_FORWARD = 0;
+    const DIRECTION_REVERSE = 1;
+    const DIRECTION_BOTH = 2;
+    
+    private $direction = self::DIRECTION_FORWARD;
+    
     public function __construct(Vertex $startVertex){
     	$this->startVertex = $startVertex;
+    }
+    
+    /**
+     * set direction in which to follow adjacent vertices
+     * 
+     * @param int $direction
+     * @return AlgorithmSearch $this (chainable)
+     * @throws Exception
+     * @see AlgorithmSearch::getVerticesAdjacent()
+     */
+    public function setDirection($direction){
+        if($direction !== self::DIRECTION_FORWARD && $direction !== self::DIRECTION_REVERSE && $direction !== self::DIRECTION_BOTH){
+            throw new Exception('Invalid direction given');
+        }
+        $this->direction = $direction;
+        return $this;
+    }
+    
+    protected function getVerticesAdjacent(Vertex $vertex){
+        if($this->direction === self::DIRECTION_FORWARD){
+            return $vertex->getVerticesEdgeTo();
+        }else if($this->direction === self::DIRECTION_REVERSE){
+            return $vertex->getVerticesEdgeFrom();
+        }else if($this->direction === self::DIRECTION_BOTH){
+            return $vertex->getVerticesEdge();
+        }else{
+            throw new Exception('Invalid direction setting');
+        }
     }
     
     /**

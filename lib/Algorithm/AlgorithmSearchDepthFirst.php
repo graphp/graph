@@ -30,7 +30,7 @@ class AlgorithmSearchDepthFirst extends AlgorithmSearch{
             if(!isset($visited[$vertex->getId()])){
                 $visited[$vertex->getId()] = $vertex;
                 
-                foreach(array_reverse($vertex->getVerticesEdgeTo(),true) as $vid=>$nextVertex){
+                foreach(array_reverse($this->getVerticesAdjacent($vertex),true) as $vid=>$nextVertex){
                     $todo[] = $nextVertex;
                 }
             }
