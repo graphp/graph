@@ -36,17 +36,25 @@ class AlgorithmDetectNegativeCycle extends Algorithm{
      *
      * @return NegativeCycleException
      * @throws Exception if there isn't a negative cycle
-     * @uses AlgorithmSpMooreBellmanFord::getCycleNegative()
+     * @uses AlgorithmSpMooreBellmanFord::getVerticesId()
      */
     public function getCycleNegative(){
-        foreach($this->graph->getVertices() as $vertex){                      // check for all vertices
-            $alg = new AlgorithmSpMooreBellmanFord($vertex);                   // start MBF algorithm on current vertex
-            try{
-                return $alg->getCycleNegative();                               // try to get negative cycle for current vertex
-            }
-            catch(Exception $ignore){ }                                        // no cycle found, check next vertex...
-        }                                                                       // no more vertices to check => abort
-        throw new Exception("No negative cycle found");
+    	$verticesVisited = array();                                            // remember vertices already visited, as they can not lead to a new cycle
+    	foreach($this->graph->getVertices() as $vid=>$vertex){                // check for all vertices
+    		if(!isset($verticesVisited[$vid])){                                // skip vertices already visited
+    			$alg = new AlgorithmSpMooreBellmanFord($vertex);               // start MBF algorithm on current vertex
+    
+    			try{
+    				foreach($alg->getVerticesId() as $vid){                   // try to get all connected vertices (or throw new cycle)
+    					$verticesVisited[$vid] = true;                         // getting connected vertices succeeded, so skip over all of them
+    				}                                                           // no cycle found, check next vertex...
+    			}
+    			catch(NegativeCycleException $e){                              // yey, negative cycle encountered => return
+    				return $e;
+    			}
+    		}
+    	}                                                                       // no more vertices to check => abort
+    	throw  new Exception("No negative cycle found");
     }
     
     /**
