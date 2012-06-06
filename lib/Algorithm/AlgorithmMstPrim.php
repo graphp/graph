@@ -33,7 +33,7 @@ class AlgorithmMstPrim extends AlgorithmMst{
         $returnEdges = array();
         
         $vertices = $this->startVertex->getGraph()->getVertices();
-        unset($vertiices[$startVertexId]);                                      // skip the first entry to run only n-1 times 
+        unset($vertices[$startVertexId]);                                      // skip the first entry to run only n-1 times 
         
          foreach ($vertices as $value) {                                            // iterate n times over edges form know nodes
             $cheapestEdge = $edgeQueue->extract();                                // Get next cheapest edge
