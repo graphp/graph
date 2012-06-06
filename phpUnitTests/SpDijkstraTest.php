@@ -9,7 +9,7 @@ class MSpDijkstraTest extends PHPUnit_Framework_TestCase
     // Run this code without crashing
     public function testRunningAlgorithm()
     {
-        $file = "Wege3.txt";
+        $file = "Wege1.txt";
 
         $LoaderEdgeListWeighted = new LoaderEdgeListWeighted(PATH_DATA.$file);
         $LoaderEdgeListWeighted->setEnableDirectedEdges(true);
@@ -20,5 +20,9 @@ class MSpDijkstraTest extends PHPUnit_Framework_TestCase
         //$alg = new AlgorithmSpDijkstra( Vertex::getFirst($steffiGraf->getVertices(),Vertex::ORDER_RANDOM) );
 
         $newGraph =  $alg->createGraph();
+
+        $targetVertex = $this->testedGraph->getVertex("5");
+
+        $this->assertEquals(4, $alg->getDistance($targetVertex));
     }
 }
