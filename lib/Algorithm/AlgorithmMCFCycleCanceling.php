@@ -3,7 +3,7 @@
 class AlgorithmMCFCycleCanceling extends AlgorithmMCF {
 
     public function createGraph() {
-        $this->checkBalance();
+    	$this->checkBalance();
 
         // create resulting graph with supersource and supersink
         $resultGraph = $this->graph->createGraphClone();
@@ -30,102 +30,46 @@ class AlgorithmMCFCycleCanceling extends AlgorithmMCF {
         $algMaxFlow = new AlgorithmMaxFlowEdmondsKarp($superSource,$superSink);
         $flow = $algMaxFlow->getMaxFlowValue();
 
-        //visualize($resultGraph);
-        //visualize($alg->createGraph());
-
         if($flow !== $sumBalance){
             throw new Exception('(s*,t*)-flow of '.$flow.' has to equal sumBalance '.$sumBalance);
         }
 
-        $returnGraph = $algMaxFlow->createGraph();
 
-        try {
-            while(true){
-                // Find negative cycle
-                $algCycle = new AlgorithmDetectNegativeCycle($returnGraph, $vertex);
-                $negativeCycle = $algCycle->getNegativeCycle();
+        $resultGraph = $algMaxFlow->createGraph();
 
-                $edgeFromFlowPath = Edge::getFirst($negativeCycle->getEdges(),Edge::ORDER_CAPACITY);
-                $newFlowValue = $edgeFromFlowPath->getCapacity();
+        while(true){
+            //create residual graph
+            $algRG = new AlgorithmResidualGraph($resultGraph);
+            $residualGraph = $algRG->createGraph();
+            $cloneSink = $residualGraph->getVertex($superSink->getId());
 
-                // Add negative cycle as flow to $returnGraph
-                foreach ($negativeCycle->getEdges() as $edge){
-                    $originalEdge = $returnGraph->getEdgeClone($edge);
-                    $originalEdge->setFlow($originalEdge->getFlow() + $newFlowValue);
+            //get negative cycle
+            $alg = new AlgorithmSpMooreBellmanFord($cloneSink);
+            try {
+                $clonedEdges = $alg->getCycleNegative()->getEdges();
+            }
+            catch (Exception $ignore) {
+                break;
+            }
+
+            //calculate maximal possible flow = minimum capacity remaining for all edges
+            $newFlow = Edge::getFirst($clonedEdges,Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
+
+            //set flow on original graph
+            foreach ($clonedEdges as $clonedEdge) {
+                try {
+            	    $edge = $resultGraph->getEdgeClone($clonedEdge);            //get edge from clone
+            	    $edge->addFlow( $newFlow );                                 //add flow
+                } catch(Exception $ignor) {                                     //if the edge doesn't exists use the residual edge
+                    $edge = $resultGraph->getEdgeClone($clonedEdge, true);
+                    $edge->addFlow( - $newFlow);                                //remove flow
                 }
-
-                $returnGraph = new AlgorithmResidualGraph($returnGraph);
             }
         }
-        catch (Exception $ignore){
-            // DONE no negative cycle found... continue and return...
-        }
 
+        $resultGraph->getVertex($superSink->getId())->destroy();
+        $resultGraph->getVertex($superSource->getId())->destroy();
 
-        //initial-zustand setzten, 0 für Positiv gewichtete Kanten max für negaitv gewichtete Kanten
-
-        $returnGraph->getVertex($superSink->getId())->destroy();
-        $returnGraph->getVertex($superSource->getId())->destroy();
-        $superSink->destroy();
-        $superSource->destroy();
-
-        //visualize($returnGraph);
-
-        //$returnGraph = $this->getFlowGraphFromResidualGraph($returnGraph);
-        return $returnGraph;
-    }
-
-
-
-    /**
-     * Merges a residual graph with initial graph
-     *
-     * @param $residualGraph
-     * @return Graph graph with maximal flow
-     */
-    private function getFlowGraphFromResidualGraph($residualGraph){
-
-        $resultGraph = $this->graph->createGraphCloneEdgeless();                // Process original graph and create a new graph that contains the flow
-
-        $originalGraphEdgesArray = $this->graph->getEdges();
-
-        // For every edge in the residual graph,
-        // that has an inversed edge in the original graph:
-        // Insert the inversed residual edge into the new graph
-        foreach ($originalGraphEdgesArray as $edge){
-            // Inverse the edge
-            $residualEdge = $this->getEdgeSimilarFromGraph($edge, $residualGraph, true);
-
-            // Add inversed edge to return graph
-            $newFlowEdge = $resultGraph->createEdgeClone($edge);
-
-            // Set flow of the edge
-            if($residualEdge != NULL){
-                $newFlowEdge->setFlow($residualEdge->getCapacity());
-            }
-            else{
-                $newFlowEdge->setWeight(0);
-            }
-        }
         return $resultGraph;
     }
-
-
-    /**
-     * Extracts (optional: inversed) edge from the given graph
-     *
-     * @param Graph $edge
-     * @param Graph $newGraph
-     * @param Boolean $inverse
-     * @return Graph
-     */
-    private function getEdgeSimilarFromGraph($edge, $newGraph, $inverse=false){
-        try{
-            return $newGraph->getEdgeClone($edge,$inverse);
-        }
-        catch(Exception $ignore){
-        }
-        return NULL;
-    }
-
 }
