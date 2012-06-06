@@ -32,26 +32,26 @@ class AlgorithmConnectedComponents extends Algorithm{
     /**
      * @return int number of components
      * @uses Graph::getVertices()
-     * @uses AlgorithmSearchDepthFirst::getVertices()
+     * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
      */
     public function getNumberOfComponents(){
         $visitedVertices = array();
         $components = 0;
         
-        foreach ($this->graph->getVertices() as $vertex){                        //for each vertices
-            if ( ! isset( $visitedVertices[$vertex->getId()] ) ){                    //did I visit this vertex before?
+        foreach ($this->graph->getVertices() as $vid=>$vertex){               //for each vertices
+            if ( ! isset( $visitedVertices[$vid] ) ){                          //did I visit this vertex before?
                 
-                $alg = new AlgorithmSearchDepthFirst($vertex);
-                $newVertices = $alg->getVertices();                                    //get all vertices of this component
+                $alg = new AlgorithmSearchBreadthFirst($vertex);
+                $newVertices = $alg->getVerticesIds();                          //get all vertices of this component
                 
-                $components++;
+                ++$components;
                 
-                foreach ($newVertices as $v){                                            //mark the vertices of this component as visited
-                    $visitedVertices[$v->getId()] = true;
+                foreach ($newVertices as $vid){                               //mark the vertices of this component as visited
+                    $visitedVertices[$vid] = true;
                 }
             }
         }
         
-        return $components;                                                        //return number of components
+        return $components;                                                    //return number of components
     }
 }
