@@ -106,6 +106,24 @@ class Graph extends Layoutable{
     }
     
     /**
+     * create a new clone/copy of this graph - copy all attributes and given vertices and its edges
+     * 
+     * @param array[Vertex] $vertices array of vertices to keep
+     * @return Graph
+     * @uses Graph::createGraphClone() to create a complete clone
+     * @uses Vertex::destroy() to remove unneeded vertices again
+     */
+    public function createGraphCloneVertices($vertices){
+        $graph = $this->createGraphClone();
+        foreach($graph->getVertices() as $vid=>$vertex){
+            if(!isset($vertices[$vid])){
+                $vertex->destroy();
+            }
+        }
+        return $graph;
+    }
+    
+    /**
      * create new clone of the given edge between adjacent vertices
      * 
      * @param Edge $originalEdge original edge (not neccessarily from this graph)
