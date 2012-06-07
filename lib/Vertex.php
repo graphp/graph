@@ -456,6 +456,27 @@ class Vertex extends Layoutable{
     }
     
     /**
+     * get all adjacent vertices of this vertex (edge FROM or TO this vertex)
+     *  
+     * @return array[Vertex]
+     * @uses Edge::hasVertexStart()
+     * @uses Edge::getVerticesToFrom()
+     * @uses Edge::getVerticesFromTo()
+     */
+    public function getVerticesEdge(){
+        $ret = array();
+        foreach($this->edges as $edge){
+            if($edge->hasVertexStart($this)){
+                $vertex = $edge->getVertexToFrom($this);
+            }else{
+                $vertex = $edge->getVertexFromTo($this);
+            }
+            $ret[$vertex->getId()] = $vertex;
+        }
+        return $ret;
+    }
+    
+    /**
      * get all vertices this vertex has an edge to
      * 
      * @return array[Vertex]
