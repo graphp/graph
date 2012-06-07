@@ -58,4 +58,32 @@ class AlgorithmConnectedComponents extends Algorithm{
         
         return $components;                                                    //return number of components
     }
+    
+    /**
+     * separate input graph into separate independant and unconnected graphs
+     * 
+     * @return array[Graph]
+     * @uses Graph::getVertices()
+     * @uses AlgorithmSearchBreadthFirst::getVertices()
+     */
+    public function createGraphsComponents(){
+    	$visitedVertices = array();
+    	$graphs = array();
+    
+    	foreach ($this->graph->getVertices() as $vid=>$vertex){               //for each vertices
+    		if ( ! isset( $visitedVertices[$vid] ) ){                          //did I visit this vertex before?
+    
+    			$alg = $this->createSearch($vertex);
+    			$newVertices = $alg->getVertices();                          //get all vertices of this component
+    
+    			foreach ($newVertices as $vid=>$unusedVertex){                //mark the vertices of this component as visited
+    				$visitedVertices[$vid] = true;
+    			}
+    
+    			$graphs []= $this->graph->createGraphCloneVertices($newVertices);
+    		}
+    	}
+    
+    	return $graphs;
+    }
 }
