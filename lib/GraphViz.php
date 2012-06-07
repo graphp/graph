@@ -18,6 +18,8 @@ class GraphViz{
     private $layoutVertex = array();
     private $layoutEdge = array();
     
+    const DELAY_OPEN = 2.0;
+    
     const EOL = PHP_EOL;
     
     public function __construct(Graph $graphToPlot){
@@ -57,7 +59,7 @@ class GraphViz{
         static $next = 0;
         if($next > microtime(true)){
             echo '[delay flooding xdg-open]'.PHP_EOL; // wait some time between calling xdg-open because earlier calls will be ignored otherwise
-            sleep(1);
+            sleep(self::DELAY_OPEN);
         }
         
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -68,7 +70,7 @@ class GraphViz{
         
         }
       
-        $next = microtime(true) + 1.0;
+        $next = microtime(true) + self::DELAY_OPEN;
         //echo "... done\n";
     }
     
