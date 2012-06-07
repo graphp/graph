@@ -16,6 +16,11 @@ class AlgorithmConnectedComponents extends Algorithm{
         $this->graph = $graph;
     }
     
+    private function createSearch(Vertex $vertex){
+        $alg = new AlgorithmSearchBreadthFirst($vertex);
+        return $alg->setDirection(AlgorithmSearch::DIRECTION_BOTH); // follow into both directions (loosely connected)
+    }
+    
     /**
      * check whether this graph consists of only a single component
      * 
@@ -25,7 +30,7 @@ class AlgorithmConnectedComponents extends Algorithm{
      * @uses AlgorithmSearchBreadthFirst::getNumberOfVertices()
      */
     public function isSingle(){
-        $alg = new AlgorithmSearchBreadthFirst($this->graph->getVertexFirst());
+        $alg = $this->createSearch($this->graph->getVertexFirst());
         return ($this->graph->getNumberOfVertices() === $alg->getNumberOfVertices());
     }
     
@@ -41,8 +46,7 @@ class AlgorithmConnectedComponents extends Algorithm{
         foreach ($this->graph->getVertices() as $vid=>$vertex){               //for each vertices
             if ( ! isset( $visitedVertices[$vid] ) ){                          //did I visit this vertex before?
                 
-                $alg = new AlgorithmSearchBreadthFirst($vertex);
-                $newVertices = $alg->getVerticesIds();                          //get all vertices of this component
+                $newVertices = $this->createSearch($vertex)->getVerticesIds();  //get all vertices of this component
                 
                 ++$components;
                 
