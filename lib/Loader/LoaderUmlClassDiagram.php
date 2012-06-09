@@ -38,9 +38,13 @@ class LoaderUmlClassDiagram extends Loader{
     }
     
     public function createVertexClass($class){
+        if($class instanceof ReflectionClass){
+            $reflection = $class;
+            $class = $reflection->getName();
+        }else{
+            $reflection = new ReflectionClass($class);
+        }
         $vertex = $this->graph->createVertex($class);
-        
-        $reflection = new ReflectionClass($class);
         
         $parent = $reflection->getParentClass();
         if($parent){
@@ -48,14 +52,14 @@ class LoaderUmlClassDiagram extends Loader{
                 $parentVertex = $this->graph->getVertex($parent->getName());
             }
             catch(Exception $ignore){
-                $parentVertex = $this->createVertexClass($parent->getName());
+                $parentVertex = $this->createVertexClass($parent);
             }
             $vertex->createEdgeTo($parentVertex)->setLayout('arrowhead','empty');
         }
         
-        foreach($reflection->getInterfaceNames() as $interface){
+        foreach($reflection->getInterfaces() as $interface){
             try{
-                $parentVertex = $this->graph->getVertex($interface);
+                $parentVertex = $this->graph->getVertex($interface->getName());
             }
             catch(Exception $ignore){
                 $parentVertex = $this->createVertexClass($interface);
