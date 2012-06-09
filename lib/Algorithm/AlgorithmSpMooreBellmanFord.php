@@ -55,7 +55,8 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
         
         //Check for negative cycles (only if last step didn't already finish anyway)
         if($changed && $changed = $this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo)){ // something is still changing...
-            $this->throwCycle($changed,$predecessorVertexOfCheapestPathTo);
+            $cycle = Cycle::factoryFromPredecessorMap($predecessorVertexOfCheapestPathTo,$changed,Edge::ORDER_WEIGHT);
+            throw new NegativeCycleException('Negative cycle found',$cycle);
         }
         
         return $returnEdges;
@@ -75,33 +76,5 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
             return $e->getCycle();
         }
         throw new Exception('No cycle found');
-    }
-    
-    private function throwCycle(Vertex $vertex,&$predecessorVertexOfCheapestPathTo){
-        //find a vertex in the cycle
-        $vid = $vertex->getId();
-        $startVertices = array();
-        do{
-        	$startVertices[$vid] = $vertex;
-        
-        	$vertex = $predecessorVertexOfCheapestPathTo[$vid];
-        	$vid = $vertex->getId();
-        }while(!isset($startVertices[$vid]));
-        
-        //find negative cycle
-        $vid = $vertex->getId();
-        $vertices = array();                                                   // build array of vertices in cycle
-        do{
-        	$vertices[$vid] = $vertex;                                          // add new vertex to cycle
-        
-        	$vertex = $predecessorVertexOfCheapestPathTo[$vid];                 // get predecessor of vertex
-        	$vid = $vertex->getId();
-        }while(!isset($vertices[$vid]));                                      // continue until we find a vertex that's already in the circle (i.e. circle is closed)
-        
-        $vertices = array_reverse($vertices,true);                             // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
-        
-        $cycle = Cycle::factoryFromVertices($vertices,Edge::ORDER_WEIGHT);
-        
-        throw new NegativeCycleException('Negative cycle found',$cycle);
     }
 }

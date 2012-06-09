@@ -16,6 +16,52 @@ class Cycle{
     private $edges;
     
     /**
+     * create new cycle instance from given predecessor map
+     * 
+     * @param array[Vertex] $predecessors map of vid => predecessor vertex instance
+     * @param Vertex        $vertex       start vertex to search predecessors from
+     * @param int           $by
+     * @param boolean       $desc
+     * @return Cycle
+     * @throws Exception
+     * @see Edge::getFirst() for parameters $by and $desc
+     * @uses Cycle::factoryFromVertices()
+     */
+    public static function factoryFromPredecessorMap($predecessors,$vertex,$by=Edge::ORDER_FIFO,$desc=false){
+        /*$checked = array();
+        foreach($predecessors as $vertex){
+            $vid = $vertex->getId();
+            if(!isset($checked[$vid])){
+                
+            }
+        }*/
+        
+        //find a vertex in the cycle
+        $vid = $vertex->getId();
+        $startVertices = array();
+        do{
+        	$startVertices[$vid] = $vertex;
+        
+        	$vertex = $predecessors[$vid];
+        	$vid = $vertex->getId();
+        }while(!isset($startVertices[$vid]));
+        
+        //find negative cycle
+        $vid = $vertex->getId();
+        $vertices = array();                                                   // build array of vertices in cycle
+        do{
+        	$vertices[$vid] = $vertex;                                          // add new vertex to cycle
+        
+        	$vertex = $predecessors[$vid];                                      // get predecessor of vertex
+        	$vid = $vertex->getId();
+        }while(!isset($vertices[$vid]));                                      // continue until we find a vertex that's already in the circle (i.e. circle is closed)
+        
+        $vertices = array_reverse($vertices,true);                             // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
+        
+        return Cycle::factoryFromVertices($vertices,$by,$desc);
+    }
+    
+    /**
      * create new cycle instance with edges between given vertices
      * 
      * @param array[Vertex] $vertices
