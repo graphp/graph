@@ -74,7 +74,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      *
      * @return double
      */
-    public function getMaxFlowValue(){
+    public function getFlowMax(){
         $resultGraph = $this->createGraph();
         
         $start = $resultGraph->getVertex($this->startVertex->getId());

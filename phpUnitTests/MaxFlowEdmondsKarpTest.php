@@ -19,6 +19,6 @@ class MaxFlowEdmondsKarpTest extends PHPUnit_Framework_TestCase
         $alg = new AlgorithmMaxFlowEdmondsKarp($this->testedGraph->getVertex(0),$this->testedGraph->getVertex(7));
         $newGraph =  $alg->createGraph();
 
-        $this->assertEquals(4, $alg->getMaxFlowValue());
+        $this->assertEquals(4, $alg->getFlowMax());
     }
 }

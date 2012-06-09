@@ -28,7 +28,7 @@ class AlgorithmMCFCycleCanceling extends AlgorithmMCF {
 
         // calculate (s*,t*)-flow
         $algMaxFlow = new AlgorithmMaxFlowEdmondsKarp($superSource,$superSink);
-        $flow = $algMaxFlow->getMaxFlowValue();
+        $flow = $algMaxFlow->getFlowMax();
 
         if($flow !== $sumBalance){
             throw new Exception('(s*,t*)-flow of '.$flow.' has to equal sumBalance '.$sumBalance);
