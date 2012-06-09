@@ -199,8 +199,34 @@ class LoaderUmlClassDiagram extends Loader{
         return $vertex;
     }
     
+    /**
+     * actually create graph instance
+     * 
+     * @return Graph
+     */
     public function createGraph(){
-        return $this->graph->createGraphClone();
+        return $this->graph->createGraphClone(); // clone instance so that the inner instance can not be modified from the outside
+    }
+    
+    /**
+     * create a separate graph for each connected component
+     * 
+     * @return array[Graph]
+     * @uses AlgorithmConnectedComponents::createGraphsComponents()
+     */
+    public function createGraphsComponents(){
+        $alg = new AlgorithmConnectedComponents($this->graph);
+        return $alg->createGraphsComponents();
+    }
+    
+    /**
+     * get total number of connected components
+     * 
+     * @return int
+     * @uses Graph::getNumberOfComponents()
+     */
+    public function getNumberOfComponents(){
+        return $this->graph->getNumberOfComponents();
     }
     
     private function getDocBlock($ref){
