@@ -10,7 +10,7 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
      *
      * @return Vertex|NULL
      */
-    private function bigStep(&$edges,&$totalCostOfCheapestPathTo,&$predecessorVertexOfCheapestPathTo){
+    private function bigStep(array &$edges,array &$totalCostOfCheapestPathTo,array &$predecessorVertexOfCheapestPathTo){
         $changed = NULL;
         foreach ($edges as $edge){                                                //check for all edges
             foreach($edge->getVerticesTarget() as $toVertex){                        //check for all "ends" of this edge (or for all targetes)

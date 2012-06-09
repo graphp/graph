@@ -109,7 +109,7 @@ class AlgorithmTspBruteforce extends AlgorithmTsp{
      * @param array[Edge]           $visitedEdges
      * @return array[Edge]
      */
-    private function step($vertex,$totalWeight,$visitedVertices,$visitedEdges){
+    private function step(Vertex $vertex,$totalWeight,array $visitedVertices,array $visitedEdges){
         if($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight >= $this->bestWeight){ // stop recursion if best result is exceeded (branch and bound)
             return NULL;
         }
@@ -160,7 +160,7 @@ class AlgorithmTspBruteforce extends AlgorithmTsp{
      * @param array[Edge] $edges
      * @return float
      */
-    private function sumEdges($edges){
+    private function sumEdges(array $edges){
         $sum = 0;
         foreach($edges as $edge){
             $sum += $edge->getWeight();

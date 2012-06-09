@@ -10,7 +10,7 @@ class AlgorithmSearchDepthFirst extends AlgorithmSearch{
      *
      * @param Vertex $vertex
      */
-    private function recursiveDepthFirstSearch($vertex, & $visitedVertices){
+    private function recursiveDepthFirstSearch(Vertex $vertex,array & $visitedVertices){
 
         if ( ! isset($visitedVertices[$vertex->getId()]) ){                        //    If I didn't visited this vertex before
             $visitedVertices[$vertex->getId()] = $vertex;                        //        Add Vertex to already visited vertices
@@ -23,7 +23,7 @@ class AlgorithmSearchDepthFirst extends AlgorithmSearch{
         }
     }
 
-    private function iterativeDepthFirstSearch($vertex){
+    private function iterativeDepthFirstSearch(Vertex $vertex){
         $visited = array();
         $todo = array($vertex);
         while($vertex = array_shift($todo)){

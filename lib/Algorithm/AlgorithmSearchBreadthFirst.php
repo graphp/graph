@@ -33,7 +33,7 @@ class AlgorithmSearchBreadthFirst extends AlgorithmSearch{
      * @param Vertex $destinationVertex
      * @return Graph with lowest vertex count between start and destination OR NUll if no path exists
      */
-    public function getGraphPathTo($destinationVertex){
+    public function getGraphPathTo(Vertex $destinationVertex){
         $queue = array($this->startVertex);                                         //Start vertex
         $mark = array($this->startVertex->getId() => true);                            //to not add vertices twice in array visited
          

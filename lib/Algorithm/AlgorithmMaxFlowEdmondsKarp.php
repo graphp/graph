@@ -88,10 +88,10 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
     /**
      * Merges a residual graph with initial graph
      *
-     * @param $residualGraph
+     * @param Graph $residualGraph
      * @return Graph graph with maximal flow
      */
-    private function getFlowGraphFromResidualGraph($residualGraph){
+    private function getFlowGraphFromResidualGraph(Graph $residualGraph){
 
         $resultGraph = $this->graph->createGraphCloneEdgeless();                // Process original graph and create a new graph that contains the flow
 
@@ -124,7 +124,7 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      * @param Graph $currentGraph
      * @return Graph if path exists OR NULL
      */
-    private function getGraphShortestPathFlow($currentGraph)
+    private function getGraphShortestPathFlow(Graph $currentGraph)
     {
         $startVertex = $currentGraph->getVertex($this->startVertex->getId());
         $destinationVertex = $currentGraph->getVertex($this->destinationVertex->getId());
@@ -158,12 +158,12 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
     /**
      * Extracts (optional: inversed) edge from the given graph
      *
-     * @param Graph $edge
+     * @param Edge  $edge
      * @param Graph $newGraph
      * @param Boolean $inverse
      * @return Graph
      */
-    private function getEdgeSimilarFromGraph($edge, $newGraph, $inverse=false){
+    private function getEdgeSimilarFromGraph(Edge $edge,Graph $newGraph, $inverse=false){
         try{
             return $newGraph->getEdgeClone($edge,$inverse);
         }

@@ -21,7 +21,7 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses AlgorithmSp::getEdges()
      * @uses AlgorithmSp::getEdgesToInternal()
      */
-    public function getEdgesTo($endVertex){
+    public function getEdgesTo(Vertex $endVertex){
         return $this->getEdgesToInternal($endVertex,$this->getEdges());
     }
     
@@ -34,7 +34,7 @@ abstract class AlgorithmSp extends Algorithm {
      * @return array[Edge]
      * @uses AlgorithmSp::getEdges() if no edges were given
      */
-    protected function getEdgesToInternal($endVertex,$edges){
+    protected function getEdgesToInternal(Vertex $endVertex,array $edges){
         $currentVertex = $endVertex;
         $path = array();
         while($currentVertex !== $this->startVertex){
@@ -63,7 +63,7 @@ abstract class AlgorithmSp extends Algorithm {
      * @return float
      * @uses Edge::getWeight()
      */
-    private function sumEdges($edges){
+    private function sumEdges(array $edges){
         $sum = 0;
         foreach($edges as $edge){
             $sum += $edge->getWeight();
@@ -128,7 +128,7 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses AlgorithmSp::getEdgesTo()
      * @uses AlgorithmSp::sumEdges()
      */
-    public function getDistance($endVertex){
+    public function getDistance(Vertex $endVertex){
         return $this->sumEdges($this->getEdgesTo($endVertex));
     }
     
@@ -152,7 +152,7 @@ abstract class AlgorithmSp extends Algorithm {
      * @uses Vertex::getEdgesTo()
      * @uses Edge::getFirst()
      */
-    protected function getEdgesCheapestPredecesor($predecessor){
+    protected function getEdgesCheapestPredecesor(array $predecessor){
         $vertices = $this->startVertex->getGraph()->getVertices();
         unset($vertices[$this->startVertex->getId()]);                          //start vertex doesn't have a predecessor
         

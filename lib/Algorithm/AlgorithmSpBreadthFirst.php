@@ -27,7 +27,7 @@ class AlgorithmSpBreadthFirst extends AlgorithmSp{
      * @return int
      * @uses AlgorithmSpBreadthFirst::getDistanceMap()
      */
-    public function getDistance($endVertex){
+    public function getDistance(Vertex $endVertex){
         $vid = $endVertex->getId();
         $map = $this->getDistanceMap();
         if(!isset($map[$vid])){
@@ -62,7 +62,7 @@ class AlgorithmSpBreadthFirst extends AlgorithmSp{
      * @return boolean
      * @uses AlgorithmSpBreadthFirst::getDistanceMap()
      */
-    public function hasVertex($endVertex){
+    public function hasVertex(Vertex $endVertex){
         $map = $this->getDistanceMap();
         return isset($map[$endVertex->getId()]);
     }
