@@ -64,15 +64,15 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
     /**
      * get negative cycle
      * 
-     * @return NegativeCycleException
-     * @throws Exception
+     * @return Cycle
+     * @throws Exception if there's no negative cycle
      */
     public function getCycleNegative(){
         try{
             $this->getEdges();
         }
         catch(NegativeCycleException $e){
-            return $e;
+            return $e->getCycle();
         }
         throw new Exception('No cycle found');
     }
@@ -100,6 +100,8 @@ class AlgorithmSpMooreBellmanFord extends AlgorithmSp{
         
         $vertices = array_reverse($vertices,true);                             // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
         
-        throw new NegativeCycleException('Negative cycle found',$vertices);
+        $cycle = Cycle::factoryFromVertices($vertices,Edge::ORDER_WEIGHT);
+        
+        throw new NegativeCycleException('Negative cycle found',$cycle);
     }
 }

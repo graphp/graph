@@ -34,8 +34,8 @@ class AlgorithmDetectNegativeCycle extends Algorithm{
     /**
      * Searches all vertices for the first negative cycle
      *
-     * @return NegativeCycleException
-     * @throws Exception if there isn't a negative cycle
+     * @return Cycle
+     * @throws Exception if there's no negative cycle
      * @uses AlgorithmSpMooreBellmanFord::getVerticesId()
      */
     public function getCycleNegative(){
@@ -50,7 +50,7 @@ class AlgorithmDetectNegativeCycle extends Algorithm{
     				}                                                           // no cycle found, check next vertex...
     			}
     			catch(NegativeCycleException $e){                              // yey, negative cycle encountered => return
-    				return $e;
+    				return $e->getCycle();
     			}
     		}
     	}                                                                       // no more vertices to check => abort
@@ -63,7 +63,7 @@ class AlgorithmDetectNegativeCycle extends Algorithm{
      * @return Graph
      * @throws Exception if there's no negative cycle
      * @uses AlgorithmDetectNegativeCycle::getCycleNegative()
-     * @uses NegativeCycleException::createGraph()
+     * @uses Cycle::createGraph()
      */
     public function createGraph(){
         return $this->getCycleNegative()->createGraph();
