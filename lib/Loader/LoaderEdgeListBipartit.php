@@ -13,11 +13,11 @@ class LoaderEdgeListBipartit extends LoaderFile{
         $countOfVerticesInA = $file[1];
         
         for ($i = 0; $i < $countOfVerticesInA; $i++){
-            $graph->getVertex($i)->setBalance(11);
+            $graph->getVertex($i)->setLayout('label','A');
         }
 
         for($k = $countOfVerticesInA; $k < $countOfAllVertices; $k++){
-            $graph->getVertex($k)->setBalance(22);
+            $graph->getVertex($k)->setLayout('label','B');
         }
 
         unset($file[0]);
