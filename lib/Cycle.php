@@ -90,6 +90,24 @@ class Cycle{
         
         return new Cycle($vertices,$edges);
     }
+    
+    /**
+     * create new cycle instance with vertices connected by given edges
+     * 
+     * @param array[Edge] $edges
+     * @param Vertex      $startVertex
+     * @return Cycle
+     */
+    public static function factoryFromEdges(array $edges,Vertex $startVertex){
+        $vertices = array($startVertex->getId() => $startVertex);
+        foreach($edges as $edge){
+            $vertex = $edge->getVertexToFrom($startVertex);
+            $vertices[$vertex->getId()] = $vertex;
+            $startVertex = $vertex;
+        }
+        
+        return new Cycle($vertices,$edges);
+    }
 
 	private function __construct($vertices,$edges){
 		$this->vertices = $vertices;

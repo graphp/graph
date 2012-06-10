@@ -71,6 +71,10 @@ class AlgorithmTspBruteforce extends AlgorithmTsp{
         return $this;
     }
     
+    protected function getVertexStart(){
+        return $this->graph->getVertexFirst();
+    }
+    
     /**
      * get resulting (first) best circle of edges connecting all vertices
      * 

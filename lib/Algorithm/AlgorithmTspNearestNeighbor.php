@@ -11,6 +11,10 @@ class AlgorithmTspNearestNeighbor extends AlgorithmTsp{
          $this->vertex = $startVertex;
     }
     
+    protected function getVertexStart(){
+        return $this->vertex;
+    }
+    
     /**
      *
      * @return array[Edge]

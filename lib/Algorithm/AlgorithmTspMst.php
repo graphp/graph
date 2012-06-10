@@ -9,6 +9,10 @@ class AlgorithmTspMst extends AlgorithmTsp{
     public function __construct(Graph $inputGraph){
         $this->graph = $inputGraph;
     }
+    
+    protected function getVertexStart(){
+        return $this->graph->getVertexFirst();
+    }
 
     /**
      *

@@ -13,6 +13,20 @@ abstract class AlgorithmTsp extends Algorithm {
         return $this->graph->createGraphCloneEdges($this->getEdges());
     }
     
+    abstract protected function getVertexStart();
+    
+    /**
+     * get (first) best circle connecting all vertices
+     * 
+     * @return Cycle
+     * @uses AlgorithmTsp::getEdges()
+     * @uses AlgorithmTsp::getVertexStart()
+     * @uses Cycle::factoryFromEdges()
+     */
+    public function getCycle(){
+        return Cycle::factoryFromEdges($this->getEdges(),$this->getVertexStart());
+    }
+    
     /**
      * get array of edges connecting all vertices in a circle
      * 
