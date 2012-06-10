@@ -5,11 +5,6 @@ class AlgorithmMMFlow extends AlgorithmMM {
         // create resulting graph with supersource and supersink
         $resultGraph = $this->graph->createGraphClone();
          
-        // All capacities to 1 (according to algorithm)
-        foreach ($resultGraph->getEdges() as $edge){
-            $edge->setCapacity(1);
-        }
-
         $maxMatchingValue = $resultGraph->getNumberOfEdges();
 
         $superSource = $resultGraph->createVertex()->setLayout('label','s*');
@@ -33,10 +28,43 @@ class AlgorithmMMFlow extends AlgorithmMM {
             }
         }
 
-        visualize($resultGraph);
-         
+        // All capacities to 1 (according to algorithm)
+        foreach ($resultGraph->getEdges() as $edge){
+            $edge->setCapacity(1);
+        }
+
         // calculate (s*,t*)-flow
-        //$algMaxFlow = new AlgorithmMaxFlowEdmondsKarp($superSource,$superSink);
-        //$flow = $algMaxFlow->getFlowMax();
+        $algMaxFlow = new AlgorithmMaxFlowEdmondsKarp($superSource,$superSink);
+        $resultGraph = $algMaxFlow->createGraph();
+
+        // destroy temporary supersource and supersink again
+        $resultGraph->getVertex($superSink->getId())->destroy();
+        $resultGraph->getVertex($superSource->getId())->destroy();
+
+        // Reset labels
+        foreach($resultGraph->getVertices() as $vertex){
+            $vertex->setLayout('label', null);
+
+        }
+
+        
+
+        return $resultGraph;
     }
+    
+    
+    public function createGraphMatchingOnly() {
+        
+        $resultGraph = $this->createGraph();
+        
+        // Remove non matchings
+        foreach($resultGraph->getEdges() as $edge){
+        	if($edge->getFlow() == 0) {
+        		$edge->destroy();
+        	}
+        }
+        
+        return $resultGraph;
+    }
+    
 }
