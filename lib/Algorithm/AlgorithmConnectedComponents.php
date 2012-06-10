@@ -16,6 +16,22 @@ class AlgorithmConnectedComponents extends Algorithm{
         $this->graph = $graph;
     }
     
+    /**
+     * create subgraph with all vertices connected to given vertex (i.e. the connected component of ths given vertex)
+     * 
+     * @param Vertex $vertex
+     * @return Graph
+     * @throws Exception
+     * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
+     * @uses Graph::createGraphCloneVertices()
+     */
+    public function createGraphComponentVertex(Vertex $vertex){
+        if($vertex->getGraph() !== $this->graph){
+            throw new Exception('This graph does not contain the given vertex');
+        }
+        return $this->graph->createGraphCloneVertices($this->createSearch($vertex)->getVertices());
+    }
+    
     private function createSearch(Vertex $vertex){
         $alg = new AlgorithmSearchBreadthFirst($vertex);
         return $alg->setDirection(AlgorithmSearch::DIRECTION_BOTH); // follow into both directions (loosely connected)
