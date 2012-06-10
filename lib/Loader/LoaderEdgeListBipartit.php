@@ -6,17 +6,21 @@ class LoaderEdgeListBipartit extends LoaderFile{
         $graph = new Graph();
 
         $file = $this->getLines();
-
-        $graph->createVertices($this->readInt($file[0]));
-
-        $countOfAllVertices = $file[0];
-        $countOfVerticesInA = $file[1];
         
-        for ($i = 0; $i < $countOfVerticesInA; $i++){
+        $countOfAllVertices = $this->readInt($file[0]);
+        $countOfVerticesInA = $this->readInt($file[1]);
+        
+        if($countOfVerticesInA > $countOfAllVertices || $countOfVerticesInA < 0){
+            throw new Exception('Invalid value for number of vertices in group A');
+        }
+
+        $graph->createVertices($countOfAllVertices);
+        
+        for ($i = 0; $i < $countOfVerticesInA; ++$i){
             $graph->getVertex($i)->setLayout('label','A');
         }
 
-        for($k = $countOfVerticesInA; $k < $countOfAllVertices; $k++){
+        for($k = $countOfVerticesInA; $k < $countOfAllVertices; ++$k){
             $graph->getVertex($k)->setLayout('label','B');
         }
 
