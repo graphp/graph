@@ -25,7 +25,7 @@ abstract class AlgorithmMM extends Algorithm {
      * @throws Exception
      * @return AlgorithmMCF $this (chainable)
      */
-    protected function getMatchingValue(){
+    public function getMatchingValue(){
         // TODO count the matching edges
 
         return null;
