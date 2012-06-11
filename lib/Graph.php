@@ -724,6 +724,11 @@ class Graph extends Layoutable{
         return $alg->getNumberOfComponents();
     }
     
+    public function isBipartit(){
+        $alg = new AlgorithmBipartit($this);
+        return $alg->isBipartit();
+    }
+    
     /**
      * do NOT allow cloning of objects (MUST NOT be called!)
      *
