@@ -46,21 +46,15 @@ class AlgorithmMMFlow extends AlgorithmMM {
             $vertex->setLayout('label', null);
 
         }
-
-        
-
-        return $resultGraph;
-    }
-    
-    
-    public function createGraphMatchingOnly() {
-        
-        $resultGraph = $this->createGraph();
         
         // Remove non matchings
         foreach($resultGraph->getEdges() as $edge){
         	if($edge->getFlow() == 0) {
         		$edge->destroy();
+        	} else {
+        	    $edgeOriginal = $this->graph->getEdgeClone($edge);
+        	    $edge->setCapacity($edgeOriginal->getCapacity());
+        	    $edge->setFlow($edgeOriginal->getFlow());
         	}
         }
         
