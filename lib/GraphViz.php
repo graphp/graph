@@ -239,18 +239,28 @@ class GraphViz{
         
         // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
         // other vertices wil be added automatically due to below edge definitions
-        foreach ($this->graph->getVertices() as $vertex){
+        foreach ($this->graph->getVertices() as $vid=>$vertex){
             $layout = $vertex->getLayout();
+            
+            if(!isset($layout['label'])){
+                $layout['label'] = self::escape($vid);
+            }
             
             $balance = $vertex->getBalance();
             if($balance !== NULL){
                 if($balance > 0){
                     $balance = '+'.$balance;
                 }
-                $layout['label'] = self::escape($vertex->getId() .' ('.$balance.')');
+                $layout['label'] .= ' ('.$balance.')';
             }
+            
+            $group = $vertex->getGroup();
+            if($group !== NULL){
+                $layout['label'] .= ' '.self::escape('['.$group.']');
+            }
+            
             if($vertex->isIsolated() || $layout){
-                $script .= '  ' . $this->escapeId($vertex->getId());
+                $script .= '  ' . $this->escapeId($vid);
                 if($layout){
                     $script .= ' ' . $this->escapeAttributes($layout);
                 }
