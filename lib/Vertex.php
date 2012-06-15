@@ -170,6 +170,14 @@ class Vertex extends Layoutable{
     private $balance;
     
     /**
+     * group number
+     *
+     * @var int
+     * @see Vertex::setGroup()
+     */
+    private $group = 0;
+    
+    /**
      * Creates a Vertex
      * 
      * @param int   $id    Identifier (int, string, what you want) $id
@@ -232,6 +240,30 @@ class Vertex extends Layoutable{
         }
         
         return $sumOfFlow;
+    }
+    
+    /**
+     * set group number of this vertex
+     * 
+     * @param int $group
+     * @return Vertex $this (chainable)
+     * @throws Exception
+     */
+    public function setGroup($group){
+        if(!is_int($group)){
+            throw new Exception('Invalid group number');
+        }
+        $this->group = $group;
+        return $this;
+    }
+    
+    /**
+     * get group number
+     * 
+     * @return int
+     */
+    public function getGroup(){
+        return $this->group;
     }
     
     /**
