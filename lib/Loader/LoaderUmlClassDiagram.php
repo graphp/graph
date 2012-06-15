@@ -209,6 +209,24 @@ class LoaderUmlClassDiagram extends Loader{
     }
     
     /**
+     * create subgraph for all classes connected to given class (i.e. return it's connected component)
+     * 
+     * @param string $class
+     * @return Graph
+     * @throws Exception
+     */
+    public function createGraphComponent($class){
+        try{
+            $vertex = $this->graph->getVertex($class);
+        }
+        catch(Exception $e){
+            throw new Exception('Given class is unknown');
+        }
+        $alg = new AlgorithmConnectedComponents($this->graph);
+        return $alg->createGraphComponentVertex($vertex);
+    }
+    
+    /**
      * create a separate graph for each connected component
      * 
      * @return array[Graph]
