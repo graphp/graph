@@ -724,6 +724,17 @@ class Graph extends Layoutable{
         return $alg->getNumberOfComponents();
     }
     
+    /**
+     * count total number of different groups assigned to vertices
+     * 
+     * @return int
+     * @uses AlgorithmGroups::getNumberOfGroups()
+     */
+    public function getNumberOfGroups(){
+        $alg = new AlgorithmGroups($this);
+        return $alg->getNumberOfGroups();
+    }
+    
     public function isBipartit(){
         $alg = new AlgorithmBipartit($this);
         return $alg->isBipartit();
