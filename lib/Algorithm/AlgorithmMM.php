@@ -20,15 +20,15 @@ abstract class AlgorithmMM extends Algorithm {
     }
     
     /**
-     * Get the count of edges that are in the matchin
+     * Get the count of edges that are in the match
      * 
      * @throws Exception
      * @return AlgorithmMCF $this (chainable)
+     * @uses AlgorithmMM::createGraph()
+     * @uses Graph::getNumberOfEdges()
      */
-    public function getMatchingValue(){
-        // TODO count the matching edges
-
-        return null;
+    public function getNumberOfMatches(){
+        return $this->createGraph()->getNumberOfEdges();
     }
     
    
