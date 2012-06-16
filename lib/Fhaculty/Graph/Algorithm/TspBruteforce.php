@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Algorithm\TspMst as AlgorithmTspMst;
 use \Exception;
 
 class TspBruteforce extends Tsp{
