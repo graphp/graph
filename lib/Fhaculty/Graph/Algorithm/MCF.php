@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Graph;
+use \Exception;
 
 abstract class MCF extends Base {
 

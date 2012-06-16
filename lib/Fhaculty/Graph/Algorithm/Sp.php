@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
+use \Exception;
 
 abstract class Sp extends Base {
     /**

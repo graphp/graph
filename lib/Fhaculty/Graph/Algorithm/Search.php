@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Vertex;
+use \Exception;
 
 abstract class Search extends Base{
     /**

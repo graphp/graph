@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use \Exception;
+
 class MCFCycleCanceling extends MCF {
 
     public function createGraph() {

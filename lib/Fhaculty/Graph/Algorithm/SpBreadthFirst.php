@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Vertex;
 use \Exception;
+use \BadMethodCallException;
 
 class SpBreadthFirst extends Sp{
     /**

@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph;
 
+use \Exception;
+
 class Cycle{
 	/**
 	 * array of vertices in the cycle
