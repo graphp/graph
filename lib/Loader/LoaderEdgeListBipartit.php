@@ -11,17 +11,17 @@ class LoaderEdgeListBipartit extends LoaderFile{
         $countOfVerticesInA = $this->readInt($file[1]);
         
         if($countOfVerticesInA > $countOfAllVertices || $countOfVerticesInA < 0){
-            throw new Exception('Invalid value for number of vertices in group A');
+            throw new Exception('Invalid value for number of vertices in group 0');
         }
 
         $graph->createVertices($countOfAllVertices);
         
         for ($i = 0; $i < $countOfVerticesInA; ++$i){
-            $graph->getVertex($i)->setLayout('label','A');
+            $graph->getVertex($i)->setGroup(0);
         }
 
         for($k = $countOfVerticesInA; $k < $countOfAllVertices; ++$k){
-            $graph->getVertex($k)->setLayout('label','B');
+            $graph->getVertex($k)->setGroup(1);
         }
 
         unset($file[0]);
@@ -36,7 +36,12 @@ class LoaderEdgeListBipartit extends LoaderFile{
                 $edge = $parts[0]->createEdge($parts[1]);
             }
         }
-
+        
+        $alg = new AlgorithmGroups($graph);
+        if(!$alg->isBipartit()){
+            throw new Exception('Graph read from file does not form a valid bipartit graph');
+        }
+        
         return $graph;
 
     }
