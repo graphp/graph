@@ -1,6 +1,6 @@
 <?php
 
-require_once 'example/init.inc.php';
+use Fhaculty\Graph\Graph;
 
 class GraphTest extends PHPUnit_Framework_TestCase
 {

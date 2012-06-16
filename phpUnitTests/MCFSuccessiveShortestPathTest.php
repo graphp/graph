@@ -1,6 +1,7 @@
 <?php
 
-require_once 'example/init.inc.php';
+use Fhaculty\Graph\Algorithm\MCFSuccessiveShortestPath as AlgorithmMCFSuccessiveShortestPath;
+use Fhaculty\Graph\Loader\EdgeListWithWeightedCapacityAndBalance as LoaderEdgeListWithWeightedCapacityAndBalance;
 
 class MCFSuccessiveShortestPathTest extends PHPUnit_Framework_TestCase
 {

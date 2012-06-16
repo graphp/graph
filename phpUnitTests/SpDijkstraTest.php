@@ -1,6 +1,7 @@
 <?php
 
-require_once 'example/init.inc.php';
+use Fhaculty\Graph\Algorithm\SpDijkstra as AlgorithmSpDijkstra;
+use Fhaculty\Graph\Loader\EdgeListWeighted as LoaderEdgeListWeighted;
 
 class MSpDijkstraTest extends PHPUnit_Framework_TestCase
 {
