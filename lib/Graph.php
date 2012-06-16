@@ -57,6 +57,7 @@ class Graph extends Layoutable{
         // TODO: properly set attributes of vertex
         $newVertex->setLayoutRaw($originalVertex->getLayout());
         $newVertex->setBalance($originalVertex->getBalance());
+        $newVertex->setGroup($originalVertex->getGroup());
         $this->vertices[$id] = $newVertex;
         return $newVertex;
     }
