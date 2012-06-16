@@ -26,6 +26,31 @@ class AlgorithmGroups extends Algorithm{
     public function getNumberOfGroups(){
         return count($this->getGroups());
     }
+    
+    /**
+     * checks whether the input graph's vertex groups are a valid bipartition
+     *
+     * @return boolean
+     * @see AlgorithmBipartit() if you do NOT want to take vertex groups into consideration
+     * @uses AlgorithmGroups::getNumberOfGroups()
+     * @uses Vertex::getGroup()
+     */
+    public function isBipartit(){
+    	if($this->getNumberOfGroups() !== 2){ // graph has to contain exactly 2 groups
+    		return false;
+    	}
+    
+    	foreach($this->graph->getVertices() as $vertex){                      // for each vertex
+    		$group = $vertex->getGroup();                                       // get current group
+    		foreach($vertex->getVerticesEdge() as $vertexNeighbor){            // for every neighbor vertex
+    			if($vertexNeighbor->getGroup() === $group){                     // vertex group must be other group
+    				return false;
+    			}
+    		}
+    	}
+    
+    	return true;
+    }
 
     /**
      * get vector of all group numbers

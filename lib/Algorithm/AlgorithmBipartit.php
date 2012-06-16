@@ -28,6 +28,17 @@ class AlgorithmBipartit extends Algorithm{
     }
     
     /**
+     * checks whether the input graph's vertex groups are a valid bipartition
+     * 
+     * @return boolean
+     * @uses AlgorithmGroups::isBipartit()
+     */
+    public function isBipartitGroups(){
+        $alg = new AlgorithmGroups($this->graph);
+        return $alg->isBipartit();
+    }
+    
+    /**
      * get map of vertex ID to vertex color
      * 
      * @return array[int]
