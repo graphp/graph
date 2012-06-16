@@ -717,7 +717,9 @@ class Graph extends Layoutable{
     	$residualEdgeArray = $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
     
     	// Check for parallel edges
-    	if(count($residualEdgeArray) !== 1){
+    	if(!$residualEdgeArray){
+    	    throw new Exception('No original edges for given cloned edge found');
+    	}else if(count($residualEdgeArray) !== 1){
     		throw new Exception('More than one cloned edge? Parallel edges (multigraph) not supported');
     	}
     
