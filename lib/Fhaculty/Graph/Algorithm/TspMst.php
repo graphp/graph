@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Edge;
 
 class TspMst extends Tsp{
     /**

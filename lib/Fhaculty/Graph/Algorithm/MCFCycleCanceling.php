@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Edge;
 use \Exception;
 
 class MCFCycleCanceling extends MCF {
@@ -47,7 +48,7 @@ class MCFCycleCanceling extends MCF {
             $residualGraph = $algRG->createGraph();
 
             //get negative cycle
-            $alg = new AlgorithmDetectNegativeCycle($residualGraph);
+            $alg = new DetectNegativeCycle($residualGraph);
             try {
                 $clonedEdges = $alg->getCycleNegative()->getEdges();
             }
