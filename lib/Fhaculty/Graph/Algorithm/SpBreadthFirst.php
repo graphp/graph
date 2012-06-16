@@ -49,6 +49,8 @@ class SpBreadthFirst extends Sp{
      * @uses Vertex::hasLoop()
      */
     public function getDistanceMap(){
+        throw new BadMethodCallException('TODO');
+        
         $map = array();
         if($this->vertex->hasLoop()){
             $map[$this->vertex->getId()] = 1;
