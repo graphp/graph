@@ -32,10 +32,6 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
         $this->startVertex = $startVertex;
         $this->destinationVertex = $destinationVertex;
         $this->graph = $startVertex->getGraph();
-
-        foreach ($this->graph->getEdges() as $edge){
-            $edge->setFlow(0);
-        }
     }
 
     /**
@@ -45,7 +41,11 @@ class AlgorithmMaxFlowEdmondsKarp extends Algorithm{
      */
     public function createGraph(){
         $currentGraph = $this->graph->createGraphClone();
-
+        
+        foreach ($currentGraph->getEdges() as $edge){
+        	$edge->setFlow(0);
+        }
+        
         $i = 0;
         do{
             $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get shortest path if NULL-> Done
