@@ -40,10 +40,6 @@ class MaxFlowEdmondsKarp extends Base{
         $this->startVertex = $startVertex;
         $this->destinationVertex = $destinationVertex;
         $this->graph = $startVertex->getGraph();
-        
-        foreach ($this->graph->getEdges() as $edge){
-        	$edge->setFlow(0);
-        }
     }
 
     /**
@@ -54,6 +50,10 @@ class MaxFlowEdmondsKarp extends Base{
     public function createGraph(){
         $currentGraph = $this->graph->createGraphClone();
         
+        foreach ($currentGraph->getEdges() as $edge){
+        	$edge->setFlow(0);
+        }
+        
         $i = 0;
         do{
             $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get shortest path if NULL-> Done
@@ -63,7 +63,7 @@ class MaxFlowEdmondsKarp extends Base{
                 $newFlowValue = $edgeFromFlowPath->getFlow();
 
                 foreach ($pathFlow->getEdges() as $edge){
-                    $originalEdge = $this->getEdgeSimilarFromGraph($edge, $currentGraph);
+                    $originalEdge = $currentGraph->getEdgeClone($edge);
                     $originalEdge->setFlow($originalEdge->getFlow() + $newFlowValue);
                 }
 
@@ -110,8 +110,13 @@ class MaxFlowEdmondsKarp extends Base{
         // Insert the inversed residual edge into the new graph
         foreach ($originalGraphEdgesArray as $edge){
             // Inverse the edge
-            $residualEdge = $this->getEdgeSimilarFromGraph($edge, $residualGraph, true);
-
+            try{
+            	$residualEdge = $residualGraph->getEdgeClone($edge,true);
+            }
+            catch(Exception $ignore){
+                $residualEdge = NULL;
+            }
+            
             // Add inversed edge to return graph
             $newFlowEdge = $resultGraph->createEdgeClone($edge);
 
@@ -161,22 +166,5 @@ class MaxFlowEdmondsKarp extends Base{
         }
 
         return $path;
-    }
-
-    /**
-     * Extracts (optional: inversed) edge from the given graph
-     *
-     * @param Edge  $edge
-     * @param Graph $newGraph
-     * @param Boolean $inverse
-     * @return Graph
-     */
-    private function getEdgeSimilarFromGraph(Edge $edge,Graph $newGraph, $inverse=false){
-        try{
-            return $newGraph->getEdgeClone($edge,$inverse);
-        }
-        catch(Exception $ignore){
-        }
-        return NULL;
     }
 }
