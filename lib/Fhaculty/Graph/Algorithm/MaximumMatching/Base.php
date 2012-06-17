@@ -1,10 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\MaximumMatching;
 
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
-abstract class MM extends Base {
+abstract class Base extends AlgorithmBase {
 
     /**
      * Origianl graph

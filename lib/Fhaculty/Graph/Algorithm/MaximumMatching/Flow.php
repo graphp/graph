@@ -1,11 +1,12 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\MaximumMatching;
 
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
+use Fhaculty\Graph\Algorithm\Groups;
 use \Exception;
 
-class MMFlow extends MM {
+class Flow extends Base {
 
     public function createGraph() {
 //         if($this->graph->isDirected()){
