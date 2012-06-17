@@ -5,7 +5,7 @@ namespace Fhaculty\Graph;
 use \Exception;
 use \ArrayIterator;
 use \SplPriorityQueue;
-use Fhaculty\Graph\Algorithm\SpBreadthFirst as AlgorithmSpBreadthFirst;
+use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst as AlgorithmSpBreadthFirst;
 
 class Vertex extends Layoutable{
     /**

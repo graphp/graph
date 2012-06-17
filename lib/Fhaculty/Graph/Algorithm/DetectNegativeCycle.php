@@ -4,6 +4,8 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\NegativeCycleException;
+use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
 use \Exception;
 
 class DetectNegativeCycle extends Base{

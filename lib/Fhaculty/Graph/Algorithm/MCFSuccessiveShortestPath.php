@@ -6,6 +6,7 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\EdgeDirected;
+use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
 use \Exception;
 
 class MCFSuccessiveShortestPath extends MCF {
