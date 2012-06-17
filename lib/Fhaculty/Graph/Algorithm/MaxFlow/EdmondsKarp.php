@@ -6,6 +6,8 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Algorithm\Base;
+use Fhaculty\Graph\Algorithm\ResidualGraph;
+use Fhaculty\Graph\Algorithm\SearchBreadthFirst;
 use \Exception;
 
 class EdmondsKarp extends Base{
