@@ -16,9 +16,9 @@ class MCFSuccessiveShortestPathTest extends PHPUnit_Framework_TestCase
     /**
      * run algorithm with bigger graph and check result against known result (will take several minutes)
      */
-    public function testKnown100(){
-    	$this->assertEquals(1537, $this->getResultFor('Kostenminimal100.txt'));
-    }
+//     public function testKnown100(){
+//     	$this->assertEquals(1537, $this->getResultFor('Kostenminimal100.txt'));
+//     }
     
     protected function getAlgFor($file){
         return new AlgorithmMCFSuccessiveShortestPath($this->getGraphFor($file));

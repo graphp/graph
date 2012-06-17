@@ -27,13 +27,13 @@ class MaxFlowEdmondsKarpTest extends PHPUnit_Framework_TestCase
     /**
      * run algorithm with bigger graph and check result against known result (will take several seconds)
      */
-    public function testKnownResultBig(){
+//     public function testKnownResultBig(){
         
-        $graph = $this->readGraph('G_1_2.txt');
+//         $graph = $this->readGraph('G_1_2.txt');
         
-        $alg = new AlgorithmMaxFlowEdmondsKarp($graph->getVertex(0),$graph->getVertex(4));
+//         $alg = new AlgorithmMaxFlowEdmondsKarp($graph->getVertex(0),$graph->getVertex(4));
         
-        $this->assertEquals(0.735802,$alg->getFlowMax());
-    }
+//         $this->assertEquals(0.735802,$alg->getFlowMax());
+//     }
     
 }
