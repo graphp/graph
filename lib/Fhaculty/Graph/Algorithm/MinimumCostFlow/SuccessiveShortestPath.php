@@ -1,15 +1,17 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\EdgeDirected;
 use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
+use Fhaculty\Graph\Algorithm\ResidualGraph;
+use Fhaculty\Graph\Algorithm\SearchBreadthFirst;
 use \Exception;
 
-class MCFSuccessiveShortestPath extends MCF {
+class SuccessiveShortestPath extends Base {
     /**
      * @uses Vertex::getFlow()
      * @uses Graph::createGraphClone()

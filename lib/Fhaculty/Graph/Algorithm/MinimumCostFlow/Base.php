@@ -1,11 +1,12 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 use Fhaculty\Graph\Graph;
 use \Exception;
 
-abstract class MCF extends Base {
+abstract class Base extends AlgorithmBase {
 
     /**
      * Origianl graph

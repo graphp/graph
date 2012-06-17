@@ -1,6 +1,6 @@
 <?php
 
-use Fhaculty\Graph\Algorithm\MCFCycleCanceling as AlgorithmMCFCycleCanceling;
+use Fhaculty\Graph\Algorithm\MinimumCostFlow\CycleCanceling as AlgorithmMCFCycleCanceling;
 use Fhaculty\Graph\Loader\EdgeListWithWeightedCapacityAndBalance as LoaderEdgeListWithWeightedCapacityAndBalance;
 
 class MCFCycleCancellingTest extends PHPUnit_Framework_TestCase

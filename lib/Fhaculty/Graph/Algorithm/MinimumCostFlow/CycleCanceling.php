@@ -1,12 +1,14 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
+use Fhaculty\Graph\Algorithm\DetectNegativeCycle;
+use Fhaculty\Graph\Algorithm\ResidualGraph;
 use \Exception;
 
-class MCFCycleCanceling extends MCF {
+class CycleCanceling extends Base {
 
     public function createGraph() {
     	$this->checkBalance();
