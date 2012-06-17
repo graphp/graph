@@ -61,7 +61,8 @@ class Vertex extends Layoutable{
      * @param int                 $by       criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param boolean             $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Vertex
-     * @throws Exception if criterium is unknown, no vertices exist or calling vertex functions throws an exception (degree on digraphs)
+     * @throws DomainException if criterium is unknown
+     * @throws InvalidArgumentException if no vertices exist
      * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
      * @uses Vertex::getDegree()
@@ -94,7 +95,7 @@ class Vertex extends Layoutable{
             }else if($by === self::ORDER_OUTDEGREE){
                 $now = $vertex->getDegreeOut();
             }else{
-                throw new Exception('Invalid order flag "'.$by.'"');
+                throw new DomainException('Invalid order flag "'.$by.'"');
             }
             if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
                 $ret = $vertex;
@@ -102,7 +103,7 @@ class Vertex extends Layoutable{
             }
         }
         if($ret === NULL){
-            throw new Exception('No vertex found');
+            throw new InvalidArgumentException('No vertex found');
         }
         return $ret;
     }
@@ -114,7 +115,8 @@ class Vertex extends Layoutable{
      * @param int                 $by       criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param boolean             $desc     whether to return biggest first (true) instead of smallest first (default:false)
      * @return Iterator iterator object (supporting at the very least foreach)
-     * @throws Exception if criterium is unknown or calling vertex functions throws an exception (degree on digraphs)
+     * @throws DomainException if criterium is unknown
+     * @throws UnexpectedValueException if trying to sort by reverse string IDs
      * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
      * @uses Vertex::getDegree()
@@ -137,7 +139,7 @@ class Vertex extends Layoutable{
             if($by === self::ORDER_ID){
                 $now = $vertex->getId();
                 if($desc && is_string($now)){
-                    throw new Exception('Unable to reverse sorting for string IDs');
+                    throw new UnexpectedValueException('Unable to reverse sorting for string IDs');
                 }
             }else if($by === self::ORDER_DEGREE){
                 $now = $vertex->getDegree();
@@ -146,7 +148,7 @@ class Vertex extends Layoutable{
             }else if($by === self::ORDER_OUTDEGREE){
                 $now = $vertex->getDegreeOut();
             }else{
-                throw new Exception('Invalid order flag "'.$by.'"');
+                throw new DomainException('Invalid order flag "'.$by.'"');
             }
             if($desc && $now !== NULL){
                 $now = -$now;
@@ -210,7 +212,7 @@ class Vertex extends Layoutable{
     
     public function setBalance($balance){
         if($balance !== NULL && !is_float($balance) && !is_int($balance)){
-            throw new Exception();
+            throw new DomainException('Invalid balance given - must be numeric');
         }
         $this->balance = $balance;
         return $this;
@@ -227,15 +229,16 @@ class Vertex extends Layoutable{
      * vertex).
      * 
      * @return float
-     * @throws Exception if they are undirected edges
+     * @throws UnexpectedValueException if they are undirected edges
      * @see Vertex::getBalance()
+     * @uses Edge::getFlow()
      */
     public function getFlow(){
         $sumOfFlow = 0;
     
         foreach ($this->edges as $edge){
             if ( ! ($edge instanceof EdgeDirected)){
-                throw new Exception("TODO: undirected edges not suported yet");
+                throw new UnexpectedValueException("TODO: undirected edges not suported yet");
             }
             
             if ($edge->hasVertexStart($this)){ // edge is an outgoing edge of this vertex
@@ -254,11 +257,11 @@ class Vertex extends Layoutable{
      * 
      * @param int $group
      * @return Vertex $this (chainable)
-     * @throws Exception
+     * @throws DomainException if group is not numeric
      */
     public function setGroup($group){
         if(!is_int($group)){
-            throw new Exception('Invalid group number');
+            throw new DomainException('Invalid group number');
         }
         $this->group = $group;
         return $this;
@@ -349,12 +352,12 @@ class Vertex extends Layoutable{
      * 
      * @param Vertex $vertex target vertex
      * @return EdgeDirected
-     * @throws Exception
+     * @throws InvalidArgumentException
      * @uses Graph::addEdge()
      */
     public function createEdgeTo($vertex){
         if($vertex->getGraph() !== $this->graph){
-            throw new Exception('Target vertex has to be within the same graph');
+            throw new InvalidArgumentException('Target vertex has to be within the same graph');
         }
         
         $edge = new EdgeDirected($this,$vertex);
@@ -369,12 +372,12 @@ class Vertex extends Layoutable{
      * 
      * @param Vertex $vertex
      * @return EdgeUndirected
-     * @throws Exception
+     * @throws InvalidArgumentException
      * @uses Graph::addEdge()
      */
     public function createEdge($vertex){
         if($vertex->getGraph() !== $this->graph){
-            throw new Exception('Target vertex has to be within the same graph');
+            throw new InvalidArgumentException('Target vertex has to be within the same graph');
         }
         
         $edge = new EdgeUndirectedId($this,$vertex);
@@ -389,13 +392,14 @@ class Vertex extends Layoutable{
      * 
      * @param Edge $edge
      * @return void
+     * @throws InvalidArgumentException if given edge does not exist
      * @private
      * @see Edge::destroy() instead!
      */
     public function removeEdge($edge){
         $id = array_search($edge,$this->edges,true);
         if($id === false){
-            throw new Exception('Given edge does NOT exist');                //Tobias: if edge gets Id => output of id
+            throw new InvalidArgumentException('Given edge does NOT exist');                //Tobias: if edge gets Id => output of id
         }
         unset($this->edges[$id]);
     }
@@ -680,9 +684,9 @@ class Vertex extends Layoutable{
     /**
      * do NOT allow cloning of objects
      *
-     * @throws Exception
+     * @throws BadMethodCallException
      */
     private function __clone(){
-        throw new Exception();
+        throw new BadMethodCallException();
     }
 }

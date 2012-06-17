@@ -2,7 +2,6 @@
 
 namespace Fhaculty\Graph;
 
-use \Exception;
 use \ArrayIterator;
 
 abstract class Edge extends Layoutable{
@@ -59,7 +58,8 @@ abstract class Edge extends Layoutable{
      * @param int               $by       criterium to sort by. see Edge::ORDER_WEIGHT, etc.
      * @param boolean           $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Edge
-     * @throws Exception if criterium is unknown or no edges exist
+     * @throws DomainException if criterium is unknown
+     * @throws InvalidArgumentException if no edges exist
      * @uses Edge::getWeight()
      */
     public static function getFirst($edges,$by=self::ORDER_FIFO,$desc=false){
@@ -88,7 +88,7 @@ abstract class Edge extends Layoutable{
             }else if($by === self::ORDER_FLOW){
                 $now = $edge->getFlow();
             }else{
-                throw new Exception('Invalid order flag "'.$by.'"');
+                throw new DomainException('Invalid order flag "'.$by.'"');
             }
             if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
                 $ret = $edge;
@@ -96,7 +96,7 @@ abstract class Edge extends Layoutable{
             }
         }
         if($ret === NULL){
-            throw new Exception('No edge found');
+            throw new InvalidArgumentException('No edge found');
         }
         return $ret;
     }
@@ -108,7 +108,7 @@ abstract class Edge extends Layoutable{
      * @param int               $by    criterium to sort by. see Edge::ORDER_WEIGHT, etc.
      * @param boolean           $desc  whether to return biggest (true) instead of smallest (default:false)
      * @return array
-     * @throws Exception if criterium is unknown
+     * @throws DomainException if criterium is unknown
      * @uses Edge::getWeight()
      * @todo return Iterator and use SplPriorityQueue instead of temporary array
      * @link http://matthewturland.com/2010/05/20/new-spl-features-in-php-5-3/
@@ -135,7 +135,7 @@ abstract class Edge extends Layoutable{
             }else if($by === self::ORDER_FLOW){
             	$now = $edge->getFlow();
             }else{
-                throw new Exception('Invalid sort criterium');
+                throw new DomainException('Invalid sort criterium');
             }
             $temp[$eid] = $now;
         }
@@ -200,7 +200,7 @@ abstract class Edge extends Layoutable{
             $this->getVertexToFrom($startVertex);
             return true;
         }
-        catch(Exception $ignore){ }
+        catch(InvalidArgumentException $ignore){ }
         return false;
     }
     
@@ -216,7 +216,7 @@ abstract class Edge extends Layoutable{
             $this->getVertexFromTo($targetVertex);
             return true;
         }
-        catch(Exception $ignore){ }
+        catch(InvalidArgumentException $ignore){ }
         return false;
     }
     
@@ -241,7 +241,7 @@ abstract class Edge extends Layoutable{
      *
      * @param Vertex $startVertex
      * @return Vertex
-     * @throws Exception if given $startVertex is not a valid start
+     * @throws InvalidArgumentException if given $startVertex is not a valid start
      * @see Edge::hasEdgeFrom() to check if given start is valid
      */
     abstract public function getVertexToFrom($startVertex);
@@ -251,7 +251,7 @@ abstract class Edge extends Layoutable{
      *
      * @param Vertex $startVertex
      * @return Vertex
-     * @throws Exception if given $startVertex is not a valid start
+     * @throws InvalidArgumentException if given $startVertex is not a valid end
      * @see Edge::hasEdgeFrom() to check if given start is valid
      */
     abstract public function getVertexFromTo($endVertex);
@@ -270,10 +270,11 @@ abstract class Edge extends Layoutable{
      *
      * @param float|int|NULL $weight new numeric weight of edge or NULL=unset weight
      * @return Edge $this (chainable)
+     * @throws DomainException if given weight is not numeric
      */
     public function setWeight($weight){
         if($weight !== NULL && !is_float($weight) && !is_int($weight)){
-            throw new Exception('Invalid weight given - must be numeric or NULL');
+            throw new DomainException('Invalid weight given - must be numeric or NULL');
         }
         $this->weight = $weight;
         return $this;
@@ -305,18 +306,19 @@ abstract class Edge extends Layoutable{
      *
      * @param float|int|NULL $capacity
      * @return Edge $this (chainable)
-     * @throws Exception if $capacity is invalid or current flow exceeds new capacity
+     * @throws DomainException if $capacity is invalid (not numeric or negative)
+     * @throws InvalidArgumentException if current flow exceeds new capacity
      */
     public function setCapacity($capacity){
         if($capacity !== NULL){
             if(!is_float($capacity) && !is_int($capacity)){
-                throw new Exception('Invalid capacity given - must be numeric');
+                throw new DomainException('Invalid capacity given - must be numeric');
             }
             if($capacity < 0){
-                throw new Exception('Capacity must not be negative');
+                throw new DomainException('Capacity must not be negative');
             }
             if($this->flow !== NULL && $this->flow > $capacity){
-                throw new Exception('Current flow of '.$this->flow.' exceeds new capacity');
+                throw new InvalidArgumentException('Current flow of '.$this->flow.' exceeds new capacity');
             }
         }
         $this->capacity = $capacity;
@@ -381,7 +383,7 @@ abstract class Edge extends Layoutable{
      * get all edges parallel to this edge (excluding self)
      *
      * @return array[Edge]
-     * @throws Exception
+     * @throws LogicException
      */
     public function getEdgesParallel(){
         $ends = $this->getVertices();
@@ -398,7 +400,7 @@ abstract class Edge extends Layoutable{
          
         $pos = array_search($this,$edges,true);
         if($pos === false){
-            throw new Exception('Internal error: Current edge not found');
+            throw new LogicException('Internal error: Current edge not found');
         }
          
         unset($edges[$pos]);                                                   // exclude current edge from parallel edges
@@ -430,13 +432,13 @@ abstract class Edge extends Layoutable{
      * get graph instance this edge is attached to
      *
      * @return Graph
-     * @throws Exception
+     * @throws LogicException
      */
     public function getGraph(){
         foreach($this->getVertices() as $vertex){
             return $vertex->getGraph();
         }
-        throw new Exception('Internal error: should not be reached');
+        throw new LogicException('Internal error: should not be reached');
     }
 
     /**

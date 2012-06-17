@@ -2,8 +2,6 @@
 
 namespace Fhaculty\Graph;
 
-use \Exception;
-
 class EdgeUndirected extends Edge{
     /**
      * vertex a
@@ -57,7 +55,7 @@ class EdgeUndirected extends Edge{
             return $this->a;
         }
         else{
-            throw new Exception('Invalid start vertex');
+            throw new InvalidArgumentException('Invalid start vertex');
         }
     }
 
@@ -69,7 +67,7 @@ class EdgeUndirected extends Edge{
             return $this->a;
         }
         else{
-            throw new Exception('Invalid end vertex');
+            throw new InvalidArgumentException('Invalid end vertex');
         }
     }
     

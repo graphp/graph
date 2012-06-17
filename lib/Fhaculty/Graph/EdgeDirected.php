@@ -2,8 +2,6 @@
 
 namespace Fhaculty\Graph;
 
-use \Exception;
-
 class EdgeDirected extends Edge{
     /**
      * source/start vertex
@@ -74,14 +72,14 @@ class EdgeDirected extends Edge{
     
     public function getVertexToFrom($startVertex){
         if ($this->from !== $startVertex){
-            throw new Exception('Invalid start vertex');
+            throw new InvalidArgumentException('Invalid start vertex');
         }
         return $this->to;
     }
 
     public function getVertexFromTo($endVertex){
         if ($this->to !== $endVertex){
-            throw new Exception('Invalid end vertex');
+            throw new InvalidArgumentException('Invalid end vertex');
         }
         return $this->from;
     }
@@ -107,14 +105,14 @@ class EdgeDirected extends Edge{
      * get all edges parallel to this edge (excluding self)
      *
      * @return array[Edge]
-     * @throws Exception
+     * @throws LogicException
      */
     public function getEdgesParallel(){
     	$edges = $this->from->getEdgesTo($this->to);                            // get all edges between this edge's endpoints
     	
     	$pos = array_search($this,$edges,true);
     	if($pos === false){
-    		throw new Exception('Internal error: Current edge not found');
+    		throw new LogicException('Internal error: Current edge not found');
     	}
     	 
     	unset($edges[$pos]);                                                   // exclude current edge from parallel edges

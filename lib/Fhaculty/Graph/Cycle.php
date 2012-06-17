@@ -2,8 +2,6 @@
 
 namespace Fhaculty\Graph;
 
-use \Exception;
-
 class Cycle{
 	/**
 	 * array of vertices in the cycle
@@ -72,7 +70,7 @@ class Cycle{
      * @param int           $by
      * @param boolean       $desc
      * @return Cycle
-     * @throws Exception
+     * @throws InvalidArgumentException if no vertices were given
      * @see Edge::getFirst() for parameters $by and $desc
      */
     public static function factoryFromVertices($vertices,$by=Edge::ORDER_FIFO,$desc=false){
@@ -88,7 +86,7 @@ class Cycle{
         	$last = $vertex;
         }
         if($last === NULL){
-            throw new Exception('No vertices given');
+            throw new InvalidArgumentException('No vertices given');
         }
         $edges []= Edge::getFirst($last->getEdgesTo($first),$by,$desc);         // additional edge from last vertex to first vertex
         
@@ -162,12 +160,13 @@ class Cycle{
 	 * get original graph of this cycle
 	 * 
 	 * @return Graph
+	 * @throws LogicException
 	 */
 	public function getGraph(){
 	    foreach($this->vertices as $vertex){
 	        return $vertex->getGraph();
 	    }
-	    throw new Exception('Must not happen');
+	    throw new LogicException('No vertex found. Must not happen');
 	}
 	
 	/**

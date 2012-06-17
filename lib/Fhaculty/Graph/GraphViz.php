@@ -113,7 +113,7 @@ class GraphViz{
             }else if($where instanceof Layoutable){
                 $where->setLayout($name,$value);
             }else{
-                throw new Exception('Invalid layout identifier');
+                throw new DomainException('Invalid layout identifier');
             }
         }
         return $this;
@@ -190,12 +190,12 @@ class GraphViz{
         
         $tmp = tempnam(sys_get_temp_dir(),'graphviz');
         if($tmp === false){
-            throw new Exception('Unable to get temporary file name for graphviz script');
+            throw new UnexpectedValueException('Unable to get temporary file name for graphviz script');
         }
         
         $ret = file_put_contents($tmp,$script,LOCK_EX);
         if($ret === false){
-            throw new Exception('Unable to write graphviz script to temporary file');
+            throw new UnexpectedValuexception('Unable to write graphviz script to temporary file');
         }
         
         $ret = 0;
@@ -208,7 +208,7 @@ class GraphViz{
         }
         system($dotExecutable.' -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp).' -o '.escapeshellarg($tmp.'.'.$this->format),$ret); // use program 'dot' to actually generate graph image
         if($ret !== 0){
-            throw new Exception('Unable to invoke "dot" to create image file (code '.$ret.')');
+            throw new UnexpectedValueException('Unable to invoke "dot" to create image file (code '.$ret.')');
         }
         
         unlink($tmp);

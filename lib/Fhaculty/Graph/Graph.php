@@ -6,7 +6,6 @@ use Fhaculty\Graph\Algorithm\ConnectedComponents as AlgorithmConnectedComponents
 use Fhaculty\Graph\Algorithm\Bipartit as AlgorithmBipartit;
 use Fhaculty\Graph\Algorithm\Eulerian as AlgorithmEulerian;
 use Fhaculty\Graph\Algorithm\Groups as AlgorithmGroups;
-use \Exception;
 
 class Graph extends Layoutable{
     /**
@@ -29,20 +28,21 @@ class Graph extends Layoutable{
      * @param int|NULL $id              new vertex ID to use (defaults to NULL: use next free numeric ID)
      * @param boolean  $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
      * @return Vertex (chainable)
-     * @throws Exception if given vertex $id is invalid or already exists
+     * @throws DomainException if given vertex $id is invalid
+     * @throws RuntimeException if given vertex $id already exists and $returnDuplicate is not set
      * @uses Vertex::getId()
      */
     public function createVertex($id=NULL,$returnDuplicate=false){
         if($id === NULL){    // no ID given
             $id = $this->getNextId();
         }else if(!is_int($id) && !is_string($id)){
-            throw new Exception('Vertex ID has to be of type integer or string');
+            throw new DomainException('Vertex ID has to be of type integer or string');
         }
         if(isset($this->vertices[$id])){
             if($returnDuplicate){
                 return $this->vertices[$id];
             }
-            throw new Exception('ID must be unique');
+            throw new RuntimeException('ID must be unique');
         }
         $vertex = new Vertex($id,$this);
         $this->vertices[$id] = $vertex;
@@ -54,12 +54,12 @@ class Graph extends Layoutable{
      * 
      * @param Vertex $originalVertex
      * @return Vertex new vertex in this graph
-     * @throws Exception
+     * @throws RuntimeException if vertex with this ID already exists
      */
     public function createVertexClone($originalVertex){
         $id = $originalVertex->getId();
         if(isset($this->vertices[$id])){
-            throw new Exception('Id of cloned vertex already exists');
+            throw new RuntimeException('Id of cloned vertex already exists');
         }
         $newVertex = new Vertex($id,$this);
         // TODO: properly set attributes of vertex
@@ -240,11 +240,11 @@ class Graph extends Layoutable{
      * 
      * @param int|string $id identifier of Vertex
      * @return Vertex
-     * @throws Exception
+     * @throws OutOfBoundsException if given vertex ID does not exist
      */
     public function getVertex($id){
         if( ! isset($this->vertices[$id]) ){
-            throw new Exception('Vertex '.$id.' does not exist');
+            throw new OutOfBoundsException('Vertex '.$id.' does not exist');
         }
         
         return $this->vertices[$id];
@@ -258,7 +258,7 @@ class Graph extends Layoutable{
      * vertex from the list of known vertices.
      *
      * @return Vertex first vertex found in this graph
-     * @throws Exception if Graph has no vertices
+     * @throws UnderflowException if Graph has no vertices
      * @see Vertex::getFirst() if you need to apply ordering first
      */
     public function getVertexFirst(){
@@ -266,7 +266,7 @@ class Graph extends Layoutable{
             return $vertex;
         }
         
-        throw new Exception("Graph has no vertices");
+        throw new UnderflowException("Graph has no vertices");
     }
     
     /**
@@ -300,7 +300,8 @@ class Graph extends Layoutable{
      * get degree for k-regular-graph (only if each vertex has the same degree)
      * 
      * @return int
-     * @throws Exception if graph is empty or not regular (i.e. vertex degrees are not equal)
+     * @throws UnderflowException if graph is empty
+     * @throws RuntimeException if graph is not regular (i.e. vertex degrees are not equal)
      * @uses Vertex::getDegreeIn()
      * @uses Vertex::getDegreeOut()
      */
@@ -311,7 +312,7 @@ class Graph extends Layoutable{
             $i = $vertex->getDegreeIn();
             
             if($i !== $degree || $i !== $vertex->getDegreeOut()){ // degree same (and for digraphs: indegree=outdegree)
-                throw new Exception('Graph is not k-regular');
+                throw new RuntimeException('Graph is not k-regular');
             }
         }
         
@@ -353,7 +354,7 @@ class Graph extends Layoutable{
             $this->getDegree();
             return true;
         }
-        catch(Exception $ignore){ }
+        catch(RuntimeException $ignore){ }
         return false;
     }
     
@@ -650,13 +651,14 @@ class Graph extends Layoutable{
      *
      * @param Edge $edge
      * @return void
+     * @throws InvalidArgumentException if given edge does not exist (should not ever happen)
      * @private
      * @see Edge::destroy() instead!
      */
     public function removeEdge($edge){
         $id = array_search($edge,$this->edges,true);
         if($id === false){
-            throw new Exception('Given edge does NOT exist');
+            throw new InvalidArgumentException('Given edge does NOT exist');
         }
         unset($this->edges[$id]);
     }
@@ -666,13 +668,14 @@ class Graph extends Layoutable{
      *
      * @param Vertex $vertex
      * @return void
+     * @throws InvalidArgumentException if given vertex does not exist (should not ever happen)
      * @private
      * @see Vertex::destroy() instead!
      */
     public function removeVertex($vertex){
         $id = array_search($vertex,$this->vertices,true);
         if($id === false){
-            throw new Exception('Given vertex does NOT exist');
+            throw new InvalidArgumentException('Given vertex does NOT exist');
         }
         unset($this->vertices[$id]);
     }
@@ -692,7 +695,8 @@ class Graph extends Layoutable{
      * @param Edge $edge
      * @param boolean $inverse
      * @return Edge
-     * @throws Exception if no edge was found or multiple edges match
+     * @throws UnderflowException if no edge was found
+     * @thrwos OverflowException if multiple edges match
      */
     public function getEdgeClone($edge, $inverse=false){
     	// Extract endpoints from edge
@@ -718,9 +722,9 @@ class Graph extends Layoutable{
     
     	// Check for parallel edges
     	if(!$residualEdgeArray){
-    	    throw new Exception('No original edges for given cloned edge found');
+    	    throw new UnderflowException('No original edges for given cloned edge found');
     	}else if(count($residualEdgeArray) !== 1){
-    		throw new Exception('More than one cloned edge? Parallel edges (multigraph) not supported');
+    		throw new OverflowException('More than one cloned edge? Parallel edges (multigraph) not supported');
     	}
     
     	return $residualEdgeArray[0];
@@ -754,10 +758,10 @@ class Graph extends Layoutable{
     /**
      * do NOT allow cloning of objects (MUST NOT be called!)
      *
-     * @throws Exception
+     * @throws BadMethodCallException
      * @see Graph::createGraphClone() instead
      */
     private function __clone(){
-        throw new Exception();
+        throw new BadMethodCallException();
     }
 }
