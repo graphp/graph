@@ -1,11 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
 use Fhaculty\Graph\Vertex;
 use \SplPriorityQueue;
 
-class MstPrim extends Mst{
+class Prim extends Base{
     /**
      * @var Vertex
      */

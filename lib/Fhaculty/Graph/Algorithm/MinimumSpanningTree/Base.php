@@ -1,8 +1,10 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
-abstract class Mst extends Base {
+use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
+
+abstract class Base extends AlgorithmBase {
     
     /**
      * create new resulting graph with only edges on minimum spanning tree

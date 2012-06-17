@@ -1,13 +1,13 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\EdgeDirected;
 use \SplPriorityQueue;
 use \Exception;
 
-class MstKruskal extends Mst{
+class Kruskal extends Base{
     
     /**
      * 
