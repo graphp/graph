@@ -1,13 +1,14 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\MaxFlow;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Algorithm\Base;
 use \Exception;
 
-class MaxFlowEdmondsKarp extends Base{
+class EdmondsKarp extends Base{
 
     /**
      *

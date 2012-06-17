@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
 use \Exception;
 
 class MMFlow extends MM {

@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
 use \Exception;
 
 class MCFCycleCanceling extends MCF {

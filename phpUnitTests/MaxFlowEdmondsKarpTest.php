@@ -1,6 +1,6 @@
 <?php
 
-use Fhaculty\Graph\Algorithm\MaxFlowEdmondsKarp as AlgorithmMaxFlowEdmondsKarp;
+use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as AlgorithmMaxFlowEdmondsKarp;
 use Fhaculty\Graph\Loader\EdgeListWithCapacity as LoaderEdgeListWithCapacity;
 
 class MaxFlowEdmondsKarpTest extends PHPUnit_Framework_TestCase
