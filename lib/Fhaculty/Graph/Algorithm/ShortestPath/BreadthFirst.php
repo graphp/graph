@@ -1,12 +1,12 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Vertex;
 use \Exception;
 use \BadMethodCallException;
 
-class SpBreadthFirst extends Sp{
+class BreadthFirst extends Base{
     /**
      * start vertex this algorithm operates on
      * 

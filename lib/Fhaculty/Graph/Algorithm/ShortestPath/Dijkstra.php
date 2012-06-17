@@ -1,11 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use \SplPriorityQueue;
 use \Exception;
 
-class SpDijkstra extends Sp{
+class Dijkstra extends Base{
     
     /**
      * get all edges on shortest path for this vertex

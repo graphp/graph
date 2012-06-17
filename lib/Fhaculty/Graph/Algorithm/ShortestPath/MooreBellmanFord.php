@@ -1,13 +1,13 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Cycle;
 use Fhaculty\Graph\NegativeCycleException;
 use \Exception;
 
-class SpMooreBellmanFord extends Sp{
+class MooreBellmanFord extends Base{
     
     /**
      *

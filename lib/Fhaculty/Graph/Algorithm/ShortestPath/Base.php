@@ -1,12 +1,13 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 use \Exception;
 
-abstract class Sp extends Base {
+abstract class Base extends AlgorithmBase {
     /**
      * start vertex to build shortest paths to
      * 
