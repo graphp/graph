@@ -2,10 +2,13 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
+use Fhaculty\Graph\Exception\RuntimeException;
+
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\EdgeDirected;
 use \SplPriorityQueue;
-use \Exception;
 
 class Kruskal extends Base{
     
@@ -35,18 +38,18 @@ class Kruskal extends Base{
         foreach ($this->graph->getEdges() as $edge){                            //For all edges
             if(!$edge->isLoop()){                                               // ignore loops (a->a)
                 if($edge instanceof EdgeDirected){
-                    throw new Exception('Kruskal for directed edges not supported');
+                    throw new UnexpectedValueException('Kruskal for directed edges not supported');
                 }
                 $weight = $edge->getWeight();
                 if($weight === NULL){
-                    throw new Exception('Kruskal for edges with no weight not supported');
+                    throw new UnexpectedValueException('Kruskal for edges with no weight not supported');
                 }
                 $sortedEdges->insert($edge, - $weight);                        //Add edges with negativ Weight because of order in stl
             }
         }
         
         if($sortedEdges->isEmpty()){
-            throw new Exception('No edges found');
+            throw new RuntimeException('No edges found');
         }
         
         //$sortedEdges = $this->graph->getEdgesOrdered('weight');
@@ -122,7 +125,7 @@ class Kruskal extends Base{
         // definition of spanning tree: number of edges = number of vertices - 1
         // above algorithm does not check isolated edges or may otherwise return multiple connected components => force check
         if (count($returnEdges) !== ( $this->graph->getNumberOfVertices() - 1 ) ){
-            throw new Exception('Graph is not connected');
+            throw new RuntimeException('Graph is not connected');
         }
         
         return $returnEdges;

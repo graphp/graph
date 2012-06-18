@@ -2,11 +2,12 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Exception\RuntimeException;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\NegativeCycleException;
+use Fhaculty\Graph\Exception\NegativeCycleException;
 use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
-use \Exception;
 
 class DetectNegativeCycle extends Base{
 
@@ -35,7 +36,7 @@ class DetectNegativeCycle extends Base{
             $this->getCycleNegative();
             return true;                                                      // cycle was found => okay
         }
-        catch(Exception $ignore){}                                             // no cycle found
+        catch(RuntimeException $ignore){}                                      // no cycle found
         return false;
     }
     
@@ -62,7 +63,7 @@ class DetectNegativeCycle extends Base{
     			}
     		}
     	}                                                                       // no more vertices to check => abort
-    	throw new Exception("No negative cycle found");
+    	throw new RuntimeException("No negative cycle found");
     }
     
     /**

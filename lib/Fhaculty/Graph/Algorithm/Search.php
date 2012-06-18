@@ -2,8 +2,10 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Exception\DomainException;
+
+use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Vertex;
-use \Exception;
 
 abstract class Search extends Base{
     /**
@@ -32,7 +34,7 @@ abstract class Search extends Base{
      */
     public function setDirection($direction){
         if($direction !== self::DIRECTION_FORWARD && $direction !== self::DIRECTION_REVERSE && $direction !== self::DIRECTION_BOTH){
-            throw new Exception('Invalid direction given');
+            throw new InvalidArgumentException('Invalid direction given');
         }
         $this->direction = $direction;
         return $this;
@@ -46,7 +48,7 @@ abstract class Search extends Base{
         }else if($this->direction === self::DIRECTION_BOTH){
             return $vertex->getVerticesEdge();
         }else{
-            throw new Exception('Invalid direction setting');
+            throw new DomainException('Invalid direction setting');
         }
     }
     

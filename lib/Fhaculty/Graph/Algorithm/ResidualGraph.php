@@ -2,10 +2,11 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\EdgeDirected;
-use \Exception;
 
 class ResidualGraph extends Base{
     private $graph;
@@ -41,17 +42,17 @@ class ResidualGraph extends Base{
 
         foreach($this->graph->getEdges() as $edge){
             if(!($edge instanceof EdgeDirected)){
-                throw new Exception('Edge is undirected');
+                throw new UnexpectedValueException('Edge is undirected');
             }
 
             $flow = $edge->getFlow();
             if($flow === NULL){
-                throw new Exception('Flow not set');
+                throw new UnexpectedValueException('Flow not set');
             }
 
             $capacity = $edge->getCapacity();
             if($capacity === NULL){
-                throw new Exception('Capacity not set');
+                throw new UnexpectedValueException('Capacity not set');
             }
 
             // capacity is still available, clone remaining capacity into new edge

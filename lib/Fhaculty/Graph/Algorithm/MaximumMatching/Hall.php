@@ -2,7 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm\MaximumMatching;
 
-use \BadMethodCallException;
+use Fhaculty\Graph\Exception\BadMethodCallException;
 
 class Hall extends Base {
 

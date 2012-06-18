@@ -2,9 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Vertex;
-use \Exception;
-use \BadMethodCallException;
 
 class BreadthFirst extends Base{
     /**

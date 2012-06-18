@@ -2,10 +2,15 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
+use Fhaculty\Graph\Exception\RuntimeException;
+
+use Fhaculty\Graph\Exception\UnderflowException;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Algorithm\TspMst as AlgorithmTspMst;
-use \Exception;
 
 class TspBruteforce extends Tsp{
     /**
@@ -91,7 +96,7 @@ class TspBruteforce extends Tsp{
     public function getEdges(){
         $this->numEdges = $this->graph->getNumberOfVertices();
         if($this->numEdges < 3){
-            throw new Exception('Needs at least 3 vertices');
+            throw new UnderflowException('Needs at least 3 vertices');
         }
         
         // numEdges 3-12 should work
@@ -106,7 +111,7 @@ class TspBruteforce extends Tsp{
                   );
         
         if($result === NULL){
-            throw new Exception('No resulting solution for TSP found');
+            throw new RuntimeException('No resulting solution for TSP found');
         }
         
         return $result;
@@ -141,7 +146,7 @@ class TspBruteforce extends Tsp{
             
             $weight = $edge->getWeight();
             if($weight < 0){
-                throw new Exception('Edge with negative weight "'.$weight.'" not supported');
+                throw new UnexpectedValueException('Edge with negative weight "'.$weight.'" not supported');
             }
             
             $result = $this->step($target,

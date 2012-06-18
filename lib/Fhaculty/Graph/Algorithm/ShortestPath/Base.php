@@ -2,10 +2,11 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Exception\RuntimeException;
+
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
-use \Exception;
 
 abstract class Base extends AlgorithmBase {
     /**
@@ -57,7 +58,7 @@ abstract class Base extends AlgorithmBase {
                 } // ignore: this edge does not point TO current vertex
             }
             if($pre === NULL){
-                throw new Exception('No edge leading to vertex');
+                throw new RuntimeException('No edge leading to vertex');
             }
         }
         return array_reverse($path);
@@ -120,7 +121,7 @@ abstract class Base extends AlgorithmBase {
             try{
                 $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex,$edges));
             }
-            catch(Exception $ignore){
+            catch(RuntimeException $ignore){
             } // ignore vertices that can not be reached
         }
         return $ret;

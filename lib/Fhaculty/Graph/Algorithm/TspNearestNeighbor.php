@@ -2,9 +2,10 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Exception\RuntimeException;
+
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
-use \Exception;
 use \SplPriorityQueue;
 
 class TspNearestNeighbor extends Tsp{
@@ -56,7 +57,7 @@ class TspNearestNeighbor extends Tsp{
             }
             
             if ( isset( $visitedVertices[ $nextVertex->getId() ] ) ){            //check if there is a way i can use
-                throw new Exception("Graph is not complete - can't find an edge to unconnected vertex");
+                throw new RuntimeException("Graph is not complete - can't find an edge to unconnected vertex");
             }
             
             $visitedVertices[ $nextVertex->getId() ] = TRUE;

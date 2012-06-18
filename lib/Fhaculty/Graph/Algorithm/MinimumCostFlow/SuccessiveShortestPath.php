@@ -2,6 +2,10 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Exception\RuntimeException;
+
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
@@ -9,7 +13,6 @@ use Fhaculty\Graph\EdgeDirected;
 use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
 use Fhaculty\Graph\Algorithm\SearchBreadthFirst;
-use \Exception;
 
 class SuccessiveShortestPath extends Base {
     /**
@@ -47,7 +50,7 @@ class SuccessiveShortestPath extends Base {
                     $this->addBalance($endVertex, - $flow);
                 }
                 else {
-                    throw new Exception("Undirected Edges not suported");
+                    throw new UnexpectedValueException("Undirected Edges not suported");
                 }
             }
             
@@ -73,7 +76,7 @@ class SuccessiveShortestPath extends Base {
                 $targetVertex = $this->getVertexSink($sourceVertex);
             }
             catch (Exception $ignore){                                          //if no target is found the network has not enough capacity
-                throw new Exception("The graph has not enough capacity for the minimum-cost flow");
+                throw new RuntimeException("The graph has not enough capacity for the minimum-cost flow");
             }
             
             //calculate shortest path between source- and target-vertex

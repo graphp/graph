@@ -2,9 +2,10 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use \Exception;
 
 class ConnectedComponents extends Base{
     
@@ -33,7 +34,7 @@ class ConnectedComponents extends Base{
      */
     public function createGraphComponentVertex(Vertex $vertex){
         if($vertex->getGraph() !== $this->graph){
-            throw new Exception('This graph does not contain the given vertex');
+            throw new InvalidArgumentException('This graph does not contain the given vertex');
         }
         return $this->graph->createGraphCloneVertices($this->createSearch($vertex)->getVertices());
     }

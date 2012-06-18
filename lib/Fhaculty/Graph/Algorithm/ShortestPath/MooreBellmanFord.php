@@ -2,10 +2,11 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Exception\RuntimeException;
+
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Cycle;
-use Fhaculty\Graph\NegativeCycleException;
-use \Exception;
+use Fhaculty\Graph\Exception\NegativeCycleException;
 
 class MooreBellmanFord extends Base{
     
@@ -83,6 +84,6 @@ class MooreBellmanFord extends Base{
         catch(NegativeCycleException $e){
             return $e->getCycle();
         }
-        throw new Exception('No cycle found');
+        throw new RuntimeException('No cycle found');
     }
 }

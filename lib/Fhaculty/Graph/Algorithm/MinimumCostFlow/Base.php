@@ -2,9 +2,9 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Exception\RuntimeException;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 use Fhaculty\Graph\Graph;
-use \Exception;
 
 abstract class Base extends AlgorithmBase {
 
@@ -28,14 +28,14 @@ abstract class Base extends AlgorithmBase {
     /**
      * check if balance is okay and throw exception otherwise
      * 
-     * @throws Exception
+     * @throws RuntimeException
      * @return AlgorithmMCF $this (chainable)
      */
     protected function checkBalance(){
         $balance = $this->graph->getBalance();
         $tolerance = 0.000001;
         if($balance >= $tolerance || $balance <= -$tolerance){
-            throw new Exception("The given graph is not balanced value is: ".$balance);
+            throw new RuntimeException("The given graph is not balanced value is: ".$balance);
         }
         return $this;
     }

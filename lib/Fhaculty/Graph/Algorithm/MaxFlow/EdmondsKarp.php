@@ -8,7 +8,7 @@ use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Algorithm\Base;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
 use Fhaculty\Graph\Algorithm\SearchBreadthFirst;
-use \Exception;
+use Fhaculty\Graph\Exception;
 
 class EdmondsKarp extends Base{
 
@@ -35,10 +35,10 @@ class EdmondsKarp extends Base{
      */
     public function __construct(Vertex $startVertex, Vertex $destinationVertex){
         if($startVertex === $destinationVertex){
-            throw new Exception('Start and destination must not be the same vertex');
+            throw new Exception\InvalidArgumentException('Start and destination must not be the same vertex');
         }
         if($startVertex->getGraph() !== $destinationVertex->getGraph()){
-            throw new Exception('Start and target vertex have to be in the same graph instance');
+            throw new Exception\InvalidArgumentException('Start and target vertex have to be in the same graph instance');
         }
         $this->startVertex = $startVertex;
         $this->destinationVertex = $destinationVertex;

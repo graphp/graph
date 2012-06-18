@@ -2,11 +2,14 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Exception\UnderflowException;
+
+use Fhaculty\Graph\Exception\RuntimeException;
+
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
 use Fhaculty\Graph\Algorithm\DetectNegativeCycle;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
-use \Exception;
 
 class CycleCanceling extends Base {
 
@@ -39,7 +42,7 @@ class CycleCanceling extends Base {
         $flow = $algMaxFlow->getFlowMax();
 
         if($flow !== $sumBalance){
-            throw new Exception('(s*,t*)-flow of '.$flow.' has to equal sumBalance '.$sumBalance);
+            throw new RuntimeException('(s*,t*)-flow of '.$flow.' has to equal sumBalance '.$sumBalance);
         }
 
 
@@ -55,7 +58,7 @@ class CycleCanceling extends Base {
             try {
                 $clonedEdges = $alg->getCycleNegative()->getEdges();
             }
-            catch (Exception $ignore) {                                        // no negative cycle found => end algorithm
+            catch (RuntimeException $ignore) {                                        // no negative cycle found => end algorithm
                 break;
             }
 
@@ -67,7 +70,7 @@ class CycleCanceling extends Base {
                 try {
             	    $edge = $resultGraph->getEdgeClone($clonedEdge);            //get edge from clone
             	    $edge->addFlow( $newFlow );                                 //add flow
-                } catch(Exception $ignor) {                                     //if the edge doesn't exists use the residual edge
+                } catch(UnderflowException $ignor) {                           //if the edge doesn't exists use the residual edge
                     $edge = $resultGraph->getEdgeClone($clonedEdge, true);
                     $edge->addFlow( - $newFlow);                                //remove flow
                 }

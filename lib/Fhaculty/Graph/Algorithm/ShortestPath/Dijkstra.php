@@ -2,8 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
 use \SplPriorityQueue;
-use \Exception;
 
 class Dijkstra extends Base{
     
@@ -49,7 +49,7 @@ class Dijkstra extends Base{
             foreach ($currentVertex->getEdgesOut() as $edge){                 //check for all edges of current vertex if there is a cheaper path (or IN OTHER WORDS: Add reachable nodes from currently added node and refresh the current possible distances)
                 $weight = $edge->getWeight();
                 if($weight < 0){
-                	throw new Exception('Djkstra not supported for negative weights - Consider using MooreBellmanFord');
+                	throw new UnexpectedValueException('Djkstra not supported for negative weights - Consider using MooreBellmanFord');
                 }
                 
                 $targetVertex = $edge->getVertexToFrom($currentVertex);
