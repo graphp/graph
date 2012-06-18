@@ -350,6 +350,9 @@ class Graph extends Layoutable{
      * @uses Graph::getDegree()
      */
     public function isRegular(){
+        if(!$this->vertices){ // an empty graph is considered regular
+            return true;
+        }
         try{
             $this->getDegree();
             return true;
