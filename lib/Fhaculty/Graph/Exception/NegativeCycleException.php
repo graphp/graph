@@ -2,9 +2,11 @@
 
 namespace Fhaculty\Graph\Exception;
 
+use Fhaculty\Graph\Cycle;
+
 use Fhaculty\Graph;
 
-class NegativeCycleException extends \Exception implements Graph\Exception{
+class NegativeCycleException extends RuntimeException implements Graph\Exception{
 	/**
 	 * instance of the cycle
 	 * 
@@ -12,8 +14,8 @@ class NegativeCycleException extends \Exception implements Graph\Exception{
 	 */
     private $cycle;
 
-	public function __construct($message,$cycle){
-		parent::__construct($message,NULL,NULL);
+	public function __construct($message,$code=NULL,$previous=NULL,Cycle $cycle){
+		parent::__construct($message,$code,$previous);
 		$this->cycle = $cycle;
 	}
 	

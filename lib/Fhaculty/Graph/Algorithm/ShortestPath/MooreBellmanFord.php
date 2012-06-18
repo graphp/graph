@@ -65,7 +65,7 @@ class MooreBellmanFord extends Base{
         //Check for negative cycles (only if last step didn't already finish anyway)
         if($changed && $changed = $this->bigStep($edges,$totalCostOfCheapestPathTo,$predecessorVertexOfCheapestPathTo)){ // something is still changing...
             $cycle = Cycle::factoryFromPredecessorMap($predecessorVertexOfCheapestPathTo,$changed,Edge::ORDER_WEIGHT);
-            throw new NegativeCycleException('Negative cycle found',$cycle);
+            throw new NegativeCycleException('Negative cycle found',0,NULL,$cycle);
         }
         
         return $returnEdges;
