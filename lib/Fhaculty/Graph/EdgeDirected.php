@@ -72,14 +72,14 @@ class EdgeDirected extends Edge{
     
     public function getVertexToFrom($startVertex){
         if ($this->from !== $startVertex){
-            throw new InvalidArgumentException('Invalid start vertex');
+            throw new Exception\InvalidArgumentException('Invalid start vertex');
         }
         return $this->to;
     }
 
     public function getVertexFromTo($endVertex){
         if ($this->to !== $endVertex){
-            throw new InvalidArgumentException('Invalid end vertex');
+            throw new Exception\InvalidArgumentException('Invalid end vertex');
         }
         return $this->from;
     }
@@ -112,7 +112,7 @@ class EdgeDirected extends Edge{
     	
     	$pos = array_search($this,$edges,true);
     	if($pos === false){
-    		throw new LogicException('Internal error: Current edge not found');
+    		throw new Exception\LogicException('Internal error: Current edge not found');
     	}
     	 
     	unset($edges[$pos]);                                                   // exclude current edge from parallel edges

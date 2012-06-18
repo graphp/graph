@@ -86,7 +86,7 @@ class Cycle{
         	$last = $vertex;
         }
         if($last === NULL){
-            throw new InvalidArgumentException('No vertices given');
+            throw new Exception\InvalidArgumentException('No vertices given');
         }
         $edges []= Edge::getFirst($last->getEdgesTo($first),$by,$desc);         // additional edge from last vertex to first vertex
         
@@ -166,7 +166,7 @@ class Cycle{
 	    foreach($this->vertices as $vertex){
 	        return $vertex->getGraph();
 	    }
-	    throw new LogicException('No vertex found. Must not happen');
+	    throw new Exception\LogicException('No vertex found. Must not happen');
 	}
 	
 	/**

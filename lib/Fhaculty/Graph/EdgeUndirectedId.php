@@ -75,7 +75,7 @@ class EdgeUndirectedId extends Edge{
                 return $this->graph->getVertex($this->a);
             }
         }
-        throw new InvalidArgumentException('Invalid start vertex');
+        throw new Exception\InvalidArgumentException('Invalid start vertex');
     }
 
     public function getVertexFromTo($endVertex){
@@ -87,7 +87,7 @@ class EdgeUndirectedId extends Edge{
                 return $this->graph->getVertex($this->a);
             }
         }
-        throw new InvalidArgumentException('Invalid end vertex');
+        throw new Exception\InvalidArgumentException('Invalid end vertex');
     }
     
     public function hasVertexStart(Vertex $startVertex){

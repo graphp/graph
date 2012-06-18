@@ -55,7 +55,7 @@ class EdgeUndirected extends Edge{
             return $this->a;
         }
         else{
-            throw new InvalidArgumentException('Invalid start vertex');
+            throw new Exception\InvalidArgumentException('Invalid start vertex');
         }
     }
 
@@ -67,7 +67,7 @@ class EdgeUndirected extends Edge{
             return $this->a;
         }
         else{
-            throw new InvalidArgumentException('Invalid end vertex');
+            throw new Exception\InvalidArgumentException('Invalid end vertex');
         }
     }
     
