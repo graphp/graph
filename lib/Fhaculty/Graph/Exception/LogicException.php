@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Fhaculty\Graph\Exception;
 
 class LogicException extends \LogicException implements Exception {
 }

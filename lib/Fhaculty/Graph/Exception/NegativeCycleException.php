@@ -1,10 +1,10 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Fhaculty\Graph\Exception;
 
-use \Exception;
+use Fhaculty\Graph;
 
-class NegativeCycleException extends Exception{
+class NegativeCycleException extends \Exception implements Graph\Exception{
 	/**
 	 * instance of the cycle
 	 * 
