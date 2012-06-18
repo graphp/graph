@@ -2,8 +2,6 @@
 
 namespace Fhaculty\Graph;
 
-use \Exception;
-
 class GraphViz{
     /**
      * 
