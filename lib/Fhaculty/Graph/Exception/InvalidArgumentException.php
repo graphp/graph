@@ -2,5 +2,7 @@
 
 namespace Fhaculty\Graph\Exception;
 
-class InvalidArgumentException extends \InvalidArgumentException implements Exception {
+use Fhaculty\Graph;
+
+class InvalidArgumentException extends \InvalidArgumentException implements Graph\Exception {
 }

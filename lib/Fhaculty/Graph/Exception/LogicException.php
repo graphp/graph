@@ -2,5 +2,7 @@
 
 namespace Fhaculty\Graph\Exception;
 
-class LogicException extends \LogicException implements Exception {
+use Fhaculty\Graph;
+
+class LogicException extends \LogicException implements Graph\Exception {
 }

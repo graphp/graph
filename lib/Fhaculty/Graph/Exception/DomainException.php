@@ -2,5 +2,7 @@
 
 namespace Fhaculty\Graph\Exception;
 
-class DomainException extends \DomainException implements Exception {
+use Fhaculty\Graph;
+
+class DomainException extends \DomainException implements Graph\Exception {
 }
