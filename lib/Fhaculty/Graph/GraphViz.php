@@ -115,25 +115,6 @@ class GraphViz{
             }
         }
         return $this;
-        // example code:
-        
-        // set global graph layout
-        $this->setLayout(self::LAYOUT_GRAPH,'bgcolor','transparent');
-        
-        // assign multiple layout settings to all vertices
-        $this->setLayout(self::LAYOUT_VERTEX,array('size'=>8,'color'=>'blue'));
-        
-        // assign layout to single edge
-        $this->setLayout($graph->getVertexFirst(),'shape','square');
-        
-        // assign multiple layout settings to multiple edges
-        $this->setLayout($alg->getEdges(),array('color'=>'red','style'=>'bold'));
-        
-        // ?? assign layout to vertexm, then delete vertex
-        $vertex = $graph->createVertex();
-        $this->setLayout($vertex,'color','red');
-        $vertex->destroy();
-        $this->display();
     }
     
     // end
