@@ -17,7 +17,7 @@ class EdgeUndirected extends Edge{
      */
     private $b;
 
-    public function __construct($a,$b){
+    public function __construct(Vertex $a,Vertex $b){
         $this->a = $a;
         $this->b = $b;
     }
@@ -38,7 +38,7 @@ class EdgeUndirected extends Edge{
         return $this->a->getId()." <-> ".$this->b->getId()." Weight: ".$this->weight;
     }
     
-    public function isConnection($from, $to){
+    public function isConnection(Vertex $from,Vertex $to){
         //                              one way                or                        other way
         return ( ( $this->a === $from && $this->b === $to ) || ( $this->b === $from && $this->a === $to ) );
     }
@@ -47,7 +47,7 @@ class EdgeUndirected extends Edge{
         return ($this->a === $this->b);
     }
 
-    public function getVertexToFrom($startVertex){
+    public function getVertexToFrom(Vertex $startVertex){
         if ($this->a === $startVertex){
             return $this->b;
         }
@@ -59,7 +59,7 @@ class EdgeUndirected extends Edge{
         }
     }
 
-    public function getVertexFromTo($endVertex){
+    public function getVertexFromTo(Vertex $endVertex){
         if ($this->a === $endVertex){
             return $this->b;
         }

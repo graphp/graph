@@ -229,7 +229,7 @@ abstract class Edge extends Layoutable{
      */
     abstract function toString();
     
-    abstract public function isConnection($from, $to);
+    abstract public function isConnection(Vertex $from,Vertex $to);
 
     /**
      * returns whether this edge is actually a loop
@@ -246,7 +246,7 @@ abstract class Edge extends Layoutable{
      * @throws InvalidArgumentException if given $startVertex is not a valid start
      * @see Edge::hasEdgeFrom() to check if given start is valid
      */
-    abstract public function getVertexToFrom($startVertex);
+    abstract public function getVertexToFrom(Vertex $startVertex);
     
     /**
      * get start vertex which can reach us(the given end vertex) with this edge
@@ -256,7 +256,7 @@ abstract class Edge extends Layoutable{
      * @throws InvalidArgumentException if given $startVertex is not a valid end
      * @see Edge::hasEdgeFrom() to check if given start is valid
      */
-    abstract public function getVertexFromTo($endVertex);
+    abstract public function getVertexFromTo(Vertex $endVertex);
     
     /**
      * return weight of edge

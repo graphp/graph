@@ -191,7 +191,7 @@ class Vertex extends Layoutable{
      * @param int   $id    Identifier (int, string, what you want) $id
      * @param Graph $graph graph to be added to
      */
-    public function __construct($id, $graph){
+    public function __construct($id,Graph $graph){
         $this->id = $id;
         $this->graph = $graph;
     }
@@ -308,7 +308,7 @@ class Vertex extends Layoutable{
      * @return boolean
      * @uses AlgorithmSpBreadthFirst::hasVertex()
      */
-    public function hasPathTo($vertex){
+    public function hasPathTo(Vertex $vertex){
         $alg = new AlgorithmSpBreadthFirst($this);
         return $alg->hasVertex($vertex);
     }
@@ -320,7 +320,7 @@ class Vertex extends Layoutable{
      * @return boolean
      * @uses Vertex::hasPathTo()
      */
-    public function hasPathFrom($vertex){
+    public function hasPathFrom(Vertex $vertex){
         return $vertex->hasPathTo($this);
     }
     
@@ -354,7 +354,7 @@ class Vertex extends Layoutable{
      * @throws InvalidArgumentException
      * @uses Graph::addEdge()
      */
-    public function createEdgeTo($vertex){
+    public function createEdgeTo(Vertex $vertex){
         if($vertex->getGraph() !== $this->graph){
             throw new Exception\InvalidArgumentException('Target vertex has to be within the same graph');
         }
@@ -374,7 +374,7 @@ class Vertex extends Layoutable{
      * @throws InvalidArgumentException
      * @uses Graph::addEdge()
      */
-    public function createEdge($vertex){
+    public function createEdge(Vertex $vertex){
         if($vertex->getGraph() !== $this->graph){
             throw new Exception\InvalidArgumentException('Target vertex has to be within the same graph');
         }
@@ -395,7 +395,7 @@ class Vertex extends Layoutable{
      * @private
      * @see Edge::destroy() instead!
      */
-    public function removeEdge($edge){
+    public function removeEdge(Edge $edge){
         $id = array_search($edge,$this->edges,true);
         if($id === false){
             throw new Exception\InvalidArgumentException('Given edge does NOT exist');                //Tobias: if edge gets Id => output of id
@@ -410,7 +410,7 @@ class Vertex extends Layoutable{
      * @return boolean
      * @uses Edge::hasVertexTarget()
      */
-    public function hasEdgeTo($vertex){
+    public function hasEdgeTo(Vertex $vertex){
         foreach($this->edges as $edge){
             if($edge->isConnection($this, $vertex)){
                 return true;
@@ -426,7 +426,7 @@ class Vertex extends Layoutable{
      * @return boolean
      * @uses Vertex::hasEdgeTo()
      */
-    public function hasEdgeFrom($vertex){
+    public function hasEdgeFrom(Vertex $vertex){
         return $vertex->hasEdgeTo($this);
     }
     
@@ -476,7 +476,7 @@ class Vertex extends Layoutable{
      * @return array[Edge]
      * @uses Edge::hasVertexTarget()
      */
-    public function getEdgesTo($vertex){
+    public function getEdgesTo(Vertex $vertex){
         $ret = array();
         foreach($this->edges as $edge){
             if($edge->isConnection($this, $vertex)){
@@ -493,7 +493,7 @@ class Vertex extends Layoutable{
      * @return array[Edge]
      * @uses Vertex::getEdgesTo()
      */
-    public function getEdgesFrom($vertex){
+    public function getEdgesFrom(Vertex $vertex){
         return $vertex->getEdgesTo($this);
     }
     

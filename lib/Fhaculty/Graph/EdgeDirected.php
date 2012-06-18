@@ -23,7 +23,7 @@ class EdgeDirected extends Edge{
      * @param Vertex $from start/source Vertex
      * @param Vertex $to   end/target Vertex
      */
-    public function __construct($from,$to){
+    public function __construct(Vertex $from,Vertex $to){
         $this->from = $from;
         $this->to = $to;
     }
@@ -62,7 +62,7 @@ class EdgeDirected extends Edge{
         return $this->from->getId()." -> ".$this->to->getId()." Weight: ".$this->weight;
     }
     
-    public function isConnection($from, $to){
+    public function isConnection(Vertex $from,Vertex $to){
         return ($this->to === $to && $this->from === $from);
     }
     
@@ -70,14 +70,14 @@ class EdgeDirected extends Edge{
         return ($this->to === $this->from);
     }
     
-    public function getVertexToFrom($startVertex){
+    public function getVertexToFrom(Vertex $startVertex){
         if ($this->from !== $startVertex){
             throw new Exception\InvalidArgumentException('Invalid start vertex');
         }
         return $this->to;
     }
 
-    public function getVertexFromTo($endVertex){
+    public function getVertexFromTo(Vertex $endVertex){
         if ($this->to !== $endVertex){
             throw new Exception\InvalidArgumentException('Invalid end vertex');
         }

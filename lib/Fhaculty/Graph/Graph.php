@@ -56,7 +56,7 @@ class Graph extends Layoutable{
      * @return Vertex new vertex in this graph
      * @throws RuntimeException if vertex with this ID already exists
      */
-    public function createVertexClone($originalVertex){
+    public function createVertexClone(Vertex $originalVertex){
         $id = $originalVertex->getId();
         if(isset($this->vertices[$id])){
             throw new Exception\RuntimeException('Id of cloned vertex already exists');
@@ -139,7 +139,7 @@ class Graph extends Layoutable{
      * @return Edge new edge in this graph
      * @uses Graph::createEdgeCloneInternal()
      */
-    public function createEdgeClone($originalEdge){
+    public function createEdgeClone(Edge $originalEdge){
         return $this->createEdgeCloneInternal($originalEdge,0,1);
     }
     
@@ -150,7 +150,7 @@ class Graph extends Layoutable{
      * @return Edge new edge in this graph
      * @uses Graph::createEdgeCloneInternal()
      */
-    public function createEdgeCloneInverted($originalEdge){
+    public function createEdgeCloneInverted(Edge $originalEdge){
         return $this->createEdgeCloneInternal($originalEdge,1,0);
     }
     
@@ -172,7 +172,7 @@ class Graph extends Layoutable{
      * @uses Edge::getCapacity()
      * @uses Edge::setCapacity()
      */
-    private function createEdgeCloneInternal($originalEdge,$ia,$ib){
+    private function createEdgeCloneInternal(Edge $originalEdge,$ia,$ib){
         $ends = $originalEdge->getVerticesId();
     
         $a = $this->getVertex($ends[$ia]); // get start vertex from old start vertex id
@@ -645,7 +645,7 @@ class Graph extends Layoutable{
      * @private
      * @see Vertex::createEdge() instead!
      */
-    public function addEdge($edge){
+    public function addEdge(Edge $edge){
         $this->edges []= $edge;
     }
     
@@ -658,7 +658,7 @@ class Graph extends Layoutable{
      * @private
      * @see Edge::destroy() instead!
      */
-    public function removeEdge($edge){
+    public function removeEdge(Edge $edge){
         $id = array_search($edge,$this->edges,true);
         if($id === false){
             throw new Exception\InvalidArgumentException('Given edge does NOT exist');
@@ -675,7 +675,7 @@ class Graph extends Layoutable{
      * @private
      * @see Vertex::destroy() instead!
      */
-    public function removeVertex($vertex){
+    public function removeVertex(Vertex $vertex){
         $id = array_search($vertex,$this->vertices,true);
         if($id === false){
             throw new Exception\InvalidArgumentException('Given vertex does NOT exist');
@@ -701,7 +701,7 @@ class Graph extends Layoutable{
      * @throws UnderflowException if no edge was found
      * @thrwos OverflowException if multiple edges match
      */
-    public function getEdgeClone($edge, $inverse=false){
+    public function getEdgeClone(Edge $edge, $inverse=false){
     	// Extract endpoints from edge
     	$originalStartVertexArray = $edge->getVerticesStart();
     	$originalStartVertex = array_shift($originalStartVertexArray);

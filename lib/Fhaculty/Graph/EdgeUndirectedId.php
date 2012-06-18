@@ -24,7 +24,7 @@ class EdgeUndirectedId extends Edge{
      */
     private $graph;
 
-    public function __construct($a,$b){
+    public function __construct(Vertex $a,Vertex $b){
         $this->a = $a->getId();
         $this->b = $b->getId();
         $this->graph = $a->getGraph();
@@ -58,7 +58,7 @@ class EdgeUndirectedId extends Edge{
         return ($this->a === $this->b);
     }
     
-    public function isConnection($from, $to){
+    public function isConnection(Vertex $from,Vertex $to){
         if($from->getGraph() !== $this->graph || $to->getGraph() !== $this->graph){
             return false;
         }
@@ -66,7 +66,7 @@ class EdgeUndirectedId extends Edge{
         return ( ( $this->a === $from->getId() && $this->b === $to->getId() ) || ( $this->b === $from->getId() && $this->a === $to->getId() ) );
     }
 
-    public function getVertexToFrom($startVertex){
+    public function getVertexToFrom(Vertex $startVertex){
         if($startVertex->getGraph() === $this->graph){
             if ($this->a === $startVertex->getId()){
                 return $this->graph->getVertex($this->b);
@@ -78,7 +78,7 @@ class EdgeUndirectedId extends Edge{
         throw new Exception\InvalidArgumentException('Invalid start vertex');
     }
 
-    public function getVertexFromTo($endVertex){
+    public function getVertexFromTo(Vertex $endVertex){
         if($endVertex->getGraph() === $this->graph){
             if ($this->a === $endVertex->getId()){
                 return $this->graph->getVertex($this->b);
