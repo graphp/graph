@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Exception\RuntimeException;
+
 use Fhaculty\Graph\Algorithm\ConnectedComponents as AlgorithmConnectedComponents;
 use Fhaculty\Graph\Algorithm\Bipartit as AlgorithmBipartit;
 use Fhaculty\Graph\Algorithm\Eulerian as AlgorithmEulerian;

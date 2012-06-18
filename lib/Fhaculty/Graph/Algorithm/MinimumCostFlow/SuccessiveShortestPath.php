@@ -2,6 +2,10 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Exception\DomainException;
+
+use Fhaculty\Graph\Exception\UnderflowException;
+
 use Fhaculty\Graph\Exception\RuntimeException;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
@@ -67,7 +71,7 @@ class SuccessiveShortestPath extends Base {
             try {
                 $sourceVertex = $this->getVertexSource($residualGraph);
             }
-            catch (Exception $ignore) {                                         //if no source is found the minimum-cost flow is found
+            catch (UnderflowException $ignore) {                               //if no source is found the minimum-cost flow is found
                 break;
             }
             
@@ -75,7 +79,7 @@ class SuccessiveShortestPath extends Base {
             try {
                 $targetVertex = $this->getVertexSink($sourceVertex);
             }
-            catch (Exception $ignore){                                          //if no target is found the network has not enough capacity
+            catch (UnderflowException $ignore){                                          //if no target is found the network has not enough capacity
                 throw new RuntimeException("The graph has not enough capacity for the minimum-cost flow");
             }
             
@@ -104,7 +108,7 @@ class SuccessiveShortestPath extends Base {
                 try {
             	    $edge = $resultGraph->getEdgeClone($clonedEdge);            //get edge from clone
             	    $edge->addFlow( $newflow );                                 //add flow
-                } catch(Exception $ignor) {                                     //if the edge doesn't exists use the residual edge
+                } catch(UnderflowException $ignor) {                           //if the edge doesn't exists use the residual edge
                     $edge = $resultGraph->getEdgeClone($clonedEdge, true);
                     $edge->addFlow( - $newflow);                                //remove flow
                 }
@@ -132,7 +136,7 @@ class SuccessiveShortestPath extends Base {
      */
     private function isBalanceReached(Graph $graph){
         if($graph->getNumberOfVertices() !== $this->graph->getNumberOfVertices()){
-            throw new Exception('Given graph does not appear to be a clone of input graph');
+            throw new DomainException('Given graph does not appear to be a clone of input graph');
         }
         foreach($this->graph->getVertices() as $vid=>$vertex){
             if($vertex->getBalance() !== $graph->getVertex($vid)->getBalance()){
@@ -156,7 +160,7 @@ class SuccessiveShortestPath extends Base {
                 return $vertex;
             }
         }
-        throw new Exception('No source vertex found in graph');
+        throw new UnderflowException('No source vertex found in graph');
     }
     
     /**
@@ -175,7 +179,7 @@ class SuccessiveShortestPath extends Base {
                 return $vertex;
             }
         }
-        throw new Exception('No sink vertex connected to given source vertex found');
+        throw new UnderflowException('No sink vertex connected to given source vertex found');
     }
     
     private function addBalance(Vertex $vertex, $balance){

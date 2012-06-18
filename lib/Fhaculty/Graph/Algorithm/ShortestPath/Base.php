@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+
 use Fhaculty\Graph\Exception\RuntimeException;
 
 use Fhaculty\Graph\Vertex;
@@ -54,7 +56,7 @@ abstract class Base extends AlgorithmBase {
                     $currentVertex = $pre;
                     break;
                 }
-                catch(Exception $ignore){
+                catch(InvalidArgumentException $ignore){
                 } // ignore: this edge does not point TO current vertex
             }
             if($pre === NULL){
