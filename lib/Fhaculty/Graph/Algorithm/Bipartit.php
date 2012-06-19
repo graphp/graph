@@ -74,7 +74,7 @@ class Bipartit extends Base{
         $ret = array(0=>array(),1=>array());
         
         foreach($this->graph->getVertices() as $vid=>$vertex){
-            $ret[$color[$vid]][$vid] = $vertex;
+            $ret[$colors[$vid]][$vid] = $vertex;
         }
         return $ret;
     }
