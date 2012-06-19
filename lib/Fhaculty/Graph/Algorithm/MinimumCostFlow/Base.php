@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Edge;
+
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 use Fhaculty\Graph\Graph;
@@ -38,6 +40,29 @@ abstract class Base extends AlgorithmBase {
             throw new UnexpectedValueException("The given graph is not balanced value is: ".$balance);
         }
         return $this;
+    }
+    
+    /**
+     * helper used to add $newFlow to original edges of $clonedEdges in graph $resultGraph
+     * 
+     * @param Graph       $resultGraph graph to look for original edges
+     * @param array[Edge] $clonedEdges array of cloned edges to be modified
+     * @param number      $newFlow     flow to add
+     * @uses Graph::getEdgeClone()
+     * @uses Graph::getEdgeCloneInverted()
+     * @uses Edge::getFlow()
+     * @uses Edge::setFlow()
+     */
+    protected function addFlow(Graph $resultGraph,$clonedEdges,$newFlow){
+        foreach($clonedEdges as $clonedEdge){
+            try {
+            	$edge = $resultGraph->getEdgeClone($clonedEdge);                //get edge from clone
+            } catch(UnderflowException $ignor) {                               //if the edge doesn't exist => use the residual edge
+            	$edge = $resultGraph->getEdgeCloneInverted($clonedEdge);
+            	$flow = -$flow;                                                 //remove flow
+            }
+            $edge->setFlow($edge->getFlow() + $newFlow);
+        }
     }
     
     /**

@@ -104,15 +104,7 @@ class SuccessiveShortestPath extends Base {
             }
             
             //add the new flow to the path
-            foreach ($edgesOnFlow as $clonedEdge){
-                try {
-            	    $edge = $resultGraph->getEdgeClone($clonedEdge);            //get edge from clone
-            	    $edge->addFlow( $newflow );                                 //add flow
-                } catch(UnderflowException $ignor) {                           //if the edge doesn't exists use the residual edge
-                    $edge = $resultGraph->getEdgeCloneInverted($clonedEdge);
-                    $edge->addFlow( - $newflow);                                //remove flow
-                }
-            }
+            $this->addFlow($resultGraph,$edgesOnFlow,$newflow);
             
             //add balance to source and remove for the sink
             $oriSourceVertex = $resultGraph->getVertex($sourceVertex->getId());

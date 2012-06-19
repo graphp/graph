@@ -68,15 +68,7 @@ class CycleCanceling extends Base {
             $newFlow = Edge::getFirst($clonedEdges,Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
 
             //set flow on original graph
-            foreach ($clonedEdges as $clonedEdge) {
-                try {
-            	    $edge = $resultGraph->getEdgeClone($clonedEdge);            //get edge from clone
-            	    $edge->addFlow( $newFlow );                                 //add flow
-                } catch(UnderflowException $ignor) {                           //if the edge doesn't exists use the residual edge
-                    $edge = $resultGraph->getEdgeCloneInverted($clonedEdge);
-                    $edge->addFlow( - $newFlow);                                //remove flow
-                }
-            }
+            $this->addFlow($resultGraph,$clonedEdges,$newFlow);
         }
         
         // destroy temporary supersource and supersink again
