@@ -57,11 +57,11 @@ abstract class Base extends AlgorithmBase {
         foreach($clonedEdges as $clonedEdge){
             try {
             	$edge = $resultGraph->getEdgeClone($clonedEdge);                //get edge from clone
-            } catch(UnderflowException $ignor) {                               //if the edge doesn't exist => use the residual edge
+            	$edge->setFlow($edge->getFlow() + $newFlow);                    // add flow
+            } catch(UnderflowException $ignore) {                              //if the edge doesn't exist => use the residual edge
             	$edge = $resultGraph->getEdgeCloneInverted($clonedEdge);
-            	$flow = -$flow;                                                 //remove flow
+            	$edge->setFlow($edge->getFlow() - $newFlow);                    //remove flow
             }
-            $edge->setFlow($edge->getFlow() + $newFlow);
         }
     }
     
