@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Exception\UnderflowException;
+
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 
 use Fhaculty\Graph\Exception\RuntimeException;
@@ -60,7 +62,7 @@ abstract class Base extends AlgorithmBase {
                 } // ignore: this edge does not point TO current vertex
             }
             if($pre === NULL){
-                throw new RuntimeException('No edge leading to vertex');
+                throw new UnderflowException('No edge leading to vertex');
             }
         }
         return array_reverse($path);
@@ -123,7 +125,7 @@ abstract class Base extends AlgorithmBase {
             try{
                 $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex,$edges));
             }
-            catch(RuntimeException $ignore){
+            catch(UnderflowException $ignore){
             } // ignore vertices that can not be reached
         }
         return $ret;

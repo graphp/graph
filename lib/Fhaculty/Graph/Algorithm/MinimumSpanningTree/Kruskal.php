@@ -125,7 +125,7 @@ class Kruskal extends Base{
         // definition of spanning tree: number of edges = number of vertices - 1
         // above algorithm does not check isolated edges or may otherwise return multiple connected components => force check
         if (count($returnEdges) !== ( $this->graph->getNumberOfVertices() - 1 ) ){
-            throw new RuntimeException('Graph is not connected');
+            throw new UnexpectedValueException('Graph is not connected');
         }
         
         return $returnEdges;

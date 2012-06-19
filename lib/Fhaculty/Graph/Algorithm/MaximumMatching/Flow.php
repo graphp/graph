@@ -15,7 +15,7 @@ class Flow extends Base {
         
         $alg = new Groups($this->graph);
         if(!$alg->isBipartit()){
-            throw new Exception\RuntimeException('Input graph does not have bipartit groups assigned to each vertex. Consider Using "AlgorithmBipartit::createGraph()" first');
+            throw new Exception\UnexpectedValueException('Input graph does not have bipartit groups assigned to each vertex. Consider Using "AlgorithmBipartit::createGraph()" first');
         }
         
         // create resulting graph with supersource and supersink
@@ -43,7 +43,7 @@ class Flow extends Base {
             } else if($group === $groupB){ // sink
                 $vertex->createEdgeTo($superSink)->setCapacity($maxMatchingValue);
             } else {
-                throw new Exception\RuntimeException('Unknown set: ' + $belongingSet);
+                throw new Exception\LogicException('Should not happen. Unknown set: ' + $belongingSet);
             }
         }
 

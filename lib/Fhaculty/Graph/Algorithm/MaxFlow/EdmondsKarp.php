@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\MaxFlow;
 
+use Fhaculty\Graph\Exception\UnderflowException;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
@@ -116,7 +118,7 @@ class EdmondsKarp extends Base{
             try{
             	$residualEdge = $residualGraph->getEdgeClone($edge,true);
             }
-            catch(Exception $ignore){
+            catch(UnderflowException $ignore){
                 $residualEdge = NULL;
             }
             

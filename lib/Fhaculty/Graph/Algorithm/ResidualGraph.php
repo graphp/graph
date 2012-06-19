@@ -30,7 +30,7 @@ class ResidualGraph extends Base{
     /**
      * create residual graph
      *
-     * @throws Exception if input graph has undirected edges or flow/capacity is not set
+     * @throws UnexpectedValueException if input graph has undirected edges or flow/capacity is not set
      * @return Graph
      * @uses Graph::createGraphCloneEdgeless()
      * @uses Graph::createEdgeClone()

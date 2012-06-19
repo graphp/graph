@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Exception\UnderflowException;
+
 use Fhaculty\Graph\Exception\RuntimeException;
 
 use Fhaculty\Graph\Graph;
@@ -36,7 +38,7 @@ class DetectNegativeCycle extends Base{
             $this->getCycleNegative();
             return true;                                                      // cycle was found => okay
         }
-        catch(RuntimeException $ignore){}                                      // no cycle found
+        catch(UnderflowException $ignore){}                                      // no cycle found
         return false;
     }
     
@@ -44,7 +46,7 @@ class DetectNegativeCycle extends Base{
      * Searches all vertices for the first negative cycle
      *
      * @return Cycle
-     * @throws Exception if there's no negative cycle
+     * @throws UnderflowException if there's no negative cycle
      * @uses AlgorithmSpMooreBellmanFord::getVerticesId()
      */
     public function getCycleNegative(){
@@ -63,7 +65,7 @@ class DetectNegativeCycle extends Base{
     			}
     		}
     	}                                                                       // no more vertices to check => abort
-    	throw new RuntimeException("No negative cycle found");
+    	throw new UnderflowException("No negative cycle found");
     }
     
     /**

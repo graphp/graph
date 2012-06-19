@@ -6,7 +6,7 @@ use Fhaculty\Graph\Cycle;
 
 use Fhaculty\Graph;
 
-class NegativeCycleException extends RuntimeException implements Graph\Exception{
+class NegativeCycleException extends UnexpectedValueException implements Graph\Exception{
 	/**
 	 * instance of the cycle
 	 * 

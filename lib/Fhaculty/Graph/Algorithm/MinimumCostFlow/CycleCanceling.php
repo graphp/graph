@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
 use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Exception\RuntimeException;
@@ -42,7 +44,7 @@ class CycleCanceling extends Base {
         $flow = $algMaxFlow->getFlowMax();
 
         if($flow !== $sumBalance){
-            throw new RuntimeException('(s*,t*)-flow of '.$flow.' has to equal sumBalance '.$sumBalance);
+            throw new UnexpectedValueException('(s*,t*)-flow of '.$flow.' has to equal sumBalance '.$sumBalance);
         }
 
 
@@ -58,7 +60,7 @@ class CycleCanceling extends Base {
             try {
                 $clonedEdges = $alg->getCycleNegative()->getEdges();
             }
-            catch (RuntimeException $ignore) {                                        // no negative cycle found => end algorithm
+            catch (UnderflowException $ignore) {                               // no negative cycle found => end algorithm
                 break;
             }
 

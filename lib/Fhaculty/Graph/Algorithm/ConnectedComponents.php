@@ -28,7 +28,7 @@ class ConnectedComponents extends Base{
      * 
      * @param Vertex $vertex
      * @return Graph
-     * @throws Exception
+     * @throws InvalidArgumentException if given vertex is not from same graph
      * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
      * @uses Graph::createGraphCloneVertices()
      */

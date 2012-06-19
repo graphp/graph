@@ -80,7 +80,7 @@ class SuccessiveShortestPath extends Base {
                 $targetVertex = $this->getVertexSink($sourceVertex);
             }
             catch (UnderflowException $ignore){                                          //if no target is found the network has not enough capacity
-                throw new RuntimeException("The graph has not enough capacity for the minimum-cost flow");
+                throw new UnexpectedValueException("The graph has not enough capacity for the minimum-cost flow");
             }
             
             //calculate shortest path between source- and target-vertex

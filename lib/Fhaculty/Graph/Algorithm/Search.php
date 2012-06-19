@@ -48,7 +48,7 @@ abstract class Search extends Base{
         }else if($this->direction === self::DIRECTION_BOTH){
             return $vertex->getVerticesEdge();
         }else{
-            throw new DomainException('Invalid direction setting');
+            throw new DomainException('Should not happen. Invalid direction setting');
         }
     }
     

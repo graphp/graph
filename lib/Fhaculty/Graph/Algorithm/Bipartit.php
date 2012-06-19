@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
 use Fhaculty\Graph\Exception\RuntimeException;
 
 use Fhaculty\Graph\Graph;
@@ -106,7 +108,7 @@ class Bipartit extends Base{
                 $colors[$vid] = $nextColor;
                 $this->checkVertex($nextVertex,$nextColor, $colors);
             }else if($colors[$vid] !== $nextColor){
-                throw new RuntimeException('Graph is not bipartit');
+                throw new UnexpectedValueException('Graph is not bipartit');
             }
         }
     }

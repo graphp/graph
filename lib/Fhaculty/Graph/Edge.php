@@ -60,8 +60,8 @@ abstract class Edge extends Layoutable{
      * @param int               $by       criterium to sort by. see Edge::ORDER_WEIGHT, etc.
      * @param boolean           $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Edge
-     * @throws DomainException if criterium is unknown
-     * @throws InvalidArgumentException if no edges exist
+     * @throws InvalidArgumentException if criterium is unknown
+     * @throws UnderflowException if no edges exist
      * @uses Edge::getWeight()
      */
     public static function getFirst($edges,$by=self::ORDER_FIFO,$desc=false){
@@ -90,7 +90,7 @@ abstract class Edge extends Layoutable{
             }else if($by === self::ORDER_FLOW){
                 $now = $edge->getFlow();
             }else{
-                throw new Exception\DomainException('Invalid order flag "'.$by.'"');
+                throw new Exception\InvalidArgumentException('Invalid order flag "'.$by.'"');
             }
             if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
                 $ret = $edge;
@@ -98,7 +98,7 @@ abstract class Edge extends Layoutable{
             }
         }
         if($ret === NULL){
-            throw new Exception\InvalidArgumentException('No edge found');
+            throw new Exception\UnderflowException('No edge found');
         }
         return $ret;
     }
@@ -137,7 +137,7 @@ abstract class Edge extends Layoutable{
             }else if($by === self::ORDER_FLOW){
             	$now = $edge->getFlow();
             }else{
-                throw new Exception\DomainException('Invalid sort criterium');
+                throw new Exception\InvalidArgumentException('Invalid sort criterium');
             }
             $temp[$eid] = $now;
         }
@@ -276,7 +276,7 @@ abstract class Edge extends Layoutable{
      */
     public function setWeight($weight){
         if($weight !== NULL && !is_float($weight) && !is_int($weight)){
-            throw new Exception\DomainException('Invalid weight given - must be numeric or NULL');
+            throw new Exception\InvalidArgumentException('Invalid weight given - must be numeric or NULL');
         }
         $this->weight = $weight;
         return $this;
@@ -314,10 +314,10 @@ abstract class Edge extends Layoutable{
     public function setCapacity($capacity){
         if($capacity !== NULL){
             if(!is_float($capacity) && !is_int($capacity)){
-                throw new Exception\DomainException('Invalid capacity given - must be numeric');
+                throw new Exception\InvalidArgumentException('Invalid capacity given - must be numeric');
             }
             if($capacity < 0){
-                throw new Exception\DomainException('Capacity must not be negative');
+                throw new Exception\InvalidArgumentException('Capacity must not be negative');
             }
             if($this->flow !== NULL && $this->flow > $capacity){
                 throw new Exception\InvalidArgumentException('Current flow of '.$this->flow.' exceeds new capacity');
@@ -346,13 +346,13 @@ abstract class Edge extends Layoutable{
     public function setFlow($flow){
         if($flow !== NULL){
             if(!is_float($flow) && !is_int($flow)){
-                throw new Exception\DomainException('Invalid flow given - must be numeric');
+                throw new Exception\InvalidArgumentException('Invalid flow given - must be numeric');
             }
             if($flow < 0){
-                throw new Exception\DomainException('Flow must not be negative');
+                throw new Exception\InvalidArgumentException('Flow must not be negative');
             }
             if($this->capacity !== NULL && $flow > $this->capacity){
-                throw new Exception\InvalidArgumentException('New flow exceeds maximum capacity');
+                throw new Exception\RangeException('New flow exceeds maximum capacity');
             }
         }
         $this->flow = $flow;

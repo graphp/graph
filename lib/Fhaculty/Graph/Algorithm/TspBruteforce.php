@@ -111,7 +111,7 @@ class TspBruteforce extends Tsp{
                   );
         
         if($result === NULL){
-            throw new RuntimeException('No resulting solution for TSP found');
+            throw new UnexpectedValueException('No resulting solution for TSP found');
         }
         
         return $result;

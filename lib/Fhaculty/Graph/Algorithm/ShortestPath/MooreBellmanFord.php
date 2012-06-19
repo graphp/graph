@@ -75,7 +75,7 @@ class MooreBellmanFord extends Base{
      * get negative cycle
      * 
      * @return Cycle
-     * @throws Exception if there's no negative cycle
+     * @throws UnderflowException if there's no negative cycle
      */
     public function getCycleNegative(){
         try{
@@ -84,6 +84,6 @@ class MooreBellmanFord extends Base{
         catch(NegativeCycleException $e){
             return $e->getCycle();
         }
-        throw new RuntimeException('No cycle found');
+        throw new UnderflowException('No cycle found');
     }
 }

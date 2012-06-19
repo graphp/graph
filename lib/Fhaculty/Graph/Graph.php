@@ -2,6 +2,12 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+
+use Fhaculty\Graph\Exception\OverflowException;
+
+use Fhaculty\Graph\Exception\UnderflowException;
+
 use Fhaculty\Graph\Exception\RuntimeException;
 
 use Fhaculty\Graph\Algorithm\ConnectedComponents as AlgorithmConnectedComponents;
@@ -30,7 +36,7 @@ class Graph extends Layoutable{
      * @param int|NULL $id              new vertex ID to use (defaults to NULL: use next free numeric ID)
      * @param boolean  $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
      * @return Vertex (chainable)
-     * @throws DomainException if given vertex $id is invalid
+     * @throws InvalidArgumentException if given vertex $id is invalid
      * @throws RuntimeException if given vertex $id already exists and $returnDuplicate is not set
      * @uses Vertex::getId()
      */
@@ -38,13 +44,13 @@ class Graph extends Layoutable{
         if($id === NULL){    // no ID given
             $id = $this->getNextId();
         }else if(!is_int($id) && !is_string($id)){
-            throw new Exception\DomainException('Vertex ID has to be of type integer or string');
+            throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
         }
         if(isset($this->vertices[$id])){
             if($returnDuplicate){
                 return $this->vertices[$id];
             }
-            throw new Exception\RuntimeException('ID must be unique');
+            throw new RuntimeException('ID must be unique');
         }
         $vertex = new Vertex($id,$this);
         $this->vertices[$id] = $vertex;
@@ -61,7 +67,7 @@ class Graph extends Layoutable{
     public function createVertexClone(Vertex $originalVertex){
         $id = $originalVertex->getId();
         if(isset($this->vertices[$id])){
-            throw new Exception\RuntimeException('Id of cloned vertex already exists');
+            throw new RuntimeException('Id of cloned vertex already exists');
         }
         $newVertex = new Vertex($id,$this);
         // TODO: properly set attributes of vertex
@@ -242,7 +248,7 @@ class Graph extends Layoutable{
      * 
      * @param int|string $id identifier of Vertex
      * @return Vertex
-     * @throws OutOfBoundsException if given vertex ID does not exist
+     * @throws Exception\OutOfBoundsException if given vertex ID does not exist
      */
     public function getVertex($id){
         if( ! isset($this->vertices[$id]) ){
@@ -260,7 +266,7 @@ class Graph extends Layoutable{
      * vertex from the list of known vertices.
      *
      * @return Vertex first vertex found in this graph
-     * @throws UnderflowException if Graph has no vertices
+     * @throws Exception\UnderflowException if Graph has no vertices
      * @see Vertex::getFirst() if you need to apply ordering first
      */
     public function getVertexFirst(){
@@ -302,8 +308,8 @@ class Graph extends Layoutable{
      * get degree for k-regular-graph (only if each vertex has the same degree)
      * 
      * @return int
-     * @throws UnderflowException if graph is empty
-     * @throws RuntimeException if graph is not regular (i.e. vertex degrees are not equal)
+     * @throws Exception\UnderflowException if graph is empty
+     * @throws Exception\RuntimeException if graph is not regular (i.e. vertex degrees are not equal)
      * @uses Vertex::getDegreeIn()
      * @uses Vertex::getDegreeOut()
      */
@@ -701,7 +707,7 @@ class Graph extends Layoutable{
      * @param boolean $inverse
      * @return Edge
      * @throws UnderflowException if no edge was found
-     * @thrwos OverflowException if multiple edges match
+     * @throws OverflowException if multiple edges match
      */
     public function getEdgeClone(Edge $edge, $inverse=false){
     	// Extract endpoints from edge
@@ -727,9 +733,9 @@ class Graph extends Layoutable{
     
     	// Check for parallel edges
     	if(!$residualEdgeArray){
-    	    throw new Exception\UnderflowException('No original edges for given cloned edge found');
+    	    throw new UnderflowException('No original edges for given cloned edge found');
     	}else if(count($residualEdgeArray) !== 1){
-    		throw new Exception\OverflowException('More than one cloned edge? Parallel edges (multigraph) not supported');
+    		throw new OverflowException('More than one cloned edge? Parallel edges (multigraph) not supported');
     	}
     
     	return $residualEdgeArray[0];

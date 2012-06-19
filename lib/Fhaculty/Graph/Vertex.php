@@ -94,7 +94,7 @@ class Vertex extends Layoutable{
             }else if($by === self::ORDER_OUTDEGREE){
                 $now = $vertex->getDegreeOut();
             }else{
-                throw new Exception\DomainException('Invalid order flag "'.$by.'"');
+                throw new Exception\InvalidArgumentException('Invalid order flag "'.$by.'"');
             }
             if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
                 $ret = $vertex;
@@ -102,7 +102,7 @@ class Vertex extends Layoutable{
             }
         }
         if($ret === NULL){
-            throw new Exception\InvalidArgumentException('No vertex found');
+            throw new Exception\UnderflowException('No vertex found');
         }
         return $ret;
     }
@@ -147,7 +147,7 @@ class Vertex extends Layoutable{
             }else if($by === self::ORDER_OUTDEGREE){
                 $now = $vertex->getDegreeOut();
             }else{
-                throw new Exception\DomainException('Invalid order flag "'.$by.'"');
+                throw new Exception\InvalidArgumentException('Invalid order flag "'.$by.'"');
             }
             if($desc && $now !== NULL){
                 $now = -$now;
@@ -211,7 +211,7 @@ class Vertex extends Layoutable{
     
     public function setBalance($balance){
         if($balance !== NULL && !is_float($balance) && !is_int($balance)){
-            throw new Exception\DomainException('Invalid balance given - must be numeric');
+            throw new Exception\InvalidArgumentException('Invalid balance given - must be numeric');
         }
         $this->balance = $balance;
         return $this;
@@ -256,11 +256,11 @@ class Vertex extends Layoutable{
      * 
      * @param int $group
      * @return Vertex $this (chainable)
-     * @throws DomainException if group is not numeric
+     * @throws InvalidArgumentException if group is not numeric
      */
     public function setGroup($group){
         if(!is_int($group)){
-            throw new Exception\DomainException('Invalid group number');
+            throw new Exception\InvalidArgumentException('Invalid group number');
         }
         $this->group = $group;
         return $this;
