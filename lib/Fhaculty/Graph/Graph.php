@@ -701,32 +701,39 @@ class Graph extends Layoutable{
     }
     
     /**
-     * Extracts (optional: inversed) edge from this graph
+     * Extracts edge from this graph
      *
      * @param Edge $edge
-     * @param boolean $inverse
      * @return Edge
      * @throws UnderflowException if no edge was found
      * @throws OverflowException if multiple edges match
      */
-    public function getEdgeClone(Edge $edge, $inverse=false){
+    public function getEdgeClone(Edge $edge){
     	// Extract endpoints from edge
-    	$originalStartVertexArray = $edge->getVerticesStart();
-    	$originalStartVertex = array_shift($originalStartVertexArray);
+    	$vertices = $edge->getVertices();
+    	
+    	return $this->getEdgeCloneInternal($edge,$vertices[0],$vertices[1]);    	
+    }
     
-    	$originalTargetVertexArray = $edge->getVerticesTarget();
-    	$originalTargetVertex = array_shift($originalTargetVertexArray);
+    /**
+     * Extracts inverted edge from this graph
+     *
+     * @param Edge $edge
+     * @return Edge
+     * @throws UnderflowException if no edge was found
+     * @throws OverflowException if multiple edges match
+     */
+    public function getEdgeCloneInverted(Edge $edge){
+    	// Extract endpoints from edge
+    	$vertices = $edge->getVertices();
+    	
+    	return $this->getEdgeCloneInternal($edge,$vertices[1],$vertices[0]);
+    }
     
-    	// swap them if inverse wanted
-    	if($inverse){
-    		$temp = $originalStartVertex;
-    		$originalStartVertex = $originalTargetVertex;
-    		$originalTargetVertex = $temp;
-    	}
-    
+    private function getEdgeCloneInternal(Edge $edge,Vertex $startVertex,Vertex $targetVertex){
     	// Get original vertices from resultgraph
-    	$residualGraphEdgeStartVertex = $this->getVertex($originalStartVertex->getId());
-    	$residualGraphEdgeTargetVertex = $this->getVertex($originalTargetVertex->getId());
+    	$residualGraphEdgeStartVertex = $this->getVertex($startVertex->getId());
+    	$residualGraphEdgeTargetVertex = $this->getVertex($targetVertex->getId());
     
     	// Now get the edge
     	$residualEdgeArray = $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);

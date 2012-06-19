@@ -116,7 +116,7 @@ class EdmondsKarp extends Base{
         foreach ($originalGraphEdgesArray as $edge){
             // Inverse the edge
             try{
-            	$residualEdge = $residualGraph->getEdgeClone($edge,true);
+            	$residualEdge = $residualGraph->getEdgeCloneInverted($edge);
             }
             catch(UnderflowException $ignore){
                 $residualEdge = NULL;

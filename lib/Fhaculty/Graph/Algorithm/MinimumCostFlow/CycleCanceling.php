@@ -73,7 +73,7 @@ class CycleCanceling extends Base {
             	    $edge = $resultGraph->getEdgeClone($clonedEdge);            //get edge from clone
             	    $edge->addFlow( $newFlow );                                 //add flow
                 } catch(UnderflowException $ignor) {                           //if the edge doesn't exists use the residual edge
-                    $edge = $resultGraph->getEdgeClone($clonedEdge, true);
+                    $edge = $resultGraph->getEdgeCloneInverted($clonedEdge);
                     $edge->addFlow( - $newFlow);                                //remove flow
                 }
             }
