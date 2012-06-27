@@ -54,6 +54,14 @@ class Vertex extends Layoutable{
     const ORDER_RANDOM = 5;
     
     /**
+     * order by vertex group
+     * 
+     * @var int
+     * @see Vertex::getGroup()
+     */
+    const ORDER_GROUP = 6;
+    
+    /**
      * get first vertex (optionally ordered by given criterium $by) from given array of vertices
      *
      * @param array[Vertex]|Graph $vertices array of vertices to scan for 'first' vertex
@@ -67,6 +75,7 @@ class Vertex extends Layoutable{
      * @uses Vertex::getDegree()
      * @uses Vertex::getDegreeIn()
      * @uses Vertex::getDegreeOut()
+     * @uses Vertex::getGroup()
      */
     public static function getFirst($vertices,$by=self::ORDER_FIFO,$desc=false){
         if($vertices instanceof Graph){
@@ -93,6 +102,8 @@ class Vertex extends Layoutable{
                 $now = $vertex->getDegreeIn();
             }else if($by === self::ORDER_OUTDEGREE){
                 $now = $vertex->getDegreeOut();
+            }else if($by === self::ORDER_GROUP){
+                $now = $vertex->getGroup();
             }else{
                 throw new Exception\InvalidArgumentException('Invalid order flag "'.$by.'"');
             }
@@ -121,6 +132,7 @@ class Vertex extends Layoutable{
      * @uses Vertex::getDegree()
      * @uses Vertex::getDegreeIn()
      * @uses Vertex::getDegreeOut()
+     * @uses Vertex::getGroup()
      */
     public static function getAll($vertices,$by=self::ORDER_FIFO,$desc=false){
         if($vertices instanceof Graph){
@@ -146,6 +158,8 @@ class Vertex extends Layoutable{
                 $now = $vertex->getDegreeIn();
             }else if($by === self::ORDER_OUTDEGREE){
                 $now = $vertex->getDegreeOut();
+            }else if($by === self::ORDER_GROUP){
+                $now = $vertex->getGroup();
             }else{
                 throw new Exception\InvalidArgumentException('Invalid order flag "'.$by.'"');
             }
