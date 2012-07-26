@@ -41,12 +41,11 @@ class CycleCanceling extends Base {
 
         // calculate (s*,t*)-flow
         $algMaxFlow = new MaxFlowEdmondsKarp($superSource,$superSink);
-        $flow = $algMaxFlow->getFlowMax();
+        $flowMax = $algMaxFlow->getFlowMax();
 
-        if($flow !== $sumBalance){
-            throw new UnexpectedValueException('(s*,t*)-flow of '.$flow.' has to equal sumBalance '.$sumBalance);
+        if($flowMax !== $sumBalance){
+            throw new UnexpectedValueException('Network does not support required flow of '.$sumBalance.' (maximum possible flow limited to '.$flowMax.')');
         }
-
 
         $resultGraph = $algMaxFlow->createGraph();
 
