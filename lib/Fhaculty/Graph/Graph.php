@@ -593,11 +593,11 @@ class Graph extends Layoutable{
      * 
      * a flow is considered balanced if each edge's current flow does not exceed its
      * maximum capacity (which is always guaranteed due to the implementation
-     * of Edge::setFlow()) and each vertices' flow (i.e. inflow-outflow) equals
+     * of Edge::setFlow()) and each vertices' flow (i.e. outflow-inflow) equals
      * its balance.
      * 
-     * checking whether the flow is balanced is not to be confused with checking
-     * whether the graph is balanced (see Graph::isBalanced() instead) 
+     * checking whether the FLOW is balanced is not to be confused with checking
+     * whether the GRAPH is balanced (see Graph::isBalanced() instead) 
      * 
      * @return boolean
      * @see Graph::isBalanced() if you merely want to check indegree=outdegree
@@ -606,7 +606,7 @@ class Graph extends Layoutable{
      */
     public function isBalancedFlow(){
         // no need to check for each edge: flow <= capacity (setters already check that)
-        // check for each vertex: inflow-outflow = balance
+        // check for each vertex: outflow-inflow = balance
         foreach($this->vertices as $vertex){
             if($vertex->getFlow() === $vertex->getBalance()){
                 return false;
