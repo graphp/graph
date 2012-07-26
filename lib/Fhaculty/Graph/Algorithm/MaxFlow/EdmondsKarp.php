@@ -114,24 +114,16 @@ class EdmondsKarp extends Base{
         // that has an inversed edge in the original graph:
         // Insert the inversed residual edge into the new graph
         foreach ($originalGraphEdgesArray as $edge){
-            // Inverse the edge
+            // get capacity of original edge
             try{
-            	$residualEdge = $residualGraph->getEdgeCloneInverted($edge);
+            	$capacity = $residualGraph->getEdgeCloneInverted($edge)->getCapacity();
             }
             catch(UnderflowException $ignore){
-                $residualEdge = NULL;
+                $capacity = 0;
             }
             
             // Add inversed edge to return graph
-            $newFlowEdge = $resultGraph->createEdgeClone($edge);
-
-            // Set flow of the edge
-            if($residualEdge != NULL){
-                $newFlowEdge->setFlow($residualEdge->getCapacity());
-            }
-//             else{
-//                 $newFlowEdge->setWeight(0);
-//             }
+            $resultGraph->createEdgeClone($edge)->setFlow($capacity);
         }
         return $resultGraph;
     }
