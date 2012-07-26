@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 
 use Fhaculty\Graph\Exception\OverflowException;
@@ -309,18 +311,17 @@ class Graph extends Layoutable{
      * 
      * @return int
      * @throws Exception\UnderflowException if graph is empty
-     * @throws Exception\RuntimeException if graph is not regular (i.e. vertex degrees are not equal)
-     * @uses Vertex::getDegreeIn()
-     * @uses Vertex::getDegreeOut()
+     * @throws UnexpectedValueException if graph is not regular (i.e. vertex degrees are not equal)
+     * @uses Vertex::getDegree()
      */
     public function getDegree(){
-        $degree = $this->getVertexFirst()->getDegreeIn(); // get initial degree of any start vertex to compare others to
+        $degree = $this->getVertexFirst()->getDegree(); // get initial degree of any start vertex to compare others to
         
         foreach($this->vertices as $vertex){
-            $i = $vertex->getDegreeIn();
+            $i = $vertex->getDegree();
             
-            if($i !== $degree || $i !== $vertex->getDegreeOut()){ // degree same (and for digraphs: indegree=outdegree)
-                throw new Exception\RuntimeException('Graph is not k-regular');
+            if($i !== $degree){
+                throw new UnexpectedValueException('Graph is not k-regular (vertex degrees differ)');
             }
         }
         
@@ -365,7 +366,7 @@ class Graph extends Layoutable{
             $this->getDegree();
             return true;
         }
-        catch(RuntimeException $ignore){ }
+        catch(UnexpectedValueException $ignore){ }
         return false;
     }
     
