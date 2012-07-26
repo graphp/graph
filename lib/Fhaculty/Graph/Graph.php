@@ -39,7 +39,7 @@ class Graph extends Layoutable{
      * @param boolean  $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
      * @return Vertex (chainable)
      * @throws InvalidArgumentException if given vertex $id is invalid
-     * @throws RuntimeException if given vertex $id already exists and $returnDuplicate is not set
+     * @throws OverflowException if given vertex $id already exists and $returnDuplicate is not set
      * @uses Vertex::getId()
      */
     public function createVertex($id=NULL,$returnDuplicate=false){
@@ -52,7 +52,7 @@ class Graph extends Layoutable{
             if($returnDuplicate){
                 return $this->vertices[$id];
             }
-            throw new RuntimeException('ID must be unique');
+            throw new OverflowException('ID must be unique');
         }
         $vertex = new Vertex($id,$this);
         $this->vertices[$id] = $vertex;
