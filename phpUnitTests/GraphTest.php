@@ -1,5 +1,9 @@
 <?php
 
+use Fhaculty\Graph\Vertex;
+
+use Fhaculty\Graph\Exception\OverflowException;
+
 use Fhaculty\Graph\Graph;
 
 class GraphTest extends PHPUnit_Framework_TestCase
@@ -16,8 +20,33 @@ class GraphTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(NULL,$this->graph->getWeightMin());
     }
     
+    /**
+     * check to make sure we can actually create vertices with automatic IDs 
+     */
     public function testCanCreateVertex(){
-        $this->graph->createVertex(0);
+        $graph = new Graph();
+        $vertex = $graph->createVertex();
+        $this->assertInstanceOf('\Fhaculty\Graph\Vertex',$vertex);
+    }
+    
+    /**
+     * check to make sure we can actually create vertices with automatic IDs 
+     */
+    public function testCanCreateVertexId(){
+        $graph = new Graph();
+        $vertex = $graph->createVertex(11);
+        $this->assertInstanceOf('\Fhaculty\Graph\Vertex',$vertex);
+        $this->assertEquals(11,$vertex->getId());
+    }
+    
+    /**
+     * fail to create two vertices with same ID
+     * @expectedException OverflowException
+     */
+    public function testFailDuplicateVertex(){
+        $graph = new Graph();
+        $graph->createVertex(33);
+        $graph->createVertex(33);
     }
 
 // commented out because expecting base Exception is not allowed
