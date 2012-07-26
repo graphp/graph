@@ -9,16 +9,17 @@ class Walk{
      * 
      * @var array[Edge]
      */
-    private $edges;
+    protected $edges;
     
     /**
      * 
      * @var array[Vertex]
      */
-    private $vertices;
+    protected $vertices;
     
-    private function __construct(){
-        // ...
+    protected function __construct(array $vertices, array $edges){
+        $this->vertices = $vertices;
+        $this->edges    = $edges;
     }
     
     /**
