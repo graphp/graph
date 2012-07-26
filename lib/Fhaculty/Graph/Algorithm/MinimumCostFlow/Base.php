@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Exception\UnderflowException;
+
 use Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
