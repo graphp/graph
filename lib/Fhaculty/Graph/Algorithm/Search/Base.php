@@ -1,13 +1,15 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\Search;
+
+use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
 use Fhaculty\Graph\Exception\DomainException;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Vertex;
 
-abstract class Search extends Base{
+abstract class Base extends AlgorithmBase{
     /**
      *
      * @var Vertex
