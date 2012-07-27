@@ -43,7 +43,7 @@ class ConnectedComponents extends Base{
     
     private function createSearch(Vertex $vertex){
         $alg = new SearchBreadthFirst($vertex);
-        return $alg->setDirection(Search::DIRECTION_BOTH); // follow into both directions (loosely connected)
+        return $alg->setDirection(SearchBreadthFirst::DIRECTION_BOTH); // follow into both directions (loosely connected)
     }
     
     /**
