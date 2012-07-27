@@ -26,6 +26,10 @@ class Kruskal extends Base{
     	return $this->graph->createGraphCloneEdges($this->getEdges());         //Copy Graph
     }
     
+    protected function getGraph() {
+        return $this->graph;
+    }
+    
     /**
      *
      * @return array[Edge]
