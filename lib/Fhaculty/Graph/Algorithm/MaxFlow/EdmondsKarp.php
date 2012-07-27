@@ -9,7 +9,7 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Algorithm\Base;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
-use Fhaculty\Graph\Algorithm\SearchBreadthFirst;
+use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
 use Fhaculty\Graph\Exception;
 
 class EdmondsKarp extends Base{
