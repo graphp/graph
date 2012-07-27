@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
+use Fhaculty\Graph\EdgeUndirectedId;
+
 use Fhaculty\Graph\Vertex;
 use \SplPriorityQueue;
 
@@ -22,60 +24,61 @@ class Prim extends Base{
     public function getEdges(){
         $edgeQueue = new SplPriorityQueue();
         
-        $startVertexId = $this->startVertex->getId();                            // set start vertex id
+        $startVertexId = $this->startVertex->getId();                           // set start vertex id
         
         // Initialize algorithm 
         
-        $markInserted = array($startVertexId => true);                // Color starting vertex
+        $markInserted = array($startVertexId => true);                          // Color starting vertex
                     
-        foreach ($this->startVertex->getEdges() as $currentEdge) {                // Add all edges from startvertex
-            $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());        // Add edges to priority queue with inverted weights (priority queue has high values at the front)
+        foreach ($this->startVertex->getEdges() as $currentEdge) {              // Add all edges from startvertex
+            $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());       // Add edges to priority queue with inverted weights (priority queue has high values at the front)
         }
+        
+        $returnEdges = array();
         // END Initialize algorithm
 
 
         // BEGIN algorithm
         
-        $returnEdges = array();
-        
         $vertices = $this->startVertex->getGraph()->getVertices();
-        unset($vertices[$startVertexId]);                                      // skip the first entry to run only n-1 times 
+        unset($vertices[$startVertexId]);                                       // skip the first entry to run only n-1 times 
         
-         foreach ($vertices as $value) {                                            // iterate n times over edges form know nodes
-            $cheapestEdge = $edgeQueue->extract();                                // Get next cheapest edge
-
-            // BEGIN Check if edge is is: [visiteted]->[unvisited]
-            $cheapestEdgeIsOk = false;                                            // 
-            while($cheapestEdgeIsOk == false) {
-                foreach ($cheapestEdge->getVerticesTarget() as $currentTarget){    // run over both vertices
-
-                    $cheapestEdgeIsOkOld = $cheapestEdgeIsOk;                    
-
-                    $cheapestEdgeIsOk = $cheapestEdgeIsOk ? true : !isset($markInserted[$currentTarget->getId()]); //check if already visited, if not visit
-
-                    if($cheapestEdgeIsOkOld != $cheapestEdgeIsOk){                //get unvisted vertex                
-                        $newTargetVertex = $currentTarget;
-                    }
+        foreach ($vertices as $notUsed) {                                       // iterate n-1 times over edges form know nodes
+            
+            do {
+                try {
+                    $cheapestEdge = $edgeQueue->extract();                      // Get next cheapest edge
                 }
-                if($cheapestEdgeIsOk == false){                                    // check if cheapest edge is false
-                    $cheapestEdge = $edgeQueue->extract();                        //if edge is not ok, get a new edge from the queue
+                catch (Exception $e) {
+                    throw new Exception("Graph has more as one component");
                 }
-            }
-            // END Check if edge is is: [visiteted]->[unvisited]
-
+                
+                //Check if edge is between unmarked and marked edge
+                
+                $startVertices = $cheapestEdge->getVerticesStart();
+                $vertexA = $startVertices[0];
+                $vertexB = $cheapestEdge->getVertexToFrom($vertexA);
+                
+            } while ( $markInserted[$vertexA] XOR $markInserted[$vertexB]);     //Edge is between marked and unmared vertex
             
             // BEGIN Cheapest Edge found, add new vertex and edge to returnGraph
             
-            $markInserted[$newTargetVertex->getId()] = true;
+            if ($markInserted[$vertexA]) {
+                $endVertex = $vertexB;
+            }
+            else {
+                $endVertex = $vertexA;
+            }
+            
+            $markInserted[$endVertex->getId()] = true;
                 
             $returnEdges []= $cheapestEdge;
 
             // BEGIN get unvisited vertex of the edge and add edges from new vertex
-            if($newTargetVertex->getId() != $startVertexId){
                         
-                foreach ($newTargetVertex->getEdges() as $currentEdge) {        // Add all edges from $currentVertex to priority queue
-                    $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
-                }
+            foreach ($endVertex->getEdges() as $currentEdge) {                  // Add all edges from $currentVertex to priority queue
+                //TODO maybe it would be better to check if the reachable vertex of $currentEdge si allready marked (smaller Queue vs. more if's)
+                $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
             }
             // END get unvisited vertex of the edge and add edges from new vertex
         }
