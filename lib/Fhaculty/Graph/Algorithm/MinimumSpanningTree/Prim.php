@@ -22,28 +22,21 @@ class Prim extends Base{
      * @return array[Edge]
      */
     public function getEdges(){
-        $edgeQueue = new SplPriorityQueue();
-        
-        $startVertexId = $this->startVertex->getId();                           // set start vertex id
-        
         // Initialize algorithm 
+        $edgeQueue = new SplPriorityQueue();
+        $vertexCurrent = $this->startVertex;
         
-        $markInserted = array($startVertexId => true);                          // Color starting vertex
-                    
-        foreach ($this->startVertex->getEdges() as $currentEdge) {              // Add all edges from startvertex
-            $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());       // Add edges to priority queue with inverted weights (priority queue has high values at the front)
-        }
-        
+        $markInserted = array();
         $returnEdges = array();
-        // END Initialize algorithm
 
-
-        // BEGIN algorithm
-        
-        $vertices = $this->startVertex->getGraph()->getVertices();
-        unset($vertices[$startVertexId]);                                       // skip the first entry to run only n-1 times 
-        
-        foreach ($vertices as $notUsed) {                                       // iterate n-1 times over edges form know nodes
+        for($i=0,$n=$this->startVertex->getGraph()->getNumberOfVertices()-1;$i<$n;++$i){ // iterate n-1 times (per definition, resulting MST MUST have n-1 edges)
+            $markInserted[$vertexCurrent->getId()] = true;
+            
+            // get unvisited vertex of the edge and add edges from new vertex
+            foreach ($vertexCurrent->getEdges() as $currentEdge) {            // Add all edges from $currentVertex to priority queue
+            	//TODO maybe it would be better to check if the reachable vertex of $currentEdge si allready marked (smaller Queue vs. more if's)
+            	$edgeQueue->insert($currentEdge, -$currentEdge->getWeight());   // Add edges to priority queue with inverted weights (priority queue has high values at the front)
+            }
             
             do {
                 try {
@@ -59,28 +52,18 @@ class Prim extends Base{
                 $vertexA = $startVertices[0];
                 $vertexB = $cheapestEdge->getVertexToFrom($vertexA);
                 
-            } while ( $markInserted[$vertexA] XOR $markInserted[$vertexB]);     //Edge is between marked and unmared vertex
+            } while ( isset($markInserted[$vertexA->getId()]) XOR isset($markInserted[$vertexB->getId()]));     //Edge is between marked and unmared vertex
             
-            // BEGIN Cheapest Edge found, add new vertex and edge to returnGraph
+            // Cheapest Edge found, add edge to returnGraph
+            $returnEdges []= $cheapestEdge;
             
+            // set current vertex for next iteration in order to add its edges to queue
             if ($markInserted[$vertexA]) {
-                $endVertex = $vertexB;
+                $vertexCurrent = $vertexB;
             }
             else {
-                $endVertex = $vertexA;
+                $vertexCurrent = $vertexA;
             }
-            
-            $markInserted[$endVertex->getId()] = true;
-                
-            $returnEdges []= $cheapestEdge;
-
-            // BEGIN get unvisited vertex of the edge and add edges from new vertex
-                        
-            foreach ($endVertex->getEdges() as $currentEdge) {                  // Add all edges from $currentVertex to priority queue
-                //TODO maybe it would be better to check if the reachable vertex of $currentEdge si allready marked (smaller Queue vs. more if's)
-                $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
-            }
-            // END get unvisited vertex of the edge and add edges from new vertex
         }
         // END algorithm
         return $returnEdges;
