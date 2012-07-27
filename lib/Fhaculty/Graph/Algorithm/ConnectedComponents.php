@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
+
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 
 use Fhaculty\Graph\Graph;

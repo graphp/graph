@@ -16,14 +16,13 @@ use Fhaculty\Graph\Edge;
 use Fhaculty\Graph\EdgeDirected;
 use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
-use Fhaculty\Graph\Algorithm\SearchBreadthFirst;
+use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
 
 class SuccessiveShortestPath extends Base {
     /**
      * @uses Vertex::getFlow()
      * @uses Graph::createGraphClone()
      * @uses AlgorithmResidualGraph::createGraph()
-     * @uses AlgorithmSearchBreadthFirst::getVertices()
      * @uses AlgorithmSpMooreBellmanFord::getEdgesTo(Vertex $targetVertex)
      * 
      * @see AlgorithmMCF::createGraph()
@@ -162,6 +161,7 @@ class SuccessiveShortestPath extends Base {
      * @throws Exception if there is no reachable sink vertex
      * 
      * @return Vertex a sink-vertex that is reachable from the source
+     * @uses BreadthFirst::getVertices()
      */
     private function getVertexSink(Vertex $source){
         $algBFS = new SearchBreadthFirst($source);                             //search for reachable Vertices
