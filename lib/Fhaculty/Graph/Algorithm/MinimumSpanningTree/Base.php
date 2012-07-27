@@ -14,8 +14,10 @@ abstract class Base extends AlgorithmBase {
      * @uses Graph::createGraphCloneEdges()
      */
     public function createGraph(){
-        return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());                //Copy Graph
+        return $this->getGraph()->createGraphCloneEdges($this->getEdges());                //Copy Graph
     }
+    
+    abstract protected function getGraph();
     
     /**
      * get all edges on minimum spanning tree
