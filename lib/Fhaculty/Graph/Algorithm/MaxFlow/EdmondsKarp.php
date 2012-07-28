@@ -61,15 +61,21 @@ class EdmondsKarp extends Base{
         
         $i = 0;
         do{
-            $pathFlow = $this->getGraphShortestPathFlow($currentGraph);         // Get shortest path if NULL-> Done
+            $startVertex = $currentGraph->getVertex($this->startVertex->getId());
+            $destinationVertex = $currentGraph->getVertex($this->destinationVertex->getId());
+            
+            // 1. Search _shortest_ (number of hops and cheapest) path from s -> t
+            $breadthSearchAlg = new SearchBreadthFirst($startVertex);
+            $pathFlow = $breadthSearchAlg->getGraphPathTo($destinationVertex);  // Get shortest path if NULL-> Done
 
-            if($pathFlow){                                                        // If path exists add the new flow to graph
-                $edgeFromFlowPath = Edge::getFirst($pathFlow->getEdges());
-                $newFlowValue = $edgeFromFlowPath->getFlow();
+            if($pathFlow){                                                        // If path exists add the new flow to graph                
+                // 2. get max flow from path
+                $maxFlowValue = Edge::getFirst($pathFlow->getEdges(),Edge::ORDER_CAPACITY)->getCapacity();
 
+                // 3. adjust flow along path
                 foreach ($pathFlow->getEdges() as $edge){
                     $originalEdge = $currentGraph->getEdgeClone($edge);
-                    $originalEdge->setFlow($originalEdge->getFlow() + $newFlowValue);
+                    $originalEdge->setFlow($originalEdge->getFlow() + $maxFlowValue);
                 }
 
                 $residualAlgorithm = new ResidualGraph($currentGraph);
@@ -126,42 +132,5 @@ class EdmondsKarp extends Base{
             $resultGraph->createEdgeClone($edge)->setFlow($capacity);
         }
         return $resultGraph;
-    }
-
-    /**
-     * Get the shortest path flow (by count of edges)
-     *
-     * @param Graph $currentGraph
-     * @return Graph if path exists OR NULL
-     */
-    private function getGraphShortestPathFlow(Graph $currentGraph)
-    {
-        $startVertex = $currentGraph->getVertex($this->startVertex->getId());
-        $destinationVertex = $currentGraph->getVertex($this->destinationVertex->getId());
-
-        // 1. Search _shortest_ (number of hops and cheapest) path from s -> t
-        $breadthSearchAlg = new SearchBreadthFirst($startVertex);
-        $path = $breadthSearchAlg->getGraphPathTo($destinationVertex);
-
-        if($path === NULL){
-            //no path found return null
-            return NULL;
-        }
-
-        // 2. get max flow from path
-        $bottleNeckEdge = Edge::getFirst($path->getEdges(),Edge::ORDER_CAPACITY);
-        $maxFlowValue = $bottleNeckEdge->getCapacity();
-
-        if($maxFlowValue == 0){
-            //echo "stop flow value is 0\n";
-            return null;
-        }
-
-        // 3. create graph with shortest path and max flow as edge values
-        foreach($path->getEdges() as $edge){
-            $edge->setFlow($maxFlowValue);
-        }
-
-        return $path;
     }
 }
