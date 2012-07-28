@@ -50,7 +50,7 @@ class Prim extends Base{
                 }
                 catch (Exception $e) {
                     return $returnEdges;
-                    throw new UnexpectedValueException("Graph has more as one component");
+                    throw new UnexpectedValueException('Graph has more than one component');
                 }
                 
                 //Check if edge is between unmarked and marked edge
