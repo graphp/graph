@@ -2,6 +2,10 @@
 
 namespace Fhaculty\Graph\Algorithm\MaxFlow;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
+use Fhaculty\Graph\EdgeDirected;
+
 use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Graph;
@@ -48,6 +52,9 @@ class EdmondsKarp extends Base{
         $graphResult = $this->startVertex->getGraph()->createGraphClone();
         
         foreach ($graphResult->getEdges() as $edge){
+            if(!($edge instanceof EdgeDirected)){
+                throw new UnexpectedValueException('Undirected edges not supported for edmonds karp');
+            }
         	$edge->setFlow(0);
         }
         
