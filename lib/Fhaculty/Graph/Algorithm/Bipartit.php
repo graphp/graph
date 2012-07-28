@@ -57,11 +57,28 @@ class Bipartit extends Base{
     public function getColors(){
         $colors = array();
         
-        foreach($this->graph->getVertices() as $vid=>$vertex){
-        	if(!isset($colors[$vid])){
-        		$colors[$vid] = 0;
-    			$this->checkVertex($vertex,0, $colors);
-        	}
+        foreach($this->graph->getVertices() as $vid=>$startVertex){           // get color for each vertex
+            if(!isset($colors[$vid])){
+                $queue = array($startVertex);
+                $colors[$vid] = 0;                                                 // initialize each components color
+                
+                // breadth search all vertices in same component
+                do{
+                    $vertex = array_shift($queue); // next vertex in color
+                    $color = $colors[$vertex->getId()];
+                    $nextColor = 1-$color;
+                    
+                    // scan all vertices connected to this vertex
+                    foreach($vertex->getVerticesEdge() as $vid=>$nextVertex){
+                    	if(!isset($colors[$vid])){ // color unknown, so expect next color for this vertex
+                    		$colors[$vid] = $nextColor;
+                    		$queue []= $nextVertex;
+                    	}else if($colors[$vid] !== $nextColor){ // color is known but differs => can not be bipartit
+                    		throw new UnexpectedValueException('Graph is not bipartit');
+                    	}
+                    }
+                }while($queue);
+            }
         }
         return $colors;
     }
@@ -99,17 +116,5 @@ class Bipartit extends Base{
         }
         
         return $graph;
-    }
-    
-    private function checkVertex(Vertex $vertex,$color,&$colors){
-        $nextColor = 1-$color;
-        foreach($vertex->getVerticesEdge() as $vid=>$nextVertex){
-            if(!isset($colors[$vid])){
-                $colors[$vid] = $nextColor;
-                $this->checkVertex($nextVertex,$nextColor, $colors);
-            }else if($colors[$vid] !== $nextColor){
-                throw new UnexpectedValueException('Graph is not bipartit');
-            }
-        }
     }
 }
