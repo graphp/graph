@@ -53,39 +53,43 @@ class EdmondsKarp extends Base{
      * @return Graph
      */
     public function createGraph(){
-        $currentGraph = $this->graph->createGraphClone();
+        $graphResult = $this->graph->createGraphClone();
         
-        foreach ($currentGraph->getEdges() as $edge){
+        foreach ($graphResult->getEdges() as $edge){
         	$edge->setFlow(0);
         }
         
         $i = 0;
         do{
-            $startVertex = $currentGraph->getVertex($this->startVertex->getId());
-            $destinationVertex = $currentGraph->getVertex($this->destinationVertex->getId());
+            $residualAlgorithm = new ResidualGraph($graphResult);
+            $graphResidual = $residualAlgorithm->createGraph(true);        // Generate new residual graph and repeat
+            
+            $startVertex = $graphResidual->getVertex($this->startVertex->getId());
+            $destinationVertex = $graphResidual->getVertex($this->destinationVertex->getId());
             
             // 1. Search _shortest_ (number of hops and cheapest) path from s -> t
             $breadthSearchAlg = new SearchBreadthFirst($startVertex);
             $pathFlow = $breadthSearchAlg->getGraphPathTo($destinationVertex);  // Get shortest path if NULL-> Done
 
-            if($pathFlow){                                                        // If path exists add the new flow to graph                
+            if($pathFlow){                                                        // If path exists add the new flow to graph
                 // 2. get max flow from path
                 $maxFlowValue = Edge::getFirst($pathFlow->getEdges(),Edge::ORDER_CAPACITY)->getCapacity();
 
-                // 3. adjust flow along path
                 foreach ($pathFlow->getEdges() as $edge){
-                    $originalEdge = $currentGraph->getEdgeClone($edge);
-                    $originalEdge->setFlow($originalEdge->getFlow() + $maxFlowValue);
+                    try{
+                        $originalEdge = $graphResult->getEdgeClone($edge);
+                        $originalEdge->setFlow($originalEdge->getFlow() + $maxFlowValue);
+                    }
+                    catch(UnderflowException $e){
+                        $originalEdge = $graphResult->getEdgeCloneInverted($edge);
+                        $originalEdge->setFlow($originalEdge->getFlow() - $maxFlowValue);
+                    }
                 }
-
-                $residualAlgorithm = new ResidualGraph($currentGraph);
-                $residualAlgorithm->setMergeParallelEdges(true);
-                $currentGraph = $residualAlgorithm->createGraph(true);        // Generate new residual graph and repeat
             }
 
         } while($pathFlow);
-
-        return $this->getFlowGraphFromResidualGraph($currentGraph);                // Generate the full flow graph from the final residual graph (handled internal: with the initialGraph)
+        
+        return $graphResult;
     }
 
     /**
@@ -102,35 +106,5 @@ class EdmondsKarp extends Base{
             $maxFlow = $maxFlow + $edge->getFlow();
         }
         return $maxFlow;
-    }
-
-    /**
-     * Merges a residual graph with initial graph
-     *
-     * @param Graph $residualGraph
-     * @return Graph graph with maximal flow
-     */
-    private function getFlowGraphFromResidualGraph(Graph $residualGraph){
-
-        $resultGraph = $this->graph->createGraphCloneEdgeless();                // Process original graph and create a new graph that contains the flow
-
-        $originalGraphEdgesArray = $this->graph->getEdges();
-
-        // For every edge in the residual graph,
-        // that has an inversed edge in the original graph:
-        // Insert the inversed residual edge into the new graph
-        foreach ($originalGraphEdgesArray as $edge){
-            // get capacity of original edge
-            try{
-            	$capacity = $residualGraph->getEdgeCloneInverted($edge)->getCapacity();
-            }
-            catch(UnderflowException $ignore){
-                $capacity = 0;
-            }
-            
-            // Add inversed edge to return graph
-            $resultGraph->createEdgeClone($edge)->setFlow($capacity);
-        }
-        return $resultGraph;
     }
 }
