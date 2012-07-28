@@ -13,13 +13,6 @@ use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
 use Fhaculty\Graph\Exception;
 
 class EdmondsKarp extends Base{
-
-    /**
-     *
-     * @var Graph
-     */
-    private $graph;
-
     /**
      * @var Vertex
      */
@@ -44,7 +37,6 @@ class EdmondsKarp extends Base{
         }
         $this->startVertex = $startVertex;
         $this->destinationVertex = $destinationVertex;
-        $this->graph = $startVertex->getGraph();
     }
 
     /**
@@ -53,13 +45,12 @@ class EdmondsKarp extends Base{
      * @return Graph
      */
     public function createGraph(){
-        $graphResult = $this->graph->createGraphClone();
+        $graphResult = $this->startVertex->getGraph()->createGraphClone();
         
         foreach ($graphResult->getEdges() as $edge){
         	$edge->setFlow(0);
         }
         
-        $i = 0;
         do{
             $residualAlgorithm = new ResidualGraph($graphResult);
             $graphResidual = $residualAlgorithm->createGraph(true);        // Generate new residual graph and repeat
