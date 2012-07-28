@@ -9,13 +9,13 @@ class MSTPrinTest extends PHPUnit_Framework_TestCase
         $this->assertCount(4, $this->getResultForComplete(5));
     }
     
-    public function testKnownHoever1() {
-        $this->assertEquals(286.711151723, $this->getResultFor("G_1_2.txt"));
-    }
+//     public function testKnownHoever1() {
+//         $this->assertEquals(286.711151723, $this->getResultFor("G_1_2.txt"));
+//     }
     
-    public function testKnownHoever2() {
-        $this->assertEquals(29.549305006, $this->getResultFor("G_1_20.txt"));
-    }
+//     public function testKnownHoever2() {
+//         $this->assertEquals(29.549305006, $this->getResultFor("G_1_20.txt"));
+//     }
     
 //     public function testKnownHoever3() {
 //         $this->assertEquals(2775.4412042395, $this->getResultFor("G_10_20.txt"));
@@ -54,7 +54,7 @@ class MSTPrinTest extends PHPUnit_Framework_TestCase
     
     protected function getResultForComplete($n){
         $loader = new LoaderCompleteGraph($n);
-        $loader->setEnableDirectedEdges(true);
+        $loader->setEnableDirectedEdges(false);
         $alg = new AlgorithmMSTPrim($loader->createGraph()->getVertex(1));
         return $alg->getEdges();
     }
