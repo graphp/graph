@@ -3,9 +3,6 @@
 namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-
-use Fhaculty\Graph\Exception\RuntimeException;
-
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
@@ -32,7 +29,7 @@ class Bipartit extends Base{
             $this->getColors();
             return true;
         }
-        catch(RuntimeException $ignore){ }
+        catch(UnexpectedValueException $ignore){ }
         return false;
     }
     
@@ -51,7 +48,7 @@ class Bipartit extends Base{
      * get map of vertex ID to vertex color
      * 
      * @return array[int]
-     * @throws Exception if graph is not bipartit
+     * @throws UnexpectedValueException if graph is not bipartit
      * @uses AlgorithmBipartit::checkVertex() for every vertex not already colored
      */
     public function getColors(){
@@ -102,7 +99,7 @@ class Bipartit extends Base{
      * create new graph with valid groups set according to bipartition colors
      * 
      * @return Graph
-     * @throws Exception if graph is not bipartit
+     * @throws UnexpectedValueException if graph is not bipartit
      * @uses AlgorithmBipartit::getColors()
      * @uses Graph::createGraphClone()
      * @uses Vertex::setGroup()
