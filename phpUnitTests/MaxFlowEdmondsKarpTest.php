@@ -1,5 +1,7 @@
 <?php
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
 use Fhaculty\Graph\Graph;
 
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as AlgorithmMaxFlowEdmondsKarp;
@@ -66,17 +68,20 @@ class MaxFlowEdmondsKarpTest extends PHPUnit_Framework_TestCase
 //         $this->assertEquals(10,$alg->getFlowMax());
 //     }
     
-//     public function testEdgesUndirected(){
-//     	$graph = new Graph();
-//     	$v0 = $graph->createVertex(0);
-//     	$v1 = $graph->createVertex(1);
+    /**
+     * @expectedException UnexpectedValueException
+     */
+    public function testEdgesUndirected(){
+    	$graph = new Graph();
+    	$v0 = $graph->createVertex(0);
+    	$v1 = $graph->createVertex(1);
     
-//     	$v1->createEdge($v0)->setCapacity(7);
+    	$v1->createEdge($v0)->setCapacity(7);
     
-//     	$alg = new AlgorithmMaxFlowEdmondsKarp($v0,$v1);
+    	$alg = new AlgorithmMaxFlowEdmondsKarp($v0,$v1);
     
-//     	$this->assertEquals(7,$alg->getFlowMax());
-//     }
+    	$this->assertEquals(7,$alg->getFlowMax());
+    }
     
     /**
      * run algorithm with bigger graph and check result against known result (will take several seconds)
