@@ -2,6 +2,10 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
+use Fhaculty\Graph\EdgeDirected;
+
 use Fhaculty\Graph\EdgeUndirectedId;
 
 use Fhaculty\Graph\Vertex;
@@ -34,8 +38,13 @@ class Prim extends Base{
             
             // get unvisited vertex of the edge and add edges from new vertex
             foreach ($vertexCurrent->getEdges() as $currentEdge) {            // Add all edges from $currentVertex to priority queue
-            	//TODO maybe it would be better to check if the reachable vertex of $currentEdge si allready marked (smaller Queue vs. more if's)
-            	$edgeQueue->insert($currentEdge, -$currentEdge->getWeight());   // Add edges to priority queue with inverted weights (priority queue has high values at the front)
+            	if(!$currentEdge->isLoop()){
+                    if($currentEdge instanceof EdgeDirected){
+                	    throw new UnexpectedValueException('Unable to create MST for directed graphs');
+                	}
+                    //TODO maybe it would be better to check if the reachable vertex of $currentEdge si allready marked (smaller Queue vs. more if's)
+                	$edgeQueue->insert($currentEdge, -$currentEdge->getWeight());   // Add edges to priority queue with inverted weights (priority queue has high values at the front)
+            	}
             }
             
             do {
