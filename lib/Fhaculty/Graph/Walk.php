@@ -172,6 +172,15 @@ class Walk{
     }
     
     /**
+     * get IDs of all vertices in the walk
+     *
+     * @return array[int]
+     */
+    public function getVerticesId(){
+    	return array_keys($this->vertices);
+    }
+    
+    /**
      * return source vertex (first vertex of walk)
      * 
      * @return Vertex

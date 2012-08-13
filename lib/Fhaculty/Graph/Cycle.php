@@ -96,13 +96,4 @@ class Cycle extends Walk{
         
         return new Cycle($vertices,$edges);
     }
-    
-	/**
-	 * get IDs of all vertices in the cycle
-	 *
-	 * @return array[int]
-	 */
-	public function getVerticesId(){
-		return array_keys($this->vertices);
-	}
 }
