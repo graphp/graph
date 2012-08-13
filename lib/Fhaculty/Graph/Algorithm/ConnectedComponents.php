@@ -49,7 +49,9 @@ class ConnectedComponents extends Base{
     /**
      * check whether this graph consists of only a single component
      * 
-     * could be improved by not checking for actual number of components but stopping when there's more than one
+     * this is faster than calling getNumberOfComponents(), as it only has to
+     * count all vertices in one component to see if the graph consists of only
+     * a single component
      * 
      * @return boolean
      * @uses AlgorithmSearchBreadthFirst::getNumberOfVertices()
