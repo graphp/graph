@@ -61,6 +61,90 @@ class Walk{
         return $this->hasArrayDuplicates($this->vertices);
     }
     
+
+    /**
+     * checks whether this walk is a loop (single edge connecting vertex A with vertex A again)
+     *
+     * @return boolean
+     * @uses Walk::isCycle()
+     */
+    public function isLoop(){
+        return (count($this->edges) === 1 && $this->isCycle());
+    }
+    
+    /**
+     * checks whether this walk is a digon (a pair of parallel edges in a multigraph or a pair of antiparallel edges in a digraph)
+     *
+     * a digon is a cycle connecting exactly two distinct vertices with exactly
+     * two distinct edges.
+     *
+     * @return boolean
+     * @uses Walk::hasArrayDuplicates()
+     * @uses Walk::getVertices()
+     * @uses Walk::isCycle()
+     */
+    public function isDigon(){
+        return (count($this->edges) === 2 && // exactly 2 edges
+                !$this->hasArrayDuplicates($this->edges) && // no duplicate edges
+                count($this->getVertices()) === 2 && // exactly two distinct vertices
+                $this->isCycle()); // this is actually a cycle
+    }
+    
+    /**
+     * checks whether this walk is a triangle (a simple cycle with exactly three distinct vertices)
+     *
+     * @return boolean
+     * @uses Walk::getVertices()
+     * @uses Walk::isCycle()
+     */
+    public function isTriangle(){
+        return (count($this->edges) === 3 && // exactly 3 (implicitly distinct) edges
+                count($this->getVertices()) === 3 && // exactly three distinct vertices
+                $this->isCycle()); // this is actually a cycle
+    }
+    
+    /**
+     * check whether this walk is simple
+     *
+     * contains no duplicate/repeated vertices (and thus no duplicate edges either)
+     * other than the starting and ending vertices of cycles.
+     *
+     * @return boolean
+     * @uses Walk::isCycle()
+     * @uses Walk::hasArrayDuplicates()
+     */
+    public function isSimple(){
+        $vertices = $this->vertices;
+        if($this->isCycle()){ // ignore starting vertex for cycles as it's always the same as ending vertex
+            unset($vertices[0]);
+        }
+        return !$this->hasArrayDuplicates($vertices);
+    }
+    
+    /**
+     * checks whether walk is hamiltonian (i.e. walk over ALL VERTICES of the graph)
+     *
+     * @return boolean
+     * @see Walk::isEulerian() if you want to check for all EDGES instead of VERTICES
+     * @uses Walk::isArrayContentsEqual()
+     * @link http://en.wikipedia.org/wiki/Hamiltonian_path
+     */
+    public function isHamiltonian(){
+        return $this->isArrayContentsEqual($this->vertices,$this->getGraph()->getVertices());
+    }
+    
+    /**
+     * checks whether walk is eulerian (i.e. a walk over ALL EDGES of the graph)
+     *
+     * @return boolean
+     * @see Walk::isHamiltonian() if you want to check for all VERTICES instead of EDGES
+     * @uses Walk::isArrayContentsEqual()
+     * @link http://en.wikipedia.org/wiki/Eulerian_path
+     */
+    public function isEulerian(){
+        return $this->isArrayContentsEqual($this->edges,$this->getGraph()->getEdges());
+    }
+    
     /**
      * get length of walk (number of edges)
      * 
@@ -219,5 +303,25 @@ class Walk{
             }
         }
         return false;
+    }
+    
+
+    /**
+     * checks whether the contents of array a equals those of array b (ignore keys and order but otherwise strict check)
+     *
+     * @param array $a
+     * @param array $b
+     * @return boolean
+     */
+    private function isArrayContentsEqual($a,$b){
+        foreach($b as $one){
+            $pos = array_search($one,$a,true);
+            if($pos === false){
+                return false;
+            }else{
+                unset($a[$pos]);
+            }
+        }
+        return $a ? false : true;
     }
 }
