@@ -10,19 +10,7 @@ use Fhaculty\Graph\Exception\LogicException;
  * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  */
-class Walk{
-    /**
-     * 
-     * @var array[Edge]
-     */
-    protected $edges;
-    
-    /**
-     * 
-     * @var array[Vertex]
-     */
-    protected $vertices;
-    
+class Walk extends Set{    
     protected function __construct(array $vertices, array $edges){
         $this->vertices = $vertices;
         $this->edges    = $edges;
@@ -143,29 +131,6 @@ class Walk{
      */
     public function isEulerian(){
         return $this->isArrayContentsEqual($this->edges,$this->getGraph()->getEdges());
-    }
-    
-    /**
-     * get length of walk (number of edges)
-     * 
-     * @return int
-     */
-    public function getLength(){
-        return count($this->edges);
-    }
-    
-    /**
-     * get total weight of walk (sum all edges' weights)
-     *
-     * @return float
-     * @uses Edge::getWeight()
-     */
-    public function getWeight(){
-        $sum = 0;
-        foreach($this->edges as $edge){
-            $sum += $edge->getWeight();
-        }
-        return $sum;
     }
     
     /**
