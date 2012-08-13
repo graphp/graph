@@ -177,7 +177,7 @@ class Walk{
      * @return array[int]
      */
     public function getVerticesId(){
-    	return array_keys($this->vertices);
+        return array_keys($this->getVertices());
     }
     
     /**
@@ -196,5 +196,20 @@ class Walk{
      */
     public function getVertexTarget(){
         return end($this->vertices);
+    }
+    
+    /**
+     * get alternating sequence of vertex,edge,vertex,edge,...,vertex
+     * 
+     * @return array
+     */
+    public function getAlternatingSequence(){
+        $ret = array();
+        for($i=0,$l=count($this->edges);$i<$l;++$i){
+            $ret []= $this->vertices[$i];
+            $ret []= $this->edges[$i];
+        }
+        $ret[] = $this->vertices[$i];
+        return $ret;
     }
 }
