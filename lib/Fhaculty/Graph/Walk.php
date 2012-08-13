@@ -77,29 +77,11 @@ class Walk{
      * @uses Edge::getWeight()
      */
     public function getWeight(){
-    	$sum = 0;
-    	foreach($this->edges as $edge){
-    		$sum += $edge->getWeight();
-    	}
-    	return $sum;
-    }
-    
-    /**
-     * checks whether ths given array contains duplicate identical entries
-     * 
-     * @param array $array
-     * @return bool
-     */
-    private function hasArrayDuplicates($array){
-        $compare = array();
-        foreach($array as $element){
-        	if(in_array($element,$compare,true)){ // duplicate element found
-        		return true;
-        	}else{
-        		$compare [] = $element; // add element to temporary array to check for duplicates
-        	}
+        $sum = 0;
+        foreach($this->edges as $edge){
+            $sum += $edge->getWeight();
         }
-        return false;
+        return $sum;
     }
     
     /**
@@ -113,25 +95,25 @@ class Walk{
         return $this->getVertexSource()->getGraph();
     }
     
-	/**
-	 * create new graph clone with only vertices and edges actually in the walk
-	 * 
-	 * do not add duplicate vertices and edges for loops and intersections, etc.
-	 * 
-	 * @return Graph
-	 * @uses Walk::getEdges()
-	 * @uses Graph::createGraphCloneEdges()
-	 */
-	public function createGraph(){
-	    $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());   // create new graph clone with only edges of walk
-	    $vertices = $this->getVertices();
-	    foreach($graph->getVertices() as $vid=>$vertex){                      // get all vertices
-	        if(!isset($vertices[$vid])){
-	            $vertex->destroy();                                             // remove those not present in the walk (isolated vertices, etc.)
-	        }
-	    }
-	    return $graph;
-	}
+    /**
+     * create new graph clone with only vertices and edges actually in the walk
+     * 
+     * do not add duplicate vertices and edges for loops and intersections, etc.
+     * 
+     * @return Graph
+     * @uses Walk::getEdges()
+     * @uses Graph::createGraphCloneEdges()
+     */
+    public function createGraph(){
+        $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());   // create new graph clone with only edges of walk
+        $vertices = $this->getVertices();
+        foreach($graph->getVertices() as $vid=>$vertex){                      // get all vertices
+            if(!isset($vertices[$vid])){
+                $vertex->destroy();                                             // remove those not present in the walk (isolated vertices, etc.)
+            }
+        }
+        return $graph;
+    }
     
     /**
      * return array of all unique edges of walk
@@ -219,5 +201,23 @@ class Walk{
         }
         $ret[] = $this->vertices[$i];
         return $ret;
+    }
+
+    /**
+     * checks whether ths given array contains duplicate identical entries
+     *
+     * @param array $array
+     * @return bool
+     */
+    private function hasArrayDuplicates($array){
+        $compare = array();
+        foreach($array as $element){
+            if(in_array($element,$compare,true)){ // duplicate element found
+                return true;
+            }else{
+                $compare [] = $element; // add element to temporary array to check for duplicates
+            }
+        }
+        return false;
     }
 }
