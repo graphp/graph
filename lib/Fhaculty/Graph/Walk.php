@@ -4,6 +4,12 @@ namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Exception\LogicException;
 
+/**
+ *
+ * @author clue
+ * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
+ * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
+ */
 class Walk{
     /**
      * 
@@ -26,6 +32,7 @@ class Walk{
      * checks whether walk is a cycle (i.e. source vertex = target vertex)
      * 
      * @return bool
+     * @link http://en.wikipedia.org/wiki/Cycle_%28graph_theory%29
      */
     public function isCycle(){
         return (reset($this->vertices) === end($this->vertices));
@@ -35,10 +42,10 @@ class Walk{
      * checks whether walk is a path (i.e. does not contain any duplicate edges)
      * 
      * @return bool
-     * @uses Walk::hasDuplicates()
+     * @uses Walk::hasArrayDuplicates()
      */
     public function isPath(){
-        return $this->hasDuplicates($this->edges);
+        return !$this->hasArrayDuplicates($this->edges);
     }
     
     /**
@@ -47,10 +54,11 @@ class Walk{
      * a walk that CONTAINS a cycle does not neccessarily have to BE a cycle
      * 
      * @return bool
-     * @uses Walk::hasDuplicates()
+     * @uses Walk::hasArrayDuplicates()
+     * @see Walk::isCycle()
      */
     public function hasCycle(){
-        return $this->hasDuplicates($this->vertices);
+        return $this->hasArrayDuplicates($this->vertices);
     }
     
     /**
@@ -82,16 +90,16 @@ class Walk{
      * @param array $array
      * @return bool
      */
-    private function hasDuplicates($array){
+    private function hasArrayDuplicates($array){
         $compare = array();
         foreach($array as $element){
         	if(in_array($element,$compare,true)){ // duplicate element found
-        		return false;
+        		return true;
         	}else{
         		$compare [] = $element; // add element to temporary array to check for duplicates
         	}
         }
-        return true;
+        return false;
     }
     
     /**
