@@ -28,20 +28,28 @@ abstract class Base extends AlgorithmBase {
      * Get the count of edges that are in the match
      * 
      * @throws Exception
-     * @return AlgorithmMCF $this (chainable)
-     * @uses AlgorithmMM::createGraph()
-     * @uses Graph::getNumberOfEdges()
+     * @return int
+     * @uses Base::getEdges()
      */
     public function getNumberOfMatches(){
-        return $this->createGraph()->getNumberOfEdges();
+        return count($this->getEdges());
     }
-    
+
+    /**
+     * create new resulting graph with only edges from maximum matching
+     *
+     * @return Graph
+     * @uses Base::getEdges()
+     * @uses Graph::createGraphCloneEdges()
+     */
+    public function createGraph(){
+    	return $this->graph->createGraphCloneEdges($this->getEdges());
+    }
    
     /**
      * create new resulting graph with minimum-cost flow on edges
      *
-     * @throws Exception if the graph has not enough capacity for the minimum-cost flow
-     * @return Graph
+     * @return array[Edge]
      */
-    abstract public function createGraph();
+    abstract public function getEdges();
 }

@@ -6,7 +6,7 @@ use Fhaculty\Graph\Exception\BadMethodCallException;
 
 class Hall extends Base {
 
-	public function createGraph() {
+	public function getEdges() {
 	    throw new BadMethodCallException('TODO');
 	}
 }

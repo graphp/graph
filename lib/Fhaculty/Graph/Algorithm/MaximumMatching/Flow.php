@@ -8,7 +8,7 @@ use Fhaculty\Graph\Exception;
 
 class Flow extends Base {
 
-    public function createGraph() {
+    public function getEdges() {
 //         if($this->graph->isDirected()){
 //             throw new Exception('Input graph must not be directed');
 //         }
@@ -62,17 +62,13 @@ class Flow extends Base {
         $resultGraph->getVertex($superSink->getId())->destroy();
         $resultGraph->getVertex($superSource->getId())->destroy();
         
-        // Remove non matchings
+        $returnEdges = array();
         foreach($resultGraph->getEdges() as $edge){
-        	if($edge->getFlow() == 0) {
-        		$edge->destroy();
-        	} else {
-        	    $edgeOriginal = $this->graph->getEdgeClone($edge);
-        	    $edge->setCapacity($edgeOriginal->getCapacity());
-        	    $edge->setFlow($edgeOriginal->getFlow());
-        	}
+            if($edge->getFlow() > 0){ // only keep matched edges
+                $originalEdge = $this->graph->getEdgeClone($edge);
+                $returnEdges []= $originalEdge;
+            }
         }
-        
-        return $resultGraph;
+        return $returnEdges;
     }
 }
