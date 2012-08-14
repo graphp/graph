@@ -16,6 +16,8 @@ use Fhaculty\Graph\Algorithm\ConnectedComponents as AlgorithmConnectedComponents
 use Fhaculty\Graph\Algorithm\Bipartit as AlgorithmBipartit;
 use Fhaculty\Graph\Algorithm\Eulerian as AlgorithmEulerian;
 use Fhaculty\Graph\Algorithm\Groups as AlgorithmGroups;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 
 class Graph extends Set{
     /**
@@ -610,5 +612,9 @@ class Graph extends Set{
      */
     private function __clone(){
         throw new Exception\BadMethodCallException();
+    }
+    
+    public function getLayout(){
+        return array();
     }
 }

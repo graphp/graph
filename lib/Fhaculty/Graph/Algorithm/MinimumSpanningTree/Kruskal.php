@@ -7,7 +7,7 @@ use Fhaculty\Graph\Exception\RuntimeException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\EdgeDirected;
+use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use \SplPriorityQueue;
 
 class Kruskal extends Base{

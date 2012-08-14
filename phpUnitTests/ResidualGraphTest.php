@@ -1,7 +1,7 @@
 <?php
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
 use Fhaculty\Graph\Graph;
 

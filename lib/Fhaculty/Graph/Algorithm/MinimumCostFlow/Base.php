@@ -4,7 +4,7 @@ namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
 use Fhaculty\Graph\Exception\UnderflowException;
 
-use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Edge\Base as Edge;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;

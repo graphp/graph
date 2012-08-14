@@ -4,7 +4,7 @@ namespace Fhaculty\Graph\Loader;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\ConnectedComponents as AlgorithmConnectedComponents;
 use \Exception;
 use \ReflectionClass;

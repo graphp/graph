@@ -5,6 +5,9 @@ namespace Fhaculty\Graph;
 use \ArrayIterator;
 use \SplPriorityQueue;
 use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst as AlgorithmSpBreadthFirst;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Edge\UndirectedId as EdgeUndirectedId;
 
 class Vertex extends Layoutable{
     /**

@@ -7,7 +7,7 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\RuntimeException;
 
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Edge\Base as Edge;
 use \SplPriorityQueue;
 
 class TspNearestNeighbor extends Tsp{

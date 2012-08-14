@@ -3,7 +3,7 @@
 namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\EdgeDirected;
+use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Vertex;
 use \SplPriorityQueue;
 use \Exception;

@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Loader;
 
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Edge\Base as Edge;
 
 class EdgeListWeighted extends File{
     public function createGraph(){

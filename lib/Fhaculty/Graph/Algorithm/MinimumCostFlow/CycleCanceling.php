@@ -8,7 +8,7 @@ use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Exception\RuntimeException;
 
-use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
 use Fhaculty\Graph\Algorithm\DetectNegativeCycle;
 use Fhaculty\Graph\Algorithm\ResidualGraph;

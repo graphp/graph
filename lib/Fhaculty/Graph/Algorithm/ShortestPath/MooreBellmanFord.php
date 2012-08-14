@@ -4,7 +4,7 @@ namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Exception\RuntimeException;
 
-use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Cycle;
 use Fhaculty\Graph\Exception\NegativeCycleException;
 

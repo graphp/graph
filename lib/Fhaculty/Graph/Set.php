@@ -3,6 +3,8 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Exception\LogicException;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 
 /**
  *

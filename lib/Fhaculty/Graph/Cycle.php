@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Edge\Base as Edge;
+
 class Cycle extends Walk{    
     /**
      * create new cycle instance from given predecessor map

@@ -4,7 +4,7 @@ namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
-use Fhaculty\Graph\EdgeUndirectedId;
+use Fhaculty\Graph\Edge\UndirectedId as EdgeUndirectedId;
 
 use Fhaculty\Graph\Vertex;
 use \SplPriorityQueue;

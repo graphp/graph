@@ -5,8 +5,8 @@ namespace Fhaculty\Graph\Algorithm;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Edge;
-use Fhaculty\Graph\EdgeDirected;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 
 class ResidualGraph extends Base{
     private $graph;

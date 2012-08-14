@@ -9,7 +9,7 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\RuntimeException;
 
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Edge;
+use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
 abstract class Base extends AlgorithmBase {
