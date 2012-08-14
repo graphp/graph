@@ -18,17 +18,15 @@ class Flow extends Base {
             throw new Exception\UnexpectedValueException('Input graph does not have bipartit groups assigned to each vertex. Consider Using "AlgorithmBipartit::createGraph()" first');
         }
         
-        // create resulting graph with supersource and supersink
-        $resultGraph = $this->graph->createGraphClone();
-         
-        $maxMatchingValue = $resultGraph->getNumberOfEdges();
+        // create temporary flow graph with supersource and supersink
+        $graphFlow = $this->graph->createGraphClone();
 
-        $vertices = $resultGraph->getVertices(); // get all vertices
+        $vertices = $graphFlow->getVertices(); // get all vertices
         // above $vertices does NOT contain supersource and supersink, because
         // we want to skip over them as they do not have a partition assigned
         
-        $superSource = $resultGraph->createVertex()->setLayout('label','s*');
-        $superSink   = $resultGraph->createVertex()->setLayout('label','t*');
+        $superSource = $graphFlow->createVertex()->setLayout('label','s*');
+        $superSink   = $graphFlow->createVertex()->setLayout('label','t*');
         
         $groups = $alg->getGroups();
         $groupA = $groups[0];
@@ -39,16 +37,16 @@ class Flow extends Base {
             $group = $vertex->getGroup();
             
             if($group === $groupA){ // source
-                $superSource->createEdgeTo($vertex)->setCapacity($maxMatchingValue);
+                $superSource->createEdgeTo($vertex);
             } else if($group === $groupB){ // sink
-                $vertex->createEdgeTo($superSink)->setCapacity($maxMatchingValue);
+                $vertex->createEdgeTo($superSink);
             } else {
                 throw new Exception\LogicException('Should not happen. Unknown set: ' + $belongingSet);
             }
         }
 
         // All capacities to 1 (according to algorithm)
-        foreach ($resultGraph->getEdges() as $edge){
+        foreach ($graphFlow->getEdges() as $edge){
             $edge->setCapacity(1)->setFlow(0);
         }
         
