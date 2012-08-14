@@ -1,8 +1,14 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Fhaculty\Graph\Edge;
 
-class EdgeUndirectedId extends Edge{
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+
+use Fhaculty\Graph\Vertex;
+
+use Fhaculty\Graph\Graph;
+
+class UndirectedId extends Base{
     /**
      * vertex ID of point a
      *
@@ -75,7 +81,7 @@ class EdgeUndirectedId extends Edge{
                 return $this->graph->getVertex($this->a);
             }
         }
-        throw new Exception\InvalidArgumentException('Invalid start vertex');
+        throw new InvalidArgumentException('Invalid start vertex');
     }
 
     public function getVertexFromTo(Vertex $endVertex){
@@ -87,7 +93,7 @@ class EdgeUndirectedId extends Edge{
                 return $this->graph->getVertex($this->a);
             }
         }
-        throw new Exception\InvalidArgumentException('Invalid end vertex');
+        throw new InvalidArgumentException('Invalid end vertex');
     }
     
     public function hasVertexStart(Vertex $startVertex){

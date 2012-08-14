@@ -1,12 +1,26 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Fhaculty\Graph\Edge;
+
+use Fhaculty\Graph\Layoutable;
+
+use Fhaculty\Graph\Vertex;
+
+use Fhaculty\Graph\Graph;
+
+use Fhaculty\Graph\Exception\LogicException;
+
+use Fhaculty\Graph\Exception\RangeException;
+
+use Fhaculty\Graph\Exception\UnderflowException;
+
+use Fhaculty\Graph\Exception\InvalidArgumentException;
 
 use Fhaculty\Graph\Exception\BadMethodCallException;
 
 use \ArrayIterator;
 
-abstract class Edge extends Layoutable{
+abstract class Base extends Layoutable{
     /**
      * do not change order - FIFO : first in, first out
      *
@@ -90,7 +104,7 @@ abstract class Edge extends Layoutable{
             }else if($by === self::ORDER_FLOW){
                 $now = $edge->getFlow();
             }else{
-                throw new Exception\InvalidArgumentException('Invalid order flag "'.$by.'"');
+                throw new InvalidArgumentException('Invalid order flag "'.$by.'"');
             }
             if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
                 $ret = $edge;
@@ -98,7 +112,7 @@ abstract class Edge extends Layoutable{
             }
         }
         if($ret === NULL){
-            throw new Exception\UnderflowException('No edge found');
+            throw new UnderflowException('No edge found');
         }
         return $ret;
     }
@@ -137,7 +151,7 @@ abstract class Edge extends Layoutable{
             }else if($by === self::ORDER_FLOW){
             	$now = $edge->getFlow();
             }else{
-                throw new Exception\InvalidArgumentException('Invalid sort criterium');
+                throw new InvalidArgumentException('Invalid sort criterium');
             }
             $temp[$eid] = $now;
         }
@@ -202,7 +216,7 @@ abstract class Edge extends Layoutable{
             $this->getVertexToFrom($startVertex);
             return true;
         }
-        catch(Exception\InvalidArgumentException $ignore){ }
+        catch(InvalidArgumentException $ignore){ }
         return false;
     }
     
@@ -218,7 +232,7 @@ abstract class Edge extends Layoutable{
             $this->getVertexFromTo($targetVertex);
             return true;
         }
-        catch(Exception\InvalidArgumentException $ignore){ }
+        catch(InvalidArgumentException $ignore){ }
         return false;
     }
     
@@ -276,7 +290,7 @@ abstract class Edge extends Layoutable{
      */
     public function setWeight($weight){
         if($weight !== NULL && !is_float($weight) && !is_int($weight)){
-            throw new Exception\InvalidArgumentException('Invalid weight given - must be numeric or NULL');
+            throw new InvalidArgumentException('Invalid weight given - must be numeric or NULL');
         }
         $this->weight = $weight;
         return $this;
@@ -314,13 +328,13 @@ abstract class Edge extends Layoutable{
     public function setCapacity($capacity){
         if($capacity !== NULL){
             if(!is_float($capacity) && !is_int($capacity)){
-                throw new Exception\InvalidArgumentException('Invalid capacity given - must be numeric');
+                throw new InvalidArgumentException('Invalid capacity given - must be numeric');
             }
             if($capacity < 0){
-                throw new Exception\InvalidArgumentException('Capacity must not be negative');
+                throw new InvalidArgumentException('Capacity must not be negative');
             }
             if($this->flow !== NULL && $this->flow > $capacity){
-                throw new Exception\InvalidArgumentException('Current flow of '.$this->flow.' exceeds new capacity');
+                throw new InvalidArgumentException('Current flow of '.$this->flow.' exceeds new capacity');
             }
         }
         $this->capacity = $capacity;
@@ -346,13 +360,13 @@ abstract class Edge extends Layoutable{
     public function setFlow($flow){
         if($flow !== NULL){
             if(!is_float($flow) && !is_int($flow)){
-                throw new Exception\InvalidArgumentException('Invalid flow given - must be numeric');
+                throw new InvalidArgumentException('Invalid flow given - must be numeric');
             }
             if($flow < 0){
-                throw new Exception\InvalidArgumentException('Flow must not be negative');
+                throw new InvalidArgumentException('Flow must not be negative');
             }
             if($this->capacity !== NULL && $flow > $this->capacity){
-                throw new Exception\RangeException('New flow exceeds maximum capacity');
+                throw new RangeException('New flow exceeds maximum capacity');
             }
         }
         $this->flow = $flow;
@@ -390,7 +404,7 @@ abstract class Edge extends Layoutable{
          
         $pos = array_search($this,$edges,true);
         if($pos === false){
-            throw new Exception\LogicException('Internal error: Current edge not found');
+            throw new LogicException('Internal error: Current edge not found');
         }
          
         unset($edges[$pos]);                                                   // exclude current edge from parallel edges
@@ -428,7 +442,7 @@ abstract class Edge extends Layoutable{
         foreach($this->getVertices() as $vertex){
             return $vertex->getGraph();
         }
-        throw new Exception\LogicException('Internal error: should not be reached');
+        throw new LogicException('Internal error: should not be reached');
     }
 
     /**
@@ -470,6 +484,6 @@ abstract class Edge extends Layoutable{
      * @throws Exception
      */
     private function __clone(){
-        throw new Exception\BadMethodCallException();
+        throw new BadMethodCallException();
     }
 }
