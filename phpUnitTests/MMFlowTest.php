@@ -8,18 +8,18 @@ use Fhaculty\Graph\Loader\EdgeListBipartit;
 
 class MMFlowTest extends PHPUnit_Framework_TestCase
 {    
-    /**
-     * run algorithm with small graph and check result against known result
-     */
-    public function testKnownResult()
-    {
-        $loader = new EdgeListBipartit(PATH_DATA.'Matching_100_100.txt');
-        $loader->setEnableDirectedEdges(false);
-        $graph = $loader->createGraph();
+//     /**
+//      * run algorithm with small graph and check result against known result
+//      */
+//     public function testKnownResult()
+//     {
+//         $loader = new EdgeListBipartit(PATH_DATA.'Matching_100_100.txt');
+//         $loader->setEnableDirectedEdges(false);
+//         $graph = $loader->createGraph();
         
-        $alg = new Flow($graph);
-        $this->assertEquals(100, $alg->getNumberOfMatches());
-    }
+//         $alg = new Flow($graph);
+//         $this->assertEquals(100, $alg->getNumberOfMatches());
+//     }
 
     public function testSimple(){
     	$graph = new Graph();
