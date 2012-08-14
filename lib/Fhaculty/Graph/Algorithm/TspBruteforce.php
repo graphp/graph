@@ -75,16 +75,22 @@ class TspBruteforce extends Tsp{
      * @return AlgorithmTspBruteforce $this (chainable)
      */
     public function setUpperLimit($limit){
-        if($limit === true){
-            $alg = new AlgorithmTspMst($this->graph);
-            $limit = $alg->createGraph()->getWeight();
-        }
         $this->upperLimit = $limit;
         return $this;
     }
     
+    public function setUpperLimitMst(){
+        $alg = new AlgorithmTspMst($this->graph);
+        $limit = $alg->createGraph()->getWeight();
+        return $this->setUpperLimit($limit);
+    }
+    
     protected function getVertexStart(){
         return $this->graph->getVertexFirst();
+    }
+    
+    protected function getGraph(){
+        return $this->graph;
     }
     
     /**

@@ -26,6 +26,10 @@ class TspNearestNeighbor extends Tsp{
         return $this->vertex;
     }
     
+    protected function getGraph(){
+        return $this->vertex->getGraph();
+    }
+    
     /**
      *
      * @return array[Edge]

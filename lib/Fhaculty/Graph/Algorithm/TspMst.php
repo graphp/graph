@@ -20,6 +20,10 @@ class TspMst extends Tsp{
     protected function getVertexStart(){
         return $this->graph->getVertexFirst();
     }
+    
+    protected function getGraph(){
+        return $this->graph;
+    }
 
     /**
      *

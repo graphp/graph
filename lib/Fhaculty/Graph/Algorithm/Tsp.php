@@ -10,13 +10,26 @@ abstract class Tsp extends Base {
      *
      * @throws Exception on error
      * @return Graph
+     * @uses Tsp::getGraph()
      * @uses AlgorithmTsp::getEdges()
      * @uses Graph::createGraphCloneEdges()
      */
     public function createGraph(){
-        return $this->graph->createGraphCloneEdges($this->getEdges());
+        return $this->getGraph()->createGraphCloneEdges($this->getEdges());
     }
     
+    /**
+     * get graph this algorithm operates on
+     * 
+     * @return Graph
+     */
+    abstract protected function getGraph();
+    
+    /**
+     * get start vertex this algorithm starts on
+     * 
+     * @return Vertex
+     */
     abstract protected function getVertexStart();
     
     /**
@@ -29,6 +42,14 @@ abstract class Tsp extends Base {
      */
     public function getCycle(){
         return Cycle::factoryFromEdges($this->getEdges(),$this->getVertexStart());
+    }
+    
+    public function getWeight(){
+        $weight = 0;
+        foreach($this->getEdges() as $edge){
+            $weight += $edge->getWeight();
+        }
+        return $weight;
     }
     
     /**
