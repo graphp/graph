@@ -21,12 +21,13 @@ class MMFlowTest extends PHPUnit_Framework_TestCase
 //         $this->assertEquals(100, $alg->getNumberOfMatches());
 //     }
 
-    public function testSimple(){
+    public function testSingleEdge(){
     	$graph = new Graph();
-    	$graph->createVertex(0)->setGroup(0)->createEdge($graph->createVertex(1)->setGroup(1));
+    	$edge = $graph->createVertex(0)->setGroup(0)->createEdge($graph->createVertex(1)->setGroup(1));
     
     	$alg = new Flow($graph);
-    	$this->assertEquals(1,$alg->getNumberOfMatches());
+    	$this->assertEquals(1,$alg->getNumberOfMatches()); // correct number of edges
+    	$this->assertEquals(array($edge),$alg->getEdges()); // actual edge instance returned
     }
     
     /**
