@@ -1,10 +1,13 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
 use Fhaculty\Graph\Cycle;
+use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
-abstract class Tsp extends Base {
+abstract class Base extends AlgorithmBase {
     /**
      * get resulting graph with the (first) best circle of edges connecting all vertices
      *

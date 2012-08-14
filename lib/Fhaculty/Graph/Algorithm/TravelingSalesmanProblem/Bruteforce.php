@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
@@ -10,9 +10,9 @@ use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Algorithm\TspMst as AlgorithmTspMst;
+use Fhaculty\Graph\Algorithm\TravelingSalesmanProblem\MinimumSpanningTree as AlgorithmTspMst;
 
-class TspBruteforce extends Tsp{
+class Bruteforce extends Base{
     /**
      * 
      * @var Graph

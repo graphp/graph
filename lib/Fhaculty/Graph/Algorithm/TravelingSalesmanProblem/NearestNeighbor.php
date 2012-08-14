@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
@@ -10,7 +10,7 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
 use \SplPriorityQueue;
 
-class TspNearestNeighbor extends Tsp{
+class NearestNeighbor extends Base{
     
     /**
      * 

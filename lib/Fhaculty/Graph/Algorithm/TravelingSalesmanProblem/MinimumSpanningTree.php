@@ -1,12 +1,13 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm;
+namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\MinimumSpanningTree\Kruskal as MstKruskal;
+use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchDepthFirst;
 
-class TspMst extends Tsp{
+class MinimumSpanningTree extends Base{
     /**
      * 
      * @var Graph
