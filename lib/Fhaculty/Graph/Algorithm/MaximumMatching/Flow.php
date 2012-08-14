@@ -13,9 +13,9 @@ use Fhaculty\Graph\Exception;
 class Flow extends Base {
 
     public function getEdges() {
-//         if($this->graph->isDirected()){
-//             throw new UnexpectedValueException('Input graph contains directed edges');
-//         }
+        if($this->graph->isDirected()){
+            throw new UnexpectedValueException('Input graph contains directed edges');
+        }
         
         $alg = new Groups($this->graph);
         if(!$alg->isBipartit()){
