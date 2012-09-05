@@ -19,13 +19,13 @@ class Eulerian extends Base{
      * check whether this graph has an eulerian cycle
      *
      * @return boolean
-     * @uses Graph::isConsecutive()
+     * @uses Graph::isConnected()
      * @uses Vertex::getDegree()
      * @todo isolated vertices should be ignored
      * @todo definition is only valid for undirected graphs
      */
     public function hasCycle(){
-        if($this->graph->isConsecutive()){
+        if($this->graph->isConnected()){
             foreach($this->graph->getVertices() as $vertex){
                 if($vertex->getDegree() & 1){ // uneven degree => fail
                     return false;

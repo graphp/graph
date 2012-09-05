@@ -332,13 +332,13 @@ class Graph extends Set{
     }
     
     /**
-     * check whether graph is consecutive (i.e. all vertices are connected)
+     * check whether graph is connected (i.e. there's a connection between all vertices)
      * 
      * @return boolean
      * @see Graph::getNumberOfComponents()
      * @uses AlgorithmConnectedComponents::isSingle()
      */
-    public function isConsecutive(){
+    public function isConnected(){
         $alg = new AlgorithmConnectedComponents($this);
         return $alg->isSingle();
     }
