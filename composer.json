@@ -1,0 +1,6 @@
+{
+    "name": "Flos/graph",
+    "autoload": {
+        "psr-0": {"Fhaculty": "lib/"}
+    }
+}
