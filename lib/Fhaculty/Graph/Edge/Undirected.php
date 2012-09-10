@@ -21,6 +21,15 @@ class Undirected extends Base{
      */
     private $b;
 
+    /**
+     * create new undirected edge between given vertices (MUST NOT BE CALLED MANUALLY!)
+     * 
+     * @param Vertex $a
+     * @param Vertex $b
+     * @deprecated obsoleted by UndirectedId
+     * @see Vertex::createEdge() instead
+     * @see UndirectedId for current replacement implementation
+     */
     public function __construct(Vertex $a,Vertex $b){
         $this->a = $a;
         $this->b = $b;

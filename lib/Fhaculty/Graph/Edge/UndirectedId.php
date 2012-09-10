@@ -30,6 +30,14 @@ class UndirectedId extends Base{
      */
     private $graph;
 
+    /**
+     * instanciate new edges between two given vertices (MUST NOT BE CALLED MANUALLY!)
+     * 
+     * @param Vertex $a
+     * @param Vertex $b
+     * @see Vertex::createEdge() to create undirected edges
+     * @see Vertex::createEdgeTo() to create directed edges
+     */
     public function __construct(Vertex $a,Vertex $b){
         $this->a = $a->getId();
         $this->b = $b->getId();

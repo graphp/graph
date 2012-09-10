@@ -24,10 +24,12 @@ class Directed extends Base{
     private $to;
 
     /**
-     * creats a new Edge
+     * creats a new Edge (MUST NOT BE CALLED MANUALLY!)
      *
      * @param Vertex $from start/source Vertex
      * @param Vertex $to   end/target Vertex
+     * @see Vertex::createEdgeTo() to create directed edges
+     * @see Vertex::createEdge() to create undirected edges
      */
     public function __construct(Vertex $from,Vertex $to){
         $this->from = $from;

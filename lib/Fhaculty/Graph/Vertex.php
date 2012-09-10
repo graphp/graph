@@ -203,10 +203,11 @@ class Vertex extends Layoutable{
     private $group = 0;
     
     /**
-     * Creates a Vertex
+     * Creates a Vertex (MUST NOT BE CALLED MANUALLY!)
      * 
-     * @param int   $id    Identifier (int, string, what you want) $id
-     * @param Graph $graph graph to be added to
+     * @param string|int $id    identifier used to uniquely identify this vertex in the graph
+     * @param Graph      $graph graph to be added to
+     * @see Graph::createVertex() to create new vertices
      */
     public function __construct($id,Graph $graph){
         $this->id = $id;
