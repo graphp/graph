@@ -289,4 +289,29 @@ class Walk extends Set{
         }
         return $a ? false : true;
     }
+    
+    /**
+     * check to make sure this walk is still valid (i.e. source graph still contains all vertices and edges)
+     * 
+     * @return boolean
+     * @uses Walk::getGraph()
+     * @uses Graph::getVertices()
+     * @uses Graph::getEdges()
+     */
+    public function isValid(){
+        $vertices = $this->getGraph()->getVertices();
+        foreach($this->vertices as $vertex){                                  // check source graph contains all vertices
+            $vid = $vertex->getId();
+            if(!isset($vertices[$vid]) || $vertices[$id] !== $vertex){         // make sure vertex ID exists and has not been replaced
+                return false;
+            }
+        }
+        $edges = $this->getGraph()->getEdges();
+        foreach($this->edges as $edge){                                        // check source graph contains all edges
+            if(!in_array($edge,$edges,true)){
+                return false;
+            }
+        }
+        return true;
+    }
 }
