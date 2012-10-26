@@ -16,7 +16,29 @@ The recommended way to install this library is [through composer](http://getcomp
 
 ## Examples
 
-Looking for more example scripts? Check out [flos/graph](https://github.com/flos/graph-php).
+````php
+<?php
+require_once 'vendor/autoload.php';
+
+use \Fhaculty\Graph\Graph as Graph;
+
+$graph = new Graph();
+
+$rome = $graph->createVertex('Rome');
+$madrid = $graph->createVertex('Madrid');
+$cologne = $graph->createVertex('Cologne');
+
+$cologne->createEdgeTo($madrid);
+$madrid->createEdgeTo($rome);
+$rome->createEdgeTo($rome); // create loop
+
+foreach($rome->getVerticesEdgeFrom() as $vertex){
+    echo $vertex->getId().' leads to rome'.PHP_EOL;
+}
+
+````
+
+Looking for more example scripts? Check out [flos/graph-php](https://github.com/flos/graph-php).
 
 ## Features
 
