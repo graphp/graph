@@ -70,7 +70,7 @@ abstract class Base extends Layoutable{
     /**
      * get first edge (optionally ordered by given criterium $by) from given array of edges
      *
-     * @param array[Edge]|Graph $edges array of edges to scan for 'first' edge
+     * @param Edge[]|Graph $edges array of edges to scan for 'first' edge
      * @param int               $by       criterium to sort by. see Edge::ORDER_WEIGHT, etc.
      * @param boolean           $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Edge
@@ -120,7 +120,7 @@ abstract class Base extends Layoutable{
     /**
      * get all edges ordered by given criterium $by
      *
-     * @param array[Edge]|Graph $edges array of edges to sort
+     * @param Edge[]|Graph $edges array of edges to sort
      * @param int               $by    criterium to sort by. see Edge::ORDER_WEIGHT, etc.
      * @param boolean           $desc  whether to return biggest (true) instead of smallest (default:false)
      * @return array
@@ -193,14 +193,14 @@ abstract class Base extends Layoutable{
     /**
      * get Vertices that are a target of this edge
      *
-     * @return array[Vertex]
+     * @return Vertex[]
      */
     abstract public function getVerticesTarget();
 
     /**
      * get Vertices that are the start of this edge
      *
-     * @return array[Vertex]
+     * @return Vertex[]
      */
     abstract public function getVerticesStart();
 
@@ -386,7 +386,7 @@ abstract class Base extends Layoutable{
     /**
      * get all edges parallel to this edge (excluding self)
      *
-     * @return array[Edge]
+     * @return Edge[]
      * @throws LogicException
      */
     public function getEdgesParallel(){
@@ -414,14 +414,14 @@ abstract class Base extends Layoutable{
     /**
      * get all vertices this edge connects
      *
-     * @return array[Vertex]
+     * @return Vertex[]
      */
     abstract public function getVertices();
 
     /**
      * get IDs of all vertices this edge connects
      *
-     * @return array[int]
+     * @return int[]
      * @see Edge::getVertices()
      */
     public function getVerticesId(){

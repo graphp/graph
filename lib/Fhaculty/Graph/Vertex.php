@@ -67,7 +67,7 @@ class Vertex extends Layoutable{
     /**
      * get first vertex (optionally ordered by given criterium $by) from given array of vertices
      *
-     * @param array[Vertex]|Graph $vertices array of vertices to scan for 'first' vertex
+     * @param Vertex[]|Graph $vertices array of vertices to scan for 'first' vertex
      * @param int                 $by       criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param boolean             $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Vertex
@@ -124,7 +124,7 @@ class Vertex extends Layoutable{
     /**
      * get iterator for vertices (optionally ordered by given criterium $by) from given array of vertices
      *
-     * @param array[Vertex]|Graph $vertices array of vertices to scan for 'first' vertex
+     * @param Vertex[]|Graph $vertices array of vertices to scan for 'first' vertex
      * @param int                 $by       criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param boolean             $desc     whether to return biggest first (true) instead of smallest first (default:false)
      * @return Iterator iterator object (supporting at the very least foreach)
@@ -177,7 +177,7 @@ class Vertex extends Layoutable{
     private $id;
     
     /**
-     * @var array[Edge]
+     * @var Edge[]
      */
     private $edges = array();
     
@@ -344,7 +344,7 @@ class Vertex extends Layoutable{
     /**
      * get array of vertices this vertex has a path to
      * 
-     * @return array[Vertex]
+     * @return Vertex[]
      * @uses AlgorithmSpBreadthFirst::getVertices()
      */
     public function getVerticesPathTo(){
@@ -355,7 +355,7 @@ class Vertex extends Layoutable{
     /**
      * get array of vertices that have a path to this vertex
      * 
-     * @return array[Vertex]
+     * @return Vertex[]
      * @uses AlgorithmSpBreadthFirst::getVertices()
      */
     public function getVerticesPathFrom(){
@@ -450,7 +450,7 @@ class Vertex extends Layoutable{
     /**
      * get ALL edges attached to this vertex
      * 
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdges(){
         return $this->edges;
@@ -459,7 +459,7 @@ class Vertex extends Layoutable{
     /**
      * get ALL outgoing edges attached to this vertex
      *
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdgesOut(){
         $outgoingEdges = array();
@@ -474,7 +474,7 @@ class Vertex extends Layoutable{
     /**
      * get ALL ingoing edges attached to this vertex
      *
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdgesIn(){
         $ingoingEdges = array() ;
@@ -490,7 +490,7 @@ class Vertex extends Layoutable{
      * get edges FROM this vertex TO the given vertex
      * 
      * @param Vertex $vertex
-     * @return array[Edge]
+     * @return Edge[]
      * @uses Edge::hasVertexTarget()
      */
     public function getEdgesTo(Vertex $vertex){
@@ -507,7 +507,7 @@ class Vertex extends Layoutable{
      * get edges FROM the given vertex TO this vertex
      *
      * @param Vertex $vertex
-     * @return array[Edge]
+     * @return Edge[]
      * @uses Vertex::getEdgesTo()
      */
     public function getEdgesFrom(Vertex $vertex){
@@ -517,7 +517,7 @@ class Vertex extends Layoutable{
     /**
      * get all adjacent vertices of this vertex (edge FROM or TO this vertex)
      *  
-     * @return array[Vertex]
+     * @return Vertex[]
      * @uses Edge::hasVertexStart()
      * @uses Edge::getVerticesToFrom()
      * @uses Edge::getVerticesFromTo()
@@ -538,7 +538,7 @@ class Vertex extends Layoutable{
     /**
      * get all vertices this vertex has an edge to
      * 
-     * @return array[Vertex]
+     * @return Vertex[]
      * @uses Vertex::getEdgesOut()
      * @uses Edge::getVerticesToFrom()
      */
@@ -554,7 +554,7 @@ class Vertex extends Layoutable{
     /**
      * get all vertices that have an edge TO this vertex
      * 
-     * @return array[Vertex]
+     * @return Vertex[]
      * @uses Vertex::getEdgesIn()
      * @uses Edge::getVerticesFromTo()
      */

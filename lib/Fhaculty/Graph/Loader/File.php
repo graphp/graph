@@ -16,7 +16,7 @@ abstract class File extends Base{
     /**
      * get an array of all lines in this file
      * 
-     * @return array[string]
+     * @return string[]
      * @throws InvalidArgumentException if file can not be read
      */
     protected function getLines(){
@@ -65,7 +65,7 @@ abstract class File extends Base{
      * @param string $line
      * @param array  $parts
      * @param Graph  $graph
-     * @return array[mixed]
+     * @return mixed[]
      * @throws InvalidArgumentException
      */
     protected function readLine($line,$parts,Graph $graph=NULL){

@@ -20,7 +20,7 @@ class Prim extends Base{
     
     /**
      *
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdges(){
         // Initialize algorithm 

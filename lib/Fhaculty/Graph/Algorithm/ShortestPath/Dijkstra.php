@@ -10,7 +10,7 @@ class Dijkstra extends Base{
     /**
      * get all edges on shortest path for this vertex
      *
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdges(){
         $totalCostOfCheapestPathTo  = Array();

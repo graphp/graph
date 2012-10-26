@@ -58,7 +58,7 @@ abstract class Base extends AlgorithmBase {
     /**
      * get array of edges connecting all vertices in a circle
      * 
-     * @return array[Edge]
+     * @return Edge[]
      */
     abstract public function getEdges();
 }

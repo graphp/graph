@@ -32,7 +32,7 @@ class NearestNeighbor extends Base{
     
     /**
      *
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdges(){
         $returnEdges = array();

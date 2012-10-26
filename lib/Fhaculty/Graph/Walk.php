@@ -167,7 +167,7 @@ class Walk extends Set{
     /**
      * return array of all unique edges of walk
      * 
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdges(){
         $edges = array();
@@ -182,7 +182,7 @@ class Walk extends Set{
     /**
      * return array/list of all edges of walk (in sequence visited in walk, may contain duplicates)
      *
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdgesSequence(){
         return $this->edges;
@@ -191,7 +191,7 @@ class Walk extends Set{
     /**
      * return array of all unique vertices of walk
      * 
-     * @return array[Vertex]
+     * @return Vertex[]
      */
     public function getVertices(){
         $vertices = array();
@@ -204,7 +204,7 @@ class Walk extends Set{
     /**
      * return array/list of all vertices of walk (in sequence visited in walk, may contain duplicates)
      * 
-     * @return array[Vertex]
+     * @return Vertex[]
      */
     public function getVerticesSequence(){
         return $this->vertices;
@@ -213,7 +213,7 @@ class Walk extends Set{
     /**
      * get IDs of all vertices in the walk
      *
-     * @return array[int]
+     * @return int[]
      */
     public function getVerticesId(){
         return array_keys($this->getVertices());

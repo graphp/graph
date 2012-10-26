@@ -97,7 +97,7 @@ class Bruteforce extends Base{
      * get resulting (first) best circle of edges connecting all vertices
      * 
      * @throws Exception on error
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdges(){
         $this->numEdges = $this->graph->getNumberOfVertices();
@@ -125,11 +125,11 @@ class Bruteforce extends Base{
     
     /**
      * 
-     * @param Vertex                $vertex      current point-of-view
-     * @param number                $totalWeight total weight (so far)
-     * @param array[mixed=>boolean] $visitedVertices
-     * @param array[Edge]           $visitedEdges
-     * @return array[Edge]
+     * @param Vertex    $vertex      current point-of-view
+     * @param number    $totalWeight total weight (so far)
+     * @param boolean[] $visitedVertices
+     * @param Edge[]    $visitedEdges
+     * @return Edge[]
      */
     private function step(Vertex $vertex,$totalWeight,array $visitedVertices,array $visitedEdges){
         if($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight >= $this->bestWeight){ // stop recursion if best result is exceeded (branch and bound)
@@ -179,7 +179,7 @@ class Bruteforce extends Base{
      * no need to optimize this further, as it's only evaluated if branchAndBound is disabled and
      * there's no valid reason why anybody would want to do so.
      * 
-     * @param array[Edge] $edges
+     * @param Edge[] $edges
      * @return float
      */
     private function sumEdges(array $edges){

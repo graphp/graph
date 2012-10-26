@@ -29,7 +29,7 @@ abstract class Base extends AlgorithmBase {
      *
      * @param Vertex     $endVertex
      * @throws Exception
-     * @return array[Edge]
+     * @return Edge[]
      * @uses AlgorithmSp::getEdges()
      * @uses AlgorithmSp::getEdgesToInternal()
      */
@@ -43,7 +43,7 @@ abstract class Base extends AlgorithmBase {
      * @param Vertex $endVertex
      * @param array  $edges     array of all input edges to operate on
      * @throws Exception
-     * @return array[Edge]
+     * @return Edge[]
      * @uses AlgorithmSp::getEdges() if no edges were given
      */
     protected function getEdgesToInternal(Vertex $endVertex,array $edges){
@@ -71,7 +71,7 @@ abstract class Base extends AlgorithmBase {
     /**
      * get sum of weight of given edges
      *
-     * @param array[Edge] $edges
+     * @param Edge[] $edges
      * @return float
      * @uses Edge::getWeight()
      */
@@ -86,7 +86,7 @@ abstract class Base extends AlgorithmBase {
     /**
      * get array of all vertices the given start vertex has a path to
      * 
-     * @return array[Vertex]
+     * @return Vertex[]
      * @uses AlgorithmSp::getDistanceMap()
      */
     public function getVertices(){
@@ -103,7 +103,7 @@ abstract class Base extends AlgorithmBase {
     /**
      * get array of all vertices' IDs the given start vertex has a path to
      * 
-     * @return array[int]
+     * @return int[]
      * @uses AlgorithmSp::getDistanceMap()
      */
     public function getVerticesId(){
@@ -113,7 +113,7 @@ abstract class Base extends AlgorithmBase {
     /**
      * get map of vertex IDs to distance
      *
-     * @return array[float]
+     * @return float[]
      * @uses AlgorithmSp::getEdges()
      * @uses AlgorithmSp::getEdgesToInternal()
      * @uses AlgorithmSp::sumEdges()
@@ -158,8 +158,8 @@ abstract class Base extends AlgorithmBase {
     /**
      * get cheapest edges (lowest weight) for given map of vertex predecessors
      * 
-     * @param array[Vertex] $predecessor
-     * @return array[Edge]
+     * @param Vertex[] $predecessor
+     * @return Edge[]
      * @uses Graph::getVertices()
      * @uses Vertex::getEdgesTo()
      * @uses Edge::getFirst()
@@ -186,7 +186,7 @@ abstract class Base extends AlgorithmBase {
     /**
      * get all edges on shortest path for this vertex
      * 
-     * @return array[Edge]
+     * @return Edge[]
      */
     abstract public function getEdges();
 }

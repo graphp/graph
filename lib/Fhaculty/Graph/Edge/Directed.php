@@ -112,7 +112,7 @@ class Directed extends Base{
     /**
      * get all edges parallel to this edge (excluding self)
      *
-     * @return array[Edge]
+     * @return Edge[]
      * @throws LogicException
      */
     public function getEdgesParallel(){

@@ -44,7 +44,7 @@ class BreadthFirst extends Base{
     /**
      * get map of vertex IDs to distance
      * 
-     * @return array[int]
+     * @return int[]
      * @uses Vertex::hasLoop()
      */
     public function getDistanceMap(){
@@ -77,7 +77,7 @@ class BreadthFirst extends Base{
     /**
      * get array of all target vertices this vertex has a path to
      * 
-     * @return array[Vertex]
+     * @return Vertex[]
      * @uses AlgorithmSpBreadthFirst::getDistanceMap()
      */
     public function getVertices(){

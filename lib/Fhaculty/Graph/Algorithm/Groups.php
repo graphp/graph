@@ -59,7 +59,7 @@ class Groups extends Base{
     /**
      * get vector of all group numbers
      *
-     * @return array[int]
+     * @return int[]
      * @uses Vertex::getGroup()
      */
     public function getGroups(){
@@ -74,7 +74,7 @@ class Groups extends Base{
      * get array of all vertices in the given group
      *
      * @param int $group
-     * @return array[Vertex]
+     * @return Vertex[]
      * @uses Vertex::getGroup()
      */
     public function getVerticesGroup($group){

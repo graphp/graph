@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm\MaximumMatching;
 
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
 abstract class Base extends AlgorithmBase {
@@ -49,7 +50,7 @@ abstract class Base extends AlgorithmBase {
     /**
      * create new resulting graph with minimum-cost flow on edges
      *
-     * @return array[Edge]
+     * @return Edge[]
      */
     abstract public function getEdges();
 }

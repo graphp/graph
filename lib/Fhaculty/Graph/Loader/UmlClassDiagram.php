@@ -239,7 +239,7 @@ class UmlClassDiagram extends Base{
     /**
      * create a separate graph for each connected component
      * 
-     * @return array[Graph]
+     * @return Graph[]
      * @uses AlgorithmConnectedComponents::createGraphsComponents()
      */
     public function createGraphsComponents(){

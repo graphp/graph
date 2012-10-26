@@ -32,7 +32,7 @@ class Kruskal extends Base{
     
     /**
      *
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdges(){
         //Sortiere Kanten im Graphen

@@ -22,7 +22,7 @@ abstract class Base extends AlgorithmBase {
     /**
      * get all edges on minimum spanning tree
      * 
-     * @return array[Edge]
+     * @return Edge[]
      */
     abstract public function getEdges();
 }

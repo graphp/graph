@@ -8,7 +8,7 @@ class Cycle extends Walk{
     /**
      * create new cycle instance from given predecessor map
      * 
-     * @param array[Vertex] $predecessors map of vid => predecessor vertex instance
+     * @param Vertex[] $predecessors map of vid => predecessor vertex instance
      * @param Vertex        $vertex       start vertex to search predecessors from
      * @param int           $by
      * @param boolean       $desc
@@ -54,7 +54,7 @@ class Cycle extends Walk{
     /**
      * create new cycle instance with edges between given vertices
      * 
-     * @param array[Vertex] $vertices
+     * @param Vertex[] $vertices
      * @param int           $by
      * @param boolean       $desc
      * @return Cycle
@@ -84,7 +84,7 @@ class Cycle extends Walk{
     /**
      * create new cycle instance with vertices connected by given edges
      * 
-     * @param array[Edge] $edges
+     * @param Edge[] $edges
      * @param Vertex      $startVertex
      * @return Cycle
      */

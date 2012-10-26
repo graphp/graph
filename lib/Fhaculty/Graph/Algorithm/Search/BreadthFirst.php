@@ -8,7 +8,7 @@ use Fhaculty\Graph\Graph;
 class BreadthFirst extends Base{
     /**
      *
-     * @return array[Vertex]
+     * @return Vertex[]
      */
     public function getVertices(){
         $queue = array($this->startVertex);

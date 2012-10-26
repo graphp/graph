@@ -89,7 +89,7 @@ class ConnectedComponents extends Base{
     /**
      * separate input graph into separate independant and unconnected graphs
      * 
-     * @return array[Graph]
+     * @return Graph[]
      * @uses Graph::getVertices()
      * @uses AlgorithmSearchBreadthFirst::getVertices()
      */

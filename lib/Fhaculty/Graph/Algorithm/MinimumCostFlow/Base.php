@@ -48,7 +48,7 @@ abstract class Base extends AlgorithmBase {
      * helper used to add $newFlow to original edges of $clonedEdges in graph $resultGraph
      * 
      * @param Graph       $resultGraph graph to look for original edges
-     * @param array[Edge] $clonedEdges array of cloned edges to be modified
+     * @param Edge[] $clonedEdges array of cloned edges to be modified
      * @param number      $newFlow     flow to add
      * @uses Graph::getEdgeClone()
      * @uses Graph::getEdgeCloneInverted()

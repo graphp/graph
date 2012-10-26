@@ -89,7 +89,7 @@ class Graph extends Set{
     /**
      * create new clone/copy of this graph - copy all attributes and vertices. but only copy all given edges
      *
-     * @param array[Edge] $edges array of edges to be cloned
+     * @param Edge[] $edges array of edges to be cloned
      * @return Graph
      * @uses Graph::createGraphCloneEdgeless()
      * @uses Graph::createEdgeClone() for each edge to be cloned
@@ -115,7 +115,7 @@ class Graph extends Set{
     /**
      * create a new clone/copy of this graph - copy all attributes and given vertices and its edges
      * 
-     * @param array[Vertex] $vertices array of vertices to keep
+     * @param Vertex[] $vertices array of vertices to keep
      * @return Graph
      * @uses Graph::createGraphClone() to create a complete clone
      * @uses Vertex::destroy() to remove unneeded vertices again

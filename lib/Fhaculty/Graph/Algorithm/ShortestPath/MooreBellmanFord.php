@@ -13,9 +13,9 @@ class MooreBellmanFord extends Base{
     /**
      *
      *
-     * @param array[Edge]   $edges
-     * @param array[int]    $totalCostOfCheapestPathTo
-     * @param array[Vertex] $predecessorVertexOfCheapestPathTo
+     * @param Edge[]   $edges
+     * @param int[]    $totalCostOfCheapestPathTo
+     * @param Vertex[] $predecessorVertexOfCheapestPathTo
      *
      * @return Vertex|NULL
      */
@@ -44,7 +44,7 @@ class MooreBellmanFord extends Base{
     /**
      * Calculate the Moore-Bellman-Ford-Algorithm and get all edges on shortest path for this vertex
      * 
-     * @return array[Edge]
+     * @return Edge[]
      * @throws NegativeCycleException if there is a negative cycle
      */
     public function getEdges(){

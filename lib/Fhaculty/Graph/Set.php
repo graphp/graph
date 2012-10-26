@@ -15,20 +15,20 @@ use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 abstract class Set{
     /**
      *
-     * @var array[Edge]
+     * @var Edge[]
      */
     protected $edges = array();
 
     /**
      *
-     * @var array[Vertex]
+     * @var Vertex[]
      */
     protected $vertices = array();
 
     /**
      * returns an array of ALL Edges in this graph
      *
-     * @return array[Edge]
+     * @return Edge[]
      */
     public function getEdges(){
         return $this->edges;
@@ -37,7 +37,7 @@ abstract class Set{
     /**
      * returns an array of all Vertices
      *
-     * @return array[Vertex]
+     * @return Vertex[]
      */
     public function getVertices(){
         return $this->vertices;

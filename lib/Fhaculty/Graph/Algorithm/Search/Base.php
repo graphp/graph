@@ -67,14 +67,14 @@ abstract class Base extends AlgorithmBase{
     /**
      * get array of all vertices that can be reached from start vertex
      * 
-     * @return array[Vertex]
+     * @return Vertex[]
      */
     abstract public function getVertices();
     
     /**
      * get array of all vertices' IDs that can be reached from start vertex
      * 
-     * @return array[int]
+     * @return int[]
      * @uses AlgorithmSearch::getVertices()
      */
     public function getVerticesIds(){

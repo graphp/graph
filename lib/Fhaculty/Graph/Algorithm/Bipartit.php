@@ -47,7 +47,7 @@ class Bipartit extends Base{
     /**
      * get map of vertex ID to vertex color
      * 
-     * @return array[int]
+     * @return int[]
      * @throws UnexpectedValueException if graph is not bipartit
      * @uses AlgorithmBipartit::checkVertex() for every vertex not already colored
      */
@@ -83,7 +83,7 @@ class Bipartit extends Base{
     /**
      * get groups of vertices per color
      * 
-     * @return array[array[Vertex]]
+     * @return array[] array of arrays of vertices
      */
     public function getColorVertices(){
         $colors = $this->getColors();
