@@ -16,7 +16,7 @@ The recommended way to install this library is [through composer](http://getcomp
 
 ## Examples
 
-Looking for more example scripts? Check out [flos/graph](https://github.com/flos/graph).
+Looking for more example scripts? Check out [flos/graph](https://github.com/flos/graph-php).
 
 ## Features
 
