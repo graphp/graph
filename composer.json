@@ -1,5 +1,5 @@
 {
-    "name": "Flos/graph",
+    "name": "clue/graph",
     "autoload": {
         "psr-0": {"Fhaculty": "lib/"}
     }
