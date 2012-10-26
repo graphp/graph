@@ -49,14 +49,28 @@ The recommended way to install this library is [through composer](http://getcomp
 
 * Loading graphs (from plain text adjacency lists or edge lists)
 * Run algorithms
- * Deep-/Breadth search
- * Travelling salesman
- * Minimal spanning tree: Kruskal, Prim
- * Shortest path: Dijkstra, Moore-Bellman-Ford
- * Maximum flow: Edmonds-Karp
- * Minimum cost flow: Cycle cancelling, Successive shortest path
- * .. more to come
-* Plotting with GraphViz (local installation needet)
+ * Search
+  * Deep first (DFS)
+  * Breadth first search (BFS)
+ * Traveling salesman problem (TSP)
+  * Bruteforce algorithm
+  * Minimum spanning tree heuristic (TSP MST heuristic)
+  * Nearest neighbor heuristic (NN heuristic)
+ * Minimum spanning tree (MST)
+  * Kruskal
+  * Prim
+ * Shortest path
+  * Dijkstra
+  * Moore-Bellman-Ford (MBF)
+  * Counting number of hops (simple BFS)
+ * Maximum flow
+  * Edmonds-Karp
+ * Minimum cost flow (MCF)
+  * Cycle canceling
+  * Successive shortest path
+ * Maximum matching
+  * Flow algorithm
+* Plotting with GraphViz (local installation needed)
 
 ## Tests
 
