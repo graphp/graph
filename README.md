@@ -25,7 +25,7 @@ $rome->createEdgeTo($rome); // create loop
 ````
 
 Let's see which city (Vertex) has road (i.e. an edge pointing) to Rome
-````
+````php
 foreach($rome->getVerticesEdgeFrom() as $vertex){
     echo $vertex->getId().' leads to rome'.PHP_EOL; // result: Madrid and Rome itself
 }
@@ -47,30 +47,30 @@ The recommended way to install this library is [through composer](http://getcomp
 
 ## Features
 
-* Loading graphs (from plain text adjacency lists or edge lists)
-* Run algorithms
- * Search
-  * Deep first (DFS)
-  * Breadth first search (BFS)
- * Traveling salesman problem (TSP)
-  * Bruteforce algorithm
-  * Minimum spanning tree heuristic (TSP MST heuristic)
-  * Nearest neighbor heuristic (NN heuristic)
- * Minimum spanning tree (MST)
-  * Kruskal
-  * Prim
- * Shortest path
-  * Dijkstra
-  * Moore-Bellman-Ford (MBF)
-  * Counting number of hops (simple BFS)
- * Maximum flow
-  * Edmonds-Karp
- * Minimum cost flow (MCF)
-  * Cycle canceling
-  * Successive shortest path
- * Maximum matching
-  * Flow algorithm
-* Plotting with GraphViz (local installation needed)
+*   Loading graphs (from plain text adjacency lists or edge lists)
+*   Run algorithms
+    * Search
+        * Deep first (DFS)
+        * Breadth first search (BFS)
+    * Traveling salesman problem (TSP)
+        * Bruteforce algorithm
+        * Minimum spanning tree heuristic (TSP MST heuristic)
+        * Nearest neighbor heuristic (NN heuristic)
+    * Minimum spanning tree (MST)
+        * Kruskal
+        * Prim
+    * Shortest path
+        * Dijkstra
+        * Moore-Bellman-Ford (MBF)
+        * Counting number of hops (simple BFS)
+    * Maximum flow
+        * Edmonds-Karp
+    * Minimum cost flow (MCF)
+        * Cycle canceling
+        * Successive shortest path
+    * Maximum matching
+        * Flow algorithm
+*   Plotting with GraphViz (local installation needed)
 
 ## Tests
 
