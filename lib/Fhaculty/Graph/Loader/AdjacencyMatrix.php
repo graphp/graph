@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Loader;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Graph;
 
 class AdjacencyMatrix extends File{
@@ -14,7 +15,7 @@ class AdjacencyMatrix extends File{
         $edgeCounter = 0;
         
         if(count($file) !== ($vertexCount+1)){
-            throw new Exception('Expects '.($vertexCount+1).' lines, but found '.count($file));
+            throw new UnexpectedValueException('Expects '.($vertexCount+1).' lines, but found '.count($file));
         }
         
         $graph->createVertices($vertexCount);

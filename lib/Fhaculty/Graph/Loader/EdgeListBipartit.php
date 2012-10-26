@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Loader;
 
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Algorithm\Groups as AlgorithmGroups;
 use \Exception;
@@ -17,7 +19,7 @@ class EdgeListBipartit extends File{
         $countOfVerticesInA = $this->readInt($file[1]);
         
         if($countOfVerticesInA > $countOfAllVertices || $countOfVerticesInA < 0){
-            throw new Exception('Invalid value for number of vertices in group 0');
+            throw new UnexpectedValueException('Invalid value for number of vertices in group 0');
         }
 
         $graph->createVertices($countOfAllVertices);
@@ -45,7 +47,7 @@ class EdgeListBipartit extends File{
         
         $alg = new AlgorithmGroups($graph);
         if(!$alg->isBipartit()){
-            throw new Exception('Graph read from file does not form a valid bipartit graph');
+            throw new UnexpectedValueException('Graph read from file does not form a valid bipartit graph');
         }
         
         return $graph;

@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Loader;
 
+use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Graph;
 use \Exception;
 
@@ -16,7 +17,7 @@ abstract class File extends Base{
      * get an array of all lines in this file
      * 
      * @return array[string]
-     * @throws Exception if file can not be read
+     * @throws InvalidArgumentException if file can not be read
      */
     protected function getLines(){
         $ret = file($this->fileName);
@@ -35,11 +36,11 @@ abstract class File extends Base{
      * 
      * @param string $line
      * @return int
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     protected function readInt($line){
         if((string)(int)$line !== $line){
-            throw new Exception('Invalid integer');
+            throw new InvalidArgumentException('Invalid integer');
         }
         return (int)$line;
     }
@@ -49,11 +50,11 @@ abstract class File extends Base{
      *
      * @param string $line
      * @return float
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     protected function readFloat($line){
         if((string)(float)$line != $line){
-            throw new Exception('Invalid float');
+            throw new InvalidArgumentException('Invalid float');
         }
         return (float)$line;
     }
@@ -65,7 +66,7 @@ abstract class File extends Base{
      * @param array  $parts
      * @param Graph  $graph
      * @return array[mixed]
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     protected function readLine($line,$parts,Graph $graph=NULL){
         $ret = array();
@@ -73,7 +74,7 @@ abstract class File extends Base{
         $i = 0;
         foreach($parts as $key=>$part){
             if(!isset($explode[$i])){
-                throw new Exception('Line does not split into enough parts');
+                throw new InvalidArgumentException('Line does not split into enough parts');
             }
             $value = $explode[$i++];
             if($part === 'int'){
@@ -83,7 +84,7 @@ abstract class File extends Base{
             }else if($part === 'vertex'){
                 $value = $graph->getVertex($value);
             }else{
-                throw new Exception('Invalid type "'.$part.'"');
+                throw new InvalidArgumentException('Invalid type "'.$part.'"');
             }
             $ret[$key] = $value;
         }
