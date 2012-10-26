@@ -1,6 +1,37 @@
-# graph-php
+# graph
 
 A mathematical graph/network library written in PHP
+
+## Examples
+
+Initialize sample graph
+````php
+<?php
+require_once 'vendor/autoload.php';
+
+use \Fhaculty\Graph\Graph as Graph;
+
+$graph = new Graph();
+
+// create some cities
+$rome = $graph->createVertex('Rome');
+$madrid = $graph->createVertex('Madrid');
+$cologne = $graph->createVertex('Cologne');
+
+// build some roads
+$cologne->createEdgeTo($madrid);
+$madrid->createEdgeTo($rome);
+$rome->createEdgeTo($rome); // create loop
+````
+
+Let's see which city (Vertex) has road (i.e. an edge pointing) to Rome
+````
+foreach($rome->getVerticesEdgeFrom() as $vertex){
+    echo $vertex->getId().' leads to rome'.PHP_EOL; // result: Madrid and Rome itself
+}
+````
+
+Looking for more example scripts? Check out [flos/graph-php](https://github.com/flos/graph-php).
 
 ## Install
 
@@ -13,32 +44,6 @@ The recommended way to install this library is [through composer](http://getcomp
     }
 }
 ```
-
-## Examples
-
-````php
-<?php
-require_once 'vendor/autoload.php';
-
-use \Fhaculty\Graph\Graph as Graph;
-
-$graph = new Graph();
-
-$rome = $graph->createVertex('Rome');
-$madrid = $graph->createVertex('Madrid');
-$cologne = $graph->createVertex('Cologne');
-
-$cologne->createEdgeTo($madrid);
-$madrid->createEdgeTo($rome);
-$rome->createEdgeTo($rome); // create loop
-
-foreach($rome->getVerticesEdgeFrom() as $vertex){
-    echo $vertex->getId().' leads to rome'.PHP_EOL;
-}
-
-````
-
-Looking for more example scripts? Check out [flos/graph-php](https://github.com/flos/graph-php).
 
 ## Features
 
