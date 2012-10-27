@@ -3,8 +3,8 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-
 use Fhaculty\Graph\Exception\InvalidArgumentException;
+use \stdClass;
 
 class GraphViz{
     /**
@@ -228,7 +228,7 @@ class GraphViz{
             $layout = $vertex->getLayout();
             
             if(!isset($layout['label'])){
-                $layout['label'] = self::escape($vid);
+                $layout['label'] = $vid;
             }
             
             $balance = $vertex->getBalance();
@@ -236,12 +236,12 @@ class GraphViz{
                 if($balance > 0){
                     $balance = '+'.$balance;
                 }
-                $layout['label'] .= ' '.self::escape('('.$balance.')');
+                $layout['label'] .= ' ('.$balance.')';
             }
             
             $group = $vertex->getGroup();
             if($group !== NULL){
-                $layout['label'] .= ' '.self::escape('['.$group.']');
+                $layout['label'] .= ' ['.$group.']';
             }
             
             if($vertex->isIsolated() || $layout){
@@ -285,7 +285,7 @@ class GraphViz{
             }
             
             if($label !== NULL){
-                $attrs['label'] = self::escape($label);
+                $attrs['label'] = $label;
             }
             // this edge also points to the opposite direction => this is actually an undirected edge
             if($directed && $currentEdge->isConnection($currentTargetVertex,$currentStartVertex)){
@@ -313,6 +313,10 @@ class GraphViz{
     }
     
     public static function escape($id){
+        // see raw()
+        if($id instanceof stdClass && isset($id->string)){
+            return $id->string;
+        }
         // see @link: There is no semantic difference between abc_2 and "abc_2"
         if(preg_match('/^(?:\-?(?:\.\d+|\d+(?:\.\d+)?))$/i',$id)){ // numeric or simple string, no need to quote (only for simplicity)
             return $id;
@@ -336,9 +340,20 @@ class GraphViz{
             }else{
                 $script .= ' ';
             }
-            $script .= $name.'='.$value;
+            $script .= $name.'='.self::escape($value);
         }
         $script .= ']';
         return $script;
+    }
+    
+    /**
+     * create a raw string representation, i.e. do NOT escape the given string when used in graphviz output
+     * 
+     * @param string $string
+     * @return StdClass
+     * @see GraphViz::escape()
+     */
+    public function raw($string){
+        return (object)array('string'=>$string);
     }
 }

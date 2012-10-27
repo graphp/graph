@@ -58,7 +58,7 @@ class Graph extends Set{
         }
         $newVertex = new Vertex($id,$this);
         // TODO: properly set attributes of vertex
-        $newVertex->setLayoutRaw($originalVertex->getLayout());
+        $newVertex->setLayout($originalVertex->getLayout());
         $newVertex->setBalance($originalVertex->getBalance());
         $newVertex->setGroup($originalVertex->getGroup());
         $this->vertices[$id] = $newVertex;
@@ -74,7 +74,7 @@ class Graph extends Set{
      */
     public function createGraphCloneEdgeless(){
         $graph = new Graph();
-//         $graph->setLayoutRaw($this->getLayout());
+//         $graph->setLayout($this->getLayout());
         // TODO: set additional graph attributes
         foreach($this->getVertices() as $originalVertex){
             $vertex = $graph->createVertexClone($originalVertex);
@@ -179,7 +179,7 @@ class Graph extends Set{
             $newEdge = $a->createEdge($b); // create new edge between new a and b
         }
         // TODO: copy edge attributes
-        $newEdge->setLayoutRaw($originalEdge->getLayout());
+        $newEdge->setLayout($originalEdge->getLayout());
         $newEdge->setWeight($originalEdge->getWeight());
         $newEdge->setFlow($originalEdge->getFlow());
         $newEdge->setCapacity($originalEdge->getCapacity());

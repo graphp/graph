@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Loader;
 
+use Fhaculty\Graph\GraphViz;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
@@ -182,7 +184,7 @@ class UmlClassDiagram extends Base{
         $label .= '}"';
         
         $vertex->setLayoutAttribute('shape','record');
-        $vertex->setLayoutRaw('label',$label);
+        $vertex->setLayoutAttribute('label',GraphViz::raw($label));
         return $vertex;
     }
     
