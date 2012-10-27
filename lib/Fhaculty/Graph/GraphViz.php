@@ -222,6 +222,9 @@ class GraphViz{
             $script .= '  edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
         }
         
+        // only append group number to vertex label if there are at least 2 different groups
+        $showGroups = ($this->graph->getNumberOfGroups() > 1);
+        
         // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
         // other vertices wil be added automatically due to below edge definitions
         foreach ($this->graph->getVertices() as $vid=>$vertex){
@@ -239,9 +242,8 @@ class GraphViz{
                 $layout['label'] .= ' ('.$balance.')';
             }
             
-            $group = $vertex->getGroup();
-            if($group !== NULL){
-                $layout['label'] .= ' ['.$group.']';
+            if($showGroups){
+                $layout['label'] .= ' ['.$vertex->getGroup().']';
             }
             
             if($vertex->isIsolated() || $layout){
