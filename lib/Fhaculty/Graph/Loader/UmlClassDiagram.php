@@ -365,8 +365,8 @@ class UmlClassDiagram extends Base{
             }else{
                 return '[…]';
             }
-        }else if(is_object($var)){
-            return get_class($var).'{…}';
+        }else if(is_object($value)){
+            return get_class($value).'{…}';
         }
         return '…';
     }
