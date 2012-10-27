@@ -3,21 +3,13 @@
 namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Layoutable;
-
 use Fhaculty\Graph\Vertex;
-
 use Fhaculty\Graph\Graph;
-
 use Fhaculty\Graph\Exception\LogicException;
-
 use Fhaculty\Graph\Exception\RangeException;
-
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Exception\BadMethodCallException;
-
 use \ArrayIterator;
 
 abstract class Base extends Layoutable{
@@ -450,6 +442,7 @@ abstract class Base extends Layoutable{
      *
      * @uses Graph::removeEdge()
      * @uses Vertex::removeEdge()
+     * @return void
      */
     public function destroy(){
         $this->getGraph()->removeEdge($this);

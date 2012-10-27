@@ -3,7 +3,6 @@
 namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Vertex;
 
 class Undirected extends Base{

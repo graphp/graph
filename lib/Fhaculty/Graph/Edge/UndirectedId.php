@@ -3,9 +3,7 @@
 namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Vertex;
-
 use Fhaculty\Graph\Graph;
 
 class UndirectedId extends Base{

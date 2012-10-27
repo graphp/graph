@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Exception\UnderflowException;
 
 class Cycle extends Walk{    
     /**
@@ -13,7 +14,7 @@ class Cycle extends Walk{
      * @param int           $by
      * @param boolean       $desc
      * @return Cycle
-     * @throws Exception\UnderflowException
+     * @throws UnderflowException
      * @see Edge::getFirst() for parameters $by and $desc
      * @uses Cycle::factoryFromVertices()
      */
@@ -58,7 +59,7 @@ class Cycle extends Walk{
      * @param int           $by
      * @param boolean       $desc
      * @return Cycle
-     * @throws Exception\UnderflowException if no vertices were given
+     * @throws UnderflowException if no vertices were given
      * @see Edge::getFirst() for parameters $by and $desc
      */
     public static function factoryFromVertices($vertices,$by=Edge::ORDER_FIFO,$desc=false){
@@ -74,7 +75,7 @@ class Cycle extends Walk{
         	$last = $vertex;
         }
         if($last === NULL){
-            throw new Exception\UnderflowException('No vertices given');
+            throw new UnderflowException('No vertices given');
         }
         $edges []= Edge::getFirst($last->getEdgesTo($first),$by,$desc);         // additional edge from last vertex to first vertex
         

@@ -2,16 +2,13 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Exception\OverflowException;
-
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Exception\RuntimeException;
-
+use Fhaculty\Graph\Exception\OutOfBoundsException;
 use Fhaculty\Graph\Algorithm\ConnectedComponents as AlgorithmConnectedComponents;
 use Fhaculty\Graph\Algorithm\Bipartit as AlgorithmBipartit;
 use Fhaculty\Graph\Algorithm\Eulerian as AlgorithmEulerian;
@@ -238,11 +235,11 @@ class Graph extends Set{
      * 
      * @param int|string $id identifier of Vertex
      * @return Vertex
-     * @throws Exception\OutOfBoundsException if given vertex ID does not exist
+     * @throws OutOfBoundsException if given vertex ID does not exist
      */
     public function getVertex($id){
         if( ! isset($this->vertices[$id]) ){
-            throw new Exception\OutOfBoundsException('Vertex '.$id.' does not exist');
+            throw new OutOfBoundsException('Vertex '.$id.' does not exist');
         }
         
         return $this->vertices[$id];
@@ -256,7 +253,7 @@ class Graph extends Set{
      * vertex from the list of known vertices.
      *
      * @return Vertex first vertex found in this graph
-     * @throws Exception\UnderflowException if Graph has no vertices
+     * @throws UnderflowException if Graph has no vertices
      * @see Vertex::getFirst() if you need to apply ordering first
      */
     public function getVertexFirst(){
@@ -264,14 +261,14 @@ class Graph extends Set{
             return $vertex;
         }
         
-        throw new Exception\UnderflowException("Graph has no vertices");
+        throw new UnderflowException("Graph has no vertices");
     }
     
     /**
      * get degree for k-regular-graph (only if each vertex has the same degree)
      * 
      * @return int
-     * @throws Exception\UnderflowException if graph is empty
+     * @throws UnderflowException if graph is empty
      * @throws UnexpectedValueException if graph is not regular (i.e. vertex degrees are not equal)
      * @uses Vertex::getDegree()
      */
@@ -509,7 +506,7 @@ class Graph extends Set{
     public function removeEdge(Edge $edge){
         $id = array_search($edge,$this->edges,true);
         if($id === false){
-            throw new Exception\InvalidArgumentException('Given edge does NOT exist');
+            throw new InvalidArgumentException('Given edge does NOT exist');
         }
         unset($this->edges[$id]);
     }
@@ -526,7 +523,7 @@ class Graph extends Set{
     public function removeVertex(Vertex $vertex){
         $id = array_search($vertex,$this->vertices,true);
         if($id === false){
-            throw new Exception\InvalidArgumentException('Given vertex does NOT exist');
+            throw new InvalidArgumentException('Given vertex does NOT exist');
         }
         unset($this->vertices[$id]);
     }
@@ -611,7 +608,7 @@ class Graph extends Set{
      * @see Graph::createGraphClone() instead
      */
     private function __clone(){
-        throw new Exception\BadMethodCallException();
+        throw new BadMethodCallException();
     }
     
     public function getLayout(){

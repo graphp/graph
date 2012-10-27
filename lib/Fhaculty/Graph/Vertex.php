@@ -2,6 +2,14 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Exception\BadMethodCallException;
+
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+
+use Fhaculty\Graph\Exception\UnderflowException;
+
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+
 use \ArrayIterator;
 use \SplPriorityQueue;
 use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst as AlgorithmSpBreadthFirst;
@@ -71,8 +79,8 @@ class Vertex extends Layoutable{
      * @param int                 $by       criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param boolean             $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Vertex
-     * @throws DomainException if criterium is unknown
-     * @throws InvalidArgumentException if no vertices exist
+     * @throws InvalidArgumentException if criterium is unknown
+     * @throws UnderflowException if no vertices exist
      * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
      * @uses Vertex::getDegree()
@@ -108,7 +116,7 @@ class Vertex extends Layoutable{
             }else if($by === self::ORDER_GROUP){
                 $now = $vertex->getGroup();
             }else{
-                throw new Exception\InvalidArgumentException('Invalid order flag "'.$by.'"');
+                throw new InvalidArgumentException('Invalid order flag "'.$by.'"');
             }
             if($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)){
                 $ret = $vertex;
@@ -116,7 +124,7 @@ class Vertex extends Layoutable{
             }
         }
         if($ret === NULL){
-            throw new Exception\UnderflowException('No vertex found');
+            throw new UnderflowException('No vertex found');
         }
         return $ret;
     }
@@ -128,7 +136,7 @@ class Vertex extends Layoutable{
      * @param int                 $by       criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param boolean             $desc     whether to return biggest first (true) instead of smallest first (default:false)
      * @return Iterator iterator object (supporting at the very least foreach)
-     * @throws DomainException if criterium is unknown
+     * @throws InvalidArgumentException if criterium is unknown
      * @throws UnexpectedValueException if trying to sort by reverse string IDs
      * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
@@ -153,7 +161,7 @@ class Vertex extends Layoutable{
             if($by === self::ORDER_ID){
                 $now = $vertex->getId();
                 if($desc && is_string($now)){
-                    throw new Exception\UnexpectedValueException('Unable to reverse sorting for string IDs');
+                    throw new UnexpectedValueException('Unable to reverse sorting for string IDs');
                 }
             }else if($by === self::ORDER_DEGREE){
                 $now = $vertex->getDegree();
@@ -164,7 +172,7 @@ class Vertex extends Layoutable{
             }else if($by === self::ORDER_GROUP){
                 $now = $vertex->getGroup();
             }else{
-                throw new Exception\InvalidArgumentException('Invalid order flag "'.$by.'"');
+                throw new InvalidArgumentException('Invalid order flag "'.$by.'"');
             }
             if($desc && $now !== NULL){
                 $now = -$now;
@@ -229,7 +237,7 @@ class Vertex extends Layoutable{
     
     public function setBalance($balance){
         if($balance !== NULL && !is_float($balance) && !is_int($balance)){
-            throw new Exception\InvalidArgumentException('Invalid balance given - must be numeric');
+            throw new InvalidArgumentException('Invalid balance given - must be numeric');
         }
         $this->balance = $balance;
         return $this;
@@ -254,7 +262,7 @@ class Vertex extends Layoutable{
     
         foreach ($this->edges as $edge){
             if ( ! ($edge instanceof EdgeDirected)){
-                throw new Exception\UnexpectedValueException("TODO: undirected edges not suported yet");
+                throw new UnexpectedValueException("TODO: undirected edges not suported yet");
             }
             
             if ($edge->hasVertexStart($this)){ // edge is an outgoing edge of this vertex
@@ -277,7 +285,7 @@ class Vertex extends Layoutable{
      */
     public function setGroup($group){
         if(!is_int($group)){
-            throw new Exception\InvalidArgumentException('Invalid group number');
+            throw new InvalidArgumentException('Invalid group number');
         }
         $this->group = $group;
         return $this;
@@ -373,7 +381,7 @@ class Vertex extends Layoutable{
      */
     public function createEdgeTo(Vertex $vertex){
         if($vertex->getGraph() !== $this->graph){
-            throw new Exception\InvalidArgumentException('Target vertex has to be within the same graph');
+            throw new InvalidArgumentException('Target vertex has to be within the same graph');
         }
         
         $edge = new EdgeDirected($this,$vertex);
@@ -393,7 +401,7 @@ class Vertex extends Layoutable{
      */
     public function createEdge(Vertex $vertex){
         if($vertex->getGraph() !== $this->graph){
-            throw new Exception\InvalidArgumentException('Target vertex has to be within the same graph');
+            throw new InvalidArgumentException('Target vertex has to be within the same graph');
         }
         
         $edge = new EdgeUndirectedId($this,$vertex);
@@ -415,7 +423,7 @@ class Vertex extends Layoutable{
     public function removeEdge(Edge $edge){
         $id = array_search($edge,$this->edges,true);
         if($id === false){
-            throw new Exception\InvalidArgumentException('Given edge does NOT exist');                //Tobias: if edge gets Id => output of id
+            throw new InvalidArgumentException('Given edge does NOT exist');
         }
         unset($this->edges[$id]);
     }
@@ -703,6 +711,6 @@ class Vertex extends Layoutable{
      * @throws BadMethodCallException
      */
     private function __clone(){
-        throw new Exception\BadMethodCallException();
+        throw new BadMethodCallException();
     }
 }
