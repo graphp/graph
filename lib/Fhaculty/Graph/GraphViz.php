@@ -92,7 +92,7 @@ class GraphViz{
                 if($value === NULL){
                     unset($old[$key]);
                 }else{
-                    $old[$key] = self::escape($value);
+                    $old[$key] = $value;
                 }
             }
         }
