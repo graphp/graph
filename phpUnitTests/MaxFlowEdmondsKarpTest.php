@@ -9,25 +9,6 @@ use Fhaculty\Graph\Loader\EdgeListWithCapacity as LoaderEdgeListWithCapacity;
 
 class MaxFlowEdmondsKarpTest extends PHPUnit_Framework_TestCase
 {
-    private function readGraph($file){
-        $LoaderEdgeListWithCapacity = new LoaderEdgeListWithCapacity(PATH_DATA.$file);
-        $LoaderEdgeListWithCapacity->setEnableDirectedEdges(true);
-        
-        return $LoaderEdgeListWithCapacity->createGraph();
-    }
-    
-    /**
-     * run algorithm with small graph and check result against known result
-     */
-    public function testKnownResultSmall()
-    {
-        $graph = $this->readGraph('Fluss.txt');
-
-        $alg = new AlgorithmMaxFlowEdmondsKarp($graph->getVertex(0),$graph->getVertex(7));
-        
-        $this->assertEquals(4, $alg->getFlowMax());
-    }
-    
     public function testEdgeDirected(){
         $graph = new Graph();
         $v0 = $graph->createVertex(0);
