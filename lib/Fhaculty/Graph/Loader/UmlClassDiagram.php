@@ -64,7 +64,7 @@ class UmlClassDiagram extends Base{
             catch(Exception $ignore){
                 $parentVertex = $this->createVertexClass($parent);
             }
-            $vertex->createEdgeTo($parentVertex)->setLayout('arrowhead','empty');
+            $vertex->createEdgeTo($parentVertex)->setLayoutAttribute('arrowhead','empty');
         }
         
         foreach($reflection->getInterfaces() as $interface){
@@ -74,7 +74,7 @@ class UmlClassDiagram extends Base{
             catch(Exception $ignore){
                 $parentVertex = $this->createVertexClass($interface);
             }
-            $vertex->createEdgeTo($parentVertex)->setLayout('arrowhead','empty')->setLayout('style','dashed');
+            $vertex->createEdgeTo($parentVertex)->setLayoutAttribute('arrowhead','empty')->setLayoutAttribute('style','dashed');
         }
         
         $label = '"{';
@@ -181,7 +181,7 @@ class UmlClassDiagram extends Base{
         
         $label .= '}"';
         
-        $vertex->setLayout('shape','record');
+        $vertex->setLayoutAttribute('shape','record');
         $vertex->setLayoutRaw('label',$label);
         return $vertex;
     }
@@ -194,17 +194,17 @@ class UmlClassDiagram extends Base{
      * @return LoaderUmlClassDiagram $this (chainable)
      */
     public function createVertexNote($note,$for=NULL){
-        $vertex = $this->graph->createVertex()->setLayout('label',$note."\n")
-                                              ->setLayout('shape','note')
-                                                ->setLayout('fontsize',8)
-                                              //->setLayout('margin','0 0')
-                                              ->setLayout('style','filled')
-                                              ->setLayout('fillcolor','yellow');
+        $vertex = $this->graph->createVertex()->setLayoutAttribute('label',$note."\n")
+                                              ->setLayoutAttribute('shape','note')
+                                                ->setLayoutAttribute('fontsize',8)
+                                              //->setLayoutAttribute('margin','0 0')
+                                              ->setLayoutAttribute('style','filled')
+                                              ->setLayoutAttribute('fillcolor','yellow');
     
         if($for !== NULL){
-            $vertex->createEdgeTo($for)->setLayout('len',1)
-            ->setLayout('style','dashed')
-            ->setLayout('arrowhead','none');
+            $vertex->createEdgeTo($for)->setLayoutAttribute('len',1)
+            ->setLayoutAttribute('style','dashed')
+            ->setLayoutAttribute('arrowhead','none');
         }
         return $vertex;
     }

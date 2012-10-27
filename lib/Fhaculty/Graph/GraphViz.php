@@ -112,8 +112,6 @@ class GraphViz{
                 $this->mergeLayout($this->layoutEdge,$layout);
             }else if($where === self::LAYOUT_VERTEX){
                 $this->mergeLayout($this->layoutVertex,$layout);
-            }else if($where instanceof Layoutable){
-                $where->setLayout($name,$value);
             }else{
                 throw new InvalidArgumentException('Invalid layout identifier');
             }

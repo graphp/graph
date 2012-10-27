@@ -21,8 +21,8 @@ class CycleCanceling extends Base {
         // create resulting graph with supersource and supersink
         $resultGraph = $this->graph->createGraphClone();
 
-        $superSource = $resultGraph->createVertex()->setLayout('label','s*');
-        $superSink   = $resultGraph->createVertex()->setLayout('label','t*');
+        $superSource = $resultGraph->createVertex()->setLayoutAttribute('label','s*');
+        $superSink   = $resultGraph->createVertex()->setLayoutAttribute('label','t*');
 
         $sumBalance = 0;
 
