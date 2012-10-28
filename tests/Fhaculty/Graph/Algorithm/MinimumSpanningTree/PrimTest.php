@@ -3,7 +3,7 @@ use Fhaculty\Graph\Algorithm\MinimumSpanningTree\Prim as AlgorithmMSTPrim;
 use Fhaculty\Graph\Loader\CompleteGraph as LoaderCompleteGraph;
 use Fhaculty\Graph\Loader\EdgeListWeighted as LoaderEdgeListWeighted;
 
-class MSTPrinTest extends PHPUnit_Framework_TestCase
+class PrimTest extends PHPUnit_Framework_TestCase
 {
     public function testKnownComplete(){
         $this->assertCount(4, $this->getResultForComplete(5));

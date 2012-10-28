@@ -7,7 +7,7 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as AlgorithmMaxFlowEdmondsKarp;
 use Fhaculty\Graph\Loader\EdgeListWithCapacity as LoaderEdgeListWithCapacity;
 
-class MaxFlowEdmondsKarpTest extends PHPUnit_Framework_TestCase
+class EdmondsKarpTest extends PHPUnit_Framework_TestCase
 {
     public function testEdgeDirected(){
         $graph = new Graph();

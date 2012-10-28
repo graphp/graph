@@ -6,7 +6,7 @@ use Fhaculty\Graph\Algorithm\MaximumMatching\Flow;
 
 use Fhaculty\Graph\Loader\EdgeListBipartit;
 
-class MMFlowTest extends PHPUnit_Framework_TestCase
+class FlowTest extends PHPUnit_Framework_TestCase
 {    
 //     /**
 //      * run algorithm with small graph and check result against known result
