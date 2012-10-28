@@ -1,6 +1,14 @@
 {
     "name": "clue/graph",
+    "type": "library",
+    "description": "A mathematical graph/network library written in PHP",
+    "keywords": ["graph","network","mathematical","vertex","edge","shortest path","dijkstra","moore-bellman-ford","minimum spanning tree","kruskal","prim"],
+    "homepage": "http://github.com/clue/graph",
+    "license": "MIT",
     "autoload": {
         "psr-0": {"Fhaculty": "lib/"}
+    },
+    "require": {
+        "php": ">=5.3.0"
     }
 }
