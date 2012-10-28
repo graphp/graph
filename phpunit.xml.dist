@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="phpUnitTests/bootstrap.php"
+<phpunit bootstrap="tests/bootstrap.php"
          colors="true" convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
 >
     <testsuites>
-        <testsuite name="gRAPH Test Suite">
-            <directory>./phpUnitTests/</directory>
+        <testsuite name="Graph Test Suite">
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 </phpunit>
