@@ -46,10 +46,6 @@ class Undirected extends Base{
         return array($this->a,$this->b);
     }
     
-    public function toString(){
-        return $this->a->getId()." <-> ".$this->b->getId()." Weight: ".$this->weight;
-    }
-    
     public function isConnection(Vertex $from,Vertex $to){
         //                              one way                or                        other way
         return ( ( $this->a === $from && $this->b === $to ) || ( $this->b === $from && $this->a === $to ) );

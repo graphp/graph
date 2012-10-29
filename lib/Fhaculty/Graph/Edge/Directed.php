@@ -64,10 +64,6 @@ class Directed extends Base{
         return $this->from;
     }
     
-    public function toString(){
-        return $this->from->getId()." -> ".$this->to->getId()." Weight: ".$this->weight;
-    }
-    
     public function isConnection(Vertex $from,Vertex $to){
         return ($this->to === $to && $this->from === $from);
     }

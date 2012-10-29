@@ -228,13 +228,6 @@ abstract class Base extends Layoutable{
         return false;
     }
     
-    /**
-     * Return string with edge visualisation
-     *
-     * @return string
-     */
-    abstract function toString();
-    
     abstract public function isConnection(Vertex $from,Vertex $to);
 
     /**

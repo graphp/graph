@@ -301,26 +301,9 @@ class Vertex extends Layoutable{
     }
     
     /**
-     * Return string with vertex visualisation
-     *
-     * @return string
-     */
-    public function toString(){
-        $return = "Edges of vertex ".$this->id.":\n";
-        
-        foreach ($this->edges as $edge){
-            $return .= "\t".$edge->toString()."\n"; 
-        }
-        
-        return $return;
-    }
-    
-//getter setter
-    
-    /**
      * returns id of this Vertex
      * 
-     * @return int
+     * @return int|string
      */
     public function getId(){
         return $this->id;

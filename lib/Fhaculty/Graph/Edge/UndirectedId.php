@@ -62,10 +62,6 @@ class UndirectedId extends Base{
         return array($this->a,$this->b);
     }
     
-    public function toString(){
-        return $this->a." <-> ".$this->b." Weight: ".$this->weight;
-    }
-    
     public function isLoop(){
         return ($this->a === $this->b);
     }
