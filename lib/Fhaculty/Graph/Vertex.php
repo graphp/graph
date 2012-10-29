@@ -350,6 +350,8 @@ class Vertex extends Layoutable{
      * @uses AlgorithmSpBreadthFirst::getVertices()
      */
     public function getVerticesPathFrom(){
+        throw new BadMethodCallException('TODO');
+        
         $alg = new AlgorithmSpBreadthFirst($this,true);
         return $alg->getVertices();
     }
