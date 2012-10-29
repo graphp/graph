@@ -230,6 +230,20 @@ class Walk extends Set{
     }
     
     /**
+     * return array of all vertex ids of walk (in sequence visited in walk, may contain duplicates)
+     * 
+     * @return string[]
+     * @uses Vertex::getId()
+     */
+    public function getVerticesSequenceId(){
+        $ids = array();
+        foreach($this->vertices as $vertex){
+            $ids []= $vertex->getId();
+        }
+        return $ids;
+    }
+    
+    /**
      * get IDs of all vertices in the walk
      *
      * @return int[]
