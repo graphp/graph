@@ -127,10 +127,10 @@ abstract class Base extends Layoutable{
         }
         if($by === self::ORDER_RANDOM){
             shuffle($edges);
-            return new ArrayIterator($edges); // create iterator for shuffled array (no need to check DESC flag)
+            return $edges; // create iterator for shuffled array (no need to check DESC flag)
         }
         if($by === self::ORDER_FIFO){
-            return new ArrayIterator($desc ? array_reverse($edges) : $edges);
+            return $desc ? array_reverse($edges) : $edges;
         }
         $temp = array(); // temporary indexed array to be sorted
         foreach($edges as $eid=>$edge){
