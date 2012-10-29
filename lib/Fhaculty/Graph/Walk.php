@@ -10,7 +10,26 @@ use Fhaculty\Graph\Exception\LogicException;
  * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  */
-class Walk extends Set{    
+class Walk extends Set{
+    
+    /**
+     * construct new walk from given start vertex and given array of edges
+     * 
+     * @param array  $edges
+     * @param Vertex $startVertex
+     * @return \Fhaculty\Graph\Walk
+     */
+    public static function factoryFromEdges(array $edges,Vertex $startVertex){
+        $vertices = array($startVertex);
+        $vertexCurrent = $startVertex;
+        foreach($edges as $edge){
+            $vertexCurrent = $edge->getVertexToFrom($vertexCurrent);
+            $vertices []= $vertexCurrent;
+        }
+        
+        return new self($vertices, $edges);
+    }
+    
     protected function __construct(array $vertices, array $edges){
         $this->vertices = $vertices;
         $this->edges    = $edges;
