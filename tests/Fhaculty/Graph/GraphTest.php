@@ -48,15 +48,4 @@ class GraphTest extends PHPUnit_Framework_TestCase
         $graph->createVertex(33);
         $graph->createVertex(33);
     }
-
-// commented out because expecting base Exception is not allowed
-//     /**
-//      * @expectedException Exception
-//      */
-//     public function testCanNotCreateVertexDuplicateId(){
-//         $this->graph->createVertex(1);
-//         $this->graph->createVertex(1);
-//     }
-    
-    
 }
