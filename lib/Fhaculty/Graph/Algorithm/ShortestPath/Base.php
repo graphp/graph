@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Walk;
+
 use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
@@ -22,6 +24,19 @@ abstract class Base extends AlgorithmBase {
     
     public function __construct(Vertex $startVertex){
         $this->startVertex = $startVertex;
+    }
+    
+    /**
+     * get walk (path) from start vertex to given end vertex
+     * 
+     * @param Vertex $endVertex
+     * @return Walk
+     * @throws Exception when there's no walk from start to end vertex
+     * @uses self::getEdgesTo()
+     * @uses Walk::factoryFromEdges()
+     */
+    public function getWalkTo(Vertex $endVertex){
+        return Walk::factoryFromEdges($this->getEdgesTo($endVertex), $this->startVertex);
     }
     
     /**
