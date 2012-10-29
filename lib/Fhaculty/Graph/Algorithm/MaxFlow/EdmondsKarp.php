@@ -2,6 +2,10 @@
 
 namespace Fhaculty\Graph\Algorithm\MaxFlow;
 
+use Fhaculty\Graph\Exception\OutOfBoundsException;
+
+use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst;
+
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
@@ -15,7 +19,6 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\Base;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
-use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
 use Fhaculty\Graph\Exception;
 
 class EdmondsKarp extends Base{
@@ -70,8 +73,13 @@ class EdmondsKarp extends Base{
             $graphResidual = $residualAlgorithm->createGraph();
             
             // 1. Search _shortest_ (number of hops and cheapest) path from s -> t
-            $breadthSearchAlg = new SearchBreadthFirst($graphResidual->getVertex($idA));
-            $pathFlow = $breadthSearchAlg->getGraphPathTo($graphResidual->getVertex($idB));
+            $alg = new BreadthFirst($graphResidual->getVertex($idA));
+            try{
+                $pathFlow = $alg->getWalkTo($graphResidual->getVertex($idB));
+            }
+            catch(OutOfBoundsException $e){
+                $pathFlow = NULL;
+            }
 
             if($pathFlow){                                                        // If path exists add the new flow to graph
                 // 2. get max flow from path
