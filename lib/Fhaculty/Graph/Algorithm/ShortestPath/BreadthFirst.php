@@ -2,43 +2,65 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Exception\OutOfBoundsException;
+
+use Fhaculty\Graph\Walk;
+
 use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Vertex;
+use \Exception;
 
 class BreadthFirst extends Base{
-    /**
-     * start vertex this algorithm operates on
-     * 
-     * @var Vertex
-     */
-    private $vertex;
-    
-    /**
-     * 
-     * @var boolean
-     */
-    private $inverse;
-    
-    public function __construct(Vertex $startVertex,$inverse=false){
-        $this->vertex = $startVertex;
-        $this->inverse = $inverse;
-    }
-    
     /**
      * get distance between start vertex and given end vertex
      * 
      * @param Vertex $endVertex
-     * @throws Exception if there's no path to given end vertex
+     * @throws OutOfBoundsException if there's no path to given end vertex
      * @return int
-     * @uses AlgorithmSpBreadthFirst::getDistanceMap()
+     * @uses self::getEdgesTo()
      */
     public function getDistance(Vertex $endVertex){
-        $vid = $endVertex->getId();
-        $map = $this->getDistanceMap();
-        if(!isset($map[$vid])){
-            throw new Exception();
+        return count($this->getEdgesTo($endVertex));
+    }
+    
+    /**
+     * get array of edges on the walk for each vertex (vertex ID => array of walk edges)
+     * 
+     * @return array[]
+     */
+    public function getEdgesMap(){
+        $vertexQueue = array();
+        $edges = array();
+        
+        $vertexCurrent = $this->startVertex;
+        $edgesCurrent = array();
+        
+        do{
+            foreach($vertexCurrent->getEdgesOut() as $edge){
+                $vertexTarget = $edge->getVertexToFrom($vertexCurrent);
+                $vid = $vertexTarget->getId();
+                if(!isset($edges[$vid])){
+                    $vertexQueue []= $vertexTarget;
+                    $edges[$vid] = array_merge($edgesCurrent,array($edge));
+                }
+            }
+            
+            // get next from queue
+            $vertexCurrent = array_shift($vertexQueue);
+            if($vertexCurrent){
+                $edgesCurrent = $edges[$vertexCurrent->getId()];
+            }
+        }while($vertexCurrent);                                                  //untill queue is empty
+    
+        return $edges;
+    }
+    
+    public function getEdgesTo(Vertex $endVertex){
+        $map = $this->getEdgesMap();
+        if(!isset($map[$endVertex->getId()])){
+            throw new OutOfBoundsException();
         }
-        return $map[$vid];
+        return $map[$endVertex->getId()];
     }
     
     /**
@@ -48,18 +70,11 @@ class BreadthFirst extends Base{
      * @uses Vertex::hasLoop()
      */
     public function getDistanceMap(){
-        throw new BadMethodCallException('TODO');
-        
-        $map = array();
-        if($this->vertex->hasLoop()){
-            $map[$this->vertex->getId()] = 1;
+        $ret = array();
+        foreach($this->getEdgesMap() as $vid=>$edges){
+            $ret[$vid] = count($edges);
         }
-        
-        $vertex = $this->vertex;
-        // TODO: actual breadth search + remember level
-        $nexts = $this->inverse ? $vertex->getVerticesEdgeFrom() : $vertex->getVerticesEdgeTo();
-        
-        return $map;
+        return $ret;
     }
     
     /**
@@ -67,10 +82,10 @@ class BreadthFirst extends Base{
      * 
      * @param Vertex $endVertex
      * @return boolean
-     * @uses AlgorithmSpBreadthFirst::getDistanceMap()
+     * @uses AlgorithmSpBreadthFirst::getEdgesMap()
      */
     public function hasVertex(Vertex $endVertex){
-        $map = $this->getDistanceMap();
+        $map = $this->getEdgesMap();
         return isset($map[$endVertex->getId()]);
     }
     
@@ -82,14 +97,22 @@ class BreadthFirst extends Base{
      */
     public function getVertices(){
         $ret = array();
-        $graph = $this->vertex->getGraph();
-        foreach($this->getDistanceMap() as $vid=>$unusedDistance){
+        $graph = $this->startVertex->getGraph();
+        foreach($this->getEdgesMap() as $vid=>$unusedEdges){
             $ret[$vid] = $graph->getVertex($vid);
         }
         return $ret;
     }
     
     public function getEdges(){
-        throw new BadMethodCallException('TODO');
+        $ret = array();
+        foreach($this->getEdgesMap() as $edges){
+            foreach($edges as $edge){
+                if(!in_array($edge,$ret,true)){
+                    $ret []= $edge;
+                }
+            }
+        }
+        return $ret;
     }
 }
