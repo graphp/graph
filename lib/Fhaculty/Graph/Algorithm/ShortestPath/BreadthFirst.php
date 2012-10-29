@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+
 use Fhaculty\Graph\Exception\OutOfBoundsException;
 
 use Fhaculty\Graph\Walk;
@@ -56,9 +58,12 @@ class BreadthFirst extends Base{
     }
     
     public function getEdgesTo(Vertex $endVertex){
+        if($endVertex->getGraph() !== $this->startVertex->getGraph()){
+            throw new InvalidArgumentException('Given target vertex does not belong to the same graph instance');
+        }
         $map = $this->getEdgesMap();
         if(!isset($map[$endVertex->getId()])){
-            throw new OutOfBoundsException();
+            throw new OutOfBoundsException('Given target vertex can not be reached from start vertex');
         }
         return $map[$endVertex->getId()];
     }
@@ -85,6 +90,9 @@ class BreadthFirst extends Base{
      * @uses AlgorithmSpBreadthFirst::getEdgesMap()
      */
     public function hasVertex(Vertex $endVertex){
+        if($endVertex->getGraph() !== $this->startVertex->getGraph()){
+            throw new InvalidArgumentException('Given target vertex does not belong to the same graph instance');
+        }
         $map = $this->getEdgesMap();
         return isset($map[$endVertex->getId()]);
     }
