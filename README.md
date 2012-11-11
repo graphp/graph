@@ -2,6 +2,8 @@
 
 A mathematical graph/network library written in PHP
 
+While the APIs should be stable, this library is still considered *beta* software. Please see *Contributing* below for ways you can help out.
+
 ## Examples
 
 Initialize sample graph
@@ -84,3 +86,13 @@ To run the test suite, you need PHPUnit. Go to the project root and run:
 ````
 $ phpunit
 ````
+
+## Contributing
+
+As stated above, this library is still considered beta software and requires some contributions. While constructing graphs, plotting them and running all algorithms on them has been tested with sample graphs, there's a fair chance that we're missing some special cases for *your* graphs - partly because of some implied assumptions and mostly because of a lack of basic unit tests.
+
+If you encounter any issues, please don't hesitate to drop us a line, file a bug report or even best provide us with a patch / pull request and/or unit test to reproduce your problem.
+
+Besides directly working with the code, any additional documentation, additions to our readme or even fixing simple typos are appreciated just as well.
+
+Any feedback and/or contribution is welcome!
