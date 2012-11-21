@@ -1,12 +1,14 @@
 <?php
 
+use Fhaculty\Graph\Exception\RuntimeException;
+
 use Fhaculty\Graph\Vertex;
 
 use Fhaculty\Graph\Exception\OverflowException;
 
 use Fhaculty\Graph\Graph;
 
-class GraphTest extends PHPUnit_Framework_TestCase
+class GraphTest extends TestCase
 {
     public function setup(){
         $this->graph = new Graph();

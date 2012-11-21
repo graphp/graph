@@ -5,52 +5,43 @@ use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
 use Fhaculty\Graph\Graph;
 
-class ResidualGraphTest extends PHPUnit_Framework_TestCase
-{
+class ResidualGraphTest extends TestCase
+{   
     /**
      * test an edge with capacity unused
      */
     public function testEdgeUnused(){
-    	$graph = new Graph();
+        $graph = new Graph();
     
-    	$graph->createVertex(0)->createEdgeTo($graph->createVertex(1))->setFlow(0)
-    	                                                              ->setCapacity(2)
-    	                                                              ->setWeight(3);
-    
-    	$alg = new ResidualGraph($graph);
-    	$residual = $alg->createGraph();
-    
-    	$this->assertEquals(2,$residual->getNumberOfVertices());
-    	$this->assertEquals(1,$residual->getNumberOfEdges());
-    
-    	$edge = Edge::getFirst($residual->getEdges());
-    
-    	$this->assertEquals(2,$edge->getCapacity());
-    	$this->assertEquals(0,$edge->getFlow());
-    	$this->assertEquals(3,$edge->getWeight());
+        $graph->createVertex(0)->createEdgeTo($graph->createVertex(1))->setFlow(0)
+                                                                      ->setCapacity(2)
+                                                                      ->setWeight(3);
+        
+        $alg = new ResidualGraph($graph);
+        $residual = $alg->createGraph();
+        
+        $this->assertGraphEquals($graph,$residual);
     }
     
     /**
      * test an edge with capacity completely used
      */
     public function testEdgeUsed(){
-    	$graph = new Graph();
+        $graph = new Graph();
     
-    	$graph->createVertex(0)->createEdgeTo($graph->createVertex(1))->setFlow(2)
-    	                                                              ->setCapacity(2)
-    	                                                              ->setWeight(3);
-    
-    	$alg = new ResidualGraph($graph);
-    	$residual = $alg->createGraph();
-    
-    	$this->assertEquals(2,$residual->getNumberOfVertices());
-    	$this->assertEquals(1,$residual->getNumberOfEdges());
-    
-    	$edge = Edge::getFirst($residual->getEdges());
-    
-    	$this->assertEquals(2,$edge->getCapacity());
-    	$this->assertEquals(0,$edge->getFlow());
-    	$this->assertEquals(-3,$edge->getWeight());
+        $graph->createVertex(0)->createEdgeTo($graph->createVertex(1))->setFlow(2)
+                                                                      ->setCapacity(2)
+                                                                      ->setWeight(3);
+        
+        $alg = new ResidualGraph($graph);
+        $residual = $alg->createGraph();
+        
+        $expected = new Graph();
+        $expected->createVertex(1)->createEdgeTo($expected->createVertex(0))->setFlow(0)
+                                                                            ->setCapacity(2)
+                                                                            ->setWeight(-3);
+        
+        $this->assertGraphEquals($expected,$residual);
     }
     
     /**
@@ -66,20 +57,21 @@ class ResidualGraphTest extends PHPUnit_Framework_TestCase
         $alg = new ResidualGraph($graph);
         $residual = $alg->createGraph();
         
-        $this->assertEquals(2,$residual->getNumberOfVertices());
-        $this->assertEquals(2,$residual->getNumberOfEdges());
+        $expected = new Graph();
+        $expected->createVertex(0);
+        $expected->createVertex(1);
         
-        $edgeRemain = Edge::getFirst($residual->getVertex(0)->getEdgesOut());
+        // remaining edge
+        $expected->getVertex(0)->createEdgeTo($expected->getVertex(1))->setFlow(0)
+                                                                      ->setCapacity(1)
+                                                                      ->setWeight(3);
         
-        $this->assertEquals(1,$edgeRemain->getCapacity());
-        $this->assertEquals(0,$edgeRemain->getFlow());
-        $this->assertEquals(3,$edgeRemain->getWeight());
+        // back edge
+        $expected->getVertex(1)->createEdgeTo($expected->getVertex(0))->setFlow(0)
+                                                                      ->setCapacity(1)
+                                                                      ->setWeight(-3);
         
-        $edgeBack = Edge::getFirst($residual->getVertex(1)->getEdgesOut());
-        
-        $this->assertEquals(1,$edgeBack->getCapacity());
-        $this->assertEquals(0,$edgeBack->getFlow());
-        $this->assertEquals(-3,$edgeBack->getWeight());
+        $this->assertGraphEquals($expected,$residual);
     }
     
     /**
@@ -101,12 +93,12 @@ class ResidualGraphTest extends PHPUnit_Framework_TestCase
      * @expectedException UnexpectedValueException
      */
     public function testInvalidNoFlow(){
-    	$graph = new Graph();
-    
-    	$graph->createVertex()->createEdgeTo($graph->createVertex())->setCapacity(1);
-    
-    	$alg = new ResidualGraph($graph);
-    	$alg->createGraph();
+        $graph = new Graph();
+        
+        $graph->createVertex()->createEdgeTo($graph->createVertex())->setCapacity(1);
+        
+        $alg = new ResidualGraph($graph);
+        $alg->createGraph();
     }
     
     /**
@@ -114,12 +106,12 @@ class ResidualGraphTest extends PHPUnit_Framework_TestCase
      * @expectedException UnexpectedValueException
      */
     public function testInvalidNoCapacity(){
-    	$graph = new Graph();
-    
-    	$graph->createVertex()->createEdgeTo($graph->createVertex())->setFlow(1);
-    
-    	$alg = new ResidualGraph($graph);
-    	$alg->createGraph();
+        $graph = new Graph();
+        
+        $graph->createVertex()->createEdgeTo($graph->createVertex())->setFlow(1);
+        
+        $alg = new ResidualGraph($graph);
+        $alg->createGraph();
     }
     
 }

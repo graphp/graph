@@ -1,16 +1,19 @@
 <?php
 
+use Fhaculty\Graph\Graph;
+
 use Fhaculty\Graph\Loader\CompleteGraph;
 
-class CompleteGraphTest extends PHPUnit_Framework_TestCase
+class CompleteGraphTest extends TestCase
 {
     public function testOne(){
         $loader = new CompleteGraph(1);
         $graph = $loader->createGraph();
         
-        $this->assertEquals(1,$graph->getNumberOfVertices());
-        $this->assertEquals(0,$graph->getNumberOfEdges());
-        $this->assertFalse($graph->isDirected());
+        $expected = new Graph();
+        $expected->createVertex();
+        
+        $this->assertGraphEquals($expected,$graph);
     }
     
     public function testTen(){
