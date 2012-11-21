@@ -1,3 +1,94 @@
 <?php
 
+use Fhaculty\Graph\Edge\Directed;
+
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Vertex;
+
 (include_once __DIR__.'/../vendor/autoload.php') OR die(PHP_EOL.'ERROR: composer autoloader not found, run "composer install" or see README for instructions'.PHP_EOL);
+
+class TestCase extends PHPUnit_Framework_TestCase{
+    protected function assertGraphEquals(Graph $expected,Graph $actual){
+        $f = function(Graph $graph){
+            $ret = get_class($graph);
+            $ret .= PHP_EOL.'vertices: '.$graph->getNumberOfVertices();
+            $ret .= PHP_EOL.'edges: '.$graph->getNumberOfEdges();
+            return $ret;
+        };
+        
+        // assert graph base parameters are equal
+        $this->assertEquals($f($expected),$f($actual));
+        
+        // next, assert that all vertices in both graphs are the same
+        // each vertex has a unique ID, therefor it's easy to search a matching partner
+        // do not use assertVertexEquals() in order to not increase assertion counter
+        
+        foreach($expected->getVertices() as $vid=>$vertex){
+            try{
+                $other = $actual->getVertex($vid);
+            }
+            catch(Exception $e){
+                $this->fail();
+            }
+            if($this->getVertexDump($vertex) !== $this->getVertexDump($vertex)){
+                $this->fail();
+            }
+        }
+        
+        // next, assert that all edges in both graphs are the same
+        // assertEdgeEquals() does not work, as the order of the edges is unknown
+        // therefor, build an array of edge dump and make sure each entry has a match
+        
+        $edgesExpected = array();
+        foreach($expected->getEdges() as $edge){
+            $edgesExpected []= $this->getEdgeDump($edge);
+        }
+        
+        foreach($actual->getEdges() as $edge){
+            $dump = $this->getEdgeDump($edge);
+            
+            $pos = array_search($dump,$edgesExpected,true);
+            if($pos === false){
+                $this->fail('given edge '.$dump.' not found');
+            }else{
+                unset($edgesExpected[$pos]);
+            }
+        }
+    }
+    
+    protected function assertVertexEquals(Vertex $expected,Vertex $actual){
+        $this->assertEquals($this->getVertexDump($expected),$this->getVertexDump($actual));
+    }
+    
+    protected function assertEdgeEquals(Edge $expected,Edge $actual){
+        $this->assertEquals($this->getEdgeDump($expected),$this->getEdgeDump($actual));
+    }
+    
+    private function getVertexDump(Vertex $vertex){
+        $ret = get_class($vertex);
+        
+        $ret .= PHP_EOL . 'id: '.$vertex->getId();
+        $ret .= PHP_EOL . 'layout: '.json_encode($vertex->getLayout());
+        $ret .= PHP_EOL . 'balance: '.$vertex->getBalance();
+        $ret .= PHP_EOL . 'group: '.$vertex->getGroup();
+        
+        return $ret;
+    }
+    
+    private function getEdgeDump(Edge $edge){
+        $ret = get_class($edge) . ' ';
+        if($edge instanceof Directed){
+        	$ret .= $edge->getVertexStart()->getId().' -> '.$edge->getVertexEnd()->getId();
+        }else{
+        	$vertices = array_values(Vertex::getAll($edge->getVerticesId(),Vertex::ORDER_ID));
+        	$ret .= $vertices[0]->getId() . ' -- ' . $vertices[1]->getId();
+        }
+        $ret .= PHP_EOL . 'flow: '.$edge->getFlow();
+        $ret .= PHP_EOL . 'capacity: '.$edge->getCapacity();
+        $ret .= PHP_EOL . 'weight: '.$edge->getWeight();
+        $ret .= PHP_EOL . 'layout: '.json_encode($edge->getLayout());
+        
+        return $ret;
+    }
+}
