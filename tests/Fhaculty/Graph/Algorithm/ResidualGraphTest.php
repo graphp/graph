@@ -7,6 +7,15 @@ use Fhaculty\Graph\Graph;
 
 class ResidualGraphTest extends TestCase
 {   
+    public function testGraphEmpty(){
+    	$graph = new Graph();
+    
+    	$alg = new ResidualGraph($graph);
+    	$residual = $alg->createGraph();
+    
+    	$this->assertGraphEquals($graph,$residual);
+    }
+    
     /**
      * test an edge with capacity unused
      */
