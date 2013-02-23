@@ -46,7 +46,6 @@ class Groups extends Base
     {
         // graph has to contain exactly 2 groups
         if ($this->getNumberOfGroups() !== 2) {
-
             return false;
         }
 
@@ -58,7 +57,6 @@ class Groups extends Base
             foreach ($vertex->getVerticesEdge() as $vertexNeighbor) {
                 // vertex group must be other group
                 if ($vertexNeighbor->getGroup() === $group) {
-
                     return false;
                 }
             }

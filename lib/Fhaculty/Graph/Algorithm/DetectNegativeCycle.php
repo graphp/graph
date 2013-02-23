@@ -69,15 +69,14 @@ class DetectNegativeCycle extends Base
                         // getting connected vertices succeeded, so skip over all of them
                         $verticesVisited[$vid] = true;
                     // no cycle found, check next vertex...
-                    } 
+                    }
                 // yey, negative cycle encountered => return
                 } catch (NegativeCycleException $e) {
-
                     return $e->getCycle();
                 }
             }
         // no more vertices to check => abort
-        } 
+        }
         throw new UnderflowException('No negative cycle found');
     }
 

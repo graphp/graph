@@ -335,7 +335,6 @@ class Graph extends Set
     {
         // an empty graph is considered regular
         if (!$this->vertices) {
-
             return true;
         }
         try {

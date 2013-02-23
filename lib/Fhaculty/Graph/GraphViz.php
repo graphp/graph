@@ -350,7 +350,6 @@ class GraphViz
         // see @link: There is no semantic difference between abc_2 and "abc_2"
         // numeric or simple string, no need to quote (only for simplicity)
         if (preg_match('/^(?:\-?(?:\.\d+|\d+(?:\.\d+)?))$/i', $id)) {
-
             return $id;
         }
 

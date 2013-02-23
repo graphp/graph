@@ -143,7 +143,6 @@ class Bruteforce extends Base
     {
         // stop recursion if best result is exceeded (branch and bound)
         if ($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight >= $this->bestWeight) {
-
             return NULL;
         }
         // kreis geschlossen am Ende
@@ -156,7 +155,6 @@ class Bruteforce extends Base
 
         // only visit each vertex once
         if (isset($visitedVertices[$vertex->getId()])) {
-
             return NULL;
         }
         $visitedVertices[$vertex->getId()] = true;

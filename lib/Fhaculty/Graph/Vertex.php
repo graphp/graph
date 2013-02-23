@@ -111,7 +111,6 @@ class Vertex extends Layoutable
                     continue;
                 // just return first vertex right away
                 } else {
-
                     return $vertex;
                 }
             } elseif ($by === self::ORDER_ID) {

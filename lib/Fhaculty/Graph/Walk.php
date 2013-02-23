@@ -334,7 +334,6 @@ class Walk extends Set
         foreach ($array as $element) {
             // duplicate element found
             if (in_array($element, $compare, true)) {
-
                 return true;
             } else {
                 // add element to temporary array to check for duplicates
@@ -382,7 +381,6 @@ class Walk extends Set
             $vid = $vertex->getId();
             // make sure vertex ID exists and has not been replaced
             if (!isset($vertices[$vid]) || $vertices[$id] !== $vertex) {
-
                 return false;
             }
         }

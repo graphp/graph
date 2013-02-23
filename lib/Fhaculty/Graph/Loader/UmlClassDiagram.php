@@ -305,7 +305,6 @@ class UmlClassDiagram extends Base
             $class = $parameter->getClass();
         // will fail if specified class does not exist
         } catch (Exception $ignore) {
-
             return '«invalidClass»';
         }
 

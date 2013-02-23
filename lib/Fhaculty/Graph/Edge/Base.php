@@ -92,7 +92,6 @@ abstract class Base extends Layoutable
                     continue;
                 // just return first edge right away
                 } else {
-
                     return $edge;
                 }
             } elseif ($by === self::ORDER_WEIGHT) {

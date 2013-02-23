@@ -32,7 +32,6 @@ class Eulerian extends Base
             foreach ($this->graph->getVertices() as $vertex) {
                 // uneven degree => fail
                 if ($vertex->getDegree() & 1) {
-
                     return false;
                 }
             }
