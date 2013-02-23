@@ -99,7 +99,7 @@ abstract class Base extends Layoutable
             } elseif ($by === self::ORDER_FLOW) {
                 $now = $edge->getFlow();
             } else {
-                throw new InvalidArgumentException('Invalid order flag "'.$by.'"');
+                throw new InvalidArgumentException('Invalid order flag "' . $by . '"');
             }
             if ($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)) {
                 $ret = $edge;
@@ -222,7 +222,7 @@ abstract class Base extends Layoutable
     }
 
     /**
-     * return true if this edge is an ingoing edge of the given vertex (i.e. the given vertex is a valid end vertex of this edge)
+     * return true if this edge is an ingoing edge of the given vertex (i . e. the given vertex is a valid end vertex of this edge)
      *
      * @param  Vertex  $targetVertex
      * @return boolean
@@ -337,7 +337,7 @@ abstract class Base extends Layoutable
                 throw new InvalidArgumentException('Capacity must not be negative');
             }
             if ($this->flow !== NULL && $this->flow > $capacity) {
-                throw new InvalidArgumentException('Current flow of '.$this->flow.' exceeds new capacity');
+                throw new InvalidArgumentException('Current flow of ' . $this->flow . ' exceeds new capacity');
             }
         }
         $this->capacity = $capacity;

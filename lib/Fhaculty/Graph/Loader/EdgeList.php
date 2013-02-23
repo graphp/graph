@@ -13,7 +13,7 @@ class EdgeList extends File
         $file = $this->getLines();
         $vertexCount = $this->readInt($file[0]);
 
-        $this->writeDebugMessage('create '.$vertexCount.' vertices');
+        $this->writeDebugMessage('create ' . $vertexCount . ' vertices');
 
         $graph->createVertices($vertexCount);
 

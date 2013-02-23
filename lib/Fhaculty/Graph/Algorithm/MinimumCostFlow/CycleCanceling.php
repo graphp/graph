@@ -43,7 +43,7 @@ class CycleCanceling extends Base
         $flowMax = $algMaxFlow->getFlowMax();
 
         if ($flowMax !== $sumBalance) {
-            throw new UnexpectedValueException('Network does not support required flow of '.$sumBalance.' (maximum possible flow limited to '.$flowMax.')');
+            throw new UnexpectedValueException('Network does not support required flow of ' . $sumBalance . ' (maximum possible flow limited to ' . $flowMax . ')');
         }
 
         $resultGraph = $algMaxFlow->createGraph();

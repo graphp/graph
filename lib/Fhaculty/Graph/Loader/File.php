@@ -93,7 +93,7 @@ abstract class File extends Base
             } elseif ($part === 'vertex') {
                 $value = $graph->getVertex($value);
             } else {
-                throw new InvalidArgumentException('Invalid type "'.$part.'"');
+                throw new InvalidArgumentException('Invalid type "' . $part . '"');
             }
             $ret[$key] = $value;
         }

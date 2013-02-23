@@ -6,7 +6,7 @@ use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
-(include_once __DIR__.'/../vendor/autoload.php') OR die(PHP_EOL.'ERROR: composer autoloader not found, run "composer install" or see README for instructions'.PHP_EOL);
+(include_once __DIR__ . '/../vendor/autoload.php') OR die(PHP_EOL . 'ERROR: composer autoloader not found, run "composer install" or see README for instructions' . PHP_EOL);
 
 class TestCase extends PHPUnit_Framework_TestCase
 {
@@ -14,8 +14,8 @@ class TestCase extends PHPUnit_Framework_TestCase
     {
         $f = function(Graph $graph){
             $ret = get_class($graph);
-            $ret .= PHP_EOL.'vertices: '.$graph->getNumberOfVertices();
-            $ret .= PHP_EOL.'edges: '.$graph->getNumberOfEdges();
+            $ret .= PHP_EOL . 'vertices: ' . $graph->getNumberOfVertices();
+            $ret .= PHP_EOL . 'edges: ' . $graph->getNumberOfEdges();
 
             return $ret;
         };
@@ -52,7 +52,7 @@ class TestCase extends PHPUnit_Framework_TestCase
 
             $pos = array_search($dump, $edgesExpected, true);
             if ($pos === false) {
-                $this->fail('given edge '.$dump.' not found');
+                $this->fail('given edge ' . $dump . ' not found');
             } else {
                 unset($edgesExpected[$pos]);
             }
@@ -73,10 +73,10 @@ class TestCase extends PHPUnit_Framework_TestCase
     {
         $ret = get_class($vertex);
 
-        $ret .= PHP_EOL . 'id: '.$vertex->getId();
-        $ret .= PHP_EOL . 'layout: '.json_encode($vertex->getLayout());
-        $ret .= PHP_EOL . 'balance: '.$vertex->getBalance();
-        $ret .= PHP_EOL . 'group: '.$vertex->getGroup();
+        $ret .= PHP_EOL . 'id: ' . $vertex->getId();
+        $ret .= PHP_EOL . 'layout: ' . json_encode($vertex->getLayout());
+        $ret .= PHP_EOL . 'balance: ' . $vertex->getBalance();
+        $ret .= PHP_EOL . 'group: ' . $vertex->getGroup();
 
         return $ret;
     }
@@ -85,15 +85,15 @@ class TestCase extends PHPUnit_Framework_TestCase
     {
         $ret = get_class($edge) . ' ';
         if ($edge instanceof Directed) {
-            $ret .= $edge->getVertexStart()->getId().' -> '.$edge->getVertexEnd()->getId();
+            $ret .= $edge->getVertexStart()->getId() . ' -> ' . $edge->getVertexEnd()->getId();
         } else {
             $vertices = array_values(Vertex::getAll($edge->getVerticesId(), Vertex::ORDER_ID));
             $ret .= $vertices[0]->getId() . ' -- ' . $vertices[1]->getId();
         }
-        $ret .= PHP_EOL . 'flow: '.$edge->getFlow();
-        $ret .= PHP_EOL . 'capacity: '.$edge->getCapacity();
-        $ret .= PHP_EOL . 'weight: '.$edge->getWeight();
-        $ret .= PHP_EOL . 'layout: '.json_encode($edge->getLayout());
+        $ret .= PHP_EOL . 'flow: ' . $edge->getFlow();
+        $ret .= PHP_EOL . 'capacity: ' . $edge->getCapacity();
+        $ret .= PHP_EOL . 'weight: ' . $edge->getWeight();
+        $ret .= PHP_EOL . 'layout: ' . json_encode($edge->getLayout());
 
         return $ret;
     }

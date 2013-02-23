@@ -163,7 +163,7 @@ class Bruteforce extends Base
 
             $weight = $edge->getWeight();
             if ($weight < 0) {
-                throw new UnexpectedValueException('Edge with negative weight "'.$weight.'" not supported');
+                throw new UnexpectedValueException('Edge with negative weight "' . $weight . '" not supported');
             }
 
             $result = $this->step($target,

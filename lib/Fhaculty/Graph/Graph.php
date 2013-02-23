@@ -244,7 +244,7 @@ class Graph extends Set
     public function getVertex($id)
     {
         if (!isset($this->vertices[$id])) {
-            throw new OutOfBoundsException('Vertex '.$id.' does not exist');
+            throw new OutOfBoundsException('Vertex ' . $id . ' does not exist');
         }
 
         return $this->vertices[$id];
@@ -391,7 +391,6 @@ class Graph extends Set
         foreach ($this->edges as $edge) { // check all edges
             if ($edge instanceof EdgeDirected) { // only check directed edges (undirected ones are symmetric by definition)
                 if (!$edge->getVertexEnd()->hasEdgeTo($edge->getVertexStart())) { // check if end also has an edge to start
-
                     return false;
                 }
             }
@@ -449,7 +448,6 @@ class Graph extends Set
         foreach ($this->vertices as $vertex) {                                    // from each vertex
             foreach ($c as $other) {                                              // to each vertex
                 if ($other !== $vertex && !$vertex->hasEdgeTo($other)) {          // missing edge => fail
-
                     return false;
                 }
             }

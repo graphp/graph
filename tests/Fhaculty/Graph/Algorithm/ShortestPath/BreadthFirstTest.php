@@ -50,13 +50,13 @@ class BreadthFirstTest extends PHPUnit_Framework_TestCase
 
         // test all reachable vertices
         foreach ($alg->getDistanceMap() as $vid => $distance) {
-            if($debug) echo 'vertex '.$vid.' in distance '.$distance;
+            if($debug) echo 'vertex ' . $vid . ' in distance ' . $distance;
             $walk = $alg->getWalkTo($graph->getVertex($vid));
 
             $this->assertEquals($distance, $walk->getNumberOfEdges());
 
             if ($debug) {
-                echo ' (vertex walk: '.implode(', ', $walk->getVerticesSequenceId()).')';
+                echo ' (vertex walk: ' . implode(', ', $walk->getVerticesSequenceId()) . ')';
                 echo PHP_EOL;
 
                 $vis = new GraphViz($walk->createGraph());

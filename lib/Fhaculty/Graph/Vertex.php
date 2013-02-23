@@ -120,7 +120,7 @@ class Vertex extends Layoutable
             } elseif ($by === self::ORDER_GROUP) {
                 $now = $vertex->getGroup();
             } else {
-                throw new InvalidArgumentException('Invalid order flag "'.$by.'"');
+                throw new InvalidArgumentException('Invalid order flag "' . $by . '"');
             }
             if ($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)) {
                 $ret = $vertex;
@@ -179,7 +179,7 @@ class Vertex extends Layoutable
             } elseif ($by === self::ORDER_GROUP) {
                 $now = $vertex->getGroup();
             } else {
-                throw new InvalidArgumentException('Invalid order flag "'.$by.'"');
+                throw new InvalidArgumentException('Invalid order flag "' . $by . '"');
             }
             if ($desc && $now !== NULL) {
                 $now = -$now;

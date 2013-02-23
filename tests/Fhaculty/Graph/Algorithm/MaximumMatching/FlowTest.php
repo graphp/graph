@@ -13,7 +13,7 @@ class FlowTest extends PHPUnit_Framework_TestCase
 //      */
 //     public function testKnownResult()
 //     {
-//         $loader = new EdgeListBipartit(PATH_DATA.'Matching_100_100.txt');
+//         $loader = new EdgeListBipartit(PATH_DATA . 'Matching_100_100.txt');
 //         $loader->setEnableDirectedEdges(false);
 //         $graph = $loader->createGraph();
 

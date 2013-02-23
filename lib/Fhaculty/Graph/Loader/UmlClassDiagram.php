@@ -36,7 +36,7 @@ class UmlClassDiagram extends Base
     public function setOption($name, $flag)
     {
         if (!isset($this->options[$name])) {
-            throw new Exception('Invalid option name "'.$name.'"');
+            throw new Exception('Invalid option name "' . $name . '"');
         }
         $this->options[$name] = !!$flag;
 
@@ -93,13 +93,13 @@ class UmlClassDiagram extends Base
             $label .= '«abstract»\\n';
         }
 
-        $label .= $this->escape($class).'|';
+        $label .= $this->escape($class) . '|';
 
         if ($this->options['show-constants']) {
             foreach ($reflection->getConstants() as $name => $value) {
                 if($this->options['only-self'] && $parent && $parent->getConstant($name) === $value) continue;
 
-                $label .= '+ «static» '.self::escape($name).' : '.$this->escape($this->getType(gettype($value))).' = '.$this->getCasted($value).' \\{readOnly\\}\\l';
+                $label .= '+ «static» ' . self::escape($name) . ' : ' . $this->escape($this->getType(gettype($value))) . ' = ' . $this->getCasted($value) . ' \\{readOnly\\}\\l';
             }
         }
 
@@ -117,11 +117,11 @@ class UmlClassDiagram extends Base
 
             $type = $this->getDocBlockVar($property);
             if ($type !== NULL) {
-                $label .= ' : '.$this->escape($type);
+                $label .= ' : ' . $this->escape($type);
             }
 
             if (isset($defaults[$property->getName()])) { // only show non-NULL values
-                $label .= ' = '.$this->getCasted($defaults[$property->getName()]);
+                $label .= ' = ' . $this->getCasted($defaults[$property->getName()]);
             }
 
             $label .= '\\l';
@@ -135,7 +135,7 @@ class UmlClassDiagram extends Base
             if($this->options['only-public'] && !$method->isPublic()) continue;
 
 //             $ref = preg_replace('/[^a-z0-9]/i', '', $method->getName());
-//             $label .= '<"'.$ref.'">';
+//             $label .= '<"' . $ref . '">';
 
             $label .= $this->visibility($method);
 
@@ -145,7 +145,7 @@ class UmlClassDiagram extends Base
             if ($method->isStatic()) {
                 $label .= ' «static»';
             }
-            $label .= ' ' . $this->escape($method->getName()).'(';
+            $label .= ' ' . $this->escape($method->getName()) . '(';
 
             $firstParam = true;
             foreach ($method->getParameters() as $parameter) {
@@ -163,12 +163,12 @@ class UmlClassDiagram extends Base
 
                 $type = $this->getParameterType($parameter);
                 if ($type !== NULL) {
-                    $label .= ' : '.$this->escape($type);
+                    $label .= ' : ' . $this->escape($type);
                 }
 
                 if ($parameter->isOptional()) {
                     try {
-                        $label .= ' = '.$this->getCasted($parameter->getDefaultValue());
+                        $label .= ' = ' . $this->getCasted($parameter->getDefaultValue());
                     } catch (Exception $ignore) {
                         $label .= ' = «unknown»';
                     }
@@ -178,7 +178,7 @@ class UmlClassDiagram extends Base
 
             $type = $this->getDocBlockReturn($method);
             if ($type !== NULL) {
-                $label .= ' : '.$this->escape($type);
+                $label .= ' : ' . $this->escape($type);
             }
 
             $label .= '\\l'; // align this line to the left
@@ -321,7 +321,7 @@ class UmlClassDiagram extends Base
             //return 'nah';
             return NULL;
         }
-        preg_match_all('/^@'.$what.' ([^\s]+)/m', $doc, $matches, PREG_SET_ORDER);
+        preg_match_all('/^@' . $what . ' ([^\s]+)/m', $doc, $matches, PREG_SET_ORDER);
         $ret = array();
         foreach ($matches as $match) {
             $ret []= trim($match[1]);
@@ -347,7 +347,7 @@ class UmlClassDiagram extends Base
             return NULL;
         }
         if (preg_match('/^array\[(\w+)\]$/i', $ret, $match)) {
-            return $this->getType($match[1]).'[]';
+            return $this->getType($match[1]) . '[]';
         }
         if (!preg_match('/^\w+$/', $ret)) {
             return 'mixed';
@@ -378,7 +378,7 @@ class UmlClassDiagram extends Base
         if ($value === NULL) {
             return 'NULL';
         } elseif (is_string($value)) {
-            return '\\"'.$this->escape(str_replace('"', '\\"', $value)).'\\"';
+            return '\\"' . $this->escape(str_replace('"', '\\"', $value)) . '\\"';
         } elseif (is_bool($value)) {
             return $value ? 'true' : 'false';
         } elseif (is_int($value) || is_float($value)) {
@@ -390,7 +390,7 @@ class UmlClassDiagram extends Base
                 return '[…]';
             }
         } elseif (is_object($value)) {
-            return get_class($value).'\\{…\\}';
+            return get_class($value) . '\\{…\\}';
         }
 
         return '…';

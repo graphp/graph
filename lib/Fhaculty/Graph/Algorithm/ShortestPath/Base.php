@@ -197,11 +197,8 @@ abstract class Base extends AlgorithmBase
 
         $edges = array();
         foreach ($vertices as $vid => $vertex) {
-            //echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
             if (isset($predecessor[$vid])) {
                 $predecesVertex = $predecessor[$vid];    //get predecor
-
-                //echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH COSTS: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
 
                 $edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex), Edge::ORDER_WEIGHT);    //get cheapest edge
             }

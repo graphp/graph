@@ -41,7 +41,7 @@ abstract class Base extends AlgorithmBase
         $balance = $this->graph->getBalance();
         $tolerance = 0.000001;
         if ($balance >= $tolerance || $balance <= -$tolerance) {
-            throw new UnexpectedValueException('The given graph is not balanced value is: '.$balance);
+            throw new UnexpectedValueException('The given graph is not balanced value is: ' . $balance);
         }
 
         return $this;

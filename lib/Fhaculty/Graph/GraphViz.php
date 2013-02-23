@@ -70,15 +70,15 @@ class GraphViz
 
         static $next = 0;
         if ($next > microtime(true)) {
-            echo '[delay flooding xdg-open]'.PHP_EOL; // wait some time between calling xdg-open because earlier calls will be ignored otherwise
+            echo '[delay flooding xdg-open]' . PHP_EOL; // wait some time between calling xdg-open because earlier calls will be ignored otherwise
             sleep(self::DELAY_OPEN);
         }
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             echo "ausgabe\n";
-            exec($tmp.' >NUL');
+            exec($tmp . ' >NUL');
         } else {
-            exec('xdg-open '.escapeshellarg($tmp).' > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
+            exec('xdg-open ' . escapeshellarg($tmp) . ' > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
 
         }
 
@@ -210,7 +210,7 @@ class GraphViz
 
         unlink($tmp);
 
-        return $tmp.'.'.$this->format;
+        return $tmp . '.' . $this->format;
     }
 
     /**
@@ -260,7 +260,7 @@ class GraphViz
             }
 
             if ($showGroups) {
-                $layout['label'] .= ' ['.$vertex->getGroup().']';
+                $layout['label'] .= ' [' . $vertex->getGroup() . ']';
             }
 
             if ($vertex->isIsolated() || $layout) {
@@ -289,9 +289,9 @@ class GraphViz
             $flow = $currentEdge->getFlow();
             $capacity = $currentEdge->getCapacity();
             if ($flow !== NULL) {                                         // flow is set
-                $label = $flow .'/'.($capacity === NULL ? '∞' : $capacity); // NULL capacity = infinite capacity
+                $label = $flow . '/' . ($capacity === NULL ? '∞' : $capacity); // NULL capacity = infinite capacity
             } elseif ($capacity !== NULL) {                               // capacity set, but not flow (assume zero flow)
-                $label = '0/'.$capacity;
+                $label = '0/' . $capacity;
             }
 
             $weight = $currentEdge->getWeight();
@@ -299,7 +299,7 @@ class GraphViz
                 if ($label === NULL) {
                     $label = $weight;
                 } else {
-                    $label .= '/'.$weight;
+                    $label .= '/' . $weight;
                 }
             }
 
@@ -311,12 +311,12 @@ class GraphViz
                 $attrs['dir'] = 'none';
             }
             if ($attrs) {
-                $script .= ' '.$this->escapeAttributes($attrs);
+                $script .= ' ' . $this->escapeAttributes($attrs);
             }
 
             $script .= self::EOL;
         }
-        $script .= '}'.self::EOL;
+        $script .= '}' . self::EOL;
 
         return $script;
     }
@@ -345,7 +345,7 @@ class GraphViz
             return $id;
         }
 
-        return '"'.str_replace(array('&', '<', '>', '"', "'", '\\', "\n"), array('&amp;', '&lt;', '&gt;', '&quot;', '&apos;', '\\\\', '\\l'), $id).'"';
+        return '"' . str_replace(array('&', '<', '>', '"', "'", '\\', "\n"), array('&amp;', '&lt;', '&gt;', '&quot;', '&apos;', '\\\\', '\\l'), $id) . '"';
     }
 
     /**
@@ -365,7 +365,7 @@ class GraphViz
             } else {
                 $script .= ' ';
             }
-            $script .= $name.'='.self::escape($value);
+            $script .= $name . '=' . self::escape($value);
         }
         $script .= ']';
 
@@ -381,6 +381,6 @@ class GraphViz
      */
     public function raw($string)
     {
-        return (object) array('string'=>$string);
+        return (object) array('string' => $string);
     }
 }

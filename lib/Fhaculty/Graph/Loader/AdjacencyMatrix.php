@@ -16,7 +16,7 @@ class AdjacencyMatrix extends File
         $edgeCounter = 0;
 
         if (count($file) !== ($vertexCount + 1)) {
-            throw new UnexpectedValueException('Expects '.($vertexCount + 1).' lines, but found '.count($file));
+            throw new UnexpectedValueException('Expects ' . ($vertexCount + 1) . ' lines, but found ' . count($file));
         }
 
         $graph->createVertices($vertexCount);
