@@ -6,7 +6,8 @@ While the APIs should be stable, this library is still considered *beta* softwar
 
 ## Quickstart examples
 
-Initialize sample graph
+Once [installed](#install), let's initialize a sample graph:
+
 ````php
 <?php
 require_once 'vendor/autoload.php';
@@ -34,18 +35,6 @@ foreach($rome->getVerticesEdgeFrom() as $vertex){
 ````
 
 Looking for more example scripts? Check out [flos/graph-php](https://github.com/flos/graph-php).
-
-## Install
-
-The recommended way to install this library is [through composer](http://getcomposer.org). [New to composer?](http://getcomposer.org/doc/00-intro.md)
-
-```JSON
-{
-    "require": {
-        "clue/graph": "dev-master"
-    }
-}
-```
 
 ## Features
 
@@ -83,6 +72,24 @@ Besides graph drawing, one of the most common things to do with graphs is runnin
 * Maximum matching
     * Flow algorithm
 
+## Install
+
+The recommended way to install this library is [through composer](http://getcomposer.org). [New to composer?](http://getcomposer.org/doc/00-intro.md)
+
+```JSON
+{
+    "require": {
+        "clue/graph": "dev-master"
+    }
+}
+```
+
+Optional recommendation:
+In order to be able to use the [graph drawing feature](#graph-drawing) you'll have to
+install GraphViz (`dot` executable). Users of Debian/Ubuntu-based distributions may simply
+invoke `sudo apt-get install graphviz`, Windows users have to
+[download GraphViZ for Windows](http://www.graphviz.org/Download_windows.php) and remaining
+users should install from [GraphViz homepage](http://www.graphviz.org/Download.php).
 
 ## Tests
 
