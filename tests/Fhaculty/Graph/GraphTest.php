@@ -1,11 +1,9 @@
 <?php
 
 use Fhaculty\Graph\Exception\RuntimeException;
-
+use Fhaculty\Graph\Exporter\Image;
 use Fhaculty\Graph\Vertex;
-
 use Fhaculty\Graph\Exception\OverflowException;
-
 use Fhaculty\Graph\Graph;
 
 class GraphTest extends TestCase
@@ -115,5 +113,15 @@ class GraphTest extends TestCase
         $graph = new Graph();
         $graph->createVertex(33);
         $graph->createVertex(33);
+    }
+
+    public function testExporter()
+    {
+        $graph = new Graph();
+        $graph->createVertex(1)->createEdge($graph->createVertex(2));
+
+        $this->assertNotEquals('', (string)$graph);
+
+        $this->assertInstanceOf('\\Fhaculty\\Graph\\Exporter\\ExporterInterface', $graph->getExporter());
     }
 }
