@@ -54,13 +54,52 @@ class TrivialGraphFormat implements ExporterInterface
 
     protected function getVertexLabel(Vertex $vertex)
     {
-        // TODO: dump additional vertex attributes, such as group, balance, etc.
-        return $vertex->getId();
+        // label defaults to the vertex ID
+        $label = $vertex->getId();
+
+        // add balance to label if set
+        $balance = $vertex->getBalance();
+        if($balance !== NULL){
+            if($balance > 0){
+                $balance = '+' . $balance;
+            }
+            $label.= ' (' . $balance . ')';
+        }
+
+        // add group to label if set
+        // TODO: what does 'if set' mean? groups should not be shown when vertex never had any group assigned (but it defaults to 0)
+//         $group = $vertex->getGroup();
+//         if ($group !== 0) {
+//             $label .= ' [' . $group .']';
+//         }
+
+        return $label;
     }
 
     protected function getEdgeLabel(Edge $edge)
     {
-        // TODO: dump additional edge attributes, such as flow, capacity, weight, etc.
-        return '';
+        $label = '';
+
+        $flow = $edge->getFlow();
+        $capacity = $edge->getCapacity();
+        // flow is set
+        if ($flow !== NULL) {
+            // NULL capacity = infinite capacity
+            $label = $flow . '/' . ($capacity === NULL ? '∞' : $capacity);
+        // capacity set, but not flow (assume zero flow)
+        } elseif ($capacity !== NULL) {
+            $label = '0/' . $capacity;
+        }
+
+        $weight = $edge->getWeight();
+        // weight is set
+        if ($weight !== NULL) {
+            if ($label === '') {
+                $label = $weight;
+            } else {
+                $label .= '/' . $weight;
+            }
+        }
+        return $label;
     }
 }
