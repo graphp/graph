@@ -83,23 +83,27 @@ class EdmondsKarp extends Base
                 $pathFlow = NULL;
             }
 
-            if ($pathFlow) {                                                        // If path exists add the new flow to graph
+            // If path exists add the new flow to graph
+            if ($pathFlow) {
                 // 2. get max flow from path
                 $maxFlowValue = Edge::getFirst($pathFlow->getEdges(), Edge::ORDER_CAPACITY)->getCapacity();
 
                 // 3. add flow to path
                 foreach ($pathFlow->getEdges() as $edge) {
-                    try { // try to look for forward edge to increase flow
+                    // try to look for forward edge to increase flow
+                    try {
                         $originalEdge = $graphResult->getEdgeClone($edge);
                         $originalEdge->setFlow($originalEdge->getFlow() + $maxFlowValue);
-                    } catch (UnderflowException $e) { // forward edge not found, look for back edge to decrease flow
+                    // forward edge not found, look for back edge to decrease flow
+                    } catch (UnderflowException $e) {
                         $originalEdge = $graphResult->getEdgeCloneInverted($edge);
                         $originalEdge->setFlow($originalEdge->getFlow() - $maxFlowValue);
                     }
                 }
             }
 
-        } while ($pathFlow); // repeat while we still finds paths with residual capacity to add flow to
+        // repeat while we still finds paths with residual capacity to add flow to
+        } while ($pathFlow);
 
         return $graphResult;
     }

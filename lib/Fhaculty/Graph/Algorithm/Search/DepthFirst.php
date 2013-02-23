@@ -16,13 +16,17 @@ class DepthFirst extends Base
      */
     private function recursiveDepthFirstSearch(Vertex $vertex, array & $visitedVertices)
     {
-        if (!isset($visitedVertices[$vertex->getId()])) {                        //    If I didn't visited this vertex before
-            $visitedVertices[$vertex->getId()] = $vertex;                        //        Add Vertex to already visited vertices
+        // If I didn't visited this vertex before
+        if (!isset($visitedVertices[$vertex->getId()])) {
+            // Add Vertex to already visited vertices
+            $visitedVertices[$vertex->getId()] = $vertex;
 
-            $nextVertices = $vertex->getVerticesEdgeTo();                        //        Get next vertices
+            // Get next vertices
+            $nextVertices = $vertex->getVerticesEdgeTo();
 
             foreach ($nextVertices as $nextVertix) {
-                $this->recursiveDepthFirstSearch($nextVertix, $visitedVertices); //            recursive call for next vertices
+                // recursive call for next vertices
+                $this->recursiveDepthFirstSearch($nextVertix, $visitedVertices);
             }
         }
     }

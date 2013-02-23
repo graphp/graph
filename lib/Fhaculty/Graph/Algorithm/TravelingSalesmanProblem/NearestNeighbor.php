@@ -45,38 +45,46 @@ class NearestNeighbor extends Base
         $visitedVertices = array($vertex->getId() => true);
 
         for ($i = 0; $i < $n - 1; ++$i,
-                                    $vertex = $nextVertex) {                        //n-1 steps (spanning tree)
+                                    // n-1 steps (spanning tree)
+                                    $vertex = $nextVertex) {
 
-            $edges = $vertex->getEdgesOut();                                //get all edges from the aktuel vertex
+            // get all edges from the aktuel vertex
+            $edges = $vertex->getEdgesOut();
 
             $sortedEdges = new SplPriorityQueue();
 
-            foreach ($edges as $edge) {                                            //sort the edges
+            // sort the edges
+            foreach ($edges as $edge) {
                 $sortedEdges->insert($edge, - $edge->getWeight());
             }
 
-            foreach ($sortedEdges as $edge) {                                    //Untill first is found: get cheepest edge
+            // Untill first is found: get cheepest edge
+            foreach ($sortedEdges as $edge) {
 
-                $nextVertex = $edge->getVertexToFrom($vertex);                        //Get EndVertex of this edge
+                // Get EndVertex of this edge
+                $nextVertex = $edge->getVertexToFrom($vertex);
 
-                if (!isset($visitedVertices[$nextVertex->getId()])) {            //is unvisited
+                // is unvisited
+                if (!isset($visitedVertices[$nextVertex->getId()])) {
                     break;
                 }
             }
 
-            if (isset($visitedVertices[$nextVertex->getId()])) {            //check if there is a way i can use
+            // check if there is a way i can use
+            if (isset($visitedVertices[$nextVertex->getId()])) {
                 throw new UnexpectedValueException('Graph is not complete - can\'t find an edge to unconnected vertex');
             }
 
             $visitedVertices[$nextVertex->getId()] = TRUE;
 
-            $returnEdges []= $edge;                                                //clone edge in new Graph
+            // clone edge in new Graph
+            $returnEdges []= $edge;
 
         }
 
-        //check if there is a way from end edge to start edge
-        //get first connecting edge
-        //connect the last vertex with the start vertex
+        // check if there is a way from end edge to start edge
+        // get first connecting edge
+        // connect the last vertex with the start vertex
         $returnEdges []= Edge::getFirst($vertex->getEdgesTo($this->vertex));
 
         return $returnEdges;

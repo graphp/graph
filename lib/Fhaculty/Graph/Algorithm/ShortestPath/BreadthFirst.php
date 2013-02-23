@@ -54,7 +54,8 @@ class BreadthFirst extends Base
             if ($vertexCurrent) {
                 $edgesCurrent = $edges[$vertexCurrent->getId()];
             }
-        } while ($vertexCurrent);                                                  //untill queue is empty
+        // untill queue is empty
+        } while ($vertexCurrent);
 
         return $edges;
     }

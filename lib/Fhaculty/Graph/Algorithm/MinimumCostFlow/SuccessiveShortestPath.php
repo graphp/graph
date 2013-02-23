@@ -31,25 +31,28 @@ class SuccessiveShortestPath extends Base
         $this->checkBalance();
         $resultGraph = $this->graph->createGraphClone();
 
-        //initial balance to 0
+        // initial balance to 0
         $vertices = $resultGraph->getVertices();
         foreach ($vertices as $vertex) {
             $vertex->setBalance(0);
         }
 
-        //initial flow of edges
+        // initial flow of edges
         $edges = $resultGraph->getEdges();
         foreach ($edges as $edge) {
-            $flow = 0;                                                          //0 if weight of edge is positiv
+            // 0 if weight of edge is positiv
+            $flow = 0;
 
-            if ($edge->getWeight() < 0) {                                        //maximal flow if weight of edge is negative
+            // maximal flow if weight of edge is negative
+            if ($edge->getWeight() < 0) {
                 $flow = $edge->getCapacity();
 
                 if ($edge instanceof EdgeDirected) {
                     $startVertex = $edge->getVertexStart();
                     $endVertex = $edge->getVertexEnd();
 
-                    $this->addBalance($startVertex, $flow);                     //add balance to start- and end-vertex
+                    // add balance to start- and end-vertex
+                    $this->addBalance($startVertex, $flow);
                     $this->addBalance($endVertex, - $flow);
                 } else {
                     throw new UnexpectedValueException('Undirected Edges not suported');
@@ -59,31 +62,34 @@ class SuccessiveShortestPath extends Base
             $edge->setFlow($flow);
         }
 
-        while (true) {                                                             //return or Exception insite this while
-            //create residual graph
+        // return or Exception insite this while
+        while (true) {
+            // create residual graph
             $algRG = new ResidualGraph($resultGraph);
             $residualGraph = $algRG->createGraph();
 
-            //search for a source
+            // search for a source
             try {
                 $sourceVertex = $this->getVertexSource($residualGraph);
-            } catch (UnderflowException $ignore) {                               //if no source is found the minimum-cost flow is found
+            // if no source is found the minimum-cost flow is found
+            } catch (UnderflowException $ignore) {
                 break;
             }
 
-            //search for reachble sink from this source
+            // search for reachble sink from this source
             try {
                 $targetVertex = $this->getVertexSink($sourceVertex);
-            } catch (UnderflowException $ignore) {                                          //if no target is found the network has not enough capacity
+            // if no target is found the network has not enough capacity
+            } catch (UnderflowException $ignore) {
                 throw new UnexpectedValueException('The graph has not enough capacity for the minimum-cost flow');
             }
 
-            //calculate shortest path between source- and target-vertex
+            // calculate shortest path between source- and target-vertex
             $algSP = new SpMooreBellmanFord($sourceVertex);
             $edgesOnFlow = $algSP->getEdgesTo($targetVertex);
 
-            //calculate the maximal possible flow
-                                                                                //new flow is the maximal possible flow for this path
+            // calculate the maximal possible flow
+                                                                                // new flow is the maximal possible flow for this path
             $newflow    =    $this->graph->getVertex($sourceVertex->getId())->getBalance() - $sourceVertex->getBalance();
             $targetFlow = - ($this->graph->getVertex($targetVertex->getId())->getBalance() - $targetVertex->getBalance());
 
@@ -98,10 +104,10 @@ class SuccessiveShortestPath extends Base
                 $newflow = $minCapacity;
             }
 
-            //add the new flow to the path
+            // add the new flow to the path
             $this->addFlow($resultGraph, $edgesOnFlow, $newflow);
 
-            //add balance to source and remove for the sink
+            // add balance to source and remove for the sink
             $oriSourceVertex = $resultGraph->getVertex($sourceVertex->getId());
             $oriTargetVertex = $resultGraph->getVertex($targetVertex->getId());
 
@@ -165,7 +171,8 @@ class SuccessiveShortestPath extends Base
      */
     private function getVertexSink(Vertex $source)
     {
-        $algBFS = new SearchBreadthFirst($source);                             //search for reachable Vertices
+        // search for reachable Vertices
+        $algBFS = new SearchBreadthFirst($source);
 
         foreach ($algBFS->getVertices() as $vid => $vertex) {
             if ($this->graph->getVertex($vid)->getBalance() - $vertex->getBalance() < 0) {

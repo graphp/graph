@@ -30,7 +30,8 @@ class Graph extends Set
      */
     public function createVertex($id = NULL, $returnDuplicate = false)
     {
-        if ($id === NULL) {    // no ID given
+        // no ID given
+        if ($id === NULL) {
             $id = $this->getNextId();
         } elseif (!is_int($id) && !is_string($id)) {
             throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
@@ -84,7 +85,7 @@ class Graph extends Set
         // TODO: set additional graph attributes
         foreach ($this->getVertices() as $originalVertex) {
             $vertex = $graph->createVertexClone($originalVertex);
-            //$graph->vertices[$vid] = $vertex;
+            // $graph->vertices[$vid] = $vertex;
         }
 
         return $graph;
@@ -185,13 +186,16 @@ class Graph extends Set
     {
         $ends = $originalEdge->getVerticesId();
 
-        $a = $this->getVertex($ends[$ia]); // get start vertex from old start vertex id
-        $b = $this->getVertex($ends[$ib]); // get target vertex from old target vertex id
+        // get start vertex from old start vertex id
+        $a = $this->getVertex($ends[$ia]);
+        // get target vertex from old target vertex id
+        $b = $this->getVertex($ends[$ib]);
 
         if ($originalEdge instanceof EdgeDirected) {
             $newEdge = $a->createEdgeTo($b);
         } else {
-            $newEdge = $a->createEdge($b); // create new edge between new a and b
+            // create new edge between new a and b
+            $newEdge = $a->createEdge($b);
         }
         // TODO: copy edge attributes
         $newEdge->setLayout($originalEdge->getLayout());
@@ -231,7 +235,8 @@ class Graph extends Set
             return 0;
         }
 
-        return max(array_keys($this->vertices))+1; // auto ID
+        // auto ID
+        return max(array_keys($this->vertices))+1;
     }
 
     /**
@@ -280,7 +285,8 @@ class Graph extends Set
      */
     public function getDegree()
     {
-        $degree = $this->getVertexFirst()->getDegree(); // get initial degree of any start vertex to compare others to
+        // get initial degree of any start vertex to compare others to
+        $degree = $this->getVertexFirst()->getDegree();
 
         foreach ($this->vertices as $vertex) {
             $i = $vertex->getDegree();
@@ -327,7 +333,8 @@ class Graph extends Set
      */
     public function isRegular()
     {
-        if (!$this->vertices) { // an empty graph is considered regular
+        // an empty graph is considered regular
+        if (!$this->vertices) {
 
             return true;
         }
@@ -388,9 +395,12 @@ class Graph extends Set
      */
     public function isSymmetric()
     {
-        foreach ($this->edges as $edge) { // check all edges
-            if ($edge instanceof EdgeDirected) { // only check directed edges (undirected ones are symmetric by definition)
-                if (!$edge->getVertexEnd()->hasEdgeTo($edge->getVertexStart())) { // check if end also has an edge to start
+        // check all edges
+        foreach ($this->edges as $edge) {
+            // only check directed edges (undirected ones are symmetric by definition)
+            if ($edge instanceof EdgeDirected) {
+                // check if end also has an edge to start
+                if (!$edge->getVertexEnd()->hasEdgeTo($edge->getVertexStart())) {
                     return false;
                 }
             }
@@ -444,10 +454,14 @@ class Graph extends Set
      */
     public function isComplete()
     {
-        $c = $this->vertices;                                                   // copy of array (separate iterator but same vertices)
-        foreach ($this->vertices as $vertex) {                                    // from each vertex
-            foreach ($c as $other) {                                              // to each vertex
-                if ($other !== $vertex && !$vertex->hasEdgeTo($other)) {          // missing edge => fail
+        // copy of array (separate iterator but same vertices)
+        $c = $this->vertices;
+        // from each vertex
+        foreach ($this->vertices as $vertex) {
+            // to each vertex
+            foreach ($c as $other) {
+                // missing edge => fail
+                if ($other !== $vertex && !$vertex->hasEdgeTo($other)) {
                     return false;
                 }
             }
@@ -477,7 +491,8 @@ class Graph extends Set
     public function getBalance()
     {
         $balance = 0;
-        foreach ($this->getVertices() as $vertex) {                                //Sum for all vertices of value
+        // Sum for all vertices of value
+        foreach ($this->getVertices() as $vertex) {
             $balance += $vertex->getBalance();
         }
 

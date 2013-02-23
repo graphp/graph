@@ -23,9 +23,12 @@ class UmlClassDiagram extends Base
     private $graph;
 
     private $options = array(
-        'only-self'   => true, // whether to only show methods/properties that are actually defined in this class (and not those merely inherited from base)
-        'only-public' => false, // whether to only show public methods/properties (or also include private/protected ones)
-        'show-constants' => true, // whether to show class constants as readonly static variables (or just omit them completely)
+        // whether to only show methods/properties that are actually defined in this class (and not those merely inherited from base)
+        'only-self'   => true,
+        // whether to only show public methods/properties (or also include private/protected ones)
+        'only-public' => false,
+        // whether to show class constants as readonly static variables (or just omit them completely)
+        'show-constants' => true,
     );
 
     public function __construct()
@@ -120,7 +123,8 @@ class UmlClassDiagram extends Base
                 $label .= ' : ' . $this->escape($type);
             }
 
-            if (isset($defaults[$property->getName()])) { // only show non-NULL values
+            // only show non-NULL values
+            if (isset($defaults[$property->getName()])) {
                 $label .= ' = ' . $this->getCasted($defaults[$property->getName()]);
             }
 
@@ -130,12 +134,13 @@ class UmlClassDiagram extends Base
         $label .= '|';
 
         foreach ($reflection->getMethods() as $method) {
-            if($this->options['only-self'] && $method->getDeclaringClass()->getName() !== $class) continue; // method not defined in this class (inherited from parent), so skip
+            // method not defined in this class (inherited from parent), so skip
+            if($this->options['only-self'] && $method->getDeclaringClass()->getName() !== $class) continue;
 
             if($this->options['only-public'] && !$method->isPublic()) continue;
 
-//             $ref = preg_replace('/[^a-z0-9]/i', '', $method->getName());
-//             $label .= '<"' . $ref . '">';
+            // $ref = preg_replace('/[^a-z0-9]/i', '', $method->getName());
+            // $label .= '<"' . $ref . '">';
 
             $label .= $this->visibility($method);
 
@@ -181,7 +186,8 @@ class UmlClassDiagram extends Base
                 $label .= ' : ' . $this->escape($type);
             }
 
-            $label .= '\\l'; // align this line to the left
+            // align this line to the left
+            $label .= '\\l';
         }
 
         $label .= '}"';
@@ -204,7 +210,7 @@ class UmlClassDiagram extends Base
         $vertex = $this->graph->createVertex()->setLayoutAttribute('label', $note."\n")
                                               ->setLayoutAttribute('shape', 'note')
                                                 ->setLayoutAttribute('fontsize', 8)
-                                              //->setLayoutAttribute('margin', '0 0')
+                                              // ->setLayoutAttribute('margin', '0 0')
                                               ->setLayoutAttribute('style', 'filled')
                                               ->setLayoutAttribute('fillcolor', 'yellow');
 
@@ -224,7 +230,8 @@ class UmlClassDiagram extends Base
      */
     public function createGraph()
     {
-        return $this->graph->createGraphClone(); // clone instance so that the inner instance can not be modified from the outside
+        // clone instance so that the inner instance can not be modified from the outside
+        return $this->graph->createGraphClone();
     }
 
     /**
@@ -294,8 +301,10 @@ class UmlClassDiagram extends Base
     {
         $class = NULL;
         try {
-            $class = $parameter->getClass(); // get class hint for parameter
-        } catch (Exception $ignore) { // will fail if specified class does not exist
+            // get class hint for parameter
+            $class = $parameter->getClass();
+        // will fail if specified class does not exist
+        } catch (Exception $ignore) {
 
             return '«invalidClass»';
         }
@@ -318,7 +327,7 @@ class UmlClassDiagram extends Base
     {
         $doc = $this->getDocBlock($ref);
         if ($doc === NULL) {
-            //return 'nah';
+            // return 'nah';
             return NULL;
         }
         preg_match_all('/^@' . $what . ' ([^\s]+)/m', $doc, $matches, PREG_SET_ORDER);
@@ -334,7 +343,7 @@ class UmlClassDiagram extends Base
     {
         $multi = $this->getDocBlockMulti($ref, $what);
         if (count($multi) !== 1) {
-            //return json_encode($matches);
+            // return json_encode($matches);
             return NULL;
         }
 
@@ -403,7 +412,8 @@ class UmlClassDiagram extends Base
         } elseif ($ref->isProtected()) {
             return '#';
         } elseif ($ref->isPrivate()) {
-            return "\342\200\223"; // U+2013 EN DASH "–"
+            // U+2013 EN DASH "–"
+            return "\342\200\223";
         }
 
         return '?';

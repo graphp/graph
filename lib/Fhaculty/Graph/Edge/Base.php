@@ -75,18 +75,23 @@ abstract class Base extends Layoutable
         if ($edges instanceof Graph) {
             $edges = $edges->getEdges();
         }
-        if ($by === self::ORDER_RANDOM && $edges) { // random order and there are actually some edges to shuffle
+        // random order and there are actually some edges to shuffle
+        if ($by === self::ORDER_RANDOM && $edges) {
 
-            return $edges[array_rand($edges)]; // just return by random key (no need to check for DESC flag)
+            // just return by random key (no need to check for DESC flag)
+            return $edges[array_rand($edges)];
         }
         $ret = NULL;
         $best = NULL;
         foreach ($edges as $edge) {
-            if ($by === self::ORDER_FIFO) {        // do not sort - needs special handling
-                if ($desc) {            // always remember edge from last iteration
+            // do not sort - needs special handling
+            if ($by === self::ORDER_FIFO) {
+                // always remember edge from last iteration
+                if ($desc) {
                     $ret = $edge;
                     continue;
-                } else {                // just return first edge right away
+                // just return first edge right away
+                } else {
 
                     return $edge;
                 }
@@ -133,12 +138,14 @@ abstract class Base extends Layoutable
         if ($by === self::ORDER_RANDOM) {
             shuffle($edges);
 
-            return $edges; // create iterator for shuffled array (no need to check DESC flag)
+            // create iterator for shuffled array (no need to check DESC flag)
+            return $edges;
         }
         if ($by === self::ORDER_FIFO) {
             return $desc ? array_reverse($edges) : $edges;
         }
-        $temp = array(); // temporary indexed array to be sorted
+        // temporary indexed array to be sorted
+        $temp = array();
         foreach ($edges as $eid => $edge) {
             if ($by === self::ORDER_WEIGHT) {
                 $now = $edge->getWeight();
@@ -153,12 +160,14 @@ abstract class Base extends Layoutable
             }
             $temp[$eid] = $now;
         }
-        if ($desc) { // actually sort array ASC/DESC
+        // actually sort array ASC/DESC
+        if ($desc) {
             arsort($temp);
         } else {
             asort($temp);
         }
-        foreach ($temp as $eid=>&$value) { // make sure resulting array is edigeId=>edge
+        // make sure resulting array is edigeId=>edge
+        foreach ($temp as $eid=>&$value) {
             $value = $edges[$eid];
         }
 
@@ -401,9 +410,12 @@ abstract class Base extends Layoutable
     {
         $ends = $this->getVertices();
 
-        $edges = $ends[0]->getEdgesTo($ends[1]);                            // get all edges between this edge's endpoints
-        if ($this->isConnection($ends[1], $ends[0])) {                         // edge points into both directions (undirected/bidirectional edge)
-            $back = $ends[1]->getEdgesTo($ends[0]);                             // also get all edges in other direction
+        // get all edges between this edge's endpoints
+        $edges = $ends[0]->getEdgesTo($ends[1]);
+        // edge points into both directions (undirected/bidirectional edge)
+        if ($this->isConnection($ends[1], $ends[0])) {
+            // also get all edges in other direction
+            $back = $ends[1]->getEdgesTo($ends[0]);
             foreach ($back as $edge) {
                 if (!in_array($edge, $edges)) {
                     $edges[] = $edge;
@@ -416,7 +428,8 @@ abstract class Base extends Layoutable
             throw new LogicException('Internal error: Current edge not found');
         }
 
-        unset($edges[$pos]);                                                   // exclude current edge from parallel edges
+        // exclude current edge from parallel edges
+        unset($edges[$pos]);
 
         return array_values($edges);
     }

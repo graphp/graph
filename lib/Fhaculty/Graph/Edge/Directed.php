@@ -128,14 +128,16 @@ class Directed extends Base
      */
     public function getEdgesParallel()
     {
-        $edges = $this->from->getEdgesTo($this->to);                            // get all edges between this edge's endpoints
+        // get all edges between this edge's endpoints
+        $edges = $this->from->getEdgesTo($this->to);
 
         $pos = array_search($this, $edges, true);
         if ($pos === false) {
             throw new LogicException('Internal error: Current edge not found');
         }
 
-        unset($edges[$pos]);                                                   // exclude current edge from parallel edges
+        // exclude current edge from parallel edges
+        unset($edges[$pos]);
 
         return array_values($edges);
     }

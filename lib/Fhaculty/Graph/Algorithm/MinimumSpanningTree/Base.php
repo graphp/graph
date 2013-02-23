@@ -15,7 +15,8 @@ abstract class Base extends AlgorithmBase
      */
     public function createGraph()
     {
-        return $this->getGraph()->createGraphCloneEdges($this->getEdges());                //Copy Graph
+        // Copy Graph
+        return $this->getGraph()->createGraphCloneEdges($this->getEdges());
     }
 
     abstract protected function getGraph();

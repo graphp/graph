@@ -31,7 +31,7 @@ class AdjacencyMatrix extends File
             $thisVertex = $graph->getVertex($i);
 
             $currentEdgeList = $this->readLine($file[$i + 1], $parts);
-            //$currentEdgeList = explode("\t", $file[$i + 1]);
+            // $currentEdgeList = explode("\t", $file[$i + 1]);
 
             for ($k = 0; $k < $vertexCount; $k++) {
 

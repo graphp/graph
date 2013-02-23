@@ -79,7 +79,7 @@ class UndirectedId extends Base
         if ($from->getGraph() !== $this->graph || $to->getGraph() !== $this->graph) {
             return false;
         }
-        //                              one way                or                        other way
+        // one way                or                        other way
         return (($this->a === $from->getId() && $this->b === $to->getId()) || ($this->b === $from->getId() && $this->a === $to->getId()));
     }
 
@@ -118,6 +118,7 @@ class UndirectedId extends Base
 
     public function hasVertexTarget(Vertex $targetVertex)
     {
-        return $this->hasVertexStart($targetVertex); // same implementation as direction does not matter
+        // same implementation as direction does not matter
+        return $this->hasVertexStart($targetVertex);
     }
 }

@@ -94,18 +94,23 @@ class Vertex extends Layoutable
         if ($vertices instanceof Graph) {
             $vertices = $vertices->getVertices();
         }
-        if ($by === self::ORDER_RANDOM && $vertices) { // random order and there are actually some vertices to shuffle
+        // random order and there are actually some vertices to shuffle
+        if ($by === self::ORDER_RANDOM && $vertices) {
 
-            return $vertices[array_rand($vertices)]; // just return by random key (no need to check for DESC flag)
+            // just return by random key (no need to check for DESC flag)
+            return $vertices[array_rand($vertices)];
         }
         $ret = NULL;
         $best = NULL;
         foreach ($vertices as $vertex) {
-            if ($by === self::ORDER_FIFO) {        // do not sort - needs special handling
-                if ($desc) {            // always remember vertex from last iteration
+            // do not sort - needs special handling
+            if ($by === self::ORDER_FIFO) {
+                // always remember vertex from last iteration
+                if ($desc) {
                     $ret = $vertex;
                     continue;
-                } else {                // just return first vertex right away
+                // just return first vertex right away
+                } else {
 
                     return $vertex;
                 }
@@ -161,7 +166,8 @@ class Vertex extends Layoutable
         if ($by === self::ORDER_RANDOM) {
             shuffle($vertices);
 
-            return new ArrayIterator($vertices); // create iterator for shuffled array (no need to check DESC flag)
+            // create iterator for shuffled array (no need to check DESC flag)
+            return new ArrayIterator($vertices);
         }
         $it = new SplPriorityQueue();
         foreach ($vertices as $vertex) {
@@ -279,10 +285,14 @@ class Vertex extends Layoutable
                 throw new UnexpectedValueException("TODO: undirected edges not suported yet");
             }
 
-            if ($edge->hasVertexStart($this)) { // edge is an outgoing edge of this vertex
-                $sumOfFlow += $edge->getFlow(); // flowing out (flow is "pointing away")
-            } else {                                // this is an ingoing edge
-                $sumOfFlow -= $edge->getFlow(); // flowing in
+            // edge is an outgoing edge of this vertex
+            if ($edge->hasVertexStart($this)) {
+                // flowing out (flow is "pointing away")
+                $sumOfFlow += $edge->getFlow();
+            // this is an ingoing edge
+            } else {
+                // flowing in
+                $sumOfFlow -= $edge->getFlow();
             }
         }
 
@@ -698,7 +708,8 @@ class Vertex extends Layoutable
             }
         }
 
-        return true; // reach this point: no edge to this vertex
+        // reach this point: no edge to this vertex
+        return true;
     }
 
     /**
@@ -716,7 +727,8 @@ class Vertex extends Layoutable
             }
         }
 
-        return true; // reach this point: no edge away from this vertex
+        // reach this point: no edge away from this vertex
+        return true;
     }
 
     /**

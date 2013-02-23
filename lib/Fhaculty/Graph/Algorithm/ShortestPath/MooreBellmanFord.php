@@ -20,15 +20,21 @@ class MooreBellmanFord extends Base
     private function bigStep(array &$edges, array &$totalCostOfCheapestPathTo, array &$predecessorVertexOfCheapestPathTo)
     {
         $changed = NULL;
-        foreach ($edges as $edge) {                                                //check for all edges
-            foreach ($edge->getVerticesTarget() as $toVertex) {                        //check for all "ends" of this edge (or for all targetes)
+        // check for all edges
+        foreach ($edges as $edge) {
+            // check for all "ends" of this edge (or for all targetes)
+            foreach ($edge->getVerticesTarget() as $toVertex) {
                 $fromVertex = $edge->getVertexFromTo($toVertex);
 
-                if (isset($totalCostOfCheapestPathTo[$fromVertex->getId()])) {            //If the fromVertex already has a path
-                    $newCost = $totalCostOfCheapestPathTo[$fromVertex->getId()] + $edge->getWeight(); //New possible costs of this path
+                // If the fromVertex already has a path
+                if (isset($totalCostOfCheapestPathTo[$fromVertex->getId()])) {
+                    // New possible costs of this path
+                    $newCost = $totalCostOfCheapestPathTo[$fromVertex->getId()] + $edge->getWeight();
 
-                    if (!isset($totalCostOfCheapestPathTo[$toVertex->getId()])                //No path has been found yet
-                            || $totalCostOfCheapestPathTo[$toVertex->getId()] > $newCost){        //OR this path is cheaper than the old path
+                    // No path has been found yet
+                    if (!isset($totalCostOfCheapestPathTo[$toVertex->getId()])
+                            // OR this path is cheaper than the old path
+                            || $totalCostOfCheapestPathTo[$toVertex->getId()] > $newCost){
 
                         $changed = $toVertex;
                         $totalCostOfCheapestPathTo[$toVertex->getId()] = $newCost;
@@ -49,22 +55,27 @@ class MooreBellmanFord extends Base
      */
     public function getEdges()
     {
-        $totalCostOfCheapestPathTo  = array($this->startVertex->getId() => 0);            //start node distance
+        // start node distance
+        $totalCostOfCheapestPathTo  = array($this->startVertex->getId() => 0);
 
-        $predecessorVertexOfCheapestPathTo  = array($this->startVertex->getId() => $this->startVertex);    //predecessor
+        // predecessor
+        $predecessorVertexOfCheapestPathTo  = array($this->startVertex->getId() => $this->startVertex);
 
-        $numSteps = $this->startVertex->getGraph()->getNumberOfVertices() - 1; // repeat (n-1) times
+        // repeat (n-1) times
+        $numSteps = $this->startVertex->getGraph()->getNumberOfVertices() - 1;
         $edges = $this->startVertex->getGraph()->getEdges();
         $changed = true;
-        for ($i = 0; $i < $numSteps && $changed; ++$i) {                        //repeat n-1 times
+        // repeat n-1 times
+        for ($i = 0; $i < $numSteps && $changed; ++$i) {
             $changed = $this->bigStep($edges, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo);
         }
 
-        //algorithm is done, build graph
+        // algorithm is done, build graph
         $returnEdges = $this->getEdgesCheapestPredecesor($predecessorVertexOfCheapestPathTo);
 
-        //Check for negative cycles (only if last step didn't already finish anyway)
-        if ($changed && $changed = $this->bigStep($edges, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)) { // something is still changing...
+        // Check for negative cycles (only if last step didn't already finish anyway)
+        // something is still changing...
+        if ($changed && $changed = $this->bigStep($edges, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)) {
             $cycle = Cycle::factoryFromPredecessorMap($predecessorVertexOfCheapestPathTo, $changed, Edge::ORDER_WEIGHT);
             throw new NegativeCycleException('Negative cycle found', 0, NULL, $cycle);
         }

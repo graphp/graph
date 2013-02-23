@@ -95,10 +95,14 @@ class Walk extends Set
      */
     public function isDigon()
     {
-        return (count($this->edges) === 2 && // exactly 2 edges
-                !$this->hasArrayDuplicates($this->edges) && // no duplicate edges
-                count($this->getVertices()) === 2 && // exactly two distinct vertices
-                $this->isCycle()); // this is actually a cycle
+        // exactly 2 edges
+        return (count($this->edges) === 2 &&
+                // no duplicate edges
+                !$this->hasArrayDuplicates($this->edges) &&
+                // exactly two distinct vertices
+                count($this->getVertices()) === 2 &&
+                // this is actually a cycle
+                $this->isCycle());
     }
 
     /**
@@ -110,9 +114,12 @@ class Walk extends Set
      */
     public function isTriangle()
     {
-        return (count($this->edges) === 3 && // exactly 3 (implicitly distinct) edges
-                count($this->getVertices()) === 3 && // exactly three distinct vertices
-                $this->isCycle()); // this is actually a cycle
+        // exactly 3 (implicitly distinct) edges
+        return (count($this->edges) === 3 &&
+                // exactly three distinct vertices
+                count($this->getVertices()) === 3 &&
+                // this is actually a cycle
+                $this->isCycle());
     }
 
     /**
@@ -128,7 +135,8 @@ class Walk extends Set
     public function isSimple()
     {
         $vertices = $this->vertices;
-        if ($this->isCycle()) { // ignore starting vertex for cycles as it's always the same as ending vertex
+        // ignore starting vertex for cycles as it's always the same as ending vertex
+        if ($this->isCycle()) {
             unset($vertices[0]);
         }
 
@@ -184,11 +192,14 @@ class Walk extends Set
      */
     public function createGraph()
     {
-        $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());   // create new graph clone with only edges of walk
+        // create new graph clone with only edges of walk
+        $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());
         $vertices = $this->getVertices();
-        foreach ($graph->getVertices() as $vid => $vertex) {                      // get all vertices
+        // get all vertices
+        foreach ($graph->getVertices() as $vid => $vertex) {
             if (!isset($vertices[$vid])) {
-                $vertex->destroy();                                             // remove those not present in the walk (isolated vertices, etc.)
+                // remove those not present in the walk (isolated vertices, etc.)
+                $vertex->destroy();
             }
         }
 
@@ -204,7 +215,8 @@ class Walk extends Set
     {
         $edges = array();
         foreach ($this->edges as $edge) {
-            if (!in_array($edge, $edges, true)) { // filter duplicate edges
+            // filter duplicate edges
+            if (!in_array($edge, $edges, true)) {
                 $edges []= $edge;
             }
         }
@@ -320,11 +332,13 @@ class Walk extends Set
     {
         $compare = array();
         foreach ($array as $element) {
-            if (in_array($element, $compare, true)) { // duplicate element found
+            // duplicate element found
+            if (in_array($element, $compare, true)) {
 
                 return true;
             } else {
-                $compare [] = $element; // add element to temporary array to check for duplicates
+                // add element to temporary array to check for duplicates
+                $compare [] = $element;
             }
         }
 
@@ -363,15 +377,18 @@ class Walk extends Set
     public function isValid()
     {
         $vertices = $this->getGraph()->getVertices();
-        foreach ($this->vertices as $vertex) {                                  // check source graph contains all vertices
+        // check source graph contains all vertices
+        foreach ($this->vertices as $vertex) {
             $vid = $vertex->getId();
-            if (!isset($vertices[$vid]) || $vertices[$id] !== $vertex) {         // make sure vertex ID exists and has not been replaced
+            // make sure vertex ID exists and has not been replaced
+            if (!isset($vertices[$vid]) || $vertices[$id] !== $vertex) {
 
                 return false;
             }
         }
         $edges = $this->getGraph()->getEdges();
-        foreach ($this->edges as $edge) {                                        // check source graph contains all edges
+        // check source graph contains all edges
+        foreach ($this->edges as $edge) {
             if (!in_array($edge, $edges, true)) {
                 return false;
             }

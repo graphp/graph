@@ -115,7 +115,8 @@ class Bruteforce extends Base
         // numEdges 3-12 should work
 
         $this->bestWeight = $this->upperLimit;
-        $this->startVertex = $this->graph->getVertexFirst(); // actual start doesn't really matter as we're only considering complete graphs here
+        // actual start doesn't really matter as we're only considering complete graphs here
+        $this->startVertex = $this->graph->getVertexFirst();
 
         $result = $this->step($this->startVertex,
                               0,
@@ -140,17 +141,21 @@ class Bruteforce extends Base
      */
     private function step(Vertex $vertex, $totalWeight, array $visitedVertices, array $visitedEdges)
     {
-        if ($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight >= $this->bestWeight) { // stop recursion if best result is exceeded (branch and bound)
+        // stop recursion if best result is exceeded (branch and bound)
+        if ($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight >= $this->bestWeight) {
 
             return NULL;
         }
-        if ($vertex === $this->startVertex && count($visitedEdges) === $this->numEdges) { // kreis geschlossen am Ende
-            $this->bestWeight = $totalWeight; // new best result
+        // kreis geschlossen am Ende
+        if ($vertex === $this->startVertex && count($visitedEdges) === $this->numEdges) {
+            // new best result
+            $this->bestWeight = $totalWeight;
 
             return $visitedEdges;
         }
 
-        if (isset($visitedVertices[$vertex->getId()])) {                          // only visit each vertex once
+        // only visit each vertex once
+        if (isset($visitedVertices[$vertex->getId()])) {
 
             return NULL;
         }
@@ -158,8 +163,10 @@ class Bruteforce extends Base
 
         $bestResult = NULL;
 
-        foreach ($vertex->getEdgesOut() as $edge) {                          // weiter verzweigen in alle vertices
-            $target = $edge->getVertexToFrom($vertex);                          // get target vertex of this edge
+        // weiter verzweigen in alle vertices
+        foreach ($vertex->getEdgesOut() as $edge) {
+            // get target vertex of this edge
+            $target = $edge->getVertexToFrom($vertex);
 
             $weight = $edge->getWeight();
             if ($weight < 0) {
@@ -172,10 +179,14 @@ class Bruteforce extends Base
                                   array_merge($visitedEdges, array($edge))
                       );
 
-            if ($result !== NULL) { // new result found
-                if($this->branchAndBound || // branch and bound enabled (default): returned result MUST be the new best result
-                   $bestResult === NULL || // this is the first result, just use it anyway
-                   $this->sumEdges($result) < $this->sumEdges($bestResult)){ // this is the new best result
+            // new result found
+            if ($result !== NULL) {
+                // branch and bound enabled (default): returned result MUST be the new best result
+                if($this->branchAndBound ||
+                   // this is the first result, just use it anyway
+                   $bestResult === NULL ||
+                   // this is the new best result
+                   $this->sumEdges($result) < $this->sumEdges($bestResult)){
                     $bestResult = $result;
                 }
             }

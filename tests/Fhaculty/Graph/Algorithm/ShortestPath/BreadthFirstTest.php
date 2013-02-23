@@ -64,6 +64,6 @@ class BreadthFirstTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        //$alg = new BreadthFirst($startVertex);
+        // $alg = new BreadthFirst($startVertex);
     }
 }

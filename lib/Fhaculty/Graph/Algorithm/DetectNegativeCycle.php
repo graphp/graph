@@ -37,8 +37,10 @@ class DetectNegativeCycle extends Base
         try {
             $this->getCycleNegative();
 
-            return true;                                                      // cycle was found => okay
-        } catch (UnderflowException $ignore) {}                                      // no cycle found
+            // cycle was found => okay
+            return true;
+        // no cycle found
+        } catch (UnderflowException $ignore) {}
 
         return false;
     }
@@ -52,21 +54,30 @@ class DetectNegativeCycle extends Base
      */
     public function getCycleNegative()
     {
-        $verticesVisited = array();                                            // remember vertices already visited, as they can not lead to a new cycle
-        foreach ($this->graph->getVertices() as $vid => $vertex) {                // check for all vertices
-            if (!isset($verticesVisited[$vid])) {                                // skip vertices already visited
-                $alg = new SpMooreBellmanFord($vertex);                        // start MBF algorithm on current vertex
+        // remember vertices already visited, as they can not lead to a new cycle
+        $verticesVisited = array();
+        // check for all vertices
+        foreach ($this->graph->getVertices() as $vid => $vertex) {
+            // skip vertices already visited
+            if (!isset($verticesVisited[$vid])) {
+                // start MBF algorithm on current vertex
+                $alg = new SpMooreBellmanFord($vertex);
 
                 try {
-                    foreach ($alg->getVerticesId() as $vid) {                   // try to get all connected vertices (or throw new cycle)
-                        $verticesVisited[$vid] = true;                         // getting connected vertices succeeded, so skip over all of them
-                    }                                                           // no cycle found, check next vertex...
-                } catch (NegativeCycleException $e) {                              // yey, negative cycle encountered => return
+                    // try to get all connected vertices (or throw new cycle)
+                    foreach ($alg->getVerticesId() as $vid) {
+                        // getting connected vertices succeeded, so skip over all of them
+                        $verticesVisited[$vid] = true;
+                    // no cycle found, check next vertex...
+                    } 
+                // yey, negative cycle encountered => return
+                } catch (NegativeCycleException $e) {
 
                     return $e->getCycle();
                 }
             }
-        }                                                                       // no more vertices to check => abort
+        // no more vertices to check => abort
+        } 
         throw new UnderflowException('No negative cycle found');
     }
 

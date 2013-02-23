@@ -27,13 +27,16 @@ class CycleCanceling extends Base
 
         // connect supersource s* and supersink t* with all "normal" sources and sinks
         foreach ($resultGraph->getVertices() as $vertex) {
-            $flow = $vertex->getBalance(); //$vertex->getFlow();
+            // $vertex->getFlow();
+            $flow = $vertex->getBalance();
             $b = abs($vertex->getBalance());
-            if ($flow > 0) { // source
+            // source
+            if ($flow > 0) {
                 $superSource->createEdgeTo($vertex)->setCapacity($b);
 
                 $sumBalance += $flow;
-            } elseif ($flow < 0) { // sink
+            // sink
+            } elseif ($flow < 0) {
                 $vertex->createEdgeTo($superSink)->setCapacity($b);
             }
         }
@@ -49,22 +52,23 @@ class CycleCanceling extends Base
         $resultGraph = $algMaxFlow->createGraph();
 
         while (true) {
-            //create residual graph
+            // create residual graph
             $algRG = new ResidualGraph($resultGraph);
             $residualGraph = $algRG->createGraph();
 
-            //get negative cycle
+            // get negative cycle
             $alg = new DetectNegativeCycle($residualGraph);
             try {
                 $clonedEdges = $alg->getCycleNegative()->getEdges();
-            } catch (UnderflowException $ignore) {                               // no negative cycle found => end algorithm
+            // no negative cycle found => end algorithm
+            } catch (UnderflowException $ignore) {
                 break;
             }
 
-            //calculate maximal possible flow = minimum capacity remaining for all edges
+            // calculate maximal possible flow = minimum capacity remaining for all edges
             $newFlow = Edge::getFirst($clonedEdges, Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
 
-            //set flow on original graph
+            // set flow on original graph
             $this->addFlow($resultGraph, $clonedEdges, $newFlow);
         }
 

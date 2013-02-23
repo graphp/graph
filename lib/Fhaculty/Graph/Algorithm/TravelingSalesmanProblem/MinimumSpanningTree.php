@@ -38,18 +38,22 @@ class MinimumSpanningTree extends Base
     {
         $returnEdges = array();
 
-        $minimumSpanningTreeAlgorithm = new MstKruskal($this->graph);          // Create minimum spanning tree
+        // Create minimum spanning tree
+        $minimumSpanningTreeAlgorithm = new MstKruskal($this->graph);
         $minimumSpanningTree = $minimumSpanningTreeAlgorithm->createGraph();
 
         $alg = new SearchDepthFirst($minimumSpanningTree->getVertexFirst());
-        $depthFirstSearch = $alg->getVertices();                                // Depth first search in minmum spanning tree (for the eulerian path)
+        // Depth first search in minmum spanning tree (for the eulerian path)
+        $depthFirstSearch = $alg->getVertices();
 
         $startVertex = NULL;
         $oldVertex = NULL;
 
-        foreach ($depthFirstSearch as $vertex) {                                    // connect vertices in order of the depth first search
+        // connect vertices in order of the depth first search
+        foreach ($depthFirstSearch as $vertex) {
 
-            $vertex = $this->graph->getVertex($vertex->getId());                // get vertex from the original graph (not from the depth first search)
+            // get vertex from the original graph (not from the depth first search)
+            $vertex = $this->graph->getVertex($vertex->getId());
                                                                                 // need to clone the edge from the original graph, therefore i need the original edge
             if ($startVertex === NULL) {
                 $startVertex = $vertex;

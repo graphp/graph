@@ -14,22 +14,31 @@ class BreadthFirst extends Base
     public function getVertices()
     {
         $queue = array($this->startVertex);
-        $mark = array($this->startVertex->getId() => true);                            //to not add vertices twice in array visited
-        $visited = array();                                                        //visited vertices
+        // to not add vertices twice in array visited
+        $mark = array($this->startVertex->getId() => true);
+        // visited vertices
+        $visited = array();
 
         do {
-            $t = array_shift($queue);                                                // get first from queue
-            $visited[$t->getId()]= $t;                                                //save as visited
+            // get first from queue
+            $t = array_shift($queue);
+            // save as visited
+            $visited[$t->getId()]= $t;
 
-            $vertices = $this->getVerticesAdjacent($t);                                //get next vertices
+            // get next vertices
+            $vertices = $this->getVerticesAdjacent($t);
             foreach ($vertices as $id => $vertex) {
-                if (!isset($mark[$id])) {                                                    //if not "toughed" before
-                    $queue[] = $vertex;                                                        //add to queue
-                    $mark[$id] = true;                                                        //and mark
+                // if not "toughed" before
+                if (!isset($mark[$id])) {
+                    // add to queue
+                    $queue[] = $vertex;
+                    // and mark
+                    $mark[$id] = true;
                 }
             }
 
-        } while ($queue);                                                            //untill queue is empty
+        // untill queue is empty
+        } while ($queue);
 
         return $visited;
     }

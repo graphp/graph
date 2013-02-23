@@ -69,9 +69,11 @@ abstract class Base extends AlgorithmBase
         $path = array();
         while ($currentVertex !== $this->startVertex) {
             $pre = NULL;
-            foreach ($edges as $edge) { // check all edges to search for edge that points TO current vertex
+            // check all edges to search for edge that points TO current vertex
+            foreach ($edges as $edge) {
                 try {
-                    $pre = $edge->getVertexFromTo($currentVertex); // get start point of this edge (fails if current vertex is not its end point)
+                    // get start point of this edge (fails if current vertex is not its end point)
+                    $pre = $edge->getVertexFromTo($currentVertex);
                     $path []= $edge;
                     $currentVertex = $pre;
                     break;
@@ -193,14 +195,17 @@ abstract class Base extends AlgorithmBase
     protected function getEdgesCheapestPredecesor(array $predecessor)
     {
         $vertices = $this->startVertex->getGraph()->getVertices();
-        unset($vertices[$this->startVertex->getId()]);                          //start vertex doesn't have a predecessor
+        // start vertex doesn't have a predecessor
+        unset($vertices[$this->startVertex->getId()]);
 
         $edges = array();
         foreach ($vertices as $vid => $vertex) {
             if (isset($predecessor[$vid])) {
-                $predecesVertex = $predecessor[$vid];    //get predecor
+                // get predecor
+                $predecesVertex = $predecessor[$vid];
 
-                $edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex), Edge::ORDER_WEIGHT);    //get cheapest edge
+                // get cheapest edge
+                $edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex), Edge::ORDER_WEIGHT);
             }
         }
 

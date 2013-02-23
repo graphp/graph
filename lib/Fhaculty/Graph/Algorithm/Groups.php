@@ -44,15 +44,20 @@ class Groups extends Base
      */
     public function isBipartit()
     {
-        if ($this->getNumberOfGroups() !== 2) { // graph has to contain exactly 2 groups
+        // graph has to contain exactly 2 groups
+        if ($this->getNumberOfGroups() !== 2) {
 
             return false;
         }
 
-        foreach ($this->graph->getVertices() as $vertex) {                      // for each vertex
-            $group = $vertex->getGroup();                                       // get current group
-            foreach ($vertex->getVerticesEdge() as $vertexNeighbor) {            // for every neighbor vertex
-                if ($vertexNeighbor->getGroup() === $group) {                     // vertex group must be other group
+        // for each vertex
+        foreach ($this->graph->getVertices() as $vertex) {
+            // get current group
+            $group = $vertex->getGroup();
+            // for every neighbor vertex
+            foreach ($vertex->getVerticesEdge() as $vertexNeighbor) {
+                // vertex group must be other group
+                if ($vertexNeighbor->getGroup() === $group) {
 
                     return false;
                 }

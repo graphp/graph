@@ -24,13 +24,15 @@ $cologne = $graph->createVertex('Cologne');
 // build some roads
 $cologne->createEdgeTo($madrid);
 $madrid->createEdgeTo($rome);
-$rome->createEdgeTo($rome); // create loop
+// create loop
+$rome->createEdgeTo($rome);
 ````
 
 Let's see which city (Vertex) has road (i.e. an edge pointing) to Rome
 ````php
 foreach ($rome->getVerticesEdgeFrom() as $vertex) {
-    echo $vertex->getId().' leads to rome'.PHP_EOL; // result: Madrid and Rome itself
+    echo $vertex->getId().' leads to rome'.PHP_EOL;
+    // result: Madrid and Rome itself
 }
 ````
 

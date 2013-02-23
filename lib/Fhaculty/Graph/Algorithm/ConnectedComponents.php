@@ -48,7 +48,8 @@ class ConnectedComponents extends Base
     {
         $alg = new SearchBreadthFirst($vertex);
 
-        return $alg->setDirection(SearchBreadthFirst::DIRECTION_BOTH); // follow into both directions (loosely connected)
+        // follow into both directions (loosely connected)
+        return $alg->setDirection(SearchBreadthFirst::DIRECTION_BOTH);
     }
 
     /**
@@ -78,20 +79,25 @@ class ConnectedComponents extends Base
         $visitedVertices = array();
         $components = 0;
 
-        foreach ($this->graph->getVertices() as $vid => $vertex) {               //for each vertices
-            if (!isset($visitedVertices[$vid])) {                          //did I visit this vertex before?
+        // for each vertices
+        foreach ($this->graph->getVertices() as $vid => $vertex) {
+            // did I visit this vertex before?
+            if (!isset($visitedVertices[$vid])) {
 
-                $newVertices = $this->createSearch($vertex)->getVerticesIds();  //get all vertices of this component
+                // get all vertices of this component
+                $newVertices = $this->createSearch($vertex)->getVerticesIds();
 
                 ++$components;
 
-                foreach ($newVertices as $vid) {                               //mark the vertices of this component as visited
+                // mark the vertices of this component as visited
+                foreach ($newVertices as $vid) {
                     $visitedVertices[$vid] = true;
                 }
             }
         }
 
-        return $components;                                                    //return number of components
+        // return number of components
+        return $components;
     }
 
     /**
@@ -106,13 +112,17 @@ class ConnectedComponents extends Base
         $visitedVertices = array();
         $graphs = array();
 
-        foreach ($this->graph->getVertices() as $vid => $vertex) {               //for each vertices
-            if (!isset($visitedVertices[$vid])) {                          //did I visit this vertex before?
+        // for each vertices
+        foreach ($this->graph->getVertices() as $vid => $vertex) {
+            // did I visit this vertex before?
+            if (!isset($visitedVertices[$vid])) {
 
                 $alg = $this->createSearch($vertex);
-                $newVertices = $alg->getVertices();                          //get all vertices of this component
+                // get all vertices of this component
+                $newVertices = $alg->getVertices();
 
-                foreach ($newVertices as $vid => $unusedVertex) {                //mark the vertices of this component as visited
+                // mark the vertices of this component as visited
+                foreach ($newVertices as $vid => $unusedVertex) {
                     $visitedVertices[$vid] = true;
                 }
 

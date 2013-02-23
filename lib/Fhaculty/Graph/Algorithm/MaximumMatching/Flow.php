@@ -26,7 +26,8 @@ class Flow extends Base
         // create temporary flow graph with supersource and supersink
         $graphFlow = $this->graph->createGraphCloneEdgeless();
 
-        $vertices = $graphFlow->getVertices(); // get all vertices
+        // get all vertices
+        $vertices = $graphFlow->getVertices();
         // above $vertices does NOT contain supersource and supersink, because
         // we want to skip over them as they do not have a partition assigned
 
@@ -41,7 +42,8 @@ class Flow extends Base
         foreach ($vertices as $vertex) {
             $group = $vertex->getGroup();
 
-            if ($group === $groupA) { // source
+            // source
+            if ($group === $groupA) {
                 $superSource->createEdgeTo($vertex)->setCapacity(1)->setFlow(0);
 
                 // temporarily create edges from A->B for flow graph
@@ -49,14 +51,15 @@ class Flow extends Base
                 foreach ($originalVertex->getVerticesEdgeTo() as $vertexTarget) {
                     $vertex->createEdgeTo($graphFlow->getVertex($vertexTarget->getId()))->setCapacity(1)->setFlow(0);
                 }
-            } elseif ($group === $groupB) { // sink
+            // sink
+            } elseif ($group === $groupB) {
                 $vertex->createEdgeTo($superSink)->setCapacity(1)->setFlow(0);
             } else {
                 throw new LogicException('Should not happen. Unknown set: ' + $belongingSet);
             }
         }
 
-//         visualize($resultGraph);
+        // visualize($resultGraph);
 
         // calculate (s*, t*)-flow
         $algMaxFlow = new MaxFlowEdmondsKarp($superSource, $superSink);
@@ -68,7 +71,8 @@ class Flow extends Base
 
         $returnEdges = array();
         foreach ($resultGraph->getEdges() as $edge) {
-            if ($edge->getFlow() > 0) { // only keep matched edges
+            // only keep matched edges
+            if ($edge->getFlow() > 0) {
                 $originalEdge = $this->graph->getEdgeClone($edge);
                 $returnEdges []= $originalEdge;
             }

@@ -30,7 +30,8 @@ class Eulerian extends Base
     {
         if ($this->graph->isConnected()) {
             foreach ($this->graph->getVertices() as $vertex) {
-                if ($vertex->getDegree() & 1) { // uneven degree => fail
+                // uneven degree => fail
+                if ($vertex->getDegree() & 1) {
 
                     return false;
                 }

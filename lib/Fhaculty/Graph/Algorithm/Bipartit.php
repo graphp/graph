@@ -61,23 +61,28 @@ class Bipartit extends Base
     {
         $colors = array();
 
-        foreach ($this->graph->getVertices() as $vid => $startVertex) {           // get color for each vertex
+        // get color for each vertex
+        foreach ($this->graph->getVertices() as $vid => $startVertex) {
             if (!isset($colors[$vid])) {
                 $queue = array($startVertex);
-                $colors[$vid] = 0;                                                 // initialize each components color
+                // initialize each components color
+                $colors[$vid] = 0;
 
                 // breadth search all vertices in same component
                 do {
-                    $vertex = array_shift($queue); // next vertex in color
+                    // next vertex in color
+                    $vertex = array_shift($queue);
                     $color = $colors[$vertex->getId()];
                     $nextColor = 1-$color;
 
                     // scan all vertices connected to this vertex
                     foreach ($vertex->getVerticesEdge() as $vid => $nextVertex) {
-                        if (!isset($colors[$vid])) { // color unknown, so expect next color for this vertex
+                        // color unknown, so expect next color for this vertex
+                        if (!isset($colors[$vid])) {
                             $colors[$vid] = $nextColor;
                             $queue []= $nextVertex;
-                        } elseif ($colors[$vid] !== $nextColor) { // color is known but differs => can not be bipartit
+                        // color is known but differs => can not be bipartit
+                        } elseif ($colors[$vid] !== $nextColor) {
                             throw new UnexpectedValueException('Graph is not bipartit');
                         }
                     }

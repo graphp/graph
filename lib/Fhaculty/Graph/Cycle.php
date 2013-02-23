@@ -29,7 +29,7 @@ class Cycle extends Walk
             }
         }*/
 
-        //find a vertex in the cycle
+        // find a vertex in the cycle
         $vid = $vertex->getId();
         $startVertices = array();
         do {
@@ -39,17 +39,22 @@ class Cycle extends Walk
             $vid = $vertex->getId();
         } while (!isset($startVertices[$vid]));
 
-        //find negative cycle
+        // find negative cycle
         $vid = $vertex->getId();
-        $vertices = array();                                                   // build array of vertices in cycle
+        // build array of vertices in cycle
+        $vertices = array();
         do {
-            $vertices[$vid] = $vertex;                                          // add new vertex to cycle
+            // add new vertex to cycle
+            $vertices[$vid] = $vertex;
 
-            $vertex = $predecessors[$vid];                                      // get predecessor of vertex
+            // get predecessor of vertex
+            $vertex = $predecessors[$vid];
             $vid = $vertex->getId();
-        } while (!isset($vertices[$vid]));                                      // continue until we find a vertex that's already in the circle (i.e. circle is closed)
+        // continue until we find a vertex that's already in the circle (i.e. circle is closed)
+        } while (!isset($vertices[$vid]));
 
-        $vertices = array_reverse($vertices, true);                             // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
+        // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
+        $vertices = array_reverse($vertices, true);
 
         return Cycle::factoryFromVertices($vertices, $by, $desc);
     }
@@ -70,17 +75,20 @@ class Cycle extends Walk
         $first = NULL;
         $last = NULL;
         foreach ($vertices as $vertex) {
-            if ($first === NULL) {    // skip first vertex as last is unknown
+            // skip first vertex as last is unknown
+            if ($first === NULL) {
                 $first = $vertex;
             } else {
-                $edges []= Edge::getFirst($last->getEdgesTo($vertex), $by, $desc); // pick edge between last vertex and this vertex
+                // pick edge between last vertex and this vertex
+                $edges []= Edge::getFirst($last->getEdgesTo($vertex), $by, $desc);
             }
             $last = $vertex;
         }
         if ($last === NULL) {
             throw new UnderflowException('No vertices given');
         }
-        $edges []= Edge::getFirst($last->getEdgesTo($first), $by, $desc);         // additional edge from last vertex to first vertex
+        // additional edge from last vertex to first vertex
+        $edges []= Edge::getFirst($last->getEdgesTo($first), $by, $desc);
 
         return new Cycle($vertices, $edges);
     }

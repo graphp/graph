@@ -65,12 +65,13 @@ class GraphViz
      */
     public function display()
     {
-        //echo "Generate picture ...";
+        // echo "Generate picture ...";
         $tmp = $this->createImageFile();
 
         static $next = 0;
         if ($next > microtime(true)) {
-            echo '[delay flooding xdg-open]' . PHP_EOL; // wait some time between calling xdg-open because earlier calls will be ignored otherwise
+            // wait some time between calling xdg-open because earlier calls will be ignored otherwise
+            echo '[delay flooding xdg-open]' . PHP_EOL;
             sleep(self::DELAY_OPEN);
         }
 
@@ -78,12 +79,13 @@ class GraphViz
             echo "ausgabe\n";
             exec($tmp . ' >NUL');
         } else {
-            exec('xdg-open ' . escapeshellarg($tmp) . ' > /dev/null 2>&1 &'); // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
+            // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
+            exec('xdg-open ' . escapeshellarg($tmp) . ' > /dev/null 2>&1 &');
 
         }
 
         $next = microtime(true) + self::DELAY_OPEN;
-        //echo "... done\n";
+        // echo "... done\n";
     }
 
     const LAYOUT_GRAPH = 1;
@@ -183,7 +185,7 @@ class GraphViz
     public function createImageFile()
     {
         $script = $this->createScript();
-        //var_dump($script);
+        // var_dump($script);
 
         $tmp = tempnam(sys_get_temp_dir(), 'graphviz');
         if ($tmp === false) {
@@ -198,12 +200,13 @@ class GraphViz
         $ret = 0;
         $dotExecutable='dot';
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            //echo 'This is a server using Windows!';
+            // echo 'This is a server using Windows!';
             $dotExecutable='dot.exe';
         } else {
-            //echo 'This is a server not using Windows!';
+            // echo 'This is a server not using Windows!';
         }
-        system($dotExecutable . ' -T ' . escapeshellarg($this->format) . ' ' . escapeshellarg($tmp) . ' -o ' . escapeshellarg($tmp . '.' . $this->format), $ret); // use program 'dot' to actually generate graph image
+        // use program 'dot' to actually generate graph image
+        system($dotExecutable . ' -T ' . escapeshellarg($this->format) . ' ' . escapeshellarg($tmp) . ' -o ' . escapeshellarg($tmp . '.' . $this->format), $ret);
         if ($ret !== 0) {
             throw new UnexpectedValueException('Unable to invoke "dot" to create image file (code ' . $ret . ')');
         }
@@ -284,18 +287,23 @@ class GraphViz
 
             $attrs = $currentEdge->getLayout();
 
-            $label = NULL;                                              // use flow/capacity/weight as edge label
+            // use flow/capacity/weight as edge label
+            $label = NULL;
 
             $flow = $currentEdge->getFlow();
             $capacity = $currentEdge->getCapacity();
-            if ($flow !== NULL) {                                         // flow is set
-                $label = $flow . '/' . ($capacity === NULL ? '∞' : $capacity); // NULL capacity = infinite capacity
-            } elseif ($capacity !== NULL) {                               // capacity set, but not flow (assume zero flow)
+            // flow is set
+            if ($flow !== NULL) {
+                // NULL capacity = infinite capacity
+                $label = $flow . '/' . ($capacity === NULL ? '∞' : $capacity);
+            // capacity set, but not flow (assume zero flow)
+            } elseif ($capacity !== NULL) {
                 $label = '0/' . $capacity;
             }
 
             $weight = $currentEdge->getWeight();
-            if ($weight !== NULL) {                                       // weight is set
+            // weight is set
+            if ($weight !== NULL) {
                 if ($label === NULL) {
                     $label = $weight;
                 } else {
@@ -340,7 +348,8 @@ class GraphViz
             return $id->string;
         }
         // see @link: There is no semantic difference between abc_2 and "abc_2"
-        if (preg_match('/^(?:\-?(?:\.\d+|\d+(?:\.\d+)?))$/i', $id)) { // numeric or simple string, no need to quote (only for simplicity)
+        // numeric or simple string, no need to quote (only for simplicity)
+        if (preg_match('/^(?:\-?(?:\.\d+|\d+(?:\.\d+)?))$/i', $id)) {
 
             return $id;
         }

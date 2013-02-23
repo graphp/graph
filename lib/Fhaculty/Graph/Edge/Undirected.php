@@ -53,7 +53,7 @@ class Undirected extends Base
 
     public function isConnection(Vertex $from, Vertex $to)
     {
-        //                              one way                or                        other way
+        // one way                or                        other way
         return (($this->a === $from && $this->b === $to) || ($this->b === $from && $this->a === $to));
     }
 
@@ -91,6 +91,7 @@ class Undirected extends Base
 
     public function hasVertexTarget(Vertex $targetVertex)
     {
-        return $this->hasVertexStart($targetVertex); // same implementation as direction does not matter
+        // same implementation as direction does not matter
+        return $this->hasVertexStart($targetVertex);
     }
 }
