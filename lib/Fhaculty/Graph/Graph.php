@@ -223,13 +223,23 @@ class Graph extends Set{
      * @throws OutOfBoundsException if given vertex ID does not exist
      */
     public function getVertex($id){
-        if( ! isset($this->vertices[$id]) ){
+        if( ! $this->hasVertex($id)){
             throw new OutOfBoundsException('Vertex '.$id.' does not exist');
         }
         
         return $this->vertices[$id];
     }
-    
+
+    /**
+     * checks whether vertex is added to graph
+     *
+     * @param int|string $id identifier of Vertex
+     * @return TRUE|FALSE
+     */
+    public function hasVertex($id){
+      return isset($this->vertices[$id]);
+    }
+
     /**
      * return first vertex found
      * 
@@ -598,5 +608,18 @@ class Graph extends Set{
     
     public function getLayout(){
         return array();
+    }
+
+    public function __toString() {
+      $result = array();
+      foreach ($this->vertices as $id => $vertex) {
+        $edges = $vertex->getEdges();
+        $dest = array();
+        $result[] = $vertex->getId() . '(' . join(',', $dest) . ')';
+      }
+      if (count($result)) {
+        return join(', ', $result);
+      }
+      return "(empty)";
     }
 }
