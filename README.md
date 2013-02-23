@@ -4,7 +4,7 @@ A mathematical graph/network library written in PHP
 
 While the APIs should be stable, this library is still considered *beta* software. Please see *Contributing* below for ways you can help out.
 
-## Examples
+## Quickstart examples
 
 Initialize sample graph
 ````php
@@ -53,7 +53,11 @@ This library is built around the concept of [mathematical graph theory](http://e
 
 Depending no how the edges are constructed, the whole graph can either be undirected, can be a [directed graph](http://en.wikipedia.org/wiki/Directed_graph) (aka digraph) or be a [mixed graph](http://en.wikipedia.org/wiki/Simple_graph#Mixed_graph). Edges are also allowed to form [loops](http://en.wikipedia.org/wiki/Loop_%28graph_theory%29) (i.e. an edge from vertex A pointing to vertex A again). Also, [multiple edges](http://en.wikipedia.org/wiki/Multiple_edges) from vertex A to vertex B  are supported as well (aka parallel edges), effectively forming a [multigraph](http://en.wikipedia.org/wiki/Multigraph) (aka pseudograph). And of course, any combination thereof is supported as well. While many authors try to differentiate between these core concepts, this library tries hard to not impose any artificial limitations or assumptions on your graphs.
 
+### Graph drawing
+
 The library supports visualizing graph images, including them into webpages, opening up images from within CLI applications and exporting them as PNG, JPEG or SVG file formats (among many others). Because [graph drawing](http://en.wikipedia.org/wiki/Graph_drawing) is a complex area on its own, the actual layouting of the graph is left up to the excelent [GraphViz](http://www.graphviz.org/) "Graph Visualization Software" and we merely provide some convenient APIs to interface with GraphViz.
+
+### Common algorithms
 
 Besides graph drawing, one of the most common things to do with graphs is running algorithms to solve common graph problems. Therefor this library includes implementations for a number of commonly used graph algorithms:
 
