@@ -267,7 +267,7 @@ class Graph extends Set
             return $vertex;
         }
 
-        throw new UnderflowException("Graph has no vertices");
+        throw new UnderflowException('Graph has no vertices');
     }
 
     /**

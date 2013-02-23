@@ -155,7 +155,7 @@ class GraphViz
     {
         $format = ($this->format === 'svg' || $this->format === 'svgz') ? 'svg+xml' : $this->format;
 
-        return 'data:image/'.$format.';base64,'.base64_encode($this->createImageData());
+        return 'data:image/' . $format . ';base64,' . base64_encode($this->createImageData());
     }
 
     /**
@@ -167,10 +167,10 @@ class GraphViz
     public function createImageHtml()
     {
         if ($this->format === 'svg' || $this->format === 'svgz') {
-            return '<object type="image/svg+xml" data="'.$this->createImageSrc().'"></object>';
+            return '<object type="image/svg+xml" data="' . $this->createImageSrc() . '"></object>';
         }
 
-        return '<img src="'.$this->createImageSrc().'" />';
+        return '<img src="' . $this->createImageSrc() . '" />';
     }
 
     /**
@@ -203,9 +203,9 @@ class GraphViz
         } else {
             //echo 'This is a server not using Windows!';
         }
-        system($dotExecutable.' -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp).' -o '.escapeshellarg($tmp.'.'.$this->format), $ret); // use program 'dot' to actually generate graph image
+        system($dotExecutable . ' -T ' . escapeshellarg($this->format) . ' ' . escapeshellarg($tmp) . ' -o ' . escapeshellarg($tmp . '.' . $this->format), $ret); // use program 'dot' to actually generate graph image
         if ($ret !== 0) {
-            throw new UnexpectedValueException('Unable to invoke "dot" to create image file (code '.$ret.')');
+            throw new UnexpectedValueException('Unable to invoke "dot" to create image file (code ' . $ret . ')');
         }
 
         unlink($tmp);
@@ -225,7 +225,7 @@ class GraphViz
     {
         $directed = $this->graph->isDirected();
 
-        $script = ($directed ? 'di':'') . 'graph G {'.self::EOL;
+        $script = ($directed ? 'di':'') . 'graph G {' . self::EOL;
 
         // add global attributes
         $layout = $this->graph->getLayout();
@@ -254,9 +254,9 @@ class GraphViz
             $balance = $vertex->getBalance();
             if ($balance !== NULL) {
                 if ($balance > 0) {
-                    $balance = '+'.$balance;
+                    $balance = '+' . $balance;
                 }
-                $layout['label'] .= ' ('.$balance.')';
+                $layout['label'] .= ' (' . $balance . ')';
             }
 
             if ($showGroups) {

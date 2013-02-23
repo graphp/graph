@@ -52,7 +52,7 @@ class SuccessiveShortestPath extends Base
                     $this->addBalance($startVertex, $flow);                     //add balance to start- and end-vertex
                     $this->addBalance($endVertex, - $flow);
                 } else {
-                    throw new UnexpectedValueException("Undirected Edges not suported");
+                    throw new UnexpectedValueException('Undirected Edges not suported');
                 }
             }
 
@@ -75,7 +75,7 @@ class SuccessiveShortestPath extends Base
             try {
                 $targetVertex = $this->getVertexSink($sourceVertex);
             } catch (UnderflowException $ignore) {                                          //if no target is found the network has not enough capacity
-                throw new UnexpectedValueException("The graph has not enough capacity for the minimum-cost flow");
+                throw new UnexpectedValueException('The graph has not enough capacity for the minimum-cost flow');
             }
 
             //calculate shortest path between source- and target-vertex

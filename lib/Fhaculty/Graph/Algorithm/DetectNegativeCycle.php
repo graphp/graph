@@ -67,7 +67,7 @@ class DetectNegativeCycle extends Base
                 }
             }
         }                                                                       // no more vertices to check => abort
-        throw new UnderflowException("No negative cycle found");
+        throw new UnderflowException('No negative cycle found');
     }
 
     /**

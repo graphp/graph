@@ -50,7 +50,7 @@ class PrimWithIf extends Base
                     $cheapestEdge = $edgeQueue->extract();                      // Get next cheapest edge
                 } catch (Exception $e) {
                     return $returnEdges;
-                    throw new UnexpectedValueException("Graph has more as one component");
+                    throw new UnexpectedValueException('Graph has more as one component');
                 }
 
                 //Check if edge is between unmarked and marked edge
