@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Algorithm\Groups;
+
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use \stdClass;
@@ -242,36 +244,62 @@ class GraphViz
             $script .= '  edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
         }
 
+        $alg = new Groups($this->graph);
         // only append group number to vertex label if there are at least 2 different groups
-        $showGroups = ($this->graph->getNumberOfGroups() > 1);
+        $showGroups = ($alg->getNumberOfGroups() > 1);
 
-        // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
-        // other vertices wil be added automatically due to below edge definitions
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
-            $layout = $vertex->getLayout();
+        if ($showGroups) {
+            $gid = 0;
+            // put each group of vertices in a separate subgraph cluster
+            foreach ($alg->getGroups() as $group) {
+                $script .= '  subgraph cluster_' . $gid++ . ' {' . self::EOL .
+                           '    label = ' . $this->escape($group) . self::EOL;
+                foreach($alg->getVerticesGroup($group) as $vid => $vertex) {
+                    $layout = $vertex->getLayout();
 
-            if (!isset($layout['label'])) {
-                $layout['label'] = $vid;
-            }
+                    $balance = $vertex->getBalance();
+                    if($balance !== NULL){
+                        if($balance > 0){
+                            $balance = '+' . $balance;
+                        }
+                        if(!isset($layout['label'])){
+                            $layout['label'] = $vid;
+                        }
+                        $layout['label'] .= ' (' . $balance . ')';
+                    }
 
-            $balance = $vertex->getBalance();
-            if ($balance !== NULL) {
-                if ($balance > 0) {
-                    $balance = '+' . $balance;
+                    $script .= '    ' . $this->escapeId($vid);
+                    if($layout){
+                        $script .= ' ' . $this->escapeAttributes($layout);
+                    }
+                    $script .= self::EOL;
                 }
-                $layout['label'] .= ' (' . $balance . ')';
+                $script .= '  }' . self::EOL;
             }
+        } else {
+            // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
+            // other vertices wil be added automatically due to below edge definitions
+            foreach ($this->graph->getVertices() as $vid => $vertex){
+                $layout = $vertex->getLayout();
 
-            if ($showGroups) {
-                $layout['label'] .= ' [' . $vertex->getGroup() . ']';
-            }
-
-            if ($vertex->isIsolated() || $layout) {
-                $script .= '  ' . $this->escapeId($vid);
-                if ($layout) {
-                    $script .= ' ' . $this->escapeAttributes($layout);
+                $balance = $vertex->getBalance();
+                if($balance !== NULL){
+                    if($balance > 0){
+                        $balance = '+' . $balance;
+                    }
+                    if(!isset($layout['label'])){
+                        $layout['label'] = $vid;
+                    }
+                    $layout['label'] .= ' (' . $balance . ')';
                 }
-                $script .= self::EOL;
+
+                if($vertex->isIsolated() || $layout){
+                    $script .= '  ' . $this->escapeId($vid);
+                    if($layout){
+                        $script .= ' ' . $this->escapeAttributes($layout);
+                    }
+                    $script .= self::EOL;
+                }
             }
         }
 
