@@ -90,12 +90,12 @@ class GraphViz
     const LAYOUT_EDGE = 2;
     const LAYOUT_VERTEX = 3;
 
-    private function mergeLayout(&$old,$new)
+    private function mergeLayout(&$old, $new)
     {
         if ($new === NULL) {
             $old = array();
         } else {
-            foreach ($new as $key=>$value) {
+            foreach ($new as $key => $value) {
                 if ($value === NULL) {
                     unset($old[$key]);
                 } else {
@@ -105,21 +105,21 @@ class GraphViz
         }
     }
 
-    public function setLayout($where,$layout,$value=NULL)
+    public function setLayout($where, $layout, $value = NULL)
     {
         if (!is_array($where)) {
             $where = array($where);
         }
         if (func_num_args() > 2) {
-            $layout = array($layout=>$value);
+            $layout = array($layout => $value);
         }
         foreach ($where as $where) {
             if ($where === self::LAYOUT_GRAPH) {
-                $this->graph->setLayout($layout,$value);
+                $this->graph->setLayout($layout, $value);
             } elseif ($where === self::LAYOUT_EDGE) {
-                $this->mergeLayout($this->layoutEdge,$layout);
+                $this->mergeLayout($this->layoutEdge, $layout);
             } elseif ($where === self::LAYOUT_VERTEX) {
-                $this->mergeLayout($this->layoutVertex,$layout);
+                $this->mergeLayout($this->layoutVertex, $layout);
             } else {
                 throw new InvalidArgumentException('Invalid layout identifier');
             }
@@ -185,12 +185,12 @@ class GraphViz
         $script = $this->createScript();
         //var_dump($script);
 
-        $tmp = tempnam(sys_get_temp_dir(),'graphviz');
+        $tmp = tempnam(sys_get_temp_dir(), 'graphviz');
         if ($tmp === false) {
             throw new UnexpectedValueException('Unable to get temporary file name for graphviz script');
         }
 
-        $ret = file_put_contents($tmp,$script,LOCK_EX);
+        $ret = file_put_contents($tmp, $script, LOCK_EX);
         if ($ret === false) {
             throw new UnexpectedValuexception('Unable to write graphviz script to temporary file');
         }
@@ -203,7 +203,7 @@ class GraphViz
         } else {
             //echo 'This is a server not using Windows!';
         }
-        system($dotExecutable.' -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp).' -o '.escapeshellarg($tmp.'.'.$this->format),$ret); // use program 'dot' to actually generate graph image
+        system($dotExecutable.' -T '.escapeshellarg($this->format).' '.escapeshellarg($tmp).' -o '.escapeshellarg($tmp.'.'.$this->format), $ret); // use program 'dot' to actually generate graph image
         if ($ret !== 0) {
             throw new UnexpectedValueException('Unable to invoke "dot" to create image file (code '.$ret.')');
         }
@@ -244,7 +244,7 @@ class GraphViz
 
         // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
         // other vertices wil be added automatically due to below edge definitions
-        foreach ($this->graph->getVertices() as $vid=>$vertex) {
+        foreach ($this->graph->getVertices() as $vid => $vertex) {
             $layout = $vertex->getLayout();
 
             if (!isset($layout['label'])) {
@@ -307,7 +307,7 @@ class GraphViz
                 $attrs['label'] = $label;
             }
             // this edge also points to the opposite direction => this is actually an undirected edge
-            if ($directed && $currentEdge->isConnection($currentTargetVertex,$currentStartVertex)) {
+            if ($directed && $currentEdge->isConnection($currentTargetVertex, $currentStartVertex)) {
                 $attrs['dir'] = 'none';
             }
             if ($attrs) {
@@ -340,12 +340,12 @@ class GraphViz
             return $id->string;
         }
         // see @link: There is no semantic difference between abc_2 and "abc_2"
-        if (preg_match('/^(?:\-?(?:\.\d+|\d+(?:\.\d+)?))$/i',$id)) { // numeric or simple string, no need to quote (only for simplicity)
+        if (preg_match('/^(?:\-?(?:\.\d+|\d+(?:\.\d+)?))$/i', $id)) { // numeric or simple string, no need to quote (only for simplicity)
 
             return $id;
         }
 
-        return '"'.str_replace(array('&','<','>','"',"'",'\\',"\n"),array('&amp;','&lt;','&gt;','&quot;','&apos;','\\\\','\\l'),$id).'"';
+        return '"'.str_replace(array('&', '<', '>', '"', "'", '\\', "\n"), array('&amp;', '&lt;', '&gt;', '&quot;', '&apos;', '\\\\', '\\l'), $id).'"';
     }
 
     /**
@@ -359,7 +359,7 @@ class GraphViz
     {
         $script = '[';
         $first = true;
-        foreach ($attrs as $name=>$value) {
+        foreach ($attrs as $name => $value) {
             if ($first) {
                 $first = false;
             } else {

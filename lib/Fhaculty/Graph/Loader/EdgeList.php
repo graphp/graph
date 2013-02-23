@@ -21,7 +21,7 @@ class EdgeList extends File
 
         unset($file[0]);
         foreach ($file as $zeile) {
-            $ends = $this->readLine($zeile,array('from'=>'vertex','to'=>'vertex'),$graph);
+            $ends = $this->readLine($zeile, array('from'=>'vertex', 'to'=>'vertex'), $graph);
 
             if ($this->directedEdges) {
                 $ends['from']->createEdgeTo($ends['to']);

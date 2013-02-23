@@ -47,7 +47,7 @@ abstract class Base extends AlgorithmBase
      */
     public function getCycle()
     {
-        return Cycle::factoryFromEdges($this->getEdges(),$this->getVertexStart());
+        return Cycle::factoryFromEdges($this->getEdges(), $this->getVertexStart());
     }
 
     public function getWeight()

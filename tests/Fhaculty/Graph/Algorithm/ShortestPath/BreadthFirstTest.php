@@ -20,24 +20,24 @@ class BreadthFirstTest extends PHPUnit_Framework_TestCase
         $graph = $loader->createGraph();
 
         // randomly remove 70% of the edges
-        foreach (array_slice(Edge::getAll($graph->getEdges(),Edge::ORDER_RANDOM),0,$graph->getNumberOfEdges()*0.8) as $edge) {
+        foreach (array_slice(Edge::getAll($graph->getEdges(), Edge::ORDER_RANDOM), 0, $graph->getNumberOfEdges()*0.8) as $edge) {
             $edge->destroy();
         }
 
-        $start = Vertex::getFirst($graph,Vertex::ORDER_RANDOM);
-        $start->setLayoutAttribute('shape','doublecircle');
+        $start = Vertex::getFirst($graph, Vertex::ORDER_RANDOM);
+        $start->setLayoutAttribute('shape', 'doublecircle');
 
         // actually start breadth search
         $alg = new BreadthFirst($start);
 
         // visualize all resulting edges in blue
         foreach ($alg->getEdges() as $edge) {
-            $edge->setLayoutAttribute('color','blue');
+            $edge->setLayoutAttribute('color', 'blue');
         }
 
         // visualize all reachable vertices in blue
         foreach ($alg->getVertices() as $vertex) {
-            $vertex->setLayoutAttribute('color','blue');
+            $vertex->setLayoutAttribute('color', 'blue');
         }
 
         if ($debug) {
@@ -49,14 +49,14 @@ class BreadthFirstTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count($alg->getVertices()) >= count($start->getVerticesEdgeTo()));
 
         // test all reachable vertices
-        foreach ($alg->getDistanceMap() as $vid=>$distance) {
+        foreach ($alg->getDistanceMap() as $vid => $distance) {
             if($debug) echo 'vertex '.$vid.' in distance '.$distance;
             $walk = $alg->getWalkTo($graph->getVertex($vid));
 
-            $this->assertEquals($distance,$walk->getNumberOfEdges());
+            $this->assertEquals($distance, $walk->getNumberOfEdges());
 
             if ($debug) {
-                echo ' (vertex walk: '.implode(', ',$walk->getVerticesSequenceId()).')';
+                echo ' (vertex walk: '.implode(', ', $walk->getVerticesSequenceId()).')';
                 echo PHP_EOL;
 
                 $vis = new GraphViz($walk->createGraph());

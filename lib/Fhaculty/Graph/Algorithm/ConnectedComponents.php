@@ -78,8 +78,8 @@ class ConnectedComponents extends Base
         $visitedVertices = array();
         $components = 0;
 
-        foreach ($this->graph->getVertices() as $vid=>$vertex) {               //for each vertices
-            if ( ! isset( $visitedVertices[$vid] ) ) {                          //did I visit this vertex before?
+        foreach ($this->graph->getVertices() as $vid => $vertex) {               //for each vertices
+            if (!isset($visitedVertices[$vid])) {                          //did I visit this vertex before?
 
                 $newVertices = $this->createSearch($vertex)->getVerticesIds();  //get all vertices of this component
 
@@ -106,13 +106,13 @@ class ConnectedComponents extends Base
         $visitedVertices = array();
         $graphs = array();
 
-        foreach ($this->graph->getVertices() as $vid=>$vertex) {               //for each vertices
-            if ( ! isset( $visitedVertices[$vid] ) ) {                          //did I visit this vertex before?
+        foreach ($this->graph->getVertices() as $vid => $vertex) {               //for each vertices
+            if (!isset($visitedVertices[$vid])) {                          //did I visit this vertex before?
 
                 $alg = $this->createSearch($vertex);
                 $newVertices = $alg->getVertices();                          //get all vertices of this component
 
-                foreach ($newVertices as $vid=>$unusedVertex) {                //mark the vertices of this component as visited
+                foreach ($newVertices as $vid => $unusedVertex) {                //mark the vertices of this component as visited
                     $visitedVertices[$vid] = true;
                 }
 

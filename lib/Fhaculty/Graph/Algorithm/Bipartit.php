@@ -61,7 +61,7 @@ class Bipartit extends Base
     {
         $colors = array();
 
-        foreach ($this->graph->getVertices() as $vid=>$startVertex) {           // get color for each vertex
+        foreach ($this->graph->getVertices() as $vid => $startVertex) {           // get color for each vertex
             if (!isset($colors[$vid])) {
                 $queue = array($startVertex);
                 $colors[$vid] = 0;                                                 // initialize each components color
@@ -73,7 +73,7 @@ class Bipartit extends Base
                     $nextColor = 1-$color;
 
                     // scan all vertices connected to this vertex
-                    foreach ($vertex->getVerticesEdge() as $vid=>$nextVertex) {
+                    foreach ($vertex->getVerticesEdge() as $vid => $nextVertex) {
                         if (!isset($colors[$vid])) { // color unknown, so expect next color for this vertex
                             $colors[$vid] = $nextColor;
                             $queue []= $nextVertex;
@@ -96,9 +96,9 @@ class Bipartit extends Base
     public function getColorVertices()
     {
         $colors = $this->getColors();
-        $ret = array(0=>array(),1=>array());
+        $ret = array(0 => array(), 1 => array());
 
-        foreach ($this->graph->getVertices() as $vid=>$vertex) {
+        foreach ($this->graph->getVertices() as $vid => $vertex) {
             $ret[$colors[$vid]][$vid] = $vertex;
         }
 
@@ -119,7 +119,7 @@ class Bipartit extends Base
         $colors = $this->getColors();
 
         $graph = $this->graph->createGraphClone();
-        foreach ($graph->getVertices() as $vid=>$vertex) {
+        foreach ($graph->getVertices() as $vid => $vertex) {
             $vertex->setGroup($colors[$vid]);
         }
 

@@ -22,7 +22,7 @@ class BreadthFirst extends Base
             $visited[$t->getId()]= $t;                                                //save as visited
 
             $vertices = $this->getVerticesAdjacent($t);                                //get next vertices
-            foreach ($vertices as $id=>$vertex) {
+            foreach ($vertices as $id => $vertex) {
                 if (!isset($mark[$id])) {                                                    //if not "toughed" before
                     $queue[] = $vertex;                                                        //add to queue
                     $mark[$id] = true;                                                        //and mark

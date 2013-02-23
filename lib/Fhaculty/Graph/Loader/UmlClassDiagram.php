@@ -33,7 +33,7 @@ class UmlClassDiagram extends Base
         $this->graph = new Graph();
     }
 
-    public function setOption($name,$flag)
+    public function setOption($name, $flag)
     {
         if (!isset($this->options[$name])) {
             throw new Exception('Invalid option name "'.$name.'"');
@@ -71,7 +71,7 @@ class UmlClassDiagram extends Base
             } catch (Exception $ignore) {
                 $parentVertex = $this->createVertexClass($parent);
             }
-            $vertex->createEdgeTo($parentVertex)->setLayoutAttribute('arrowhead','empty');
+            $vertex->createEdgeTo($parentVertex)->setLayoutAttribute('arrowhead', 'empty');
         }
 
         foreach ($reflection->getInterfaces() as $interface) {
@@ -80,7 +80,7 @@ class UmlClassDiagram extends Base
             } catch (Exception $ignore) {
                 $parentVertex = $this->createVertexClass($interface);
             }
-            $vertex->createEdgeTo($parentVertex)->setLayoutAttribute('arrowhead','empty')->setLayoutAttribute('style','dashed');
+            $vertex->createEdgeTo($parentVertex)->setLayoutAttribute('arrowhead', 'empty')->setLayoutAttribute('style', 'dashed');
         }
 
         $label = '"{';
@@ -96,7 +96,7 @@ class UmlClassDiagram extends Base
         $label .= $this->escape($class).'|';
 
         if ($this->options['show-constants']) {
-            foreach ($reflection->getConstants() as $name=>$value) {
+            foreach ($reflection->getConstants() as $name => $value) {
                 if($this->options['only-self'] && $parent && $parent->getConstant($name) === $value) continue;
 
                 $label .= '+ «static» '.self::escape($name).' : '.$this->escape($this->getType(gettype($value))).' = '.$this->getCasted($value).' \\{readOnly\\}\\l';
@@ -134,7 +134,7 @@ class UmlClassDiagram extends Base
 
             if($this->options['only-public'] && !$method->isPublic()) continue;
 
-//             $ref = preg_replace('/[^a-z0-9]/i','',$method->getName());
+//             $ref = preg_replace('/[^a-z0-9]/i', '', $method->getName());
 //             $label .= '<"'.$ref.'">';
 
             $label .= $this->visibility($method);
@@ -186,8 +186,8 @@ class UmlClassDiagram extends Base
 
         $label .= '}"';
 
-        $vertex->setLayoutAttribute('shape','record');
-        $vertex->setLayoutAttribute('label',GraphViz::raw($label));
+        $vertex->setLayoutAttribute('shape', 'record');
+        $vertex->setLayoutAttribute('label', GraphViz::raw($label));
 
         return $vertex;
     }
@@ -199,19 +199,19 @@ class UmlClassDiagram extends Base
      * @param  Vertex|NULL           $for
      * @return LoaderUmlClassDiagram $this (chainable)
      */
-    public function createVertexNote($note,$for=NULL)
+    public function createVertexNote($note, $for = NULL)
     {
-        $vertex = $this->graph->createVertex()->setLayoutAttribute('label',$note."\n")
-                                              ->setLayoutAttribute('shape','note')
-                                                ->setLayoutAttribute('fontsize',8)
-                                              //->setLayoutAttribute('margin','0 0')
-                                              ->setLayoutAttribute('style','filled')
-                                              ->setLayoutAttribute('fillcolor','yellow');
+        $vertex = $this->graph->createVertex()->setLayoutAttribute('label', $note."\n")
+                                              ->setLayoutAttribute('shape', 'note')
+                                                ->setLayoutAttribute('fontsize', 8)
+                                              //->setLayoutAttribute('margin', '0 0')
+                                              ->setLayoutAttribute('style', 'filled')
+                                              ->setLayoutAttribute('fillcolor', 'yellow');
 
         if ($for !== NULL) {
-            $vertex->createEdgeTo($for)->setLayoutAttribute('len',1)
-            ->setLayoutAttribute('style','dashed')
-            ->setLayoutAttribute('arrowhead','none');
+            $vertex->createEdgeTo($for)->setLayoutAttribute('len', 1)
+            ->setLayoutAttribute('style', 'dashed')
+            ->setLayoutAttribute('arrowhead', 'none');
         }
 
         return $vertex;
@@ -274,7 +274,7 @@ class UmlClassDiagram extends Base
     {
         $doc = $ref->getDocComment();
         if ($doc !== false) {
-            return trim(preg_replace('/(^(?:\h*\*)\h*|\h+$)/m','',substr($doc,3,-2)));
+            return trim(preg_replace('/(^(?:\h*\*)\h*|\h+$)/m', '', substr($doc, 3, -2)));
         }
 
         return NULL;
@@ -282,12 +282,12 @@ class UmlClassDiagram extends Base
 
     private function getDocBlockVar($ref)
     {
-        return $this->getType($this->getDocBlockSingle($ref,'var'));
+        return $this->getType($this->getDocBlockSingle($ref, 'var'));
     }
 
     private function getDocBlockReturn($ref)
     {
-        return $this->getType($this->getDocBlockSingle($ref,'return'));
+        return $this->getType($this->getDocBlockSingle($ref, 'return'));
     }
 
     private function getParameterType(ReflectionParameter $parameter)
@@ -306,7 +306,7 @@ class UmlClassDiagram extends Base
 
         $pos = $parameter->getPosition();
         $refFn = $parameter->getDeclaringFunction();
-        $params = $this->getDocBlockMulti($refFn,'param');
+        $params = $this->getDocBlockMulti($refFn, 'param');
         if (count($params) === $refFn->getNumberOfParameters()) {
             return $this->getType($params[$pos]);
         }
@@ -314,14 +314,14 @@ class UmlClassDiagram extends Base
         return NULL;
     }
 
-    private function getDocBlockMulti($ref,$what)
+    private function getDocBlockMulti($ref, $what)
     {
         $doc = $this->getDocBlock($ref);
         if ($doc === NULL) {
             //return 'nah';
             return NULL;
         }
-        preg_match_all('/^@'.$what.' ([^\s]+)/m',$doc,$matches,PREG_SET_ORDER);
+        preg_match_all('/^@'.$what.' ([^\s]+)/m', $doc, $matches, PREG_SET_ORDER);
         $ret = array();
         foreach ($matches as $match) {
             $ret []= trim($match[1]);
@@ -330,7 +330,7 @@ class UmlClassDiagram extends Base
         return $ret;
     }
 
-    private function getDocBlockSingle($ref,$what)
+    private function getDocBlockSingle($ref, $what)
     {
         $multi = $this->getDocBlockMulti($ref, $what);
         if (count($multi) !== 1) {
@@ -346,10 +346,10 @@ class UmlClassDiagram extends Base
         if ($ret === NULL) {
             return NULL;
         }
-        if (preg_match('/^array\[(\w+)\]$/i',$ret,$match)) {
+        if (preg_match('/^array\[(\w+)\]$/i', $ret, $match)) {
             return $this->getType($match[1]).'[]';
         }
-        if (!preg_match('/^\w+$/',$ret)) {
+        if (!preg_match('/^\w+$/', $ret)) {
             return 'mixed';
         }
         $low = strtolower($ret);
@@ -359,7 +359,7 @@ class UmlClassDiagram extends Base
             $ret = 'float';
         } elseif ($low === 'boolean') {
             return 'bool';
-        } elseif (in_array($low,array('int','float','bool','string','null','resource','array','void','mixed'))) {
+        } elseif (in_array($low, array('int', 'float', 'bool', 'string', 'null', 'resource', 'array', 'void', 'mixed'))) {
             return $low;
         }
 
@@ -378,7 +378,7 @@ class UmlClassDiagram extends Base
         if ($value === NULL) {
             return 'NULL';
         } elseif (is_string($value)) {
-            return '\\"'.$this->escape(str_replace('"','\\"',$value)).'\\"';
+            return '\\"'.$this->escape(str_replace('"', '\\"', $value)).'\\"';
         } elseif (is_bool($value)) {
             return $value ? 'true' : 'false';
         } elseif (is_int($value) || is_float($value)) {
@@ -411,6 +411,6 @@ class UmlClassDiagram extends Base
 
     private function escape($id)
     {
-        return preg_replace('/([^\\w])/u','\\\\$1',str_replace(array("\r","\n","\t"),array('\\r','\\n','\\t'),$id));
+        return preg_replace('/([^\\w])/u', '\\\\$1', str_replace(array("\r", "\n", "\t"), array('\\r', '\\n', '\\t'), $id));
     }
 }

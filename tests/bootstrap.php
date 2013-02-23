@@ -10,7 +10,7 @@ use Fhaculty\Graph\Vertex;
 
 class TestCase extends PHPUnit_Framework_TestCase
 {
-    protected function assertGraphEquals(Graph $expected,Graph $actual)
+    protected function assertGraphEquals(Graph $expected, Graph $actual)
     {
         $f = function(Graph $graph){
             $ret = get_class($graph);
@@ -21,13 +21,13 @@ class TestCase extends PHPUnit_Framework_TestCase
         };
 
         // assert graph base parameters are equal
-        $this->assertEquals($f($expected),$f($actual));
+        $this->assertEquals($f($expected), $f($actual));
 
         // next, assert that all vertices in both graphs are the same
         // each vertex has a unique ID, therefor it's easy to search a matching partner
         // do not use assertVertexEquals() in order to not increase assertion counter
 
-        foreach ($expected->getVertices() as $vid=>$vertex) {
+        foreach ($expected->getVertices() as $vid => $vertex) {
             try {
                 $other = $actual->getVertex($vid);
             } catch (Exception $e) {
@@ -50,7 +50,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         foreach ($actual->getEdges() as $edge) {
             $dump = $this->getEdgeDump($edge);
 
-            $pos = array_search($dump,$edgesExpected,true);
+            $pos = array_search($dump, $edgesExpected, true);
             if ($pos === false) {
                 $this->fail('given edge '.$dump.' not found');
             } else {
@@ -59,14 +59,14 @@ class TestCase extends PHPUnit_Framework_TestCase
         }
     }
 
-    protected function assertVertexEquals(Vertex $expected,Vertex $actual)
+    protected function assertVertexEquals(Vertex $expected, Vertex $actual)
     {
-        $this->assertEquals($this->getVertexDump($expected),$this->getVertexDump($actual));
+        $this->assertEquals($this->getVertexDump($expected), $this->getVertexDump($actual));
     }
 
-    protected function assertEdgeEquals(Edge $expected,Edge $actual)
+    protected function assertEdgeEquals(Edge $expected, Edge $actual)
     {
-        $this->assertEquals($this->getEdgeDump($expected),$this->getEdgeDump($actual));
+        $this->assertEquals($this->getEdgeDump($expected), $this->getEdgeDump($actual));
     }
 
     private function getVertexDump(Vertex $vertex)
@@ -87,7 +87,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         if ($edge instanceof Directed) {
             $ret .= $edge->getVertexStart()->getId().' -> '.$edge->getVertexEnd()->getId();
         } else {
-            $vertices = array_values(Vertex::getAll($edge->getVerticesId(),Vertex::ORDER_ID));
+            $vertices = array_values(Vertex::getAll($edge->getVerticesId(), Vertex::ORDER_ID));
             $ret .= $vertices[0]->getId() . ' -- ' . $vertices[1]->getId();
         }
         $ret .= PHP_EOL . 'flow: '.$edge->getFlow();

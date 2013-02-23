@@ -38,7 +38,7 @@ class Dijkstra extends Base
                 }
                 $currentVertex = $cheapestVertex->extract();                    //Get cheapest unmarked vertex
                 $currentVertexId = $currentVertex->getId();
-            } while ( isset($usedVertices[$currentVertexId]) );                    //Vertices can be in the priority queue multiple times, with different path costs (if vertex is already marked, this is an old unvalid entry)
+            } while (isset($usedVertices[$currentVertexId]));                    //Vertices can be in the priority queue multiple times, with different path costs (if vertex is already marked, this is an old unvalid entry)
 
             if ($isEmpty) {                                                        //catch "algorithm ends" condition
                 break;
@@ -55,10 +55,10 @@ class Dijkstra extends Base
                 $targetVertex = $edge->getVertexToFrom($currentVertex);
                 $targetVertexId = $targetVertex->getId();
 
-                if ( ! isset( $usedVertices[$targetVertexId] ) ) {              //if the targetVertex is marked, the cheapest path for this vertex has already been found (no negative edges) {
+                if (!isset($usedVertices[$targetVertexId])) {              //if the targetVertex is marked, the cheapest path for this vertex has already been found (no negative edges) {
                     $newCostsToTargetVertex = $totalCostOfCheapestPathTo[$currentVertexId] + $weight;    //calculate new cost to vertex
 
-                    if ( ( ! isset($predecesVertexOfCheapestPathTo[$targetVertexId]) )
+                    if ((!isset($predecesVertexOfCheapestPathTo[$targetVertexId]))
                            || $totalCostOfCheapestPathTo[$targetVertexId] > $newCostsToTargetVertex){    //is the new path cheaper?
 
                         $cheapestVertex->insert($targetVertex, - $newCostsToTargetVertex);            //Not an update, just an new insert with lower cost

@@ -23,7 +23,7 @@ class GraphTest extends TestCase
         $newgraph = new Graph();
         $newvertex = $newgraph->createVertexClone($vertex);
 
-        $this->assertVertexEquals($vertex,$newvertex);
+        $this->assertVertexEquals($vertex, $newvertex);
     }
 
     /**
@@ -42,7 +42,7 @@ class GraphTest extends TestCase
     {
         $graph = new Graph();
         $newgraph = $graph->createGraphClone();
-        $this->assertGraphEquals($graph,$newgraph);
+        $this->assertGraphEquals($graph, $newgraph);
     }
 
     public function testGraphClone()
@@ -52,7 +52,7 @@ class GraphTest extends TestCase
 
         $newgraph = $graph->createGraphClone();
 
-        $this->assertGraphEquals($graph,$newgraph);
+        $this->assertGraphEquals($graph, $newgraph);
 
         $graphClonedTwice = $newgraph->createGraphClone();
 
@@ -72,17 +72,17 @@ class GraphTest extends TestCase
         $graphExpected->createVertex(2);
         $graphExpected->createVertex(3);
 
-        $this->assertGraphEquals($graphExpected,$graphEdgeless);
+        $this->assertGraphEquals($graphExpected, $graphEdgeless);
     }
 
     public function testBalance()
     {
-        $this->assertEquals(0,$this->graph->getBalance());
+        $this->assertEquals(0, $this->graph->getBalance());
     }
 
     public function testGetWeightMin()
     {
-        $this->assertEquals(NULL,$this->graph->getWeightMin());
+        $this->assertEquals(NULL, $this->graph->getWeightMin());
     }
 
     /**
@@ -92,7 +92,7 @@ class GraphTest extends TestCase
     {
         $graph = new Graph();
         $vertex = $graph->createVertex();
-        $this->assertInstanceOf('\Fhaculty\Graph\Vertex',$vertex);
+        $this->assertInstanceOf('\Fhaculty\Graph\Vertex', $vertex);
     }
 
     /**
@@ -102,8 +102,8 @@ class GraphTest extends TestCase
     {
         $graph = new Graph();
         $vertex = $graph->createVertex(11);
-        $this->assertInstanceOf('\Fhaculty\Graph\Vertex',$vertex);
-        $this->assertEquals(11,$vertex->getId());
+        $this->assertInstanceOf('\Fhaculty\Graph\Vertex', $vertex);
+        $this->assertEquals(11, $vertex->getId());
     }
 
     /**

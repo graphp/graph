@@ -58,7 +58,7 @@ abstract class Base extends AlgorithmBase
      * @uses Edge::getFlow()
      * @uses Edge::setFlow()
      */
-    protected function addFlow(Graph $resultGraph,$clonedEdges,$newFlow)
+    protected function addFlow(Graph $resultGraph, $clonedEdges, $newFlow)
     {
         foreach ($clonedEdges as $clonedEdge) {
             try {

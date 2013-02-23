@@ -65,8 +65,8 @@ class Kruskal extends Base
         $returnEdges = array();
 
         $colorNext = 0;    // next color to assign
-        $colorVertices = array(); // array(color1=>array(vid1,vid2,...),color2=>...)
-        $colorOfVertices = array(); // array(vid1=>color1,vid2=>color1,...)
+        $colorVertices = array(); // array(color1 => array(vid1, vid2, ...), color2=>...)
+        $colorOfVertices = array(); // array(vid1 => color1, vid2 => color1, ...)
 
         //Füge billigste Kanten zu neuen Graphen hinzu und verschmelze teilgragen wenn es nötig ist (keine Kreise)
         //solange ich mehr als einen Graphen habe mit weniger als n-1 kanten (bei n knoten im original)
@@ -87,7 +87,7 @@ class Kruskal extends Base
                 $colorOfVertices[$aId] = $colorNext;
                 $colorOfVertices[$bId] = $colorNext;
 
-                $colorVertices[$colorNext] = array($aId,$bId);
+                $colorVertices[$colorNext] = array($aId, $bId);
 
                 ++$colorNext;
 
@@ -131,7 +131,7 @@ class Kruskal extends Base
 
         // definition of spanning tree: number of edges = number of vertices - 1
         // above algorithm does not check isolated edges or may otherwise return multiple connected components => force check
-        if (count($returnEdges) !== ( $this->graph->getNumberOfVertices() - 1 ) ) {
+        if (count($returnEdges) !== ($this->graph->getNumberOfVertices() - 1)) {
             throw new UnexpectedValueException('Graph is not connected');
         }
 

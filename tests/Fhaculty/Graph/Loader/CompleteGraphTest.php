@@ -14,7 +14,7 @@ class CompleteGraphTest extends TestCase
         $expected = new Graph();
         $expected->createVertex();
 
-        $this->assertGraphEquals($expected,$graph);
+        $this->assertGraphEquals($expected, $graph);
     }
 
     public function testUndirected()
@@ -24,8 +24,8 @@ class CompleteGraphTest extends TestCase
         $loader = new CompleteGraph($n);
         $graph = $loader->createGraph();
 
-        $this->assertEquals($n,$graph->getNumberOfVertices());
-        $this->assertEquals($n*($n-1)/2,$graph->getNumberOfEdges());
+        $this->assertEquals($n, $graph->getNumberOfVertices());
+        $this->assertEquals($n*($n-1)/2, $graph->getNumberOfEdges());
     }
 
     public function testDirected()
@@ -36,8 +36,8 @@ class CompleteGraphTest extends TestCase
         $loader->setEnableDirectedEdges(true);
         $graph = $loader->createGraph();
 
-        $this->assertEquals($n,$graph->getNumberOfVertices());
-        $this->assertEquals($n*($n-1),$graph->getNumberOfEdges()); // n*(n-1) for directed graphs
+        $this->assertEquals($n, $graph->getNumberOfVertices());
+        $this->assertEquals($n*($n-1), $graph->getNumberOfEdges()); // n*(n-1) for directed graphs
         $this->assertTrue($graph->isDirected());
         $this->assertTrue($graph->isComplete());
     }

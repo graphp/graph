@@ -93,13 +93,13 @@ class SuccessiveShortestPath extends Base
             }
 
             // get minimum of capacity remaining on path
-            $minCapacity = Edge::getFirst($edgesOnFlow,Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
+            $minCapacity = Edge::getFirst($edgesOnFlow, Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
             if ($minCapacity < $newflow) {
                 $newflow = $minCapacity;
             }
 
             //add the new flow to the path
-            $this->addFlow($resultGraph,$edgesOnFlow,$newflow);
+            $this->addFlow($resultGraph, $edgesOnFlow, $newflow);
 
             //add balance to source and remove for the sink
             $oriSourceVertex = $resultGraph->getVertex($sourceVertex->getId());
@@ -127,7 +127,7 @@ class SuccessiveShortestPath extends Base
         if ($graph->getNumberOfVertices() !== $this->graph->getNumberOfVertices()) {
             throw new DomainException('Given graph does not appear to be a clone of input graph');
         }
-        foreach ($this->graph->getVertices() as $vid=>$vertex) {
+        foreach ($this->graph->getVertices() as $vid => $vertex) {
             if ($vertex->getBalance() !== $graph->getVertex($vid)->getBalance()) {
                 return false;
             }
@@ -146,7 +146,7 @@ class SuccessiveShortestPath extends Base
      */
     private function getVertexSource(Graph $graph)
     {
-        foreach ($graph->getVertices() as $vid=>$vertex) {
+        foreach ($graph->getVertices() as $vid => $vertex) {
             if ($this->graph->getVertex($vid)->getBalance() - $vertex->getBalance() > 0) {
                 return $vertex;
             }
@@ -167,7 +167,7 @@ class SuccessiveShortestPath extends Base
     {
         $algBFS = new SearchBreadthFirst($source);                             //search for reachable Vertices
 
-        foreach ($algBFS->getVertices() as $vid=>$vertex) {
+        foreach ($algBFS->getVertices() as $vid => $vertex) {
             if ($this->graph->getVertex($vid)->getBalance() - $vertex->getBalance() < 0) {
                 return $vertex;
             }

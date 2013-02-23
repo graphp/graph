@@ -59,16 +59,16 @@ class NearestNeighbor extends Base
 
                 $nextVertex = $edge->getVertexToFrom($vertex);                        //Get EndVertex of this edge
 
-                if ( ! isset( $visitedVertices[ $nextVertex->getId() ] ) ) {            //is unvisited
+                if (!isset($visitedVertices[$nextVertex->getId()])) {            //is unvisited
                     break;
                 }
             }
 
-            if ( isset( $visitedVertices[ $nextVertex->getId() ] ) ) {            //check if there is a way i can use
+            if (isset($visitedVertices[$nextVertex->getId()])) {            //check if there is a way i can use
                 throw new UnexpectedValueException("Graph is not complete - can't find an edge to unconnected vertex");
             }
 
-            $visitedVertices[ $nextVertex->getId() ] = TRUE;
+            $visitedVertices[$nextVertex->getId()] = TRUE;
 
             $returnEdges []= $edge;                                                //clone edge in new Graph
 

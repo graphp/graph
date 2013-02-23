@@ -32,12 +32,12 @@ class CompleteGraph extends Base
             if ($this->directedEdges) {
                 for ($j = 0; $j < $n; ++$j) {
                     if ($j !== $i) {
-                        $vertex->createEdgeTo($graph->getVertex($j) );
+                        $vertex->createEdgeTo($graph->getVertex($j));
                     }
                 }
             } else {
                 for ($j = $i + 1; $j < $n; ++$j) {
-                    $vertex->createEdge( $graph->getVertex($j) );
+                    $vertex->createEdge($graph->getVertex($j));
                 }
             }
         }

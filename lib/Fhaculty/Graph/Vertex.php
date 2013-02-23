@@ -89,7 +89,7 @@ class Vertex extends Layoutable
      * @uses Vertex::getDegreeOut()
      * @uses Vertex::getGroup()
      */
-    public static function getFirst($vertices,$by=self::ORDER_FIFO,$desc=false)
+    public static function getFirst($vertices, $by = self::ORDER_FIFO, $desc = false)
     {
         if ($vertices instanceof Graph) {
             $vertices = $vertices->getVertices();
@@ -150,7 +150,7 @@ class Vertex extends Layoutable
      * @uses Vertex::getDegreeOut()
      * @uses Vertex::getGroup()
      */
-    public static function getAll($vertices,$by=self::ORDER_FIFO,$desc=false)
+    public static function getAll($vertices, $by = self::ORDER_FIFO, $desc = false)
     {
         if ($vertices instanceof Graph) {
             $vertices = $vertices->getVertices();
@@ -184,7 +184,7 @@ class Vertex extends Layoutable
             if ($desc && $now !== NULL) {
                 $now = -$now;
             }
-            $it->insert($vertex,$now);
+            $it->insert($vertex, $now);
         }
 
         return $it;
@@ -225,7 +225,7 @@ class Vertex extends Layoutable
      * @param Graph      $graph graph to be added to
      * @see Graph::createVertex() to create new vertices
      */
-    public function __construct($id,Graph $graph)
+    public function __construct($id, Graph $graph)
     {
         $this->id = $id;
         $this->graph = $graph;
@@ -275,7 +275,7 @@ class Vertex extends Layoutable
         $sumOfFlow = 0;
 
         foreach ($this->edges as $edge) {
-            if ( ! ($edge instanceof EdgeDirected)) {
+            if (!($edge instanceof EdgeDirected)) {
                 throw new UnexpectedValueException("TODO: undirected edges not suported yet");
             }
 
@@ -375,7 +375,7 @@ class Vertex extends Layoutable
     {
         throw new BadMethodCallException('TODO');
 
-        $alg = new AlgorithmSpBreadthFirst($this,true);
+        $alg = new AlgorithmSpBreadthFirst($this, true);
 
         return $alg->getVertices();
     }
@@ -394,7 +394,7 @@ class Vertex extends Layoutable
             throw new InvalidArgumentException('Target vertex has to be within the same graph');
         }
 
-        $edge = new EdgeDirected($this,$vertex);
+        $edge = new EdgeDirected($this, $vertex);
         $this->edges []= $edge;
         $vertex->edges []= $edge;
         $this->graph->addEdge($edge);
@@ -416,7 +416,7 @@ class Vertex extends Layoutable
             throw new InvalidArgumentException('Target vertex has to be within the same graph');
         }
 
-        $edge = new EdgeUndirectedId($this,$vertex);
+        $edge = new EdgeUndirectedId($this, $vertex);
         $this->edges []= $edge;
         $vertex->edges []= $edge;
         $this->graph->addEdge($edge);
@@ -435,7 +435,7 @@ class Vertex extends Layoutable
      */
     public function removeEdge(Edge $edge)
     {
-        $id = array_search($edge,$this->edges,true);
+        $id = array_search($edge, $this->edges, true);
         if ($id === false) {
             throw new InvalidArgumentException('Given edge does NOT exist');
         }

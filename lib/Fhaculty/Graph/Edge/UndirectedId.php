@@ -37,7 +37,7 @@ class UndirectedId extends Base
      * @see Vertex::createEdge() to create undirected edges
      * @see Vertex::createEdgeTo() to create directed edges
      */
-    public function __construct(Vertex $a,Vertex $b)
+    public function __construct(Vertex $a, Vertex $b)
     {
         $this->a = $a->getId();
         $this->b = $b->getId();
@@ -51,22 +51,22 @@ class UndirectedId extends Base
 
     public function getVerticesStart()
     {
-        return array($this->graph->getVertex($this->a),$this->graph->getVertex($this->b));
+        return array($this->graph->getVertex($this->a), $this->graph->getVertex($this->b));
     }
 
     public function getVerticesTarget()
     {
-        return array($this->graph->getVertex($this->b),$this->graph->getVertex($this->a));
+        return array($this->graph->getVertex($this->b), $this->graph->getVertex($this->a));
     }
 
     public function getVertices()
     {
-        return array($this->graph->getVertex($this->a),$this->graph->getVertex($this->b));
+        return array($this->graph->getVertex($this->a), $this->graph->getVertex($this->b));
     }
 
     public function getVerticesId()
     {
-        return array($this->a,$this->b);
+        return array($this->a, $this->b);
     }
 
     public function isLoop()
@@ -74,13 +74,13 @@ class UndirectedId extends Base
         return ($this->a === $this->b);
     }
 
-    public function isConnection(Vertex $from,Vertex $to)
+    public function isConnection(Vertex $from, Vertex $to)
     {
         if ($from->getGraph() !== $this->graph || $to->getGraph() !== $this->graph) {
             return false;
         }
         //                              one way                or                        other way
-        return ( ( $this->a === $from->getId() && $this->b === $to->getId() ) || ( $this->b === $from->getId() && $this->a === $to->getId() ) );
+        return (($this->a === $from->getId() && $this->b === $to->getId()) || ($this->b === $from->getId() && $this->a === $to->getId()));
     }
 
     public function getVertexToFrom(Vertex $startVertex)

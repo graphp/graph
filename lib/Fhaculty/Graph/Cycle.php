@@ -19,7 +19,7 @@ class Cycle extends Walk
      * @see Edge::getFirst() for parameters $by and $desc
      * @uses Cycle::factoryFromVertices()
      */
-    public static function factoryFromPredecessorMap($predecessors,$vertex,$by=Edge::ORDER_FIFO,$desc=false)
+    public static function factoryFromPredecessorMap($predecessors, $vertex, $by = Edge::ORDER_FIFO, $desc = false)
     {
         /*$checked = array();
         foreach ($predecessors as $vertex) {
@@ -49,9 +49,9 @@ class Cycle extends Walk
             $vid = $vertex->getId();
         } while (!isset($vertices[$vid]));                                      // continue until we find a vertex that's already in the circle (i.e. circle is closed)
 
-        $vertices = array_reverse($vertices,true);                             // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
+        $vertices = array_reverse($vertices, true);                             // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
 
-        return Cycle::factoryFromVertices($vertices,$by,$desc);
+        return Cycle::factoryFromVertices($vertices, $by, $desc);
     }
 
     /**
@@ -64,7 +64,7 @@ class Cycle extends Walk
      * @throws UnderflowException if no vertices were given
      * @see Edge::getFirst() for parameters $by and $desc
      */
-    public static function factoryFromVertices($vertices,$by=Edge::ORDER_FIFO,$desc=false)
+    public static function factoryFromVertices($vertices, $by = Edge::ORDER_FIFO, $desc = false)
     {
         $edges = array();
         $first = NULL;
@@ -73,16 +73,16 @@ class Cycle extends Walk
             if ($first === NULL) {    // skip first vertex as last is unknown
                 $first = $vertex;
             } else {
-                $edges []= Edge::getFirst($last->getEdgesTo($vertex),$by,$desc); // pick edge between last vertex and this vertex
+                $edges []= Edge::getFirst($last->getEdgesTo($vertex), $by, $desc); // pick edge between last vertex and this vertex
             }
             $last = $vertex;
         }
         if ($last === NULL) {
             throw new UnderflowException('No vertices given');
         }
-        $edges []= Edge::getFirst($last->getEdgesTo($first),$by,$desc);         // additional edge from last vertex to first vertex
+        $edges []= Edge::getFirst($last->getEdgesTo($first), $by, $desc);         // additional edge from last vertex to first vertex
 
-        return new Cycle($vertices,$edges);
+        return new Cycle($vertices, $edges);
     }
 
     /**
@@ -92,7 +92,7 @@ class Cycle extends Walk
      * @param  Vertex $startVertex
      * @return Cycle
      */
-    public static function factoryFromEdges(array $edges,Vertex $startVertex)
+    public static function factoryFromEdges(array $edges, Vertex $startVertex)
     {
         $vertices = array($startVertex->getId() => $startVertex);
         foreach ($edges as $edge) {
@@ -101,6 +101,6 @@ class Cycle extends Walk
             $startVertex = $vertex;
         }
 
-        return new Cycle($vertices,$edges);
+        return new Cycle($vertices, $edges);
     }
 }

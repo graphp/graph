@@ -49,7 +49,7 @@ class MinimumSpanningTree extends Base
 
         foreach ($depthFirstSearch as $vertex) {                                    // connect vertices in order of the depth first search
 
-            $vertex = $this->graph->getVertex( $vertex->getId() );                // get vertex from the original graph (not from the depth first search)
+            $vertex = $this->graph->getVertex($vertex->getId());                // get vertex from the original graph (not from the depth first search)
                                                                                 // need to clone the edge from the original graph, therefore i need the original edge
             if ($startVertex === NULL) {
                 $startVertex = $vertex;

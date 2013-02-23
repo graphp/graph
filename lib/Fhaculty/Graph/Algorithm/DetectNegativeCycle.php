@@ -53,7 +53,7 @@ class DetectNegativeCycle extends Base
     public function getCycleNegative()
     {
         $verticesVisited = array();                                            // remember vertices already visited, as they can not lead to a new cycle
-        foreach ($this->graph->getVertices() as $vid=>$vertex) {                // check for all vertices
+        foreach ($this->graph->getVertices() as $vid => $vertex) {                // check for all vertices
             if (!isset($verticesVisited[$vid])) {                                // skip vertices already visited
                 $alg = new SpMooreBellmanFord($vertex);                        // start MBF algorithm on current vertex
 

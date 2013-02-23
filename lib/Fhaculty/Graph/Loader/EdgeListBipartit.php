@@ -36,7 +36,7 @@ class EdgeListBipartit extends File
         unset($file[0]);
         unset($file[1]);
         foreach ($file as $zeile) {
-            $parts = $this->readLine($zeile,array('vertex','vertex'),$graph);
+            $parts = $this->readLine($zeile, array('vertex', 'vertex'), $graph);
 
             if ($this->directedEdges) {
                 $edge = $parts[0]->createEdgeTo($parts[1]);

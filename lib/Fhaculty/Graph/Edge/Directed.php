@@ -30,7 +30,7 @@ class Directed extends Base
      * @see Vertex::createEdgeTo() to create directed edges
      * @see Vertex::createEdge() to create undirected edges
      */
-    public function __construct(Vertex $from,Vertex $to)
+    public function __construct(Vertex $from, Vertex $to)
     {
         $this->from = $from;
         $this->to = $to;
@@ -48,7 +48,7 @@ class Directed extends Base
 
     public function getVertices()
     {
-        return array($this->from,$this->to);
+        return array($this->from, $this->to);
     }
 
     /**
@@ -71,7 +71,7 @@ class Directed extends Base
         return $this->from;
     }
 
-    public function isConnection(Vertex $from,Vertex $to)
+    public function isConnection(Vertex $from, Vertex $to)
     {
         return ($this->to === $to && $this->from === $from);
     }
@@ -130,7 +130,7 @@ class Directed extends Base
     {
         $edges = $this->from->getEdgesTo($this->to);                            // get all edges between this edge's endpoints
 
-        $pos = array_search($this,$edges,true);
+        $pos = array_search($this, $edges, true);
         if ($pos === false) {
             throw new LogicException('Internal error: Current edge not found');
         }

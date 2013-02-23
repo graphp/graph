@@ -30,8 +30,8 @@ class Flow extends Base
         // above $vertices does NOT contain supersource and supersink, because
         // we want to skip over them as they do not have a partition assigned
 
-        $superSource = $graphFlow->createVertex()->setLayoutAttribute('label','s*');
-        $superSink   = $graphFlow->createVertex()->setLayoutAttribute('label','t*');
+        $superSource = $graphFlow->createVertex()->setLayoutAttribute('label', 's*');
+        $superSink   = $graphFlow->createVertex()->setLayoutAttribute('label', 't*');
 
         $groups = $alg->getGroups();
         $groupA = $groups[0];
@@ -58,8 +58,8 @@ class Flow extends Base
 
 //         visualize($resultGraph);
 
-        // calculate (s*,t*)-flow
-        $algMaxFlow = new MaxFlowEdmondsKarp($superSource,$superSink);
+        // calculate (s*, t*)-flow
+        $algMaxFlow = new MaxFlowEdmondsKarp($superSource, $superSink);
         $resultGraph = $algMaxFlow->createGraph();
 
         // destroy temporary supersource and supersink again

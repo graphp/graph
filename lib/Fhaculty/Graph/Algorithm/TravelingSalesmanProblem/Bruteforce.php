@@ -138,7 +138,7 @@ class Bruteforce extends Base
      * @param  Edge[]    $visitedEdges
      * @return Edge[]
      */
-    private function step(Vertex $vertex,$totalWeight,array $visitedVertices,array $visitedEdges)
+    private function step(Vertex $vertex, $totalWeight, array $visitedVertices, array $visitedEdges)
     {
         if ($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight >= $this->bestWeight) { // stop recursion if best result is exceeded (branch and bound)
 
@@ -169,7 +169,7 @@ class Bruteforce extends Base
             $result = $this->step($target,
                                   $totalWeight + $weight,
                                   $visitedVertices,
-                                  array_merge($visitedEdges,array($edge))
+                                  array_merge($visitedEdges, array($edge))
                       );
 
             if ($result !== NULL) { // new result found

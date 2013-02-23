@@ -33,14 +33,14 @@ class PrimWithIf extends Base
         $markInserted = array();
         $returnEdges = array();
 
-        for ($i = 0,$n = $this->startVertex->getGraph()->getNumberOfVertices() - 1; $i < $n; ++$i) { // iterate n-1 times (per definition, resulting MST MUST have n-1 edges)
+        for ($i = 0, $n = $this->startVertex->getGraph()->getNumberOfVertices() - 1; $i < $n; ++$i) { // iterate n-1 times (per definition, resulting MST MUST have n-1 edges)
             $markInserted[$vertexCurrent->getId()] = true;
 
             // get unvisited vertex of the edge and add edges from new vertex
             foreach ($vertexCurrent->getEdges() as $currentEdge) {            // Add all edges from $currentVertex to priority queue
 
                 //TODO maybe it would be better to check if the reachable vertex of $currentEdge si allready marked (smaller Queue vs. more if's)
-                if ( ! isset($markInserted[$currentEdge->getVertexToFrom($vertexCurrent)->getId()] ) ) {
+                if (!isset($markInserted[$currentEdge->getVertexToFrom($vertexCurrent)->getId()])) {
                     $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());   // Add edges to priority queue with inverted weights (priority queue has high values at the front)
                 }
             }
@@ -59,7 +59,7 @@ class PrimWithIf extends Base
                 $vertexA = $startVertices[0];
                 $vertexB = $cheapestEdge->getVertexToFrom($vertexA);
 
-            } while ( ! ( isset($markInserted[$vertexA->getId()]) XOR isset($markInserted[$vertexB->getId()]) ) );     //Edge is between marked and unmared vertex
+            } while (!(isset($markInserted[$vertexA->getId()]) XOR isset($markInserted[$vertexB->getId()])));     //Edge is between marked and unmared vertex
 
             // Cheapest Edge found, add edge to returnGraph
             $returnEdges []= $cheapestEdge;

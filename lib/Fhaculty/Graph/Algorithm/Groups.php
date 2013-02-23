@@ -88,7 +88,7 @@ class Groups extends Base
     public function getVerticesGroup($group)
     {
         $vertices = array();
-        foreach ($this->graph->getVertices() as $vid=>$vertex) {
+        foreach ($this->graph->getVertices() as $vid => $vertex) {
             if ($vertex->getGroup() === $group) {
                 $vertices[$vid] = $vertex;
             }

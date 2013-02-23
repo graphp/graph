@@ -16,7 +16,7 @@ class EdgeListWithCapacity extends File
 
         unset($file[0]);
         foreach ($file as $zeile) {
-            $parts = $this->readLine($zeile,array('vertex','vertex','float'),$graph);
+            $parts = $this->readLine($zeile, array('vertex', 'vertex', 'float'), $graph);
 
             if ($this->directedEdges) {
                 $edge = $parts[0]->createEdgeTo($parts[1]);

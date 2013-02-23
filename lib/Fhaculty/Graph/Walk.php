@@ -17,7 +17,7 @@ class Walk extends Set
      * @param  Vertex               $startVertex
      * @return \Fhaculty\Graph\Walk
      */
-    public static function factoryFromEdges(array $edges,Vertex $startVertex)
+    public static function factoryFromEdges(array $edges, Vertex $startVertex)
     {
         $vertices = array($startVertex);
         $vertexCurrent = $startVertex;
@@ -145,7 +145,7 @@ class Walk extends Set
      */
     public function isHamiltonian()
     {
-        return $this->isArrayContentsEqual($this->vertices,$this->getGraph()->getVertices());
+        return $this->isArrayContentsEqual($this->vertices, $this->getGraph()->getVertices());
     }
 
     /**
@@ -158,7 +158,7 @@ class Walk extends Set
      */
     public function isEulerian()
     {
-        return $this->isArrayContentsEqual($this->edges,$this->getGraph()->getEdges());
+        return $this->isArrayContentsEqual($this->edges, $this->getGraph()->getEdges());
     }
 
     /**
@@ -186,7 +186,7 @@ class Walk extends Set
     {
         $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());   // create new graph clone with only edges of walk
         $vertices = $this->getVertices();
-        foreach ($graph->getVertices() as $vid=>$vertex) {                      // get all vertices
+        foreach ($graph->getVertices() as $vid => $vertex) {                      // get all vertices
             if (!isset($vertices[$vid])) {
                 $vertex->destroy();                                             // remove those not present in the walk (isolated vertices, etc.)
             }
@@ -204,7 +204,7 @@ class Walk extends Set
     {
         $edges = array();
         foreach ($this->edges as $edge) {
-            if (!in_array($edge,$edges,true)) { // filter duplicate edges
+            if (!in_array($edge, $edges, true)) { // filter duplicate edges
                 $edges []= $edge;
             }
         }
@@ -294,14 +294,14 @@ class Walk extends Set
     }
 
     /**
-     * get alternating sequence of vertex,edge,vertex,edge,...,vertex
+     * get alternating sequence of vertex, edge, vertex, edge, ..., vertex
      *
      * @return array
      */
     public function getAlternatingSequence()
     {
         $ret = array();
-        for ($i=0,$l=count($this->edges);$i<$l;++$i) {
+        for ($i = 0, $l = count($this->edges); $i < $l; ++$i) {
             $ret []= $this->vertices[$i];
             $ret []= $this->edges[$i];
         }
@@ -320,7 +320,7 @@ class Walk extends Set
     {
         $compare = array();
         foreach ($array as $element) {
-            if (in_array($element,$compare,true)) { // duplicate element found
+            if (in_array($element, $compare, true)) { // duplicate element found
 
                 return true;
             } else {
@@ -338,10 +338,10 @@ class Walk extends Set
      * @param  array   $b
      * @return boolean
      */
-    private function isArrayContentsEqual($a,$b)
+    private function isArrayContentsEqual($a, $b)
     {
         foreach ($b as $one) {
-            $pos = array_search($one,$a,true);
+            $pos = array_search($one, $a, true);
             if ($pos === false) {
                 return false;
             } else {
@@ -372,7 +372,7 @@ class Walk extends Set
         }
         $edges = $this->getGraph()->getEdges();
         foreach ($this->edges as $edge) {                                        // check source graph contains all edges
-            if (!in_array($edge,$edges,true)) {
+            if (!in_array($edge, $edges, true)) {
                 return false;
             }
         }

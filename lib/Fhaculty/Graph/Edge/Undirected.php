@@ -30,7 +30,7 @@ class Undirected extends Base
      * @see Vertex::createEdge() instead
      * @see UndirectedId for current replacement implementation
      */
-    public function __construct(Vertex $a,Vertex $b)
+    public function __construct(Vertex $a, Vertex $b)
     {
         $this->a = $a;
         $this->b = $b;
@@ -38,23 +38,23 @@ class Undirected extends Base
 
     public function getVerticesTarget()
     {
-        return array($this->b,$this->a);
+        return array($this->b, $this->a);
     }
 
     public function getVerticesStart()
     {
-        return  array($this->a,$this->b);
+        return  array($this->a, $this->b);
     }
 
     public function getVertices()
     {
-        return array($this->a,$this->b);
+        return array($this->a, $this->b);
     }
 
-    public function isConnection(Vertex $from,Vertex $to)
+    public function isConnection(Vertex $from, Vertex $to)
     {
         //                              one way                or                        other way
-        return ( ( $this->a === $from && $this->b === $to ) || ( $this->b === $from && $this->a === $to ) );
+        return (($this->a === $from && $this->b === $to) || ($this->b === $from && $this->a === $to));
     }
 
     public function isLoop()

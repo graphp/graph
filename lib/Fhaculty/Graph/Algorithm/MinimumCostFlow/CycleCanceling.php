@@ -20,8 +20,8 @@ class CycleCanceling extends Base
         // create resulting graph with supersource and supersink
         $resultGraph = $this->graph->createGraphClone();
 
-        $superSource = $resultGraph->createVertex()->setLayoutAttribute('label','s*');
-        $superSink   = $resultGraph->createVertex()->setLayoutAttribute('label','t*');
+        $superSource = $resultGraph->createVertex()->setLayoutAttribute('label', 's*');
+        $superSink   = $resultGraph->createVertex()->setLayoutAttribute('label', 't*');
 
         $sumBalance = 0;
 
@@ -38,8 +38,8 @@ class CycleCanceling extends Base
             }
         }
 
-        // calculate (s*,t*)-flow
-        $algMaxFlow = new MaxFlowEdmondsKarp($superSource,$superSink);
+        // calculate (s*, t*)-flow
+        $algMaxFlow = new MaxFlowEdmondsKarp($superSource, $superSink);
         $flowMax = $algMaxFlow->getFlowMax();
 
         if ($flowMax !== $sumBalance) {
@@ -62,10 +62,10 @@ class CycleCanceling extends Base
             }
 
             //calculate maximal possible flow = minimum capacity remaining for all edges
-            $newFlow = Edge::getFirst($clonedEdges,Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
+            $newFlow = Edge::getFirst($clonedEdges, Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
 
             //set flow on original graph
-            $this->addFlow($resultGraph,$clonedEdges,$newFlow);
+            $this->addFlow($resultGraph, $clonedEdges, $newFlow);
         }
 
         // destroy temporary supersource and supersink again

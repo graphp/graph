@@ -15,9 +15,9 @@ class NegativeCycleException extends UnexpectedValueException implements Graph\E
      */
     private $cycle;
 
-    public function __construct($message,$code=NULL,$previous=NULL,Cycle $cycle)
+    public function __construct($message, $code = NULL, $previous = NULL, Cycle $cycle)
     {
-        parent::__construct($message,$code,$previous);
+        parent::__construct($message, $code, $previous);
         $this->cycle = $cycle;
     }
 

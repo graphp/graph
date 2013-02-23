@@ -70,7 +70,7 @@ abstract class Base extends Layoutable
      * @throws UnderflowException       if no edges exist
      * @uses Edge::getWeight()
      */
-    public static function getFirst($edges,$by=self::ORDER_FIFO,$desc=false)
+    public static function getFirst($edges, $by = self::ORDER_FIFO, $desc = false)
     {
         if ($edges instanceof Graph) {
             $edges = $edges->getEdges();
@@ -125,7 +125,7 @@ abstract class Base extends Layoutable
      * @todo return Iterator and use SplPriorityQueue instead of temporary array
      * @link http://matthewturland.com/2010/05/20/new-spl-features-in-php-5-3/
      */
-    public static function getAll($edges,$by=self::ORDER_FIFO,$desc=false)
+    public static function getAll($edges, $by = self::ORDER_FIFO, $desc = false)
     {
         if ($edges instanceof Graph) {
             $edges = $edges->getEdges();
@@ -139,7 +139,7 @@ abstract class Base extends Layoutable
             return $desc ? array_reverse($edges) : $edges;
         }
         $temp = array(); // temporary indexed array to be sorted
-        foreach ($edges as $eid=>$edge) {
+        foreach ($edges as $eid => $edge) {
             if ($by === self::ORDER_WEIGHT) {
                 $now = $edge->getWeight();
             } elseif ($by === self::ORDER_CAPACITY) {
@@ -239,7 +239,7 @@ abstract class Base extends Layoutable
         return false;
     }
 
-    abstract public function isConnection(Vertex $from,Vertex $to);
+    abstract public function isConnection(Vertex $from, Vertex $to);
 
     /**
      * returns whether this edge is actually a loop
@@ -402,16 +402,16 @@ abstract class Base extends Layoutable
         $ends = $this->getVertices();
 
         $edges = $ends[0]->getEdgesTo($ends[1]);                            // get all edges between this edge's endpoints
-        if ($this->isConnection($ends[1],$ends[0])) {                         // edge points into both directions (undirected/bidirectional edge)
+        if ($this->isConnection($ends[1], $ends[0])) {                         // edge points into both directions (undirected/bidirectional edge)
             $back = $ends[1]->getEdgesTo($ends[0]);                             // also get all edges in other direction
             foreach ($back as $edge) {
-                if (!in_array($edge,$edges)) {
+                if (!in_array($edge, $edges)) {
                     $edges[] = $edge;
                 }
             } // alternative implementation for array_unique(), because it requires casting edges to string
         }
 
-        $pos = array_search($this,$edges,true);
+        $pos = array_search($this, $edges, true);
         if ($pos === false) {
             throw new LogicException('Internal error: Current edge not found');
         }

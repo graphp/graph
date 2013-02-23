@@ -76,12 +76,12 @@ abstract class File extends Base
      * @return mixed[]
      * @throws InvalidArgumentException
      */
-    protected function readLine($line,$parts,Graph $graph=NULL)
+    protected function readLine($line, $parts, Graph $graph = NULL)
     {
         $ret = array();
-        $explode = explode("\t",$line);
+        $explode = explode("\t", $line);
         $i = 0;
-        foreach ($parts as $key=>$part) {
+        foreach ($parts as $key => $part) {
             if (!isset($explode[$i])) {
                 throw new InvalidArgumentException('Line does not split into enough parts');
             }

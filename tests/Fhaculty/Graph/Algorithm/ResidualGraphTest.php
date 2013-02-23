@@ -14,7 +14,7 @@ class ResidualGraphTest extends TestCase
         $alg = new ResidualGraph($graph);
         $residual = $alg->createGraph();
 
-        $this->assertGraphEquals($graph,$residual);
+        $this->assertGraphEquals($graph, $residual);
     }
 
     /**
@@ -31,7 +31,7 @@ class ResidualGraphTest extends TestCase
         $alg = new ResidualGraph($graph);
         $residual = $alg->createGraph();
 
-        $this->assertGraphEquals($graph,$residual);
+        $this->assertGraphEquals($graph, $residual);
     }
 
     /**
@@ -53,7 +53,7 @@ class ResidualGraphTest extends TestCase
                                                                             ->setCapacity(2)
                                                                             ->setWeight(-3);
 
-        $this->assertGraphEquals($expected,$residual);
+        $this->assertGraphEquals($expected, $residual);
     }
 
     /**
@@ -84,7 +84,7 @@ class ResidualGraphTest extends TestCase
                                                                       ->setCapacity(1)
                                                                       ->setWeight(-3);
 
-        $this->assertGraphEquals($expected,$residual);
+        $this->assertGraphEquals($expected, $residual);
     }
 
     /**

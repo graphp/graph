@@ -16,9 +16,9 @@ class EdmondsKarpTest extends PHPUnit_Framework_TestCase
 
         $v0->createEdgeTo($v1)->setCapacity(10);
 
-        $alg = new AlgorithmMaxFlowEdmondsKarp($v0,$v1);
+        $alg = new AlgorithmMaxFlowEdmondsKarp($v0, $v1);
 
-        $this->assertEquals(10,$alg->getFlowMax());
+        $this->assertEquals(10, $alg->getFlowMax());
     }
 
     public function testEdgesMultiplePaths()
@@ -32,9 +32,9 @@ class EdmondsKarpTest extends PHPUnit_Framework_TestCase
         $v0->createEdgeTo($v2)->setCapacity(7);
         $v2->createEdgeTo($v1)->setCapacity(9);
 
-        $alg = new AlgorithmMaxFlowEdmondsKarp($v0,$v1);
+        $alg = new AlgorithmMaxFlowEdmondsKarp($v0, $v1);
 
-        $this->assertEquals(12,$alg->getFlowMax());
+        $this->assertEquals(12, $alg->getFlowMax());
     }
 
 //     public function testEdgesParallel(){
@@ -45,9 +45,9 @@ class EdmondsKarpTest extends PHPUnit_Framework_TestCase
 //         $v0->createEdgeTo($v1)->setCapacity(3.4);
 //         $v0->createEdgeTo($v1)->setCapacity(6.6);
 
-//         $alg = new AlgorithmMaxFlowEdmondsKarp($v0,$v1);
+//         $alg = new AlgorithmMaxFlowEdmondsKarp($v0, $v1);
 
-//         $this->assertEquals(10,$alg->getFlowMax());
+//         $this->assertEquals(10, $alg->getFlowMax());
 //     }
 
     /**
@@ -61,9 +61,9 @@ class EdmondsKarpTest extends PHPUnit_Framework_TestCase
 
         $v1->createEdge($v0)->setCapacity(7);
 
-        $alg = new AlgorithmMaxFlowEdmondsKarp($v0,$v1);
+        $alg = new AlgorithmMaxFlowEdmondsKarp($v0, $v1);
 
-        $this->assertEquals(7,$alg->getFlowMax());
+        $this->assertEquals(7, $alg->getFlowMax());
     }
 
     /**
@@ -73,9 +73,9 @@ class EdmondsKarpTest extends PHPUnit_Framework_TestCase
 
 //         $graph = $this->readGraph('G_1_2.txt');
 
-//         $alg = new AlgorithmMaxFlowEdmondsKarp($graph->getVertex(0),$graph->getVertex(4));
+//         $alg = new AlgorithmMaxFlowEdmondsKarp($graph->getVertex(0), $graph->getVertex(4));
 
-//         $this->assertEquals(0.735802,$alg->getFlowMax());
+//         $this->assertEquals(0.735802, $alg->getFlowMax());
 //     }
 
 }

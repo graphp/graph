@@ -85,7 +85,7 @@ class EdmondsKarp extends Base
 
             if ($pathFlow) {                                                        // If path exists add the new flow to graph
                 // 2. get max flow from path
-                $maxFlowValue = Edge::getFirst($pathFlow->getEdges(),Edge::ORDER_CAPACITY)->getCapacity();
+                $maxFlowValue = Edge::getFirst($pathFlow->getEdges(), Edge::ORDER_CAPACITY)->getCapacity();
 
                 // 3. add flow to path
                 foreach ($pathFlow->getEdges() as $edge) {

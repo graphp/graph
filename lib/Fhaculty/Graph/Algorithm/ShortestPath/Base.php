@@ -51,7 +51,7 @@ abstract class Base extends AlgorithmBase
      */
     public function getEdgesTo(Vertex $endVertex)
     {
-        return $this->getEdgesToInternal($endVertex,$this->getEdges());
+        return $this->getEdgesToInternal($endVertex, $this->getEdges());
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class Base extends AlgorithmBase
      * @return Edge[]
      * @uses AlgorithmSp::getEdges() if no edges were given
      */
-    protected function getEdgesToInternal(Vertex $endVertex,array $edges)
+    protected function getEdgesToInternal(Vertex $endVertex, array $edges)
     {
         $currentVertex = $endVertex;
         $path = array();
@@ -113,7 +113,7 @@ abstract class Base extends AlgorithmBase
     {
         $vertices = array();
         $map = $this->getDistanceMap();
-        foreach ($this->startVertex->getGraph()->getVertices() as $vid=>$vertex) {
+        foreach ($this->startVertex->getGraph()->getVertices() as $vid => $vertex) {
             if (isset($map[$vid])) {
                 $vertices[$vid] = $vertex;
             }
@@ -145,9 +145,9 @@ abstract class Base extends AlgorithmBase
     {
         $edges = $this->getEdges();
         $ret = array();
-        foreach ($this->startVertex->getGraph()->getVertices() as $vid=>$vertex) {
+        foreach ($this->startVertex->getGraph()->getVertices() as $vid => $vertex) {
             try {
-                $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex,$edges));
+                $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex, $edges));
             } catch (UnderflowException $ignore) {
             } // ignore vertices that can not be reached
         }
@@ -196,14 +196,14 @@ abstract class Base extends AlgorithmBase
         unset($vertices[$this->startVertex->getId()]);                          //start vertex doesn't have a predecessor
 
         $edges = array();
-        foreach ($vertices as $vid=>$vertex) {
+        foreach ($vertices as $vid => $vertex) {
             //echo $vertex->getId()." : ".$this->startVertex->getId()."\n";
-            if (isset( $predecessor[$vid] )) {
+            if (isset($predecessor[$vid])) {
                 $predecesVertex = $predecessor[$vid];    //get predecor
 
                 //echo "EDGE FROM ".$predecesVertex->getId()." TO ".$vertex->getId()." WITH COSTS: ".$totalCostOfCheapestPathTo[$vertex->getId()]."\n";
 
-                $edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex),Edge::ORDER_WEIGHT);    //get cheapest edge
+                $edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex), Edge::ORDER_WEIGHT);    //get cheapest edge
             }
         }
 

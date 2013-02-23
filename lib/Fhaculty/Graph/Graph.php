@@ -28,7 +28,7 @@ class Graph extends Set
      * @throws OverflowException        if given vertex $id already exists and $returnDuplicate is not set
      * @uses Vertex::getId()
      */
-    public function createVertex($id=NULL,$returnDuplicate=false)
+    public function createVertex($id = NULL, $returnDuplicate = false)
     {
         if ($id === NULL) {    // no ID given
             $id = $this->getNextId();
@@ -41,7 +41,7 @@ class Graph extends Set
             }
             throw new OverflowException('ID must be unique');
         }
-        $vertex = new Vertex($id,$this);
+        $vertex = new Vertex($id, $this);
         $this->vertices[$id] = $vertex;
 
         return $vertex;
@@ -60,7 +60,7 @@ class Graph extends Set
         if (isset($this->vertices[$id])) {
             throw new RuntimeException('Id of cloned vertex already exists');
         }
-        $newVertex = new Vertex($id,$this);
+        $newVertex = new Vertex($id, $this);
         // TODO: properly set attributes of vertex
         $newVertex->setLayout($originalVertex->getLayout());
         $newVertex->setBalance($originalVertex->getBalance());
@@ -130,7 +130,7 @@ class Graph extends Set
     public function createGraphCloneVertices($vertices)
     {
         $graph = $this->createGraphClone();
-        foreach ($graph->getVertices() as $vid=>$vertex) {
+        foreach ($graph->getVertices() as $vid => $vertex) {
             if (!isset($vertices[$vid])) {
                 $vertex->destroy();
             }
@@ -148,7 +148,7 @@ class Graph extends Set
      */
     public function createEdgeClone(Edge $originalEdge)
     {
-        return $this->createEdgeCloneInternal($originalEdge,0,1);
+        return $this->createEdgeCloneInternal($originalEdge, 0, 1);
     }
 
     /**
@@ -160,7 +160,7 @@ class Graph extends Set
      */
     public function createEdgeCloneInverted(Edge $originalEdge)
     {
-        return $this->createEdgeCloneInternal($originalEdge,1,0);
+        return $this->createEdgeCloneInternal($originalEdge, 1, 0);
     }
 
     /**
@@ -181,7 +181,7 @@ class Graph extends Set
      * @uses Edge::getCapacity()
      * @uses Edge::setCapacity()
      */
-    private function createEdgeCloneInternal(Edge $originalEdge,$ia,$ib)
+    private function createEdgeCloneInternal(Edge $originalEdge, $ia, $ib)
     {
         $ends = $originalEdge->getVerticesId();
 
@@ -211,8 +211,8 @@ class Graph extends Set
      */
     public function createVertices($n)
     {
-        for ($id=$this->getNextId(),$n+=$id;$id<$n;++$id) {
-            $this->vertices[$id] = new Vertex($id,$this);
+        for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
+            $this->vertices[$id] = new Vertex($id, $this);
         }
 
         return $this;
@@ -243,7 +243,7 @@ class Graph extends Set
      */
     public function getVertex($id)
     {
-        if ( ! isset($this->vertices[$id]) ) {
+        if (!isset($this->vertices[$id])) {
             throw new OutOfBoundsException('Vertex '.$id.' does not exist');
         }
 
@@ -303,7 +303,7 @@ class Graph extends Set
      */
     public function getDegreeMin()
     {
-        return Vertex::getFirst($this->vertices,Vertex::ORDER_DEGREE)->getDegree();
+        return Vertex::getFirst($this->vertices, Vertex::ORDER_DEGREE)->getDegree();
     }
 
     /**
@@ -316,7 +316,7 @@ class Graph extends Set
      */
     public function getDegreeMax()
     {
-        return Vertex::getFirst($this->vertices,Vertex::ORDER_DEGREE,true)->getDegree();
+        return Vertex::getFirst($this->vertices, Vertex::ORDER_DEGREE, true)->getDegree();
     }
 
     /**
@@ -539,7 +539,7 @@ class Graph extends Set
      */
     public function removeEdge(Edge $edge)
     {
-        $id = array_search($edge,$this->edges,true);
+        $id = array_search($edge, $this->edges, true);
         if ($id === false) {
             throw new InvalidArgumentException('Given edge does NOT exist');
         }
@@ -557,7 +557,7 @@ class Graph extends Set
      */
     public function removeVertex(Vertex $vertex)
     {
-        $id = array_search($vertex,$this->vertices,true);
+        $id = array_search($vertex, $this->vertices, true);
         if ($id === false) {
             throw new InvalidArgumentException('Given vertex does NOT exist');
         }
@@ -577,7 +577,7 @@ class Graph extends Set
         // Extract endpoints from edge
         $vertices = $edge->getVertices();
 
-        return $this->getEdgeCloneInternal($edge,$vertices[0],$vertices[1]);
+        return $this->getEdgeCloneInternal($edge, $vertices[0], $vertices[1]);
     }
 
     /**
@@ -593,10 +593,10 @@ class Graph extends Set
         // Extract endpoints from edge
         $vertices = $edge->getVertices();
 
-        return $this->getEdgeCloneInternal($edge,$vertices[1],$vertices[0]);
+        return $this->getEdgeCloneInternal($edge, $vertices[1], $vertices[0]);
     }
 
-    private function getEdgeCloneInternal(Edge $edge,Vertex $startVertex,Vertex $targetVertex)
+    private function getEdgeCloneInternal(Edge $edge, Vertex $startVertex, Vertex $targetVertex)
     {
         // Get original vertices from resultgraph
         $residualGraphEdgeStartVertex = $this->getVertex($startVertex->getId());

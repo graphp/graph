@@ -32,7 +32,7 @@ abstract class Layoutable
      */
     public function setLayout(array $attributes)
     {
-        foreach ($attributes as $key=>$value) {
+        foreach ($attributes as $key => $value) {
             if ($value === NULL) {
                 unset($this->layout[$key]);
             } else {
@@ -51,7 +51,7 @@ abstract class Layoutable
      * @return self
      * @see Layoutable::setLayout()
      */
-    public function setLayoutAttribute($name,$value)
+    public function setLayoutAttribute($name, $value)
     {
         if ($value === NULL) {
             unset($this->layout[$name]);
