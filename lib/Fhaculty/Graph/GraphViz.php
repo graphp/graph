@@ -236,15 +236,14 @@ class GraphViz{
                            '    ' . 'label = '.$this->escape($group) . self::EOL;
                 foreach($alg->getVerticesGroup($group) as $vid => $vertex) {
                     $layout = $vertex->getLayout();
-            
-                    if(!isset($layout['label'])){
-                        $layout['label'] = $vid;
-                    }
-            
+
                     $balance = $vertex->getBalance();
                     if($balance !== NULL){
                         if($balance > 0){
                             $balance = '+'.$balance;
+                        }
+                        if(!isset($layout['label'])){
+                            $layout['label'] = $vid;
                         }
                         $layout['label'] .= ' ('.$balance.')';
                     }
@@ -262,15 +261,14 @@ class GraphViz{
             // other vertices wil be added automatically due to below edge definitions
             foreach ($this->graph->getVertices() as $vid=>$vertex){
                 $layout = $vertex->getLayout();
-                
-                if(!isset($layout['label'])){
-                    $layout['label'] = $vid;
-                }
-                
+
                 $balance = $vertex->getBalance();
                 if($balance !== NULL){
                     if($balance > 0){
                         $balance = '+'.$balance;
+                    }
+                    if(!isset($layout['label'])){
+                        $layout['label'] = $vid;
                     }
                     $layout['label'] .= ' ('.$balance.')';
                 }
