@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Exporter\ExporterInterface;
+use Fhaculty\Graph\Exporter\Dot;
 use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
@@ -18,6 +20,12 @@ use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 
 class Graph extends Set
 {
+    /**
+     * @var ExporterInterface|null
+     * @see self::setExporter()
+     */
+    protected $exporter = null;
+
     /**
      * create a new Vertex in the Graph
      *
@@ -669,8 +677,48 @@ class Graph extends Set
         throw new BadMethodCallException();
     }
 
-    public function getLayout()
+    /**
+     * set a new exporter to use when calling __toString()
+     *
+     * @param ExporterInterface $exporter
+     * @return \Fhaculty\Graph\Graph $this (chainable)
+     */
+    public function setExporter(ExporterInterface $exporter)
     {
+        $this->exporter = $exporter;
+        return $this;
+    }
+
+    /**
+     * get current exporter to use to export graph to its output format
+     *
+     * If no other exporter has been set previously, this will lazy-load
+     * the (current default) Dot exporter.
+     *
+     * @return ExporterInterface
+     */
+    public function getExporter()
+    {
+        if ($this->exporter === null) {
+            $this->exporter = new Dot();
+        }
+        return $this->exporter;
+    }
+
+    /**
+     * export graph to its output format
+     *
+     * this is a magic method that will be called automatically when you
+     * call `echo $graph;`.
+     * @uses self::getExporter()
+     * @uses ExporterInterface::getOutput()
+     */
+    public function __toString()
+    {
+        return $this->getExporter()->getOutput($this);
+    }
+
+    public function getLayout(){
         return array();
     }
 }
