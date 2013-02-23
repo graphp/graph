@@ -4,20 +4,22 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Graph;
 
-class Groups extends Base{
+class Groups extends Base
+{
     /**
      * graph to operate on
-     * 
+     *
      * @var Graph
      */
     private $graph;
-    
+
     /**
      * instanciate algorithm on given graph
-     * 
+     *
      * @param Graph $graph
      */
-    public function __construct(Graph $graph){
+    public function __construct(Graph $graph)
+    {
         $this->graph = $graph;
     }
 
@@ -27,10 +29,11 @@ class Groups extends Base{
      * @return int
      * @uses AlgorithmGroups::getGroups()
      */
-    public function getNumberOfGroups(){
+    public function getNumberOfGroups()
+    {
         return count($this->getGroups());
     }
-    
+
     /**
      * checks whether the input graph's vertex groups are a valid bipartition
      *
@@ -39,21 +42,24 @@ class Groups extends Base{
      * @uses AlgorithmGroups::getNumberOfGroups()
      * @uses Vertex::getGroup()
      */
-    public function isBipartit(){
-    	if($this->getNumberOfGroups() !== 2){ // graph has to contain exactly 2 groups
-    		return false;
-    	}
-    
-    	foreach($this->graph->getVertices() as $vertex){                      // for each vertex
-    		$group = $vertex->getGroup();                                       // get current group
-    		foreach($vertex->getVerticesEdge() as $vertexNeighbor){            // for every neighbor vertex
-    			if($vertexNeighbor->getGroup() === $group){                     // vertex group must be other group
-    				return false;
-    			}
-    		}
-    	}
-    
-    	return true;
+    public function isBipartit()
+    {
+        if ($this->getNumberOfGroups() !== 2) { // graph has to contain exactly 2 groups
+
+            return false;
+        }
+
+        foreach ($this->graph->getVertices() as $vertex) {                      // for each vertex
+            $group = $vertex->getGroup();                                       // get current group
+            foreach ($vertex->getVerticesEdge() as $vertexNeighbor) {            // for every neighbor vertex
+                if ($vertexNeighbor->getGroup() === $group) {                     // vertex group must be other group
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -62,28 +68,32 @@ class Groups extends Base{
      * @return int[]
      * @uses Vertex::getGroup()
      */
-    public function getGroups(){
+    public function getGroups()
+    {
         $groups = array();
-        foreach($this->graph->getVertices() as $vertex){
+        foreach ($this->graph->getVertices() as $vertex) {
             $groups[$vertex->getGroup()] = true;
         }
+
         return array_keys($groups);
     }
 
     /**
      * get array of all vertices in the given group
      *
-     * @param int $group
+     * @param  int      $group
      * @return Vertex[]
      * @uses Vertex::getGroup()
      */
-    public function getVerticesGroup($group){
+    public function getVerticesGroup($group)
+    {
         $vertices = array();
-        foreach($this->graph->getVertices() as $vid=>$vertex){
-            if($vertex->getGroup() === $group){
+        foreach ($this->graph->getVertices() as $vid=>$vertex) {
+            if ($vertex->getGroup() === $group) {
                 $vertices[$vid] = $vertex;
             }
         }
+
         return $vertices;
     }
 }

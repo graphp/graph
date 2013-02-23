@@ -2,5 +2,6 @@
 
 namespace Fhaculty\Graph;
 
-interface Exception{
+interface Exception
+{
 }

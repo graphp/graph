@@ -4,17 +4,19 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Graph;
 
-class Eulerian extends Base{
+class Eulerian extends Base
+{
     /**
-     * 
+     *
      * @var Graph
      */
     private $graph;
-    
-    public function __construct(Graph $graph){
+
+    public function __construct(Graph $graph)
+    {
         $this->graph = $graph;
     }
-    
+
     /**
      * check whether this graph has an eulerian cycle
      *
@@ -24,15 +26,19 @@ class Eulerian extends Base{
      * @todo isolated vertices should be ignored
      * @todo definition is only valid for undirected graphs
      */
-    public function hasCycle(){
-        if($this->graph->isConnected()){
-            foreach($this->graph->getVertices() as $vertex){
-                if($vertex->getDegree() & 1){ // uneven degree => fail
+    public function hasCycle()
+    {
+        if ($this->graph->isConnected()) {
+            foreach ($this->graph->getVertices() as $vertex) {
+                if ($vertex->getDegree() & 1) { // uneven degree => fail
+
                     return false;
                 }
             }
+
             return true;
         }
+
         return false;
     }
 }

@@ -8,22 +8,28 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 
-class ResidualGraph extends Base{
+class ResidualGraph extends Base
+{
     private $graph;
     private $keepNullCapacity = false;
     private $mergeParallelEdges = false;
 
-    public function __construct(Graph $graph){
+    public function __construct(Graph $graph)
+    {
         $this->graph = $graph;
     }
 
-    public function setKeepNullCapacity($toggle){
+    public function setKeepNullCapacity($toggle)
+    {
         $this->keepNullCapacity = !!$toggle;
+
         return $this;
     }
 
-    public function setMergeParallelEdges($toggle){
+    public function setMergeParallelEdges($toggle)
+    {
         $this->mergeParallelEdges = !!$toggle;
+
         return $this;
     }
 
@@ -36,48 +42,49 @@ class ResidualGraph extends Base{
      * @uses Graph::createEdgeClone()
      * @uses Graph::createEdgeCloneInverted()
      */
-    public function createGraph(){
-
+    public function createGraph()
+    {
         $newgraph = $this->graph->createGraphCloneEdgeless();
 
-        foreach($this->graph->getEdges() as $edge){
-            if(!($edge instanceof EdgeDirected)){
+        foreach ($this->graph->getEdges() as $edge) {
+            if (!($edge instanceof EdgeDirected)) {
                 throw new UnexpectedValueException('Edge is undirected');
             }
 
             $flow = $edge->getFlow();
-            if($flow === NULL){
+            if ($flow === NULL) {
                 throw new UnexpectedValueException('Flow not set');
             }
 
             $capacity = $edge->getCapacity();
-            if($capacity === NULL){
+            if ($capacity === NULL) {
                 throw new UnexpectedValueException('Capacity not set');
             }
 
             // capacity is still available, clone remaining capacity into new edge
-            if($this->keepNullCapacity || $flow < $capacity){
+            if ($this->keepNullCapacity || $flow < $capacity) {
                 $newEdge = $newgraph->createEdgeClone($edge)->setFlow(0)->setCapacity($capacity - $flow);
-                
-                if($this->mergeParallelEdges){
+
+                if ($this->mergeParallelEdges) {
                     $this->mergeParallelEdges($newEdge);
                 }
             }
 
             // flow is set, clone current flow as capacity for back-flow into new inverted edge (opposite direction)
-            if($this->keepNullCapacity || $flow > 0){
+            if ($this->keepNullCapacity || $flow > 0) {
                 $newEdge = $newgraph->createEdgeCloneInverted($edge)->setFlow(0)->setCapacity($flow);
 
                 // if weight is set, use negative weight for back-edges
-                if($newEdge->getWeight() !== NULL){
+                if ($newEdge->getWeight() !== NULL) {
                     $newEdge->setWeight(-$newEdge->getWeight());
                 }
-                
-                if($this->mergeParallelEdges){
+
+                if ($this->mergeParallelEdges) {
                     $this->mergeParallelEdges($newEdge);
                 }
             }
         }
+
         return $newgraph;
     }
 
@@ -86,19 +93,20 @@ class ResidualGraph extends Base{
      *
      * @param Edge $newEdge
      */
-    private function mergeParallelEdges(Edge $newEdge){
+    private function mergeParallelEdges(Edge $newEdge)
+    {
         $parallelEdges = $newEdge->getEdgesParallel();
-        if($parallelEdges){
+        if ($parallelEdges) {
 
             $mergedCapacity = 0;
 
-            foreach ($parallelEdges as $parallelEdge){
+            foreach ($parallelEdges as $parallelEdge) {
                 $mergedCapacity += $parallelEdge->getCapacity();
             }
 
             $newEdge->setCapacity($newEdge->getCapacity() + $mergedCapacity);
 
-            foreach ($parallelEdges as $parallelEdge){
+            foreach ($parallelEdges as $parallelEdge) {
                 $parallelEdge->destroy();
             }
         }

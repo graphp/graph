@@ -6,17 +6,16 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 use Fhaculty\Graph\Exception\UnderflowException;
 
-use Fhaculty\Graph\Exception\RuntimeException;
-
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
 use Fhaculty\Graph\Algorithm\DetectNegativeCycle;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
 
-class CycleCanceling extends Base {
-
-    public function createGraph() {
-    	$this->checkBalance();
+class CycleCanceling extends Base
+{
+    public function createGraph()
+    {
+        $this->checkBalance();
 
         // create resulting graph with supersource and supersink
         $resultGraph = $this->graph->createGraphClone();
@@ -27,14 +26,14 @@ class CycleCanceling extends Base {
         $sumBalance = 0;
 
         // connect supersource s* and supersink t* with all "normal" sources and sinks
-        foreach($resultGraph->getVertices() as $vertex){
+        foreach ($resultGraph->getVertices() as $vertex) {
             $flow = $vertex->getBalance(); //$vertex->getFlow();
             $b = abs($vertex->getBalance());
-            if($flow > 0){ // source
+            if ($flow > 0) { // source
                 $superSource->createEdgeTo($vertex)->setCapacity($b);
 
                 $sumBalance += $flow;
-            }else if($flow < 0){ // sink
+            } elseif ($flow < 0) { // sink
                 $vertex->createEdgeTo($superSink)->setCapacity($b);
             }
         }
@@ -43,13 +42,13 @@ class CycleCanceling extends Base {
         $algMaxFlow = new MaxFlowEdmondsKarp($superSource,$superSink);
         $flowMax = $algMaxFlow->getFlowMax();
 
-        if($flowMax !== $sumBalance){
+        if ($flowMax !== $sumBalance) {
             throw new UnexpectedValueException('Network does not support required flow of '.$sumBalance.' (maximum possible flow limited to '.$flowMax.')');
         }
 
         $resultGraph = $algMaxFlow->createGraph();
 
-        while(true){
+        while (true) {
             //create residual graph
             $algRG = new ResidualGraph($resultGraph);
             $residualGraph = $algRG->createGraph();
@@ -58,8 +57,7 @@ class CycleCanceling extends Base {
             $alg = new DetectNegativeCycle($residualGraph);
             try {
                 $clonedEdges = $alg->getCycleNegative()->getEdges();
-            }
-            catch (UnderflowException $ignore) {                               // no negative cycle found => end algorithm
+            } catch (UnderflowException $ignore) {                               // no negative cycle found => end algorithm
                 break;
             }
 
@@ -69,7 +67,7 @@ class CycleCanceling extends Base {
             //set flow on original graph
             $this->addFlow($resultGraph,$clonedEdges,$newFlow);
         }
-        
+
         // destroy temporary supersource and supersink again
         $resultGraph->getVertex($superSink->getId())->destroy();
         $resultGraph->getVertex($superSource->getId())->destroy();

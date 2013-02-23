@@ -2,22 +2,24 @@
 
 namespace Fhaculty\Graph\Loader;
 
-abstract class Base{
-    
+abstract class Base
+{
     private $debugMode = false;
-    
+
     protected $directedEdges = false;
-    
-    public abstract function createGraph();
-    
-    public function setEnableDirectedEdges($directedEdges){
+
+    abstract public function createGraph();
+
+    public function setEnableDirectedEdges($directedEdges)
+    {
         $this->directedEdges = $directedEdges;
     }
-    
-    protected function writeDebugMessage($messageString){
-        if($this->debugMode){
+
+    protected function writeDebugMessage($messageString)
+    {
+        if ($this->debugMode) {
             echo $messageString;
         }
-    
+
     }
 }

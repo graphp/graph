@@ -29,7 +29,7 @@ $rome->createEdgeTo($rome); // create loop
 
 Let's see which city (Vertex) has road (i.e. an edge pointing) to Rome
 ````php
-foreach($rome->getVerticesEdgeFrom() as $vertex){
+foreach ($rome->getVerticesEdgeFrom() as $vertex) {
     echo $vertex->getId().' leads to rome'.PHP_EOL; // result: Madrid and Rome itself
 }
 ````
