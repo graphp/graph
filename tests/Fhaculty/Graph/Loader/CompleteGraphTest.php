@@ -16,21 +16,25 @@ class CompleteGraphTest extends TestCase
         $this->assertGraphEquals($expected,$graph);
     }
     
-    public function testTen(){
-        $loader = new CompleteGraph(10);
+    public function testUndirected(){
+        $n = 9;
+        
+        $loader = new CompleteGraph($n);
         $graph = $loader->createGraph();
     
-        $this->assertEquals(10,$graph->getNumberOfVertices()); // $n
-        $this->assertEquals(45,$graph->getNumberOfEdges()); // n*(n-1)/2
+        $this->assertEquals($n,$graph->getNumberOfVertices());
+        $this->assertEquals($n*($n-1)/2,$graph->getNumberOfEdges());
     }
     
     public function testDirected(){
-        $loader = new CompleteGraph(5);
+        $n = 8;
+        
+        $loader = new CompleteGraph($n);
         $loader->setEnableDirectedEdges(true);
         $graph = $loader->createGraph();
     
-        $this->assertEquals(5,$graph->getNumberOfVertices());
-        $this->assertEquals(20,$graph->getNumberOfEdges()); // n*(n-1) for directed graphs
+        $this->assertEquals($n,$graph->getNumberOfVertices());
+        $this->assertEquals($n*($n-1),$graph->getNumberOfEdges()); // n*(n-1) for directed graphs
         $this->assertTrue($graph->isDirected());
         $this->assertTrue($graph->isComplete());
     }
