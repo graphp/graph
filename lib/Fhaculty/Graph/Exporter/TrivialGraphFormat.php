@@ -8,6 +8,11 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Graph;
 
 /**
+ * Trivial Graph Format (TGF) is a really simple format for describing graphs.
+ *
+ * It consists of a list of vertices, a separator and a list of directed edges
+ * as vertex pairs. Each entry can only have a single plain text label assigned
+ * which does not support any structured information.
  *
  * @author clue
  * @link http://en.wikipedia.org/wiki/Trivial_Graph_Format
@@ -52,6 +57,12 @@ class TrivialGraphFormat implements ExporterInterface
         return $output;
     }
 
+    /**
+     * get label for given $vertex
+     *
+     * @param Vertex $vertex
+     * @return string
+     */
     protected function getVertexLabel(Vertex $vertex)
     {
         // label defaults to the vertex ID
@@ -76,6 +87,12 @@ class TrivialGraphFormat implements ExporterInterface
         return $label;
     }
 
+    /**
+     * get label for given $edge
+     *
+     * @param Edge $edge
+     * @return string label (may be empty if there's nothing to be described)
+     */
     protected function getEdgeLabel(Edge $edge)
     {
         $label = '';
