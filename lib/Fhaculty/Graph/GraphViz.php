@@ -31,9 +31,13 @@ class GraphViz
 
     const EOL = PHP_EOL;
 
-    public function __construct(Graph $graphToPlot)
-    {
+    private $options = array(
+      'executable' => 'dot',
+    );
+
+    public function __construct(Graph $graphToPlot, $options = array()){
         $this->graph = $graphToPlot;
+        $this->options = $options + $this->options;
     }
 
     /**
@@ -200,7 +204,7 @@ class GraphViz
         }
 
         $ret = 0;
-        $dotExecutable='dot';
+        $dotExecutable= $this->options['executable'];
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             // echo 'This is a server using Windows!';
             $dotExecutable='dot.exe';
