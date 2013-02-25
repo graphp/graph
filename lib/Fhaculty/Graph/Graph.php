@@ -721,4 +721,17 @@ class Graph extends Set
     public function getLayout(){
         return array();
     }
+
+    public function __toString() {
+      $result = array();
+      foreach ($this->vertices as $id => $vertex) {
+        $edges = $vertex->getEdges();
+        $dest = array();
+        $result[] = $vertex->getId() . '(' . join(',', $dest) . ')';
+      }
+      if (count($result)) {
+        return join(', ', $result);
+      }
+      return "(empty)";
+    }
 }
