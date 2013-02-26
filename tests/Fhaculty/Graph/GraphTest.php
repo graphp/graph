@@ -124,4 +124,22 @@ class GraphTest extends TestCase
 
         $this->assertInstanceOf('\\Fhaculty\\Graph\\Exporter\\ExporterInterface', $graph->getExporter());
     }
+
+    public function testHasVertex()
+    {
+        $graph = new Graph();
+        $graph->createVertex(1);
+        $graph->createVertex('string');
+
+        // check integer IDs
+        $this->assertFalse($graph->hasVertex(2));
+        $this->assertTrue($graph->hasVertex(1));
+
+        // check string IDs
+        $this->assertFalse($graph->hasVertex('non-existant'));
+        $this->assertTrue($graph->hasVertex('string'));
+
+        // integer IDs can also be checked as string IDs
+        $this->assertTrue($graph->hasVertex('1'));
+    }
 }
