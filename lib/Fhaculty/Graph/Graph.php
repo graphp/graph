@@ -264,10 +264,10 @@ class Graph extends Set
     }
 
     /**
-     * checks whether vertex is added to graph
+     * checks whether given vertex ID exists in this graph
      *
      * @param int|string $id identifier of Vertex
-     * @return TRUE|FALSE
+     * @return boolean
      */
     public function hasVertex($id)
     {
