@@ -5,9 +5,11 @@ namespace Fhaculty\Graph;
 use Fhaculty\Graph\Algorithm\Groups;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\LayoutableInterface;
+
 use \stdClass;
 
-class GraphViz
+class GraphViz implements LayoutableInterface
 {
     /**
      *
@@ -153,7 +155,7 @@ class GraphViz
         }
     }
 
-    public function setLayout($where, $layout, $value = NULL)
+    public function setLayouts($where, $layout, $value = NULL)
     {
         if (!is_array($where)) {
             $where = array($where);
@@ -163,7 +165,7 @@ class GraphViz
         }
         foreach ($where as $where) {
             if ($where === self::LAYOUT_GRAPH) {
-                $this->graph->setLayout($layout, $value);
+                $this->setLayout($layout);
             } elseif ($where === self::LAYOUT_EDGE) {
                 $this->mergeLayout($this->layoutEdge, $layout);
             } elseif ($where === self::LAYOUT_VERTEX) {
@@ -271,7 +273,7 @@ class GraphViz
         $script = ($directed ? 'di':'') . 'graph G {' . self::EOL;
 
         // add global attributes
-        $layout = $this->graph->getLayout();
+        $layout = $this->getLayout();
         if ($layout) {
             $script .= '  graph ' . $this->escapeAttributes($layout) . self::EOL;
         }
@@ -457,4 +459,56 @@ class GraphViz
     {
         return (object) array('string' => $string);
     }
+
+    /**
+     * associative array of layout settings
+     *
+     * @var array
+     */
+    private $layout = array();
+
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    public function setLayout(array $attributes)
+    {
+        foreach ($attributes as $key => $value) {
+            if ($value === NULL) {
+                unset($this->layout[$key]);
+            } else {
+                $this->layout[$key] = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    public function setLayoutAttribute($name, $value)
+    {
+        if ($value === NULL) {
+            unset($this->layout[$name]);
+        } else {
+            $this->layout[$name] = $value;
+        }
+
+        return $this;
+    }
+
+    public function hasLayoutAttribute($name)
+    {
+        return isset($this->layout[$name]);
+    }
+
+    public function getLayoutAttribute($name)
+    {
+        if (!isset($this->layout[$name])) {
+            throw new OutOfBoundsException('Given layout attribute is not set');
+        }
+
+        return $this->layout[$name];
+    }
+
+
 }
