@@ -33,7 +33,7 @@ class GraphViz
      * @var string
      * @see GraphViz::setExecutable()
      */
-    private $executable = '';
+    private $executable = 'dot';
 
     const DELAY_OPEN = 2.0;
 
@@ -42,11 +42,10 @@ class GraphViz
     public function __construct(Graph $graphToPlot)
     {
         $this->graph = $graphToPlot;
-        $executable= 'dot';
+
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $executable='dot.exe';
+            $this->executable = 'dot.exe';
         }
-        $this->setExecutable($executable);
     }
 
     /**
