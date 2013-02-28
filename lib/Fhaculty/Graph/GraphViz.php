@@ -28,7 +28,7 @@ class GraphViz
     private $layoutEdge = array();
 
     /**
-     * Either the name of full path to GraphViz layout.
+     * Either the name or full path to GraphViz layout.
      *
      * @var string
      * @see GraphViz::setExecutable()
