@@ -3,7 +3,6 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Algorithm\Groups;
-
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use \stdClass;
@@ -51,6 +50,11 @@ class GraphViz
     /**
      * Change the executable to use.
      *
+     * Usually, your graphviz executables should be located in your $PATH
+     * environment variable and invoking a mere `dot` is sufficient. If you
+     * have no access to your $PATH variable, use this method to set the path
+     * to your graphviz dot executable.
+     *
      * This should contain '.exe' on windows.
      * - /full/path/to/bin/dot
      * - neato
@@ -58,12 +62,20 @@ class GraphViz
      * - c:\path\to\bin\dot.exe
      *
      * @param string $executable
-     * @see GraphViz::executable
+     * @return GraphViz $this (chainable)
      */
     public function setExecutable($executable) {
         $this->executable = $executable;
+
+        return $this;
     }
 
+    /**
+     * return executable to use
+     *
+     * @return string
+     * @see GraphViz::setExecutable()
+     */
     public function getExecutable() {
         return $this->executable;
     }
