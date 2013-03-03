@@ -5,6 +5,17 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Graph;
 
+/**
+ * Tests for Topological Sort Algorithm
+ *
+ * To test for Topological Sorting we need to test for Graph having:
+ * - no cycles
+ * - is directed
+ * In short a DirectedAcyclicGraph.
+ *
+ * @see http://en.wikipedia.org/wiki/Topological_sorting
+ * @see http://en.wikipedia.org/wiki/Directed_acyclic_graph
+ */
 class TopologicalSortTest extends TestCase
 {
     public function testGraphEmpty()
@@ -27,6 +38,9 @@ class TopologicalSortTest extends TestCase
         $this->assertSame(array(1 => $graph->getVertex(1), 2 => $graph->getVertex(2)), $alg->getVertices());
     }
 
+    /**
+     * 1 -> 2
+     */
     public function testGraphSimple()
     {
         $graph = new Graph();
@@ -50,6 +64,8 @@ class TopologicalSortTest extends TestCase
     }
 
     /**
+     * 1 -> 1
+     *
      * @expectedException UnexpectedValueException
      */
     public function testFailLoop()
@@ -62,6 +78,8 @@ class TopologicalSortTest extends TestCase
     }
 
     /**
+     * 1 -> 2 -> 1
+     *
      * @expectedException UnexpectedValueException
      */
     public function testFailCycle()
