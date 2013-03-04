@@ -3,7 +3,6 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Algorithm\Groups;
-
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use \stdClass;
@@ -27,6 +26,14 @@ class GraphViz
     private $layoutVertex = array();
     private $layoutEdge = array();
 
+    /**
+     * Either the name of full path to GraphViz layout.
+     *
+     * @var string
+     * @see GraphViz::setExecutable()
+     */
+    private $executable = 'dot';
+
     const DELAY_OPEN = 2.0;
 
     const EOL = PHP_EOL;
@@ -34,6 +41,43 @@ class GraphViz
     public function __construct(Graph $graphToPlot)
     {
         $this->graph = $graphToPlot;
+
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $this->executable = 'dot.exe';
+        }
+    }
+
+    /**
+     * Change the executable to use.
+     *
+     * Usually, your graphviz executables should be located in your $PATH
+     * environment variable and invoking a mere `dot` is sufficient. If you
+     * have no access to your $PATH variable, use this method to set the path
+     * to your graphviz dot executable.
+     *
+     * This should contain '.exe' on windows.
+     * - /full/path/to/bin/dot
+     * - neato
+     * - dot.exe
+     * - c:\path\to\bin\dot.exe
+     *
+     * @param string $executable
+     * @return GraphViz $this (chainable)
+     */
+    public function setExecutable($executable) {
+        $this->executable = $executable;
+
+        return $this;
+    }
+
+    /**
+     * return executable to use
+     *
+     * @return string
+     * @see GraphViz::setExecutable()
+     */
+    public function getExecutable() {
+        return $this->executable;
     }
 
     /**
@@ -200,17 +244,11 @@ class GraphViz
         }
 
         $ret = 0;
-        $dotExecutable='dot';
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            // echo 'This is a server using Windows!';
-            $dotExecutable='dot.exe';
-        } else {
-            // echo 'This is a server not using Windows!';
-        }
-        // use program 'dot' to actually generate graph image
-        system($dotExecutable . ' -T ' . escapeshellarg($this->format) . ' ' . escapeshellarg($tmp) . ' -o ' . escapeshellarg($tmp . '.' . $this->format), $ret);
+
+        $executable = $this->getExecutable();
+        system($executable . ' -T ' . escapeshellarg($this->format) . ' ' . escapeshellarg($tmp) . ' -o ' . escapeshellarg($tmp . '.' . $this->format), $ret);
         if ($ret !== 0) {
-            throw new UnexpectedValueException('Unable to invoke "dot" to create image file (code ' . $ret . ')');
+            throw new UnexpectedValueException('Unable to invoke "' . $executable .'" to create image file (code ' . $ret . ')');
         }
 
         unlink($tmp);
@@ -415,7 +453,7 @@ class GraphViz
      * @return StdClass
      * @see GraphViz::escape()
      */
-    public function raw($string)
+    public static function raw($string)
     {
         return (object) array('string' => $string);
     }

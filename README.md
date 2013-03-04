@@ -2,6 +2,8 @@
 
 A mathematical graph/network library written in PHP
 
+[![Build Status](https://travis-ci.org/clue/graph.png)](https://travis-ci.org/clue/graph)
+
 While the APIs should be stable, this library is still considered *beta* software. Please see *Contributing* below for ways you can help out.
 
 ## Quickstart examples
