@@ -155,7 +155,20 @@ class GraphViz implements LayoutableInterface
         }
     }
 
-    public function setLayouts($where, $layout, $value = NULL)
+    /**
+     * set the global layout for GRAPH, EDGE or VERTEX
+     *
+     * By defining the layout at the graph level we can set in a way
+     * default values for all vertices and edges. It is also possible to set
+     * values for the graph itself. Ie background color, layout engine, etc.
+     *
+     * @param type $where
+     * @param type $layout
+     * @param type $value
+     * @return \Fhaculty\Graph\GraphViz
+     * @throws InvalidArgumentException
+     */
+    public function setLayoutBy($where, $layout, $value = NULL)
     {
         if (!is_array($where)) {
             $where = array($where);
