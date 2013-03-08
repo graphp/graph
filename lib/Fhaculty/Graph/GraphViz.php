@@ -431,17 +431,27 @@ class GraphViz
      */
     private function escapeAttributes($attrs)
     {
-        $script = '[';
+        $script = '[' . "\n";
         $first = true;
         foreach ($attrs as $name => $value) {
             if ($first) {
                 $first = false;
             } else {
-                $script .= ' ';
+                $script .= "\n" . '   ';
             }
-            $script .= $name . '=' . self::escape($value);
+            if ($name == 'label') {
+                if (strpos($value, '<<') === 0) {
+                    $script .= $name . '=' . $value;
+                }
+                else {
+                    $script .= $name . '=' . '"' . $value . '"';
+                }
+            }
+            else {
+                $script .= $name . '=' . self::escape($value);
+            }
         }
-        $script .= ']';
+        $script .= "\n" . ']';
 
         return $script;
     }
