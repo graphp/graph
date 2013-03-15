@@ -142,4 +142,19 @@ class GraphTest extends TestCase
         // integer IDs can also be checked as string IDs
         $this->assertTrue($graph->hasVertex('1'));
     }
+
+    public function testCreateMultigraph()
+    {
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+
+        $e1 = $v1->createEdge($v2);
+        $e2 = $v1->createEdge($v2);
+
+        $this->assertEquals(2, $graph->getNumberOfEdges());
+        $this->assertEquals(2, count($v1->getEdges()));
+
+        $this->assertEquals(array(2), array_keys($v1->getVerticesEdge()));
+    }
 }
