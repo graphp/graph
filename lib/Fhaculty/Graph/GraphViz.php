@@ -302,18 +302,7 @@ class GraphViz
                 $script .= $this->formatIndent . 'subgraph cluster_' . $gid++ . ' {' . self::EOL .
                            $indent . 'label = ' . $this->escape($group) . self::EOL;
                 foreach($alg->getVerticesGroup($group) as $vid => $vertex) {
-                    $layout = $vertex->getLayout();
-
-                    $balance = $vertex->getBalance();
-                    if($balance !== NULL){
-                        if($balance > 0){
-                            $balance = '+' . $balance;
-                        }
-                        if(!isset($layout['label'])){
-                            $layout['label'] = $vid;
-                        }
-                        $layout['label'] .= ' (' . $balance . ')';
-                    }
+                    $layout = $this->getLayoutVertex($vertex);
 
                     $script .= $indent . $this->escapeId($vid);
                     if($layout){
@@ -327,18 +316,7 @@ class GraphViz
             // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
             // other vertices wil be added automatically due to below edge definitions
             foreach ($this->graph->getVertices() as $vid => $vertex){
-                $layout = $vertex->getLayout();
-
-                $balance = $vertex->getBalance();
-                if($balance !== NULL){
-                    if($balance > 0){
-                        $balance = '+' . $balance;
-                    }
-                    if(!isset($layout['label'])){
-                        $layout['label'] = $vid;
-                    }
-                    $layout['label'] .= ' (' . $balance . ')';
-                }
+                $layout = $this->getLayoutVertex($vertex);
 
                 if($vertex->isIsolated() || $layout){
                     $script .= $this->formatIndent . $this->escapeId($vid);
@@ -465,5 +443,23 @@ class GraphViz
     public static function raw($string)
     {
         return (object) array('string' => $string);
+    }
+
+    protected function getLayoutVertex(Vertex $vertex)
+    {
+        $layout = $vertex->getLayout();
+
+        $balance = $vertex->getBalance();
+        if($balance !== NULL){
+            if($balance > 0){
+                $balance = '+' . $balance;
+            }
+            if(!isset($layout['label'])){
+                $layout['label'] = $vid;
+            }
+            $layout['label'] .= ' (' . $balance . ')';
+        }
+
+        return $layout;
     }
 }
