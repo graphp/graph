@@ -3,8 +3,9 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Exception\OutOfBoundsException;
+use Fhaculty\Graph\LayoutableInterface;
 
-abstract class Layoutable
+abstract class Layoutable implements LayoutableInterface
 {
     /**
      * associative array of layout settings
