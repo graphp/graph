@@ -218,16 +218,17 @@ class Graph extends Set
      * create the given number of vertices
      *
      * @param  int   $n
-     * @return Graph (chainable)
+     * @return Vertex[] array of vertices created
      * @uses Graph::getNextId()
      */
     public function createVertices($n)
     {
+        $vertices = array();
         for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
-            $this->vertices[$id] = new Vertex($id, $this);
+            $vertices[$id] = $this->vertices[$id] = new Vertex($id, $this);
         }
 
-        return $this;
+        return $vertices;
     }
 
     /**
