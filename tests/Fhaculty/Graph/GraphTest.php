@@ -178,4 +178,13 @@ class GraphTest extends TestCase
         $this->assertEquals(array(1, 3), array_keys($v2->getVerticesEdgeTo()));
         $this->assertEquals(array(1), array_keys($v2->getVerticesEdgeFrom()));
     }
+
+    public function testCreateVerticesNone()
+    {
+        $graph = new Graph();
+
+        $ret = $graph->createVertices(0);
+        $this->assertEquals(array(), $ret);
+        $this->assertEquals(0, $graph->getNumberOfVertices());
+    }
 }
