@@ -184,8 +184,9 @@ class GraphTest extends TestCase
     {
         $graph = new Graph();
 
-        $ret = $graph->createVertices(0);
-        $this->assertEquals(array(), $ret);
+        $this->assertEquals(array(), $graph->createVertices(0));
+        $this->assertEquals(array(), $graph->createVertices(array()));
+
         $this->assertEquals(0, $graph->getNumberOfVertices());
     }
 
@@ -206,7 +207,50 @@ class GraphTest extends TestCase
             array(-1),
             array("10"),
             array(0.5),
-            array(null)
+            array(null),
+            array(array(1, 1))
         );
+    }
+
+    public function testCreateVerticesOkay()
+    {
+        $graph = new Graph();
+
+        $vertices = $graph->createVertices(2);
+        $this->assertCount(2, $vertices);
+        $this->assertEquals(array(0, 1), array_keys($graph->getVertices()));
+
+        $vertices = $graph->createVertices(array(7, 9));
+        $this->assertCount(2, $vertices);
+        $this->assertEquals(array(0, 1, 7, 9), array_keys($graph->getVertices()));
+
+        $vertices = $graph->createVertices(3);
+        $this->assertCount(3, $vertices);
+        $this->assertEquals(array(0, 1, 7, 9, 10, 11, 12), array_keys($graph->getVertices()));
+    }
+
+    public function testCreateVerticesAtomic()
+    {
+        $graph = new Graph();
+
+        // create vertices 10-19 (inclusive)
+        $vertices = $graph->createVertices(range(10, 19));
+        $this->assertCount(10, $vertices);
+
+        try {
+            $graph->createVertices(array(9, 19, 20));
+            $this->fail('Should be unable to create vertices because of duplicate IDs');
+        }
+        catch (OverflowException $ignoreExpected) {
+            $this->assertEquals(10, $graph->getNumberOfVertices());
+        }
+
+        try {
+            $graph->createVertices(array(20, 21, 21));
+            $this->fail('Should be unable to create vertices because of duplicate IDs');
+        }
+        catch (InvalidArgumentException $ignoreExpected) {
+            $this->assertEquals(10, $graph->getNumberOfVertices());
+        }
     }
 }
