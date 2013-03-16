@@ -224,8 +224,12 @@ class Graph extends Set
     public function createVertices($n)
     {
         $vertices = array();
-        for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
-            $vertices[$id] = $this->vertices[$id] = new Vertex($id, $this);
+        if (is_int($n) && $n >= 0) {
+            for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
+                $vertices[$id] = $this->vertices[$id] = new Vertex($id, $this);
+            }
+        } else {
+            throw new InvalidArgumentException('Invalid number of vertices given. Must be non-negative integer');
         }
 
         return $vertices;
