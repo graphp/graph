@@ -466,7 +466,11 @@ class GraphViz
         }
 
         if ($label !== NULL) {
-            $layout['label'] = $label;
+            if (isset($layout['label'])) {
+                $layout['label'] .= ' ' . $label;
+            } else {
+                $layout['label'] = $label;
+            }
         }
         return $layout;
     }
