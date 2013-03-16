@@ -5,6 +5,7 @@ namespace Fhaculty\Graph;
 use Fhaculty\Graph\Algorithm\Groups;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Edge\Base as Edge;
 use \stdClass;
 
 class GraphViz
@@ -338,40 +339,13 @@ class GraphViz
 
             $script .= $this->formatIndent . $this->escapeId($currentStartVertex->getId()) . $edgeop . $this->escapeId($currentTargetVertex->getId());
 
-            $attrs = $currentEdge->getLayout();
+            $layout = $currentEdge->getLayout();
 
-            // use flow/capacity/weight as edge label
-            $label = NULL;
-
-            $flow = $currentEdge->getFlow();
-            $capacity = $currentEdge->getCapacity();
-            // flow is set
-            if ($flow !== NULL) {
-                // NULL capacity = infinite capacity
-                $label = $flow . '/' . ($capacity === NULL ? '∞' : $capacity);
-            // capacity set, but not flow (assume zero flow)
-            } elseif ($capacity !== NULL) {
-                $label = '0/' . $capacity;
-            }
-
-            $weight = $currentEdge->getWeight();
-            // weight is set
-            if ($weight !== NULL) {
-                if ($label === NULL) {
-                    $label = $weight;
-                } else {
-                    $label .= '/' . $weight;
-                }
-            }
-
-            if ($label !== NULL) {
-                $attrs['label'] = $label;
-            }
             // this edge also points to the opposite direction => this is actually an undirected edge
             if ($directed && $currentEdge->isConnection($currentTargetVertex, $currentStartVertex)) {
-                $attrs['dir'] = 'none';
+                $layout['dir'] = 'none';
             }
-            if ($attrs) {
+            if ($layout) {
                 $script .= ' ' . $this->escapeAttributes($attrs);
             }
 
@@ -460,6 +434,40 @@ class GraphViz
             $layout['label'] .= ' (' . $balance . ')';
         }
 
+        return $layout;
+    }
+
+    protected function getLayoutEdge(Edge $edge)
+    {
+        $layout = $edge->getLayout();
+
+        // use flow/capacity/weight as edge label
+        $label = NULL;
+
+        $flow = $edge->getFlow();
+        $capacity = $edge->getCapacity();
+        // flow is set
+        if ($flow !== NULL) {
+            // NULL capacity = infinite capacity
+            $label = $flow . '/' . ($capacity === NULL ? '∞' : $capacity);
+            // capacity set, but not flow (assume zero flow)
+        } elseif ($capacity !== NULL) {
+            $label = '0/' . $capacity;
+        }
+
+        $weight = $edge->getWeight();
+        // weight is set
+        if ($weight !== NULL) {
+            if ($label === NULL) {
+                $label = $weight;
+            } else {
+                $label .= '/' . $weight;
+            }
+        }
+
+        if ($label !== NULL) {
+            $layout['label'] = $label;
+        }
         return $layout;
     }
 }
