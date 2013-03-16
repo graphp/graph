@@ -21,7 +21,7 @@ use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesMap;
 use Fhaculty\Graph\Set\Edges;
 
-class Graph extends Set
+class Graph extends Set implements LayoutableInterface
 {
     /**
      * @var ExporterInterface|null
@@ -60,6 +60,13 @@ class Graph extends Set
     {
         return $this->edges;
     }
+
+    /**
+     * associative array of layout settings
+     *
+     * @var array
+     */
+    private $layout = array();
 
     /**
      * create a new Vertex in the Graph
@@ -505,7 +512,46 @@ class Graph extends Set
         return $this->getExporter()->getOutput($this);
     }
 
-    public function getLayout(){
-        return array();
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    public function setLayout(array $attributes)
+    {
+        foreach ($attributes as $key => $value) {
+            if ($value === NULL) {
+                unset($this->layout[$key]);
+            } else {
+                $this->layout[$key] = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    public function setLayoutAttribute($name, $value)
+    {
+        if ($value === NULL) {
+            unset($this->layout[$name]);
+        } else {
+            $this->layout[$name] = $value;
+        }
+
+        return $this;
+    }
+
+    public function hasLayoutAttribute($name)
+    {
+        return isset($this->layout[$name]);
+    }
+
+    public function getLayoutAttribute($name)
+    {
+        if (!isset($this->layout[$name])) {
+            throw new OutOfBoundsException('Given layout attribute is not set');
+        }
+
+        return $this->layout[$name];
     }
 }
