@@ -34,6 +34,14 @@ class GraphViz
      */
     private $executable = 'dot';
 
+    /**
+     * string to use as indentation for dot output
+     *
+     * @var string
+     * @see GraphViz::createScript()
+     */
+    private $formatIndent = '  ';
+
     const DELAY_OPEN = 2.0;
 
     const EOL = PHP_EOL;
@@ -273,13 +281,13 @@ class GraphViz
         // add global attributes
         $layout = $this->graph->getLayout();
         if ($layout) {
-            $script .= '  graph ' . $this->escapeAttributes($layout) . self::EOL;
+            $script .= $this->formatIndent . 'graph ' . $this->escapeAttributes($layout) . self::EOL;
         }
         if ($this->layoutVertex) {
-            $script .= '  node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
+            $script .= $this->formatIndent . 'node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
         }
         if ($this->layoutEdge) {
-            $script .= '  edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
+            $script .= $this->formatIndent . 'edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
         }
 
         $alg = new Groups($this->graph);
@@ -288,10 +296,11 @@ class GraphViz
 
         if ($showGroups) {
             $gid = 0;
+            $indent = str_repeat($this->formatIndent, 2);
             // put each group of vertices in a separate subgraph cluster
             foreach ($alg->getGroups() as $group) {
-                $script .= '  subgraph cluster_' . $gid++ . ' {' . self::EOL .
-                           '    label = ' . $this->escape($group) . self::EOL;
+                $script .= $this->formatIndent . 'subgraph cluster_' . $gid++ . ' {' . self::EOL .
+                           $indent . 'label = ' . $this->escape($group) . self::EOL;
                 foreach($alg->getVerticesGroup($group) as $vid => $vertex) {
                     $layout = $vertex->getLayout();
 
@@ -306,7 +315,7 @@ class GraphViz
                         $layout['label'] .= ' (' . $balance . ')';
                     }
 
-                    $script .= '    ' . $this->escapeId($vid);
+                    $script .= $indent . $this->escapeId($vid);
                     if($layout){
                         $script .= ' ' . $this->escapeAttributes($layout);
                     }
@@ -332,7 +341,7 @@ class GraphViz
                 }
 
                 if($vertex->isIsolated() || $layout){
-                    $script .= '  ' . $this->escapeId($vid);
+                    $script .= $this->formatIndent . $this->escapeId($vid);
                     if($layout){
                         $script .= ' ' . $this->escapeAttributes($layout);
                     }
@@ -349,7 +358,7 @@ class GraphViz
             $currentStartVertex = $both[0];
             $currentTargetVertex = $both[1];
 
-            $script .= '  ' . $this->escapeId($currentStartVertex->getId()) . $edgeop . $this->escapeId($currentTargetVertex->getId());
+            $script .= $this->formatIndent . $this->escapeId($currentStartVertex->getId()) . $edgeop . $this->escapeId($currentTargetVertex->getId());
 
             $attrs = $currentEdge->getLayout();
 
