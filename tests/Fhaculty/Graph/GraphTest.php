@@ -4,6 +4,7 @@ use Fhaculty\Graph\Exception\RuntimeException;
 use Fhaculty\Graph\Exporter\Image;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\OverflowException;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Graph;
 
 class GraphTest extends TestCase
@@ -186,5 +187,26 @@ class GraphTest extends TestCase
         $ret = $graph->createVertices(0);
         $this->assertEquals(array(), $ret);
         $this->assertEquals(0, $graph->getNumberOfVertices());
+    }
+
+    /**
+     * expect to fail for invalid number of vertices
+     * @expectedException InvalidArgumentException
+     * @dataProvider testCreateVerticesFailProvider
+     */
+    public function testCreateVerticesFail($number)
+    {
+        $graph = new Graph();
+        $graph->createVertices($number);
+    }
+
+    public static function testCreateVerticesFailProvider()
+    {
+        return array(
+            array(-1),
+            array("10"),
+            array(0.5),
+            array(null)
+        );
     }
 }
