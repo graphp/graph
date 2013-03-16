@@ -163,6 +163,29 @@ class GraphViz
                 }
             }
         }
+        return $this;
+    }
+
+    /**
+     * set the global default layout for all edges
+     *
+     * @param array $layout
+     * @return self $this (chainable)
+     */
+    public function setLayoutEdgeDefault(array $layout)
+    {
+        return $this->mergeLayout($this->layoutEdge, $layout);
+    }
+
+    /**
+     * set the global default layout for all vertices
+     *
+     * @param array $layout
+     * @return self $this (chainable)
+     */
+    public function setLayoutVertexDefault(array $layout)
+    {
+        return $this->mergeLayout($this->layoutVertex, $layout);
     }
 
     public function setLayouts($where, $layout, $value = NULL)
@@ -177,9 +200,9 @@ class GraphViz
             if ($where instanceof LayoutableInterface) {
                 $where->setLayout($layout);
             } elseif ($where === self::LAYOUT_EDGE) {
-                $this->mergeLayout($this->layoutEdge, $layout);
+                $this->setLayoutEdgeDefault($layout);
             } elseif ($where === self::LAYOUT_VERTEX) {
-                $this->mergeLayout($this->layoutVertex, $layout);
+                $this->setLayoutVertexDefault($layout);
             } else {
                 throw new InvalidArgumentException('Invalid layout identifier');
             }
