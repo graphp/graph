@@ -111,3 +111,7 @@ If you encounter any issues, please don't hesitate to drop us a line, file a bug
 Besides directly working with the code, any additional documentation, additions to our readme or even fixing simple typos are appreciated just as well.
 
 Any feedback and/or contribution is welcome!
+
+## License
+
+Released under the terms of the permissive [MIT license](http://opensource.org/licenses/MIT).
