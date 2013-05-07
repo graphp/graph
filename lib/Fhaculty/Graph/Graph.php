@@ -215,19 +215,43 @@ class Graph extends Set
     }
 
     /**
-     * create the given number of vertices
+     * create the given number of vertices or given array of Vertex IDs
      *
-     * @param  int   $n
-     * @return Graph (chainable)
+     * @param  int|array $n number of vertices to create or array of Vertex IDs to create
+     * @return Vertex[]  array of vertices created
      * @uses Graph::getNextId()
      */
     public function createVertices($n)
     {
-        for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
-            $this->vertices[$id] = new Vertex($id, $this);
+        $vertices = array();
+        if (is_int($n) && $n >= 0) {
+            for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
+                $vertices[$id] = $this->vertices[$id] = new Vertex($id, $this);
+            }
+        } elseif (is_array($n)) {
+            // array given => check to make sure all given IDs are available (atomic operation)
+            foreach ($n as $id) {
+                if (!is_int($id) && !is_string($id)) {
+                    throw new InvalidArgumentException('All Vertex IDs have to be of type integer or string');
+                } elseif (isset($this->vertices[$id])) {
+                    throw new OverflowException('Given array of Vertex IDs contains an ID that already exists. Given IDs must be unique');
+                } elseif (isset($vertices[$id])) {
+                    throw new InvalidArgumentException('Given array of Vertex IDs contain duplicate IDs. Given IDs must be unique');
+                }
+
+                // temporary marker to check for duplicate IDs in the array
+                $vertices[$id] = false;
+            }
+
+            // actually create all requested vertices
+            foreach ($n as $id) {
+                $vertices[$id] = $this->vertices[$id] = new Vertex($id, $this);
+            }
+        } else {
+            throw new InvalidArgumentException('Invalid number of vertices given. Must be non-negative integer or an array of Vertex IDs');
         }
 
-        return $this;
+        return $vertices;
     }
 
     /**
