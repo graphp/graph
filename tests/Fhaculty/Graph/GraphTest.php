@@ -44,6 +44,15 @@ class GraphTest extends TestCase
         $this->assertGraphEquals($graph, $newgraph);
     }
 
+    /**
+     * @expectedException OutOfBoundsException
+     */
+    public function testGetVertexNonexistant()
+    {
+        $graph = new Graph();
+        $graph->getVertex('non-existant');
+    }
+
     public function testGraphClone()
     {
         $graph = new Graph();
