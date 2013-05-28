@@ -83,11 +83,6 @@ class GraphTest extends TestCase
         $this->assertGraphEquals($graphExpected, $graphEdgeless);
     }
 
-    public function testBalance()
-    {
-        $this->assertEquals(0, $this->graph->getBalance());
-    }
-
     /**
      * check to make sure we can actually create vertices with automatic IDs
      */
