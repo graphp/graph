@@ -47,7 +47,7 @@ class Balance extends Base
         // no need to check for each edge: flow <= capacity (setters already check that)
         // check for each vertex: outflow-inflow = balance
         foreach ($this->graph->getVertices() as $vertex) {
-            if ($vertex->getFlow() === $vertex->getBalance()) {
+            if ($vertex->getFlow() !== $vertex->getBalance()) {
                 return false;
             }
         }
