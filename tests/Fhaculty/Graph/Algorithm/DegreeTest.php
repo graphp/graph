@@ -34,6 +34,7 @@ class DegreeTest extends TestCase
         catch (UnderflowException $e) { }
 
         $this->assertTrue($alg->isRegular());
+        $this->assertTrue($alg->isBalanced());
     }
 
     public function testGraphIsolated()
@@ -48,6 +49,7 @@ class DegreeTest extends TestCase
         $this->assertEquals(0, $alg->getDegreeMin());
         $this->assertEquals(0, $alg->getDegreeMax());
         $this->assertTrue($alg->isRegular());
+        $this->assertTrue($alg->isBalanced());
     }
 
     public function testGraphIrregular()
@@ -68,5 +70,6 @@ class DegreeTest extends TestCase
         $this->assertEquals(1, $alg->getDegreeMin());
         $this->assertEquals(2, $alg->getDegreeMax());
         $this->assertFalse($alg->isRegular());
+        $this->assertFalse($alg->isBalanced());
     }
 }

@@ -441,24 +441,6 @@ class Graph extends Set
         return true;
     }
 
-    /**
-     * checks whether the indegree of every vertex equals its outdegree
-     *
-     * @return boolean
-     * @uses Vertex::getDegreeIn()
-     * @uses Vertex::getDegreeOut()
-     */
-    public function isBalanced()
-    {
-        foreach ($this->vertices as $vertex) {
-            if ($vertex->getDegreeIn() !== $vertex->getDegreeOut()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public function getBalance()
     {
         $balance = 0;
