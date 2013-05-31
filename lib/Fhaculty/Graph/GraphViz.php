@@ -5,6 +5,7 @@ namespace Fhaculty\Graph;
 use Fhaculty\Graph\Algorithm\Groups;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Edge\Base as Edge;
 use \stdClass;
 
 class GraphViz
@@ -33,6 +34,14 @@ class GraphViz
      * @see GraphViz::setExecutable()
      */
     private $executable = 'dot';
+
+    /**
+     * string to use as indentation for dot output
+     *
+     * @var string
+     * @see GraphViz::createScript()
+     */
+    private $formatIndent = '  ';
 
     const DELAY_OPEN = 2.0;
 
@@ -273,13 +282,13 @@ class GraphViz
         // add global attributes
         $layout = $this->graph->getLayout();
         if ($layout) {
-            $script .= '  graph ' . $this->escapeAttributes($layout) . self::EOL;
+            $script .= $this->formatIndent . 'graph ' . $this->escapeAttributes($layout) . self::EOL;
         }
         if ($this->layoutVertex) {
-            $script .= '  node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
+            $script .= $this->formatIndent . 'node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
         }
         if ($this->layoutEdge) {
-            $script .= '  edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
+            $script .= $this->formatIndent . 'edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
         }
 
         $alg = new Groups($this->graph);
@@ -288,25 +297,15 @@ class GraphViz
 
         if ($showGroups) {
             $gid = 0;
+            $indent = str_repeat($this->formatIndent, 2);
             // put each group of vertices in a separate subgraph cluster
             foreach ($alg->getGroups() as $group) {
-                $script .= '  subgraph cluster_' . $gid++ . ' {' . self::EOL .
-                           '    label = ' . $this->escape($group) . self::EOL;
+                $script .= $this->formatIndent . 'subgraph cluster_' . $gid++ . ' {' . self::EOL .
+                           $indent . 'label = ' . $this->escape($group) . self::EOL;
                 foreach($alg->getVerticesGroup($group) as $vid => $vertex) {
-                    $layout = $vertex->getLayout();
+                    $layout = $this->getLayoutVertex($vertex);
 
-                    $balance = $vertex->getBalance();
-                    if($balance !== NULL){
-                        if($balance > 0){
-                            $balance = '+' . $balance;
-                        }
-                        if(!isset($layout['label'])){
-                            $layout['label'] = $vid;
-                        }
-                        $layout['label'] .= ' (' . $balance . ')';
-                    }
-
-                    $script .= '    ' . $this->escapeId($vid);
+                    $script .= $indent . $this->escapeId($vid);
                     if($layout){
                         $script .= ' ' . $this->escapeAttributes($layout);
                     }
@@ -318,21 +317,10 @@ class GraphViz
             // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
             // other vertices wil be added automatically due to below edge definitions
             foreach ($this->graph->getVertices() as $vid => $vertex){
-                $layout = $vertex->getLayout();
-
-                $balance = $vertex->getBalance();
-                if($balance !== NULL){
-                    if($balance > 0){
-                        $balance = '+' . $balance;
-                    }
-                    if(!isset($layout['label'])){
-                        $layout['label'] = $vid;
-                    }
-                    $layout['label'] .= ' (' . $balance . ')';
-                }
+                $layout = $this->getLayoutVertex($vertex);
 
                 if($vertex->isIsolated() || $layout){
-                    $script .= '  ' . $this->escapeId($vid);
+                    $script .= $this->formatIndent . $this->escapeId($vid);
                     if($layout){
                         $script .= ' ' . $this->escapeAttributes($layout);
                     }
@@ -349,43 +337,16 @@ class GraphViz
             $currentStartVertex = $both[0];
             $currentTargetVertex = $both[1];
 
-            $script .= '  ' . $this->escapeId($currentStartVertex->getId()) . $edgeop . $this->escapeId($currentTargetVertex->getId());
+            $script .= $this->formatIndent . $this->escapeId($currentStartVertex->getId()) . $edgeop . $this->escapeId($currentTargetVertex->getId());
 
-            $attrs = $currentEdge->getLayout();
+            $layout = $this->getLayoutEdge($currentEdge);
 
-            // use flow/capacity/weight as edge label
-            $label = NULL;
-
-            $flow = $currentEdge->getFlow();
-            $capacity = $currentEdge->getCapacity();
-            // flow is set
-            if ($flow !== NULL) {
-                // NULL capacity = infinite capacity
-                $label = $flow . '/' . ($capacity === NULL ? '∞' : $capacity);
-            // capacity set, but not flow (assume zero flow)
-            } elseif ($capacity !== NULL) {
-                $label = '0/' . $capacity;
-            }
-
-            $weight = $currentEdge->getWeight();
-            // weight is set
-            if ($weight !== NULL) {
-                if ($label === NULL) {
-                    $label = $weight;
-                } else {
-                    $label .= '/' . $weight;
-                }
-            }
-
-            if ($label !== NULL) {
-                $attrs['label'] = $label;
-            }
             // this edge also points to the opposite direction => this is actually an undirected edge
             if ($directed && $currentEdge->isConnection($currentTargetVertex, $currentStartVertex)) {
-                $attrs['dir'] = 'none';
+                $layout['dir'] = 'none';
             }
-            if ($attrs) {
-                $script .= ' ' . $this->escapeAttributes($attrs);
+            if ($layout) {
+                $script .= ' ' . $this->escapeAttributes($layout);
             }
 
             $script .= self::EOL;
@@ -456,5 +417,61 @@ class GraphViz
     public static function raw($string)
     {
         return (object) array('string' => $string);
+    }
+
+    protected function getLayoutVertex(Vertex $vertex)
+    {
+        $layout = $vertex->getLayout();
+
+        $balance = $vertex->getBalance();
+        if($balance !== NULL){
+            if($balance > 0){
+                $balance = '+' . $balance;
+            }
+            if(!isset($layout['label'])){
+                $layout['label'] = $vertex->getId();
+            }
+            $layout['label'] .= ' (' . $balance . ')';
+        }
+
+        return $layout;
+    }
+
+    protected function getLayoutEdge(Edge $edge)
+    {
+        $layout = $edge->getLayout();
+
+        // use flow/capacity/weight as edge label
+        $label = NULL;
+
+        $flow = $edge->getFlow();
+        $capacity = $edge->getCapacity();
+        // flow is set
+        if ($flow !== NULL) {
+            // NULL capacity = infinite capacity
+            $label = $flow . '/' . ($capacity === NULL ? '∞' : $capacity);
+            // capacity set, but not flow (assume zero flow)
+        } elseif ($capacity !== NULL) {
+            $label = '0/' . $capacity;
+        }
+
+        $weight = $edge->getWeight();
+        // weight is set
+        if ($weight !== NULL) {
+            if ($label === NULL) {
+                $label = $weight;
+            } else {
+                $label .= '/' . $weight;
+            }
+        }
+
+        if ($label !== NULL) {
+            if (isset($layout['label'])) {
+                $layout['label'] .= ' ' . $label;
+            } else {
+                $layout['label'] = $label;
+            }
+        }
+        return $layout;
     }
 }
