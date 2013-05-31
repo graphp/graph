@@ -429,7 +429,7 @@ class GraphViz
                 $balance = '+' . $balance;
             }
             if(!isset($layout['label'])){
-                $layout['label'] = $vid;
+                $layout['label'] = $vertex->getId();
             }
             $layout['label'] .= ' (' . $balance . ')';
         }
