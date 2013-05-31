@@ -339,14 +339,14 @@ class GraphViz
 
             $script .= $this->formatIndent . $this->escapeId($currentStartVertex->getId()) . $edgeop . $this->escapeId($currentTargetVertex->getId());
 
-            $layout = $currentEdge->getLayout();
+            $layout = $this->getLayoutEdge($currentEdge);
 
             // this edge also points to the opposite direction => this is actually an undirected edge
             if ($directed && $currentEdge->isConnection($currentTargetVertex, $currentStartVertex)) {
                 $layout['dir'] = 'none';
             }
             if ($layout) {
-                $script .= ' ' . $this->escapeAttributes($attrs);
+                $script .= ' ' . $this->escapeAttributes($layout);
             }
 
             $script .= self::EOL;
