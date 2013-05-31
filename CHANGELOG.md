@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * BC break: `Graph::createVertices()` now returns an array of vertices instead of the chainable `Graph` (#19)
 * Feature: `Graph::createVertices()` now also accepts an array of vertex IDs (#19)
+* Fix: Various issues with `Vertex`/`Edge` layout attributes (#32)
 
 ## 0.5.0 (2013-05-07)
 
