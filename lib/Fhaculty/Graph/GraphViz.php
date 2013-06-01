@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Algorithm\Directed;
 use Fhaculty\Graph\Algorithm\Groups;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
@@ -269,13 +270,14 @@ class GraphViz
      * create graphviz script representing this graph
      *
      * @return string
-     * @uses Graph::isDirected()
+     * @uses Directed::isDirected()
      * @uses Graph::getVertices()
      * @uses Graph::getEdges()
      */
     public function createScript()
     {
-        $directed = $this->graph->isDirected();
+        $alg = new Directed($this->graph);
+        $directed = $alg->isDirected();
 
         $script = ($directed ? 'di':'') . 'graph G {' . self::EOL;
 
