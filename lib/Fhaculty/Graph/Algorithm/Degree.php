@@ -7,10 +7,29 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
+/**
+ * Basic algorithms for working with the degrees of Graphs.
+ * 
+ * The degree (or valency) of a Vertex of a Graph is the number of Edges
+ * incident to the Vertex, with Loops counted twice.
+ * 
+ * @link http://en.wikipedia.org/wiki/Degree_%28graph_theory%29
+ * @link http://en.wikipedia.org/wiki/Regular_graph
+ */
 class Degree extends Base
 {
+    /**
+     * Graph to operate on
+     * 
+     * @var Graph
+     */
     private $graph;
 
+    /**
+     * instanciate new degree algorithm
+     * 
+     * @param Graph $graph
+     */
     public function __construct(Graph $graph)
     {
         $this->graph = $graph;
@@ -23,6 +42,7 @@ class Degree extends Base
      * @throws UnderflowException       if graph is empty
      * @throws UnexpectedValueException if graph is not regular (i.e. vertex degrees are not equal)
      * @uses Vertex::getDegree()
+     * @see self::isRegular()
      */
     public function getDegree()
     {
