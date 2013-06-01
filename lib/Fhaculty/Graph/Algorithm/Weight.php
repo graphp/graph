@@ -67,6 +67,8 @@ class Weight extends Base
      * minimum weight is often needed because some algorithms do not support
      * negative weights or edges with zero weight.
      *
+     * edges with NO (null) weight will NOT be considered for the minimum weight.
+     *
      * @return float|NULL minimum edge weight or NULL if graph is not weighted or empty
      */
     public function getWeightMin()
@@ -74,7 +76,7 @@ class Weight extends Base
         $min = NULL;
         foreach ($this->set->getEdges() as $edge) {
             $weight = $edge->getWeight();
-            if ($min === NULL || $weight < $min) {
+            if ($weight !== null && ($min === NULL || $weight < $min)) {
                 $min = $weight;
             }
         }
