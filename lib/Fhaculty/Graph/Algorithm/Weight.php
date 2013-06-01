@@ -3,13 +3,34 @@
 namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Set;
-
 use Fhaculty\Graph\Algorithm\Base;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Walk;
 
+/**
+ * Basic algorithms for working with the (total) weight of a Graph/Walk
+ *
+ * A weighted graph associates a label (weight) with every edge in the graph.
+ * Sometimes the word cost is used instead of weight. The term network is a
+ * synonym for a weighted graph.
+ *
+ * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Weighted_graphs_and_networks
+ */
 class Weight extends Base
 {
+    /**
+     * Graph/Walk to operate on
+     *
+     * @var Set
+     */
     private $set;
 
+    /**
+     * instanciate new weight algorithm
+     *
+     * @param Set|Graph|Walk $graphOrWalk either the Graph or Walk to operate on (or the common base class Set)
+     */
     public function __construct(Set $graphOrWalk)
     {
         $this->set = $graphOrWalk;
@@ -70,6 +91,7 @@ class Weight extends Base
      * edges with NO (null) weight will NOT be considered for the minimum weight.
      *
      * @return float|NULL minimum edge weight or NULL if graph is not weighted or empty
+     * @uses Edge::getWeight()
      */
     public function getWeightMin()
     {
