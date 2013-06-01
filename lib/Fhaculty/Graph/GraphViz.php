@@ -160,9 +160,45 @@ class GraphViz
                 }
             }
         }
+        return $this;
     }
 
-    public function setLayout($where, $layout, $value = NULL)
+    /**
+     * set the global default layout for all edges
+     *
+     * @param array $layout
+     * @return self $this (chainable)
+     */
+    public function setLayoutEdgeDefault(array $layout)
+    {
+        return $this->mergeLayout($this->layoutEdge, $layout);
+    }
+
+    /**
+     * set the global default layout for all vertices
+     *
+     * @param array $layout
+     * @return self $this (chainable)
+     */
+    public function setLayoutVertexDefault(array $layout)
+    {
+        return $this->mergeLayout($this->layoutVertex, $layout);
+    }
+
+    /**
+     * set the global default layout for GRAPH, EDGE or VERTEX
+     *
+     * By defining the layout at the graph level we can set in a way
+     * default values for all vertices and edges. It is also possible to set
+     * values for the graph itself. Ie background color, layout engine, etc.
+     *
+     * @param type $where
+     * @param type $layout
+     * @param type $value
+     * @return \Fhaculty\Graph\GraphViz
+     * @throws InvalidArgumentException
+     */
+    public function setLayoutBy($where, $layout, $value = NULL)
     {
         if (!is_array($where)) {
             $where = array($where);
@@ -171,12 +207,12 @@ class GraphViz
             $layout = array($layout => $value);
         }
         foreach ($where as $where) {
-            if ($where === self::LAYOUT_GRAPH) {
-                $this->graph->setLayout($layout, $value);
+            if ($where instanceof LayoutableInterface) {
+                $where->setLayout($layout);
             } elseif ($where === self::LAYOUT_EDGE) {
-                $this->mergeLayout($this->layoutEdge, $layout);
+                $this->setLayoutEdgeDefault($layout);
             } elseif ($where === self::LAYOUT_VERTEX) {
-                $this->mergeLayout($this->layoutVertex, $layout);
+                $this->setLayoutVertexDefault($layout);
             } else {
                 throw new InvalidArgumentException('Invalid layout identifier');
             }
