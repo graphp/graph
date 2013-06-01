@@ -1,0 +1,26 @@
+// Graph has a name (tooltip in SVG output)
+graph Faculty {
+  // cluster_ is a special prefix making it a box with a label
+  subgraph cluster_graph {
+    label = "<<package>>\nGraph"
+
+    graph_php [
+      label = "Graph.php"
+    ]
+
+    // Note the absence of cluster_ making their groupness hard to tell
+    subgraph algorithm {
+      label = "<<package>>\nAlgorithm"
+        subgraph cluster_maxflow {
+          label = "<<package>>\nMaxFlow"
+          EdmondsKarp
+      }
+      AlgorithmX -- AlgorithmY
+    }
+    subgraph cluster_edge {
+      label = "<<package>>\nEdge"
+      P
+      Q
+    }
+  }
+}
