@@ -88,11 +88,6 @@ class GraphTest extends TestCase
         $this->assertEquals(0, $this->graph->getBalance());
     }
 
-    public function testGetWeightMin()
-    {
-        $this->assertEquals(NULL, $this->graph->getWeightMin());
-    }
-
     /**
      * check to make sure we can actually create vertices with automatic IDs
      */
