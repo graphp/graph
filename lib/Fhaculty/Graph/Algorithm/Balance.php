@@ -6,10 +6,29 @@ use Fhaculty\Graph\Algorithm\Base;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
+/**
+ * Basic algorithms for working with the balance of flow graphs
+ *
+ * A flow network (also known as a transportation network) is a directed graph
+ * where each edge has a capacity and each edge receives a flow.
+ *
+ * @link http://en.wikipedia.org/wiki/Flow_network
+ * @see Algorithm\Degree if you're looking for balanced degrees instead of balanced flows
+ */
 class Balance extends Base
 {
+    /**
+     * Graph to operate on
+     *
+     * @var Graph
+     */
     private $graph;
 
+    /**
+     * instanciate new Balance algorithm
+     *
+     * @param Graph $graph graph to operate on
+     */
     public function __construct(Graph $graph)
     {
         $this->graph = $graph;
@@ -38,7 +57,7 @@ class Balance extends Base
      * whether the GRAPH is balanced (see Graph::isBalanced() instead)
      *
      * @return boolean
-     * @see Graph::isBalanced() if you merely want to check indegree=outdegree
+     * @see Algorithm\Degree::isBalanced() if you merely want to check indegree=outdegree
      * @uses Vertex::getFlow()
      * @uses Vertex::getBalance()
      */
