@@ -2,10 +2,9 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Algorithm\Weight as AlgorithmWeight;
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Edge\Base as Edge;
-
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 use Fhaculty\Graph\Graph;
@@ -79,12 +78,13 @@ abstract class Base extends AlgorithmBase
      * calculate total weight along minimum-cost flow
      *
      * @return float
-     * @uses AlgorithmMCF::createGraph()
-     * @uses Graph::getWeightFlow()
+     * @uses self::createGraph()
+     * @uses AlgorithmWeight::getWeightFlow()
      */
     public function getWeightFlow()
     {
-        return $this->createGraph()->getWeightFlow();
+        $alg = new AlgorithmWeight($this->createGraph());
+        return $alg->getWeightFlow();
     }
 
     /**

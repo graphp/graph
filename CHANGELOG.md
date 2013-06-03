@@ -7,6 +7,7 @@ you spot any mistakes.
 ## 0.6.0 (2013-xx-xx)
 
 * BC break: `Graph::createVertices()` now returns an array of vertices instead of the chainable `Graph` (#19)
+* BC break: Move `Set::getWeight()`, `Set::getWeightFlow()`, `Set::getWeightMin()` and `Set::isWeighted()` to new `Algorithm\Weight` (#33)
 * Feature: `Graph::createVertices()` now also accepts an array of vertex IDs (#19)
 * Fix: Various issues with `Vertex`/`Edge` layout attributes (#32)
 
