@@ -319,77 +319,6 @@ class Graph extends Set
     }
 
     /**
-     * get degree for k-regular-graph (only if each vertex has the same degree)
-     *
-     * @return int
-     * @throws UnderflowException       if graph is empty
-     * @throws UnexpectedValueException if graph is not regular (i.e. vertex degrees are not equal)
-     * @uses Vertex::getDegree()
-     */
-    public function getDegree()
-    {
-        // get initial degree of any start vertex to compare others to
-        $degree = $this->getVertexFirst()->getDegree();
-
-        foreach ($this->vertices as $vertex) {
-            $i = $vertex->getDegree();
-
-            if ($i !== $degree) {
-                throw new UnexpectedValueException('Graph is not k-regular (vertex degrees differ)');
-            }
-        }
-
-        return $degree;
-    }
-
-    /**
-     * get minimum degree of vertices
-     *
-     * @return int
-     * @throws Exception if graph is empty or directed
-     * @uses Vertex::getFirst()
-     * @uses Vertex::getDegree()
-     */
-    public function getDegreeMin()
-    {
-        return Vertex::getFirst($this->vertices, Vertex::ORDER_DEGREE)->getDegree();
-    }
-
-    /**
-     * get maximum degree of vertices
-     *
-     * @return int
-     * @throws Exception if graph is empty or directed
-     * @uses Vertex::getFirst()
-     * @uses Vertex::getDegree()
-     */
-    public function getDegreeMax()
-    {
-        return Vertex::getFirst($this->vertices, Vertex::ORDER_DEGREE, true)->getDegree();
-    }
-
-    /**
-     * checks whether this graph is regular, i.e. each vertex has the same indegree/outdegree
-     *
-     * @return boolean
-     * @uses Graph::getDegree()
-     */
-    public function isRegular()
-    {
-        // an empty graph is considered regular
-        if (!$this->vertices) {
-            return true;
-        }
-        try {
-            $this->getDegree();
-
-            return true;
-        } catch (UnexpectedValueException $ignore) { }
-
-        return false;
-    }
-
-    /**
      * check whether graph is connected (i.e. there's a connection between all vertices)
      *
      * @return boolean
@@ -506,24 +435,6 @@ class Graph extends Set
                 if ($other !== $vertex && !$vertex->hasEdgeTo($other)) {
                     return false;
                 }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * checks whether the indegree of every vertex equals its outdegree
-     *
-     * @return boolean
-     * @uses Vertex::getDegreeIn()
-     * @uses Vertex::getDegreeOut()
-     */
-    public function isBalanced()
-    {
-        foreach ($this->vertices as $vertex) {
-            if ($vertex->getDegreeIn() !== $vertex->getDegreeOut()) {
-                return false;
             }
         }
 
