@@ -319,34 +319,6 @@ class Graph extends Set
     }
 
     /**
-     * check whether graph is connected (i.e. there's a connection between all vertices)
-     *
-     * @return boolean
-     * @see Graph::getNumberOfComponents()
-     * @uses AlgorithmConnectedComponents::isSingle()
-     */
-    public function isConnected()
-    {
-        $alg = new AlgorithmConnectedComponents($this);
-
-        return $alg->isSingle();
-    }
-
-    /**
-     * check whether this graph has an eulerian cycle
-     *
-     * @return boolean
-     * @uses AlgorithmEulerian::hasCycle()
-     * @link http://en.wikipedia.org/wiki/Eulerian_path
-     */
-    public function hasEulerianCycle()
-    {
-        $alg = new AlgorithmEulerian($this);
-
-        return $alg->hasCycle();
-    }
-
-    /**
      * checks whether this graph is trivial (one vertex and no edges)
      *
      * @return boolean
@@ -539,37 +511,6 @@ class Graph extends Set
         }
 
         return $residualEdgeArray[0];
-    }
-
-    /**
-     * @return int number of components of this graph
-     * @uses AlgorithmConnectedComponents::getNumberOfComponents()
-     */
-    public function getNumberOfComponents()
-    {
-        $alg = new AlgorithmConnectedComponents($this);
-
-        return $alg->getNumberOfComponents();
-    }
-
-    /**
-     * count total number of different groups assigned to vertices
-     *
-     * @return int
-     * @uses AlgorithmGroups::getNumberOfGroups()
-     */
-    public function getNumberOfGroups()
-    {
-        $alg = new AlgorithmGroups($this);
-
-        return $alg->getNumberOfGroups();
-    }
-
-    public function isBipartit()
-    {
-        $alg = new AlgorithmBipartit($this);
-
-        return $alg->isBipartit();
     }
 
     /**
