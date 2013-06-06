@@ -1,5 +1,7 @@
 <?php
 
+use Fhaculty\Graph\Algorithm\Directed;
+
 use Fhaculty\Graph\Graph;
 
 use Fhaculty\Graph\Loader\CompleteGraph;
@@ -38,7 +40,10 @@ class CompleteGraphTest extends TestCase
 
         $this->assertEquals($n, $graph->getNumberOfVertices());
         $this->assertEquals($n*($n-1), $graph->getNumberOfEdges()); // n*(n-1) for directed graphs
-        $this->assertTrue($graph->isDirected());
+
+        $alg = new Directed($graph);
+        $this->assertTrue($alg->isDirected());
+
         $this->assertTrue($graph->isComplete());
     }
 }
