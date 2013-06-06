@@ -3,7 +3,6 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 
 /**
  *
@@ -63,22 +62,6 @@ abstract class Set
     public function getNumberOfEdges()
     {
         return count($this->edges);
-    }
-
-    /**
-     * checks whether the graph has any directed edges (aka digraph)
-     *
-     * @return boolean
-     */
-    public function isDirected()
-    {
-        foreach ($this->edges as $edge) {
-            if ($edge instanceof EdgeDirected) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

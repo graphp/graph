@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph\Algorithm\MaximumMatching;
 
+use Fhaculty\Graph\Algorithm\Directed;
+
 use Fhaculty\Graph\Exception\LogicException;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
@@ -14,7 +16,8 @@ class Flow extends Base
 {
     public function getEdges()
     {
-        if ($this->graph->isDirected()) {
+        $alg = new Directed($this->graph);
+        if ($alg->isDirected()) {
             throw new UnexpectedValueException('Input graph contains directed edges');
         }
 
