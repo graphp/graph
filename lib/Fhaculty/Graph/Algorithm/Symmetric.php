@@ -6,14 +6,28 @@ use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
+/**
+ * Basic algorithms for working with symmetric digraphs
+ * 
+ * A directed graph is called symmetric if, for every arc that belongs to it,
+ * the corresponding reversed arc (antiparallel directed edge) also belongs to it.
+ * 
+ * @link http://en.wikipedia.org/wiki/Directed_graph#Classes_of_digraphs
+ */
 class Symmetric extends Base
 {
     /**
-     *
+     * Graph to operate on
+     * 
      * @var Graph
      */
     private $graph;
 
+    /**
+     * instantiate symmetric algorithm
+     * 
+     * @param Graph $graph Graph
+     */
     public function __construct(Graph $graph)
     {
         $this->graph = $graph;
