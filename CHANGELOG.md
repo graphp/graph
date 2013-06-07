@@ -17,6 +17,7 @@ you spot any mistakes.
   * `Graph::getNumberOfComponents()` (=> `Algorithm\ConnectedComponents::getNumberOfComponents()`)
   * `Graph::getNumberOfGroups()` (=> `Algorithm\Groups::getNumberOfGroups()`)
   * `Graph::isBipartit()` (=> `AlgorithmBipartit::isBipartit()`)
+* BC break: Move `Loader\UmlClassDiagram` to separate [fhaculty/graph-uml](https://github.com/fhaculty/graph-uml) repo (#38)
 * Feature: `Graph::createVertices()` now also accepts an array of vertex IDs (#19)
 * Fix: Various issues with `Vertex`/`Edge` layout attributes (#32)
 
