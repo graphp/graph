@@ -11,6 +11,7 @@ you spot any mistakes.
 * BC break: Move `Graph::getDegree()`, `Graph::getDegreeMin()`, `Graph::getDegreeMax()`, `Graph::isRegular()` and `Graph::isBalanced()` to new `Algorithm\Degree` (#29)
 * BC break: Move `Graph::getBalance()` and `Graph::isBalancedFlow()` to new `Algorithm\Balance` (#30)
 * BC break: Move `Set::isDirected()` to new `Algorithm\Directed` (#34)
+* BC break: Move `Graph::isSymmetric()` to new `Algorithm\Symmetric` (#41)
 * BC break: Remove unneeded algorithm alias definitions to reduce complexity, improve testability and avoid tight coupling (#31)
   * `Graph::isConnected()` (=> `Algorithm\ConnectedComponents::isSingle()`)
   * `Graph::hasEulerianCycle()` (=> `Algorithm\Eulerian::hasCycle()`)
