@@ -1,5 +1,7 @@
 <?php
 
+use Fhaculty\Graph\Algorithm\Complete;
+
 use Fhaculty\Graph\Algorithm\Directed;
 
 use Fhaculty\Graph\Graph;
@@ -44,6 +46,7 @@ class CompleteGraphTest extends TestCase
         $alg = new Directed($graph);
         $this->assertTrue($alg->isDirected());
 
-        $this->assertTrue($graph->isComplete());
+        $alg = new Complete($graph);
+        $this->assertTrue($alg->isComplete());
     }
 }
