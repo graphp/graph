@@ -26,9 +26,7 @@ class Undirected extends Base
      *
      * @param Vertex $a
      * @param Vertex $b
-     * @deprecated obsoleted by UndirectedId
      * @see Vertex::createEdge() instead
-     * @see UndirectedId for current replacement implementation
      */
     public function __construct(Vertex $a, Vertex $b)
     {
