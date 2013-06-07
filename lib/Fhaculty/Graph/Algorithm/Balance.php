@@ -2,7 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
-use Fhaculty\Graph\Algorithm\Base;
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
@@ -15,25 +15,8 @@ use Fhaculty\Graph\Vertex;
  * @link http://en.wikipedia.org/wiki/Flow_network
  * @see Algorithm\Degree if you're looking for balanced degrees instead of balanced flows
  */
-class Balance extends Base
+class Balance extends BaseGraph
 {
-    /**
-     * Graph to operate on
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    /**
-     * instanciate new Balance algorithm
-     *
-     * @param Graph $graph graph to operate on
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     public function getBalance()
     {
         $balance = 0;

@@ -2,21 +2,11 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 
-class Eulerian extends Base
+class Eulerian extends BaseGraph
 {
-    /**
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * check whether this graph has an eulerian cycle
      *

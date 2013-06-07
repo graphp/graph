@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Graph;
@@ -12,15 +13,8 @@ use Fhaculty\Graph\Graph;
  * @author clue
  * @link http://en.wikipedia.org/wiki/Topological_sorting
  */
-class TopologicalSort extends Base
+class TopologicalSort extends BaseGraph
 {
-    private $graph;
-
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * run algorithm and return an ordered/sorted list of vertices
      *

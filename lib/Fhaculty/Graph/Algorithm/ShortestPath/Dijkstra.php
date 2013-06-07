@@ -16,21 +16,21 @@ class Dijkstra extends Base
     {
         $totalCostOfCheapestPathTo  = Array();
         // start node distance
-        $totalCostOfCheapestPathTo[$this->startVertex->getId()] = 0;
+        $totalCostOfCheapestPathTo[$this->vertex->getId()] = 0;
 
         // just to get the cheapest vertex in the correct order
         $cheapestVertex = new SplPriorityQueue();
-        $cheapestVertex->insert($this->startVertex, 0);
+        $cheapestVertex->insert($this->vertex, 0);
 
         // predecessor
         $predecesVertexOfCheapestPathTo  = Array();
-        $predecesVertexOfCheapestPathTo[$this->startVertex->getId()] = $this->startVertex;
+        $predecesVertexOfCheapestPathTo[$this->vertex->getId()] = $this->vertex;
 
         // mark vertices when their cheapest path has been found
         $usedVertices  = Array();
 
         // Repeat until all vertices have been marked
-        $totalCountOfVertices = $this->startVertex->getGraph()->getNumberOfVertices();
+        $totalCountOfVertices = $this->vertex->getGraph()->getNumberOfVertices();
         for ($i = 0; $i < $totalCountOfVertices; ++$i) {
             $currentVertex = NULL;
             $currentVertexId = NULL;

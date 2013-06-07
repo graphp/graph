@@ -2,24 +2,13 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
-class Bipartit extends Base
+class Bipartit extends BaseGraph
 {
-    /**
-     * input graph to operate on
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * check whether this graph is bipartit
      *

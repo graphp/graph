@@ -56,10 +56,10 @@ class DepthFirst extends Base
      */
     public function getVertices()
     {
-        return $this->iterativeDepthFirstSearch($this->startVertex);
+        return $this->iterativeDepthFirstSearch($this->vertex);
 
         $visitedVertices = array();
-        $this->recursiveDepthFirstSearch($this->startVertex, $visitedVertices);
+        $this->recursiveDepthFirstSearch($this->vertex, $visitedVertices);
 
         return $visitedVertices;
     }

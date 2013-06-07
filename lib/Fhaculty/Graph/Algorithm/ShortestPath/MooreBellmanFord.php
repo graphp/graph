@@ -56,14 +56,14 @@ class MooreBellmanFord extends Base
     public function getEdges()
     {
         // start node distance
-        $totalCostOfCheapestPathTo  = array($this->startVertex->getId() => 0);
+        $totalCostOfCheapestPathTo  = array($this->vertex->getId() => 0);
 
         // predecessor
-        $predecessorVertexOfCheapestPathTo  = array($this->startVertex->getId() => $this->startVertex);
+        $predecessorVertexOfCheapestPathTo  = array($this->vertex->getId() => $this->vertex);
 
         // repeat (n-1) times
-        $numSteps = $this->startVertex->getGraph()->getNumberOfVertices() - 1;
-        $edges = $this->startVertex->getGraph()->getEdges();
+        $numSteps = $this->vertex->getGraph()->getNumberOfVertices() - 1;
+        $edges = $this->vertex->getGraph()->getEdges();
         $changed = true;
         // repeat n-1 times
         for ($i = 0; $i < $numSteps && $changed; ++$i) {

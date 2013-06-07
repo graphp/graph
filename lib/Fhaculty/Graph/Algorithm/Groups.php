@@ -2,27 +2,11 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 
-class Groups extends Base
+class Groups extends BaseGraph
 {
-    /**
-     * graph to operate on
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    /**
-     * instanciate algorithm on given graph
-     *
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * count total number of different groups assigned to vertices
      *

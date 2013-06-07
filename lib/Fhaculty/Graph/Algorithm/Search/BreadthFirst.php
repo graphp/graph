@@ -13,9 +13,9 @@ class BreadthFirst extends Base
      */
     public function getVertices()
     {
-        $queue = array($this->startVertex);
+        $queue = array($this->vertex);
         // to not add vertices twice in array visited
-        $mark = array($this->startVertex->getId() => true);
+        $mark = array($this->vertex->getId() => true);
         // visited vertices
         $visited = array();
 

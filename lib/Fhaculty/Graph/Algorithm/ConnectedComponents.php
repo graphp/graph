@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
@@ -9,23 +10,8 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
-class ConnectedComponents extends Base
+class ConnectedComponents extends BaseGraph
 {
-    /**
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    /**
-     *
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * create subgraph with all vertices connected to given vertex (i.e. the connected component of ths given vertex)
      *

@@ -2,33 +2,15 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Algorithm\Weight as AlgorithmWeight;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 use Fhaculty\Graph\Graph;
 
-abstract class Base extends AlgorithmBase
+abstract class Base extends BaseGraph
 {
-    /**
-     * Origianl graph
-     *
-     * @var Graph
-     */
-    protected $graph;
-
-    /**
-     * The given graph where the algorithm should operate on
-     *
-     * @param  Graph     $graph
-     * @throws Exception if the given graph is not balanced
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * check if balance is okay and throw exception otherwise
      *

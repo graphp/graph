@@ -2,11 +2,9 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
-use Fhaculty\Graph\Set;
-use Fhaculty\Graph\Algorithm\Base;
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Walk;
 
 /**
  * Basic algorithms for working with the (total) weight of a Graph/Walk
@@ -17,25 +15,8 @@ use Fhaculty\Graph\Walk;
  *
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Weighted_graphs_and_networks
  */
-class Weight extends Base
+class Weight extends BaseSet
 {
-    /**
-     * Graph/Walk to operate on
-     *
-     * @var Set
-     */
-    private $set;
-
-    /**
-     * instanciate new weight algorithm
-     *
-     * @param Set|Graph|Walk $graphOrWalk either the Graph or Walk to operate on (or the common base class Set)
-     */
-    public function __construct(Set $graphOrWalk)
-    {
-        $this->set = $graphOrWalk;
-    }
-
     /**
      * checks whether this graph has any weighted edges
      *

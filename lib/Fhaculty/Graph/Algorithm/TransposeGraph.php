@@ -2,21 +2,15 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 
-class TransposeGraph extends Base
+class TransposeGraph extends BaseGraph
 {
-    private $graph;
-
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * create transpose graph
      *
