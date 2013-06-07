@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Algorithm\BaseVertex;
 use Fhaculty\Graph\Walk;
 
 use Fhaculty\Graph\Exception\UnderflowException;
@@ -10,22 +11,9 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
 
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
-abstract class Base extends AlgorithmBase
+abstract class Base extends BaseVertex
 {
-    /**
-     * start vertex to build shortest paths to
-     *
-     * @var Vertex
-     */
-    protected $startVertex;
-
-    public function __construct(Vertex $startVertex)
-    {
-        $this->startVertex = $startVertex;
-    }
-
     /**
      * get walk (path) from start vertex to given end vertex
      *
@@ -37,7 +25,7 @@ abstract class Base extends AlgorithmBase
      */
     public function getWalkTo(Vertex $endVertex)
     {
-        return Walk::factoryFromEdges($this->getEdgesTo($endVertex), $this->startVertex);
+        return Walk::factoryFromEdges($this->getEdgesTo($endVertex), $this->vertex);
     }
 
     /**
@@ -67,7 +55,7 @@ abstract class Base extends AlgorithmBase
     {
         $currentVertex = $endVertex;
         $path = array();
-        while ($currentVertex !== $this->startVertex) {
+        while ($currentVertex !== $this->vertex) {
             $pre = NULL;
             // check all edges to search for edge that points TO current vertex
             foreach ($edges as $edge) {
@@ -115,7 +103,7 @@ abstract class Base extends AlgorithmBase
     {
         $vertices = array();
         $map = $this->getDistanceMap();
-        foreach ($this->startVertex->getGraph()->getVertices() as $vid => $vertex) {
+        foreach ($this->vertex->getGraph()->getVertices() as $vid => $vertex) {
             if (isset($map[$vid])) {
                 $vertices[$vid] = $vertex;
             }
@@ -147,7 +135,7 @@ abstract class Base extends AlgorithmBase
     {
         $edges = $this->getEdges();
         $ret = array();
-        foreach ($this->startVertex->getGraph()->getVertices() as $vid => $vertex) {
+        foreach ($this->vertex->getGraph()->getVertices() as $vid => $vertex) {
             try {
                 $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex, $edges));
             } catch (UnderflowException $ignore) {
@@ -180,7 +168,7 @@ abstract class Base extends AlgorithmBase
      */
     public function createGraph()
     {
-        return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());
+        return $this->vertex->getGraph()->createGraphCloneEdges($this->getEdges());
     }
 
     /**
@@ -194,9 +182,9 @@ abstract class Base extends AlgorithmBase
      */
     protected function getEdgesCheapestPredecesor(array $predecessor)
     {
-        $vertices = $this->startVertex->getGraph()->getVertices();
+        $vertices = $this->vertex->getGraph()->getVertices();
         // start vertex doesn't have a predecessor
-        unset($vertices[$this->startVertex->getId()]);
+        unset($vertices[$this->vertex->getId()]);
 
         $edges = array();
         foreach ($vertices as $vid => $vertex) {

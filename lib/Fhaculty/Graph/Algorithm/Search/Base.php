@@ -2,31 +2,20 @@
 
 namespace Fhaculty\Graph\Algorithm\Search;
 
-use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
+use Fhaculty\Graph\Algorithm\BaseVertex;
 
 use Fhaculty\Graph\Exception\DomainException;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Vertex;
 
-abstract class Base extends AlgorithmBase
+abstract class Base extends BaseVertex
 {
-    /**
-     *
-     * @var Vertex
-     */
-    protected $startVertex;
-
     const DIRECTION_FORWARD = 0;
     const DIRECTION_REVERSE = 1;
     const DIRECTION_BOTH = 2;
 
     private $direction = self::DIRECTION_FORWARD;
-
-    public function __construct(Vertex $startVertex)
-    {
-        $this->startVertex = $startVertex;
-    }
 
     /**
      * set direction in which to follow adjacent vertices

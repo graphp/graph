@@ -36,7 +36,7 @@ class BreadthFirst extends Base
         $vertexQueue = array();
         $edges = array();
 
-        $vertexCurrent = $this->startVertex;
+        $vertexCurrent = $this->vertex;
         $edgesCurrent = array();
 
         do {
@@ -62,7 +62,7 @@ class BreadthFirst extends Base
 
     public function getEdgesTo(Vertex $endVertex)
     {
-        if ($endVertex->getGraph() !== $this->startVertex->getGraph()) {
+        if ($endVertex->getGraph() !== $this->vertex->getGraph()) {
             throw new InvalidArgumentException('Given target vertex does not belong to the same graph instance');
         }
         $map = $this->getEdgesMap();
@@ -98,7 +98,7 @@ class BreadthFirst extends Base
      */
     public function hasVertex(Vertex $endVertex)
     {
-        if ($endVertex->getGraph() !== $this->startVertex->getGraph()) {
+        if ($endVertex->getGraph() !== $this->vertex->getGraph()) {
             throw new InvalidArgumentException('Given target vertex does not belong to the same graph instance');
         }
         $map = $this->getEdgesMap();
@@ -115,7 +115,7 @@ class BreadthFirst extends Base
     public function getVertices()
     {
         $ret = array();
-        $graph = $this->startVertex->getGraph();
+        $graph = $this->vertex->getGraph();
         foreach ($this->getEdgesMap() as $vid => $unusedEdges) {
             $ret[$vid] = $graph->getVertex($vid);
         }
