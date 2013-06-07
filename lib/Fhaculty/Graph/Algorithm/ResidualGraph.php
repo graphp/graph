@@ -2,22 +2,17 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 
-class ResidualGraph extends Base
+class ResidualGraph extends BaseGraph
 {
-    private $graph;
     private $keepNullCapacity = false;
     private $mergeParallelEdges = false;
-
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
 
     public function setKeepNullCapacity($toggle)
     {

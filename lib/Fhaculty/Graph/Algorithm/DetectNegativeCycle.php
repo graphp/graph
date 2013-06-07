@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Graph;
@@ -9,23 +10,8 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\NegativeCycleException;
 use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
 
-class DetectNegativeCycle extends Base
+class DetectNegativeCycle extends BaseGraph
 {
-    /**
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    /**
-     *
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * check if the input graph has any negative cycles
      *

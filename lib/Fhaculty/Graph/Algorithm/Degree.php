@@ -2,39 +2,22 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
-use Fhaculty\Graph\Algorithm\Base;
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 /**
  * Basic algorithms for working with the degrees of Graphs.
- * 
+ *
  * The degree (or valency) of a Vertex of a Graph is the number of Edges
  * incident to the Vertex, with Loops counted twice.
- * 
+ *
  * @link http://en.wikipedia.org/wiki/Degree_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Regular_graph
  */
-class Degree extends Base
+class Degree extends BaseGraph
 {
-    /**
-     * Graph to operate on
-     * 
-     * @var Graph
-     */
-    private $graph;
-
-    /**
-     * instanciate new degree algorithm
-     * 
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * get degree for k-regular-graph (only if each vertex has the same degree)
      *

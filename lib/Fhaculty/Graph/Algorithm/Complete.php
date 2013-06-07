@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 
 /**
@@ -13,25 +14,8 @@ use Fhaculty\Graph\Graph;
  * @link http://en.wikipedia.org/wiki/Complete_graph
  * @link http://mathworld.wolfram.com/CompleteGraph.html
  */
-class Complete extends Base
+class Complete extends BaseGraph
 {
-    /**
-     * Graph to operate on
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    /**
-     * instantiate new complete algorithm
-     *
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * checks whether this graph is complete (every vertex has an edge to any other vertex)
      *

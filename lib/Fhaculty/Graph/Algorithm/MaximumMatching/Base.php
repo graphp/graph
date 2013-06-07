@@ -2,30 +2,12 @@
 
 namespace Fhaculty\Graph\Algorithm\MaximumMatching;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
-abstract class Base extends AlgorithmBase
+abstract class Base extends BaseGraph
 {
-    /**
-     * Origianl graph
-     *
-     * @var Graph
-     */
-    protected $graph;
-
-    /**
-     * The given graph where the algorithm should operate on
-     *
-     * @param  Graph     $graph
-     * @throws Exception if the given graph is not balanced
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * Get the count of edges that are in the match
      *
