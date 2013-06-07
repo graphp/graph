@@ -366,30 +366,6 @@ class Graph extends Set
     }
 
     /**
-     * checks whether this graph is complete (every vertex has an edge to any other vertex)
-     *
-     * @return boolean
-     * @uses Vertex::hasEdgeTo()
-     */
-    public function isComplete()
-    {
-        // copy of array (separate iterator but same vertices)
-        $c = $this->vertices;
-        // from each vertex
-        foreach ($this->vertices as $vertex) {
-            // to each vertex
-            foreach ($c as $other) {
-                // missing edge => fail
-                if ($other !== $vertex && !$vertex->hasEdgeTo($other)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * adds a new Edge to the Graph (MUST NOT be called manually!)
      *
      * @param  Edge $edge instance of the new Edge
