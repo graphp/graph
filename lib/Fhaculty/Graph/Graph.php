@@ -329,30 +329,6 @@ class Graph extends Set
     }
 
     /**
-     * checks whether this graph is symmetric (for every edge a->b there's also an edge b->a)
-     *
-     * @return boolean
-     * @uses EdgeDirected::getVertexStart()
-     * @uses EdgeDirected::getVertedEnd()
-     * @uses Vertex::hasEdgeTo()
-     */
-    public function isSymmetric()
-    {
-        // check all edges
-        foreach ($this->edges as $edge) {
-            // only check directed edges (undirected ones are symmetric by definition)
-            if ($edge instanceof EdgeDirected) {
-                // check if end also has an edge to start
-                if (!$edge->getVertexEnd()->hasEdgeTo($edge->getVertexStart())) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * checks whether this graph has any parallel edges (aka multigraph)
      *
      * @return boolean
