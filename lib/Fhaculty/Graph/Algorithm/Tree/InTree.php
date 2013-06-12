@@ -4,7 +4,6 @@ namespace Fhaculty\Graph\Algorithm\Tree;
 
 use Fhaculty\Graph\Algorithm\Tree\BaseDirected as DirectedTree;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\Algorithm\Search\Base as Search;
 use Fhaculty\Graph\Vertex;
 
 /**
@@ -14,8 +13,6 @@ use Fhaculty\Graph\Vertex;
  */
 class InTree extends DirectedTree
 {
-    const DIRECTION_CHILDREN = Search::DIRECTION_REVERSE;
-
     public function getVerticesChildren(Vertex $vertex)
     {
         return $vertex->getVerticesEdgeFrom();

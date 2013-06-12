@@ -4,7 +4,6 @@ namespace Fhaculty\Graph\Algorithm\Tree;
 
 use Fhaculty\Graph\Algorithm\Tree\BaseDirected as DirectedTree;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
 use Fhaculty\Graph\Vertex;
 
 /**
@@ -15,8 +14,6 @@ use Fhaculty\Graph\Vertex;
  */
 class OutTree extends DirectedTree
 {
-    const DIRECTION_CHILDREN = StrictDepthFirst::DIRECTION_FORWARD;
-
     public function getVerticesChildren(Vertex $vertex)
     {
         return $vertex->getVerticesEdgeTo();

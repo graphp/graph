@@ -5,8 +5,6 @@ namespace Fhaculty\Graph\Algorithm\Tree;
 use Fhaculty\Graph\Algorithm\Tree\Base as Tree;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\Algorithm\Search\Base as Search;
-use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
 use Fhaculty\Graph\Vertex;
 
 /**
@@ -16,8 +14,6 @@ use Fhaculty\Graph\Vertex;
  */
 abstract class BaseDirected extends Tree
 {
-    const DIRECTION_CHILDREN = -1;
-
     /**
      * get root vertex for this in-tree
      *
@@ -29,12 +25,7 @@ abstract class BaseDirected extends Tree
     {
         $root = $this->getVertexPossibleRoot();
 
-        $search = new StrictDepthFirst($root);
-        $search->setDirection(static::DIRECTION_CHILDREN);
-
-        $num = $search->getNumberOfVertices();
-
-        if ($num !== $this->graph->getNumberOfVertices()) {
+        if (count($this->getVerticesSubtree($root)) !== $this->graph->getNumberOfVertices()) {
             throw new UnexpectedValueException();
         }
 
@@ -206,5 +197,52 @@ abstract class BaseDirected extends Tree
             }
         }
         return $max;
+    }
+
+    /**
+     * get all vertices that are in the subtree of the given $vertex (which IS included)
+     *
+     * root vertex will return the whole tree, leaf vertices will only return themselves
+     *
+     * @param Vertex $vertex
+     * @throws UnexpectedValueException if there are invalid edges (check isTree()!)
+     * @return Vertex[]
+     * @uses self::getVerticesChildren()
+     * @uses self::getVerticesSubtree()
+     */
+    public function getVerticesSubtree(Vertex $vertex)
+    {
+        $vertices = array($vertex->getId() => $vertex);
+        foreach ($this->getVerticesChildren($vertex) as $vid => $vertexChild) {
+            if (isset($vertices[$vid])) {
+                throw new UnexpectedValueException('Multiple links to child vertex found');
+            }
+            foreach ($this->getVerticesSubtree($vertexChild) as $vid => $vertexSub) {
+                if (isset($vertices[$vid])) {
+                    throw new UnexpectedValueException('Multiple links to vertex found');
+                }
+                $vertices[$vid] = $vertexSub;
+            }
+        }
+
+        return $vertices;
+    }
+
+    /**
+     * get all vertices below the given $vertex (which is NOT included)
+     *
+     * think of this as the recursive version of getVerticesChildren()
+     *
+     * @param Vertex $vertex
+     * @return Vertex[]
+     * @throws UnexpectedValueException if there are invalid edges (check isTree()!)
+     * @uses self::getVerticesSubtree()
+     */
+    public function getVerticesDescendant(Vertex $vertex)
+    {
+        $vertices = $this->getVerticesSubtree($vertex);
+        unset($vertices[$vertex->getId()]);
+
+        return $vertices;
     }
 }
