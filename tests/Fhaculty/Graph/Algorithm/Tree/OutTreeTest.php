@@ -35,4 +35,14 @@ class OutTreeTest extends BaseDirectedTest
 
         return $graph;
     }
+
+    protected function createGraphParallelEdge()
+    {
+        // v1 -> v2, v1 -> v2
+        $graph = new Graph();
+        $graph->createVertex('v1')->createEdgeTo($graph->createVertex('v2'));
+        $graph->getVertex('v1')->createEdgeTo($graph->getVertex('v2'));
+
+        return $graph;
+    }
 }
