@@ -18,18 +18,16 @@ abstract class BaseDirected extends Tree
      * get root vertex for this in-tree
      *
      * @return Vertex
-     * @throws UnderflowException if given graph is empty
-     * @throws UnexpectedValueException if given graph is not a tree
+     * @throws UnderflowException if given graph is empty or no possible root candidate was found (check isTree()!)
      */
     public function getVertexRoot()
     {
-        $root = $this->getVertexPossibleRoot();
-
-        if (count($this->getVerticesSubtree($root)) !== $this->graph->getNumberOfVertices()) {
-            throw new UnexpectedValueException();
+        foreach ($this->graph->getVertices() as $vertex) {
+            if ($this->isVertexPossibleRoot($vertex)) {
+                return $vertex;
+            }
         }
-
-        return $root;
+        throw new UnderflowException('No possible root found. Either empty graph or no Vertex with proper degree found.');
     }
 
     /**
@@ -41,15 +39,25 @@ abstract class BaseDirected extends Tree
      */
     public function isTree()
     {
-        if (!$this->graph->isEmpty()) {
-            try {
-                $this->getVertexRoot();
-            }
-            catch (UnexpectedValueException $e) {
-                return false;
-            }
+        if ($this->graph->isEmpty()) {
+            return true;
         }
-        return true;
+
+        try {
+            $root = $this->getVertexRoot();
+        }
+        catch (UnderflowException $e) {
+            return false;
+        }
+
+        try {
+            $num = count($this->getVerticesSubtree($root));
+        }
+        catch (UnexpectedValueException $e) {
+            return false;
+        }
+
+        return ($num === $this->graph->getNumberOfVertices());
     }
 
     /**
@@ -86,16 +94,6 @@ abstract class BaseDirected extends Tree
     protected function isVertexPossibleRoot(Vertex $vertex)
     {
         return (count($this->getVerticesParent($vertex)) === 0);
-    }
-
-    protected function getVertexPossibleRoot()
-    {
-        foreach ($this->graph->getVertices() as $vertex) {
-            if ($this->isVertexPossibleRoot($vertex)) {
-                return $vertex;
-            }
-        }
-        throw new UnderflowException('No possible root found. Either empty graph or no Vertex with proper degree found.');
     }
 
     /**
@@ -207,25 +205,37 @@ abstract class BaseDirected extends Tree
      * @param Vertex $vertex
      * @throws UnexpectedValueException if there are invalid edges (check isTree()!)
      * @return Vertex[]
-     * @uses self::getVerticesChildren()
+     * @uses self::getVerticesSubtreeRecursive()
      * @uses self::getVerticesSubtree()
      */
     public function getVerticesSubtree(Vertex $vertex)
     {
-        $vertices = array($vertex->getId() => $vertex);
-        foreach ($this->getVerticesChildren($vertex) as $vid => $vertexChild) {
-            if (isset($vertices[$vid])) {
-                throw new UnexpectedValueException('Multiple links to child vertex found');
-            }
-            foreach ($this->getVerticesSubtree($vertexChild) as $vid => $vertexSub) {
-                if (isset($vertices[$vid])) {
-                    throw new UnexpectedValueException('Multiple links to vertex found');
-                }
-                $vertices[$vid] = $vertexSub;
-            }
-        }
+        $vertices = array();
+        $this->getVerticesSubtreeRecursive($vertex, $vertices);
 
         return $vertices;
+    }
+
+    /**
+     * helper method to get recursively get subtree for given $vertex
+     *
+     * @param Vertex   $vertex
+     * @param Vertex[] $vertices
+     * @throws UnexpectedValueException if multiple links were found to the given edge (check isTree()!)
+     * @uses self::getVerticesChildren()
+     * @uses self::getVerticesSubtreeRecursive() to recurse into subtrees
+     */
+    private function getVerticesSubtreeRecursive(Vertex $vertex, &$vertices)
+    {
+        $vid = $vertex->getId();
+        if (isset($vertices[$vid])) {
+            throw new UnexpectedValueException('Multiple links found');
+        }
+        $vertices[$vid] = $vertex;
+
+        foreach ($this->getVerticesChildren($vertex) as $vertexChild) {
+            $this->getVerticesSubtreeRecursive($vertexChild, $vertices);
+        }
     }
 
     /**
