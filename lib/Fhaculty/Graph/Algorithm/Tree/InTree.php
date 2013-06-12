@@ -7,9 +7,18 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Vertex;
 
 /**
+ * Alternative InTree implementation where Edges "point towards" root Vertex
+ *
+ *         ROOT
+ *         ^  ^
+ *        /    \
+ *       A      B
+ *              ^
+ *               \
+ *                C
  *
  * @link http://en.wikipedia.org/wiki/Spaghetti_stack
- * @see OutTree
+ * @see DirectedTree for more information on directed, rooted trees
  */
 class InTree extends DirectedTree
 {

@@ -10,7 +10,34 @@ use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
 use Fhaculty\Graph\Vertex;
 
 /**
+ * Undirected tree implementation
  *
+ * An undirected tree is a connected Graph (single component) with no cycles.
+ * Every undirected Tree is an undirected Graph, but not every undirected Graph
+ * is an undirected Tree.
+ *
+ *    A
+ *   / \
+ *  B   C
+ *     / \
+ *    D   E
+ *
+ * Undirected trees do not have special root Vertices (like the above picture
+ * might suggest). The above tree Graph can also be equivalently be pictured
+ * like this:
+ *
+ *      C
+ *     /|\
+ *    / | \
+ *   A  D  E
+ *  /
+ * B
+ *
+ * If you're looking for a tree with a designated root Vertex, use directed,
+ * rooted trees (BaseDirected).
+ *
+ * @link http://en.wikipedia.org/wiki/Tree_%28graph_theory%29
+ * @see BaseDirected if you're looking for directed, rooted trees
  */
 class Undirected extends Tree
 {
@@ -41,6 +68,13 @@ class Undirected extends Tree
         return ($vertex->getDegree() === 1);
     }
 
+    /**
+     * checks if the given $vertex is an internal vertex (inner vertex with at least 2 edges)
+     *
+     * @param Vertex $vertex
+     * @return boolean
+     * @uses Vertex::getDegree()
+     */
     public function isVertexInternal(Vertex $vertex)
     {
         return ($vertex->getDegree() >= 2);

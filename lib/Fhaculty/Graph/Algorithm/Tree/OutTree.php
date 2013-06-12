@@ -7,10 +7,18 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Vertex;
 
 /**
- * A rooted tree with the "away from root" direction (a more narrow term is an "arborescence"), meaning:
+ * Usual OutTree implementation where Edges "point away" from root Vertex
+ *
+ *          ROOT
+ *          /  \
+ *    A <--/    \--> B
+ *                   \
+ *                    \--> C
+ *
+ * also known as arborescence
  *
  * @link http://en.wikipedia.org/wiki/Arborescence_%28graph_theory%29
- * @see InTree
+ * @see DirectedTree for more information on directed, rooted trees
  */
 class OutTree extends DirectedTree
 {

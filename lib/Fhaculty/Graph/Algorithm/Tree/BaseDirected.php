@@ -8,9 +8,45 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Vertex;
 
 /**
+ * Abstract algorithm base class for working with directed, rooted trees
  *
+ * Directed trees have an designated root Vertex, which is the uppermost Vertex.
+ * Every other Vertex is either a directed child of this root Vertex or an
+ * indirect descendant (recursive child).
+ *
+ * There are two common implementations of directed trees:
+ *
+ * - Usual OutTree implementation where Edges "point away" from root Vertex
+ *
+ *          ROOT
+ *          /  \
+ *    A <--/    \--> B
+ *                   \
+ *                    \--> C
+ *
+ * - Alternative InTree implementation where Edges "point towards" root Vertex
+ *
+ *         ROOT
+ *         ^  ^
+ *        /    \
+ *       A      B
+ *              ^
+ *               \
+ *                C
+ *
+ * It's your choice on how to direct the edges, but make sure they all point in
+ * the "same direction", or it will not be a valid tree anymore. However your
+ * decision may be, in the above example, ROOT is always the root Vertex,
+ * B is the parent of "C" and A, B are the children of ROOT.
+ *
+ * For performance reasons, except for `isTree()`, none of the below methods
+ * check if the given Graph is actually a valid tree. So make sure to verify
+ * `isTree()` returns `true` before relying on any of the methods.
+ *
+ * @link http://en.wikipedia.org/wiki/Arborescence_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Spaghetti_stack
- * @see OutTree
+ * @see OutTree usual implementation where Edges "point away" from root vertex
+ * @see InTree alternative implementation where Edges "point towards" root vertex
  */
 abstract class BaseDirected extends Tree
 {
@@ -19,6 +55,8 @@ abstract class BaseDirected extends Tree
      *
      * @return Vertex
      * @throws UnderflowException if given graph is empty or no possible root candidate was found (check isTree()!)
+     * @uses Graph::getVertices() to iterate over each Vertex
+     * @uses self::isVertexPossibleRoot() to check if any Vertex is a possible root candidate
      */
     public function getVertexRoot()
     {
@@ -34,8 +72,9 @@ abstract class BaseDirected extends Tree
      * checks if this is a tree
      *
      * @return boolean
-     * @uses Graph::isEmpty()
-     * @uses self::getVertexRoot() to actually check tree
+     * @uses Graph::isEmpty() to skip empty Graphs (an empty is Graph is a valid tree)
+     * @uses self::getVertexRoot() to get root Vertex to start search from
+     * @uses self::getVerticesSubtree() to count number of vertices connected to root
      */
     public function isTree()
     {
@@ -60,6 +99,7 @@ abstract class BaseDirected extends Tree
             return false;
         }
 
+        // check number of vertices reachable from root should match total number of vertices
         return ($num === $this->graph->getNumberOfVertices());
     }
 
@@ -70,6 +110,7 @@ abstract class BaseDirected extends Tree
      * @throws UnderflowException if vertex has no parent (is a root vertex)
      * @throws UnexpectedValueException if vertex has more than one possible parent (check isTree()!)
      * @return Vertex
+     * @uses self::getVerticesParents() to get array of parent vertices
      */
     public function getVertexParent(Vertex $vertex)
     {
@@ -93,8 +134,24 @@ abstract class BaseDirected extends Tree
      */
     abstract public function getVerticesChildren(Vertex $vertex);
 
+    /**
+     * internal helper to get all parents vertices
+     *
+     * a valid tree vertex only ever has a single parent, expect for the root,
+     * which has none.
+     *
+     * @param Vertex $vertex
+     * @return Vertex[]
+     */
     abstract protected function getVerticesParent(Vertex $vertex);
 
+    /**
+     * check if given vertex is a possible root (i.e. has no parent)
+     *
+     * @param Vertex $vertex
+     * @return boolean
+     * @uses self::getVerticesParent()
+     */
     protected function isVertexPossibleRoot(Vertex $vertex)
     {
         return (count($this->getVerticesParent($vertex)) === 0);
@@ -105,13 +162,22 @@ abstract class BaseDirected extends Tree
      *
      * @param Vertex $vertex
      * @return boolean
-     * @uses self::getVerticesChildren()
+     * @uses self::getVerticesChildren() to check given vertex has no children
      */
     public function isVertexLeaf(Vertex $vertex)
     {
         return (count($this->getVerticesChildren($vertex)) === 0);
     }
 
+    /**
+     * checks if the given $vertex is an internal vertex (has children and is not root)
+     *
+     * @param Vertex $vertex
+     * @return boolean
+     * @uses self::getVerticesParent() to check given vertex has a parent (is not root)
+     * @uses self::getVerticesChildren() to check given vertex has children (is not a leaf)
+     * @see \Fhaculty\Graph\Algorithm\Tree\Base::isVertexInternal() for more information
+     */
     public function isVertexInternal(Vertex $vertex)
     {
         return ($this->getVerticesParent($vertex) && $this->getVerticesChildren($vertex));
