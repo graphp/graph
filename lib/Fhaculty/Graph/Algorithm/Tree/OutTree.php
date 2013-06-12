@@ -16,11 +16,21 @@ class OutTree extends DirectedTree
 {
     public function getVerticesChildren(Vertex $vertex)
     {
-        return $vertex->getVerticesEdgeTo();
+        $vertices = $vertex->getVerticesEdgeTo();
+        if (count($vertices) !== $vertex->getDegreeOut()) {
+            throw new UnexpectedValueException();
+        }
+
+        return $vertices;
     }
 
     protected function getVerticesParent(Vertex $vertex)
     {
-        return $vertex->getVerticesEdgeFrom();
+        $vertices = $vertex->getVerticesEdgeFrom();
+        if (count($vertices) !== $vertex->getDegreeIn()) {
+            throw new UnexpectedValueException();
+        }
+
+        return $vertices;
     }
 }

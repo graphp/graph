@@ -49,6 +49,9 @@ abstract class BaseDirected extends Tree
         catch (UnderflowException $e) {
             return false;
         }
+        catch (UnexpectedValueException $e) {
+            return false;
+        }
 
         try {
             $num = count($this->getVerticesSubtree($root));
@@ -86,6 +89,7 @@ abstract class BaseDirected extends Tree
      *
      * @param Vertex $vertex
      * @return Vertex[]
+     * @throws UnexpectedValueException if the given $vertex contains invalid / parallel links (check isTree()!)
      */
     abstract public function getVerticesChildren(Vertex $vertex);
 
