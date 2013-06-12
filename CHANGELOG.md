@@ -20,6 +20,8 @@ you spot any mistakes.
   * `Graph::getNumberOfGroups()` (=> `Algorithm\Groups::getNumberOfGroups()`)
   * `Graph::isBipartit()` (=> `AlgorithmBipartit::isBipartit()`)
 * BC break: Move `Loader\UmlClassDiagram` to separate [fhaculty/graph-uml](https://github.com/fhaculty/graph-uml) repo (#38)
+* BC break: Move `Vertex::isLeaf()` to new `Algorithm\Tree\Undirected::isVertexLeaf()` (#44)
+* Feature: New `Algorithm\Tree` namespace with algorithms for undirected and directed, rooted trees (#44)
 * Feature: `Graph::createVertices()` now also accepts an array of vertex IDs (#19)
 * Fix: Various issues with `Vertex`/`Edge` layout attributes (#32)
 
