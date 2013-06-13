@@ -8,6 +8,8 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\Search\Base as Search;
 use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Edge\UndirectedId as UndirectedEdge;
 
 /**
  * Undirected tree implementation
@@ -41,6 +43,14 @@ use Fhaculty\Graph\Vertex;
  */
 class Undirected extends Tree
 {
+    /**
+     * checks if this is a tree
+     *
+     * @return boolean
+     * @uses Graph::isEmpty() to skip empty Graphs (an empty Graph is a valid tree)
+     * @uses Graph::getVertexFirst() to get get get random "root" Vertex to start search from
+     * @uses self::getVerticesSubtreeRecursive() to count number of vertices connected to root
+     */
     public function isTree()
     {
         if ($this->graph->isEmpty()) {
@@ -50,8 +60,13 @@ class Undirected extends Tree
         // every vertex can represent a root vertex, so just pick one
         $root = $this->graph->getVertexFirst();
 
-        // TODO: recurse $root to get sub-vertices
         $vertices = array();
+        try {
+            $this->getVerticesSubtreeRecursive($root, $vertices, null);
+        }
+        catch (UnexpectedValueException $e) {
+            return false;
+        }
 
         return (count($vertices) === $this->graph->getNumberOfVertices());
     }
@@ -78,5 +93,56 @@ class Undirected extends Tree
     public function isVertexInternal(Vertex $vertex)
     {
         return ($vertex->getDegree() >= 2);
+    }
+
+    /**
+     * get subtree for given Vertex and ignore path to "parent" ignoreVertex
+     *
+     * @param Vertex      $vertex
+     * @param Vertex[]    $vertices
+     * @param Vertex|null $ignore
+     * @throws UnexpectedValueException for cycles or directed edges (check isTree()!)
+     * @uses self::getVerticesNeighboor()
+     * @uses self::getVerticesSubtreeRecursive() to recurse into sub-subtrees
+     */
+    private function getVerticesSubtreeRecursive(Vertex $vertex, &$vertices, Vertex $ignore = null)
+    {
+        if (isset($vertices[$vertex->getId()])) {
+            // vertex already visited => must be a cycle
+            throw new UnexpectedValueException('Vertex already visited');
+        }
+        $vertices[$vertex->getId()] = $vertex;
+
+        foreach ($this->getVerticesNeighboor($vertex) as $vertexNeighboor) {
+            if ($vertexNeighboor === $ignore) {
+                // ignore source vertex only once
+                $ignore = null;
+                continue;
+            }
+            $this->getVerticesSubtreeRecursive($vertexNeighboor, $vertices, $vertex);
+        }
+    }
+
+    /**
+     * get neighboor vertices for given start vertex
+     *
+     * @param Vertex $vertex
+     * @throws UnexpectedValueException for directed edges
+     * @return Vertex[] (might include possible duplicates)
+     * @uses Vertex::getEdges()
+     * @uses Edge::getVertexToFrom()
+     * @see Vertex::getVerticesEdge()
+     */
+    private function getVerticesNeighboor(Vertex $vertex)
+    {
+        $vertices = array();
+        foreach ($vertex->getEdges() as $edge) {
+            /* @var Edge $edge */
+            if (!($edge instanceof UndirectedEdge)) {
+                throw new UnexpectedValueException('Directed edge encountered');
+            }
+            $vertices[] = $edge->getVertexToFrom($vertex);
+        }
+        return $vertices;
     }
 }
