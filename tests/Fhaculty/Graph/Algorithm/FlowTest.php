@@ -20,14 +20,16 @@ class FlowaTest extends TestCase
 
     public function testEdgeWithZeroFlowIsConsideredFlow()
     {
-        // 1 -- 2
+        // 1 -> 2
         $graph = new Graph();
-        $graph->createVertex(1)->createEdge($graph->createVertex(2))->setFlow(0);
+        $graph->createVertex(1)->createEdgeTo($graph->createVertex(2))->setFlow(0);
 
 
         $alg = new AlgorithmFlow($graph);
 
         $this->assertTrue($alg->hasFlow());
+        $this->assertEquals(0, $alg->getFlowVertex($graph->getVertex(1)));
+        $this->assertEquals(0, $alg->getFlowVertex($graph->getVertex(2)));
     }
 
     /**
@@ -43,6 +45,8 @@ class FlowaTest extends TestCase
         $alg = new AlgorithmFlow($graph);
 
         $this->assertFalse($alg->hasFlow());
+        $this->assertEquals(0, $alg->getFlowVertex($graph->getVertex(1)));
+        $this->assertEquals(0, $alg->getFlowVertex($graph->getVertex(2)));
 
         return $graph;
     }
@@ -60,6 +64,8 @@ class FlowaTest extends TestCase
         $alg = new AlgorithmFlow($graph);
 
         $this->assertTrue($alg->hasFlow());
+        $this->assertEquals(10, $alg->getFlowVertex($graph->getVertex(2)));
+        $this->assertEquals(-10, $alg->getFlowVertex($graph->getVertex(3)));
     }
 
     public function testGraphBalance()
@@ -73,5 +79,20 @@ class FlowaTest extends TestCase
 
         $this->assertEquals(90, $alg->getBalance());
         $this->assertFalse($alg->isBalancedFlow());
+    }
+
+    /**
+     * @expectedException UnexpectedValueException
+     */
+    public function testVertexWithUndirectedEdgeHasInvalidFlow()
+    {
+        // 1 -- 2
+        $graph = new Graph();
+        $graph->createVertex(1)->createEdge($graph->createVertex(2))->setFlow(10);
+
+
+        $alg = new AlgorithmFlow($graph);
+
+        $alg->getFlowVertex($graph->getVertex(1));
     }
 }
