@@ -14,6 +14,7 @@ you spot any mistakes.
 * BC break: Move `Graph::isSymmetric()` to new `Algorithm\Symmetric` (#41)
 * BC break: Move `Graph::isComplete()` to new `Algorithm\Complete` (#43)
 * BC break: Move `Set::hasFlow()` to new `Algorithm\Flow` (#47)
+* BC break: Move `Vertex::getFlow()` to `Algorithm\Flow::getFlowVertex()` (#47)
 * BC break: Remove unneeded algorithm alias definitions to reduce complexity, improve testability and avoid tight coupling (#31)
   * `Graph::isConnected()` (=> `Algorithm\ConnectedComponents::isSingle()`)
   * `Graph::hasEulerianCycle()` (=> `Algorithm\Eulerian::hasCycle()`)
