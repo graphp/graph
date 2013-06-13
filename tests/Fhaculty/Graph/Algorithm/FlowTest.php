@@ -12,6 +12,8 @@ class FlowaTest extends TestCase
         $alg = new AlgorithmFlow($graph);
 
         $this->assertFalse($alg->hasFlow());
+        $this->assertEquals(0, $alg->getBalance());
+        $this->assertTrue($alg->isBalancedFlow());
 
         return $graph;
     }
@@ -58,5 +60,18 @@ class FlowaTest extends TestCase
         $alg = new AlgorithmFlow($graph);
 
         $this->assertTrue($alg->hasFlow());
+    }
+
+    public function testGraphBalance()
+    {
+        // source(+100) -> sink(-10)
+        $graph = new Graph();
+        $graph->createVertex('source')->setBalance(100);
+        $graph->createVertex('sink')->setBalance(-10);
+
+        $alg = new AlgorithmFlow($graph);
+
+        $this->assertEquals(90, $alg->getBalance());
+        $this->assertFalse($alg->isBalancedFlow());
     }
 }
