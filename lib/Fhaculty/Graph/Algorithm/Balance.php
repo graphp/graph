@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm;
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Algorithm\Flow;
 
 /**
  * Basic algorithms for working with the balance of flow graphs
@@ -41,15 +42,17 @@ class Balance extends BaseGraph
      *
      * @return boolean
      * @see Algorithm\Degree::isBalanced() if you merely want to check indegree=outdegree
-     * @uses Vertex::getFlow()
+     * @uses Flow::getFlowVertex()
      * @uses Vertex::getBalance()
      */
     public function isBalancedFlow()
     {
+        $flow = new Flow($this->graph);
+
         // no need to check for each edge: flow <= capacity (setters already check that)
         // check for each vertex: outflow-inflow = balance
         foreach ($this->graph->getVertices() as $vertex) {
-            if ($vertex->getFlow() !== $vertex->getBalance()) {
+            if ($flow->getFlowVertex($vertex) !== $vertex->getBalance()) {
                 return false;
             }
         }
