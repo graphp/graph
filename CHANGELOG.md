@@ -20,6 +20,7 @@ you spot any mistakes.
   * `Graph::getNumberOfGroups()` (=> `Algorithm\Groups::getNumberOfGroups()`)
   * `Graph::isBipartit()` (=> `AlgorithmBipartit::isBipartit()`)
 * BC break: Move `Loader\UmlClassDiagram` to separate [fhaculty/graph-uml](https://github.com/fhaculty/graph-uml) repo (#38)
+* BC break: Remove needless `Algorithm\MinimumSpanningTree\PrimWithIf` (use `Algorithm\MinimumSpanningTree\Prim` instead) (#45)
 * Feature: `Graph::createVertices()` now also accepts an array of vertex IDs (#19)
 * Fix: Various issues with `Vertex`/`Edge` layout attributes (#32)
 
