@@ -29,6 +29,7 @@ use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
  * Tree\BaseDirected.
  *
  * @link http://en.wikipedia.org/wiki/Tree_%28graph_theory%29
+ * @link http://en.wikipedia.org/wiki/Tree_%28data_structure%29
  * @see Undirected for an implementation of these algorithms on (undirected) trees
  * @see BaseDirected for an abstract implementation of these algorithms on directed, rooted trees
  */

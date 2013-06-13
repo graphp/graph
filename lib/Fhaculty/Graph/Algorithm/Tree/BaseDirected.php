@@ -72,7 +72,7 @@ abstract class BaseDirected extends Tree
      * checks if this is a tree
      *
      * @return boolean
-     * @uses Graph::isEmpty() to skip empty Graphs (an empty is Graph is a valid tree)
+     * @uses Graph::isEmpty() to skip empty Graphs (an empty Graph is a valid tree)
      * @uses self::getVertexRoot() to get root Vertex to start search from
      * @uses self::getVerticesSubtree() to count number of vertices connected to root
      */
@@ -130,7 +130,7 @@ abstract class BaseDirected extends Tree
      *
      * @param Vertex $vertex
      * @return Vertex[]
-     * @throws UnexpectedValueException if the given $vertex contains invalid / parallel links (check isTree()!)
+     * @throws UnexpectedValueException if the given $vertex contains invalid / parallel edges (check isTree()!)
      */
     abstract public function getVerticesChildren(Vertex $vertex);
 
@@ -142,6 +142,7 @@ abstract class BaseDirected extends Tree
      *
      * @param Vertex $vertex
      * @return Vertex[]
+     * @throws UnexpectedValueException if the given $vertex contains invalid / parallel edges (check isTree()!)
      */
     abstract protected function getVerticesParent(Vertex $vertex);
 

@@ -102,7 +102,7 @@ class Undirected extends Tree
      * @param Vertex[]    $vertices
      * @param Vertex|null $ignore
      * @throws UnexpectedValueException for cycles or directed edges (check isTree()!)
-     * @uses self::getVerticesNeighboor()
+     * @uses self::getVerticesNeighbor()
      * @uses self::getVerticesSubtreeRecursive() to recurse into sub-subtrees
      */
     private function getVerticesSubtreeRecursive(Vertex $vertex, &$vertices, Vertex $ignore = null)
@@ -113,7 +113,7 @@ class Undirected extends Tree
         }
         $vertices[$vertex->getId()] = $vertex;
 
-        foreach ($this->getVerticesNeighboor($vertex) as $vertexNeighboor) {
+        foreach ($this->getVerticesNeighbor($vertex) as $vertexNeighboor) {
             if ($vertexNeighboor === $ignore) {
                 // ignore source vertex only once
                 $ignore = null;
@@ -124,7 +124,7 @@ class Undirected extends Tree
     }
 
     /**
-     * get neighboor vertices for given start vertex
+     * get neighbor vertices for given start vertex
      *
      * @param Vertex $vertex
      * @throws UnexpectedValueException for directed edges
@@ -133,7 +133,7 @@ class Undirected extends Tree
      * @uses Edge::getVertexToFrom()
      * @see Vertex::getVerticesEdge()
      */
-    private function getVerticesNeighboor(Vertex $vertex)
+    private function getVerticesNeighbor(Vertex $vertex)
     {
         $vertices = array();
         foreach ($vertex->getEdges() as $edge) {
