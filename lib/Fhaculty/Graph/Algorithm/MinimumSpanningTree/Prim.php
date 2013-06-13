@@ -44,7 +44,6 @@ class Prim extends Base
                     if ($currentEdge instanceof EdgeDirected) {
                         throw new UnexpectedValueException('Unable to create MST for directed graphs');
                     }
-                    // TODO maybe it would be better to check if the reachable vertex of $currentEdge si allready marked (smaller Queue vs. more if's)
                     // Add edges to priority queue with inverted weights (priority queue has high values at the front)
                     $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
                 }
