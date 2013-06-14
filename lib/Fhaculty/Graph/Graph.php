@@ -150,7 +150,7 @@ class Graph extends Set
     /**
      * create a new clone/copy of this graph - copy all attributes and given vertices and its edges
      *
-     * @param  Vertex[] $vertices array of vertices to keep
+     * @param  Vertices $vertices set of vertices to keep
      * @return Graph
      * @uses Graph::createGraphClone() to create a complete clone
      * @uses Vertex::destroy() to remove unneeded vertices again
@@ -239,7 +239,7 @@ class Graph extends Set
      * create the given number of vertices or given array of Vertex IDs
      *
      * @param  int|array $n number of vertices to create or array of Vertex IDs to create
-     * @return Vertex[]  array of vertices created
+     * @return Vertices set of Vertices created
      * @uses Graph::getNextId()
      */
     public function createVertices($n)
@@ -272,7 +272,7 @@ class Graph extends Set
             throw new InvalidArgumentException('Invalid number of vertices given. Must be non-negative integer or an array of Vertex IDs');
         }
 
-        return $vertices;
+        return new Vertices($vertices);
     }
 
     /**
@@ -435,7 +435,7 @@ class Graph extends Set
     public function getEdgeClone(Edge $edge)
     {
         // Extract endpoints from edge
-        $vertices = Vertices::factory($edge->getVertices())->getVector();
+        $vertices = $edge->getVertices()->getVector();
 
         return $this->getEdgeCloneInternal($edge, $vertices[0], $vertices[1]);
     }
@@ -451,7 +451,7 @@ class Graph extends Set
     public function getEdgeCloneInverted(Edge $edge)
     {
         // Extract endpoints from edge
-        $vertices = Vertices::factory($edge->getVertices())->getVector();
+        $vertices = $edge->getVertices()->getVector();
 
         return $this->getEdgeCloneInternal($edge, $vertices[1], $vertices[0]);
     }

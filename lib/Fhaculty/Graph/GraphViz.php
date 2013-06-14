@@ -304,7 +304,7 @@ class GraphViz
             foreach ($alg->getGroups() as $group) {
                 $script .= $this->formatIndent . 'subgraph cluster_' . $gid++ . ' {' . self::EOL .
                            $indent . 'label = ' . $this->escape($group) . self::EOL;
-                foreach($alg->getVerticesGroup($group) as $vid => $vertex) {
+                foreach($alg->getVerticesGroup($group)->getMap() as $vid => $vertex) {
                     $layout = $this->getLayoutVertex($vertex);
 
                     $script .= $indent . $this->escapeId($vid);

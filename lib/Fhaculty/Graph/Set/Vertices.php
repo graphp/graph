@@ -201,7 +201,6 @@ class Vertices implements Countable, IteratorAggregate
      * @return Iterator                 iterator object (supporting at the very least foreach)
      * @throws InvalidArgumentException if criterium is unknown
      * @throws UnexpectedValueException if trying to sort by reverse string IDs
-     * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
      * @uses Vertex::getDegree()
      * @uses Vertex::getDegreeIn()
@@ -250,13 +249,11 @@ class Vertices implements Countable, IteratorAggregate
     /**
      * get first vertex (optionally ordered by given criterium $by) from given array of vertices
      *
-     * @param  Vertex[]|Graph           $vertices array of vertices to scan for 'first' vertex
-     * @param  int                      $by       criterium to sort by. see Vertex::ORDER_ID, etc.
+     * @param  int                      $orderBy  criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param  boolean                  $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Vertex
      * @throws InvalidArgumentException if criterium is unknown
      * @throws UnderflowException       if no vertices exist
-     * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
      * @uses Vertex::getDegree()
      * @uses Vertex::getDegreeIn()

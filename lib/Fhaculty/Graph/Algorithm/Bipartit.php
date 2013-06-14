@@ -65,7 +65,7 @@ class Bipartit extends BaseGraph
                     $nextColor = 1-$color;
 
                     // scan all vertices connected to this vertex
-                    foreach ($vertex->getVerticesEdge() as $vid => $nextVertex) {
+                    foreach ($vertex->getVerticesEdge()->getMap() as $vid => $nextVertex) {
                         // color unknown, so expect next color for this vertex
                         if (!isset($colors[$vid])) {
                             $colors[$vid] = $nextColor;

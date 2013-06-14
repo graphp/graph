@@ -201,14 +201,14 @@ abstract class Base extends Layoutable
     /**
      * get Vertices that are a target of this edge
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     abstract public function getVerticesTarget();
 
     /**
      * get Vertices that are the start of this edge
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     abstract public function getVerticesStart();
 

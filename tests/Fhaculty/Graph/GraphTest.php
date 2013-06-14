@@ -183,8 +183,8 @@ class GraphTest extends TestCase
     {
         $graph = new Graph();
 
-        $this->assertEquals(array(), $graph->createVertices(0));
-        $this->assertEquals(array(), $graph->createVertices(array()));
+        $this->assertEquals(array(), $graph->createVertices(0)->getVector());
+        $this->assertEquals(array(), $graph->createVertices(array())->getVector());
 
         $this->assertEquals(0, $graph->getNumberOfVertices());
     }
