@@ -183,6 +183,17 @@ class Vertices implements Countable, IteratorAggregate
     }
 
     /**
+     * get a new set of Vertices that match the given callback filter function
+     *
+     * @param callable $callbackCheck
+     * @return Vertices a new Vertices instance
+     */
+    public function getVerticesMatch($callbackCheck)
+    {
+        return new self(array_filter($callbackCheck, $this->vertices));
+    }
+
+    /**
      * get iterator for vertices (optionally ordered by given criterium $by) from given array of vertices
      *
      * @param  int                      $orderBy       criterium to sort by. see Vertex::ORDER_ID, etc.
@@ -295,6 +306,32 @@ class Vertices implements Countable, IteratorAggregate
         }
 
         return $ret;
+    }
+
+    /**
+     * get a new set Vertices where each Vertex is distinct/unique
+     *
+     * @return Vertices a new Vertices instance
+     * @uses self::getMap()
+     */
+    public function getVerticesDistinct()
+    {
+        return new self($this->getMap());
+    }
+
+    /**
+     * get a mapping array of Vertex ID => Vertex instance and thus remove duplicate vertices
+     *
+     * @return Vertex[] Vertex ID => Vertex instance
+     * @uses Vertex::getId()
+     */
+    public function getMap()
+    {
+        $vertices = array();
+        foreach ($this->vertices as $vertex) {
+            $vertices[$vertex->getId()] = $vertex;
+        }
+        return $vertices;
     }
 
     public function getIds()
