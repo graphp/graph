@@ -1,10 +1,10 @@
 <?php
 
 use Fhaculty\Graph\Edge\Directed;
-
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 
 (include_once __DIR__ . '/../vendor/autoload.php') OR die(PHP_EOL . 'ERROR: composer autoloader not found, run "composer install" or see README for instructions' . PHP_EOL);
 
@@ -87,7 +87,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         if ($edge instanceof Directed) {
             $ret .= $edge->getVertexStart()->getId() . ' -> ' . $edge->getVertexEnd()->getId();
         } else {
-            $vertices = array_values(Vertex::getAll($edge->getVerticesId(), Vertex::ORDER_ID));
+            $vertices = Vertices::factory($edge->getVertices(), Vertices::ORDER_ID())->getIds();
             $ret .= $vertices[0]->getId() . ' -- ' . $vertices[1]->getId();
         }
         $ret .= PHP_EOL . 'flow: ' . $edge->getFlow();

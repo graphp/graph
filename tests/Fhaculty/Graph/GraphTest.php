@@ -217,15 +217,15 @@ class GraphTest extends TestCase
 
         $vertices = $graph->createVertices(2);
         $this->assertCount(2, $vertices);
-        $this->assertEquals(array(0, 1), array_keys($graph->getVertices()));
+        $this->assertEquals(array(0, 1), $graph->getVertices()->getIds());
 
         $vertices = $graph->createVertices(array(7, 9));
         $this->assertCount(2, $vertices);
-        $this->assertEquals(array(0, 1, 7, 9), array_keys($graph->getVertices()));
+        $this->assertEquals(array(0, 1, 7, 9), $graph->getVertices()->getIds());
 
         $vertices = $graph->createVertices(3);
         $this->assertCount(3, $vertices);
-        $this->assertEquals(array(0, 1, 7, 9, 10, 11, 12), array_keys($graph->getVertices()));
+        $this->assertEquals(array(0, 1, 7, 9, 10, 11, 12), $graph->getVertices()->getIds());
     }
 
     public function testCreateVerticesAtomic()

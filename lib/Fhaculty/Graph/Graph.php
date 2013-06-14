@@ -17,6 +17,7 @@ use Fhaculty\Graph\Algorithm\Eulerian as AlgorithmEulerian;
 use Fhaculty\Graph\Algorithm\Groups as AlgorithmGroups;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Set\Vertices;
 
 class Graph extends Set
 {
@@ -25,6 +26,24 @@ class Graph extends Set
      * @see self::setExporter()
      */
     protected $exporter = null;
+
+    protected $verticesStorage = array();
+    protected $vertices;
+
+    public function __construct()
+    {
+        $this->vertices = Vertices::factoryArrayReference($this->verticesStorage);
+    }
+
+    /**
+     * return set of Vertices added to this graph
+     *
+     * @return Vertices
+     */
+    public function getVertices()
+    {
+        return $this->vertices;
+    }
 
     /**
      * create a new Vertex in the Graph
@@ -44,14 +63,14 @@ class Graph extends Set
         } elseif (!is_int($id) && !is_string($id)) {
             throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
         }
-        if (isset($this->vertices[$id])) {
+        if ($this->vertices->hasVertexId($id)) {
             if ($returnDuplicate) {
-                return $this->vertices[$id];
+                return $this->vertices->getVertexId($id);
             }
             throw new OverflowException('ID must be unique');
         }
         $vertex = new Vertex($id, $this);
-        $this->vertices[$id] = $vertex;
+        $this->verticesStorage[$id] = $vertex;
 
         return $vertex;
     }
@@ -66,7 +85,7 @@ class Graph extends Set
     public function createVertexClone(Vertex $originalVertex)
     {
         $id = $originalVertex->getId();
-        if (isset($this->vertices[$id])) {
+        if ($this->vertices->hasVertexId($id)) {
             throw new RuntimeException('Id of cloned vertex already exists');
         }
         $newVertex = new Vertex($id, $this);
@@ -74,7 +93,7 @@ class Graph extends Set
         $newVertex->setLayout($originalVertex->getLayout());
         $newVertex->setBalance($originalVertex->getBalance());
         $newVertex->setGroup($originalVertex->getGroup());
-        $this->vertices[$id] = $newVertex;
+        $this->verticesStorage[$id] = $newVertex;
 
         return $newVertex;
     }
@@ -138,9 +157,11 @@ class Graph extends Set
      */
     public function createGraphCloneVertices($vertices)
     {
+        $verticesKeep = Vertices::factory($vertices);
+
         $graph = $this->createGraphClone();
-        foreach ($graph->getVertices() as $vid => $vertex) {
-            if (!isset($vertices[$vid])) {
+        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
+            if (!$verticesKeep->hasVertexId($vid)) {
                 $vertex->destroy();
             }
         }
@@ -226,14 +247,14 @@ class Graph extends Set
         $vertices = array();
         if (is_int($n) && $n >= 0) {
             for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
-                $vertices[$id] = $this->vertices[$id] = new Vertex($id, $this);
+                $vertices[$id] = $this->verticesStorage[$id] = new Vertex($id, $this);
             }
         } elseif (is_array($n)) {
             // array given => check to make sure all given IDs are available (atomic operation)
             foreach ($n as $id) {
                 if (!is_int($id) && !is_string($id)) {
                     throw new InvalidArgumentException('All Vertex IDs have to be of type integer or string');
-                } elseif (isset($this->vertices[$id])) {
+                } elseif ($this->vertices->hasVertexId($id)) {
                     throw new OverflowException('Given array of Vertex IDs contains an ID that already exists. Given IDs must be unique');
                 } elseif (isset($vertices[$id])) {
                     throw new InvalidArgumentException('Given array of Vertex IDs contain duplicate IDs. Given IDs must be unique');
@@ -245,7 +266,7 @@ class Graph extends Set
 
             // actually create all requested vertices
             foreach ($n as $id) {
-                $vertices[$id] = $this->vertices[$id] = new Vertex($id, $this);
+                $vertices[$id] = $this->verticesStorage[$id] = new Vertex($id, $this);
             }
         } else {
             throw new InvalidArgumentException('Invalid number of vertices given. Must be non-negative integer or an array of Vertex IDs');
@@ -263,12 +284,12 @@ class Graph extends Set
      */
     private function getNextId()
     {
-        if (!$this->vertices) {
+        if (!$this->verticesStorage) {
             return 0;
         }
 
         // auto ID
-        return max(array_keys($this->vertices))+1;
+        return max(array_keys($this->verticesStorage))+1;
     }
 
     /**
@@ -280,11 +301,7 @@ class Graph extends Set
      */
     public function getVertex($id)
     {
-        if (!$this->hasVertex($id)) {
-            throw new OutOfBoundsException('Vertex ' . $id . ' does not exist');
-        }
-
-        return $this->vertices[$id];
+        return $this->vertices->getVertexId($id);
     }
 
     /**
@@ -295,7 +312,7 @@ class Graph extends Set
      */
     public function hasVertex($id)
     {
-        return isset($this->vertices[$id]);
+        return $this->vertices->hasVertexId($id);
     }
 
     /**
@@ -307,15 +324,12 @@ class Graph extends Set
      *
      * @return Vertex             first vertex found in this graph
      * @throws UnderflowException if Graph has no vertices
-     * @see Vertex::getFirst() if you need to apply ordering first
+     * @see Vertices::getVertexOrder() if you need to apply ordering first
+     * @uses Vertices::getVertexFirst()
      */
     public function getVertexFirst()
     {
-        foreach ($this->vertices as $vertex) {
-            return $vertex;
-        }
-
-        throw new UnderflowException('Graph has no vertices');
+        return $this->vertices->getVertexFirst();
     }
 
     /**
@@ -352,7 +366,7 @@ class Graph extends Set
      */
     public function isEmpty()
     {
-        return !$this->vertices;
+        return $this->vertices->isEmpty();
     }
 
     /**
@@ -407,11 +421,7 @@ class Graph extends Set
      */
     public function removeVertex(Vertex $vertex)
     {
-        $id = array_search($vertex, $this->vertices, true);
-        if ($id === false) {
-            throw new InvalidArgumentException('Given vertex does NOT exist');
-        }
-        unset($this->vertices[$id]);
+        unset($this->verticesStorage[$this->vertices->getIndexVertex($vertex)]);
     }
 
     /**
@@ -425,7 +435,7 @@ class Graph extends Set
     public function getEdgeClone(Edge $edge)
     {
         // Extract endpoints from edge
-        $vertices = $edge->getVertices();
+        $vertices = Vertices::factory($edge->getVertices())->getVector();
 
         return $this->getEdgeCloneInternal($edge, $vertices[0], $vertices[1]);
     }
@@ -441,7 +451,7 @@ class Graph extends Set
     public function getEdgeCloneInverted(Edge $edge)
     {
         // Extract endpoints from edge
-        $vertices = $edge->getVertices();
+        $vertices = Vertices::factory($edge->getVertices())->getVector();
 
         return $this->getEdgeCloneInternal($edge, $vertices[1], $vertices[0]);
     }

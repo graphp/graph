@@ -6,6 +6,7 @@ use Fhaculty\Graph\GraphViz;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst;
 use Fhaculty\Graph\Loader\CompleteGraph;
+use Fhaculty\Graph\Set\Vertices;
 
 class BreadthFirstTest extends PHPUnit_Framework_TestCase
 {
@@ -24,7 +25,7 @@ class BreadthFirstTest extends PHPUnit_Framework_TestCase
             $edge->destroy();
         }
 
-        $start = Vertex::getFirst($graph, Vertex::ORDER_RANDOM);
+        $start = $graph->getVertices()->getVertexOrder(Vertices::ORDER_RANDOM);
         $start->setLayoutAttribute('shape', 'doublecircle');
 
         // actually start breadth search

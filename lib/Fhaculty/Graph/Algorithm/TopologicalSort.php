@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm;
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Graph;
 
 /**
@@ -32,11 +33,11 @@ class TopologicalSort extends BaseGraph
         // TODO: find alternative to recursive algorithm to avoid hitting recursion limit with ~100 nodes
         // TODO: avoid having to reverse all vertices multiple times
 
-        foreach(array_reverse($this->graph->getVertices()) as $vertex) {
+        foreach(array_reverse($this->graph->getVertices()->getVector()) as $vertex) {
             $this->visit($vertex, $visited, $tsl);
         }
 
-        return array_reverse($tsl, true);
+        return new Vertices(array_reverse($tsl, true));
     }
 
     protected function visit(Vertex $vertex, array &$visited, array &$tsl)
