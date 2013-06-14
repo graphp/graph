@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Graph;
 
 class UndirectedId extends Base
@@ -61,7 +62,7 @@ class UndirectedId extends Base
 
     public function getVertices()
     {
-        return array($this->graph->getVertex($this->a), $this->graph->getVertex($this->b));
+        return new Vertices(array($this->graph->getVertex($this->a), $this->graph->getVertex($this->b)));
     }
 
     public function getVerticesId()

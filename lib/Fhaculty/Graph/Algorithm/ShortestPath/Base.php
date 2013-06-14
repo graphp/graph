@@ -4,13 +4,11 @@ namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Algorithm\BaseVertex;
 use Fhaculty\Graph\Walk;
-
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Vertices;
 
 abstract class Base extends BaseVertex
 {
@@ -94,22 +92,22 @@ abstract class Base extends BaseVertex
     }
 
     /**
-     * get array of all vertices the given start vertex has a path to
+     * get set of all Vertices the given start vertex has a path to
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses AlgorithmSp::getDistanceMap()
      */
     public function getVertices()
     {
         $vertices = array();
         $map = $this->getDistanceMap();
-        foreach ($this->vertex->getGraph()->getVertices() as $vid => $vertex) {
+        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
             if (isset($map[$vid])) {
                 $vertices[$vid] = $vertex;
             }
         }
 
-        return $vertices;
+        return new Vertices($vertices);
     }
 
     /**
@@ -135,7 +133,7 @@ abstract class Base extends BaseVertex
     {
         $edges = $this->getEdges();
         $ret = array();
-        foreach ($this->vertex->getGraph()->getVertices() as $vid => $vertex) {
+        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
             try {
                 $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex, $edges));
             } catch (UnderflowException $ignore) {
@@ -182,7 +180,7 @@ abstract class Base extends BaseVertex
      */
     protected function getEdgesCheapestPredecesor(array $predecessor)
     {
-        $vertices = $this->vertex->getGraph()->getVertices();
+        $vertices = $this->vertex->getGraph()->getVertices()->getMap();
         // start vertex doesn't have a predecessor
         unset($vertices[$this->vertex->getId()]);
 

@@ -4,12 +4,13 @@ namespace Fhaculty\Graph\Algorithm\Search;
 
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Set\Vertices;
 
 class BreadthFirst extends Base
 {
     /**
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     public function getVertices()
     {
@@ -40,6 +41,6 @@ class BreadthFirst extends Base
         // untill queue is empty
         } while ($queue);
 
-        return $visited;
+        return new Vertices($visited);
     }
 }

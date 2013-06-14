@@ -2,13 +2,12 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Exception\OutOfBoundsException;
-
 use Fhaculty\Graph\Walk;
-
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 use \Exception;
 
 class BreadthFirst extends Base
@@ -109,7 +108,7 @@ class BreadthFirst extends Base
     /**
      * get array of all target vertices this vertex has a path to
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses AlgorithmSpBreadthFirst::getDistanceMap()
      */
     public function getVertices()
@@ -120,7 +119,7 @@ class BreadthFirst extends Base
             $ret[$vid] = $graph->getVertex($vid);
         }
 
-        return $ret;
+        return new Vertices($ret);
     }
 
     public function getEdges()

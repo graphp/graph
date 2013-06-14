@@ -8,6 +8,8 @@ namespace Fhaculty\Graph;
  * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  */
+use Fhaculty\Graph\Set\Vertices;
+
 class Walk extends Set
 {
     /**
@@ -153,7 +155,7 @@ class Walk extends Set
      */
     public function isHamiltonian()
     {
-        return $this->isArrayContentsEqual($this->vertices, $this->getGraph()->getVertices());
+        return $this->isArrayContentsEqual($this->getVertices()->getVector(), $this->getGraph()->getVertices()->getVector());
     }
 
     /**
@@ -194,9 +196,9 @@ class Walk extends Set
     {
         // create new graph clone with only edges of walk
         $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());
-        $vertices = $this->getVertices();
+        $vertices = $this->getVertices()->getMap();
         // get all vertices
-        foreach ($graph->getVertices() as $vid => $vertex) {
+        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
             if (!isset($vertices[$vid])) {
                 // remove those not present in the walk (isolated vertices, etc.)
                 $vertex->destroy();
@@ -235,9 +237,9 @@ class Walk extends Set
     }
 
     /**
-     * return array of all unique vertices of walk
+     * return set of all unique Vertices of walk
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     public function getVertices()
     {
@@ -246,17 +248,17 @@ class Walk extends Set
             $vertices[$vertex->getId()] = $vertex;
         }
 
-        return $vertices;
+        return new Vertices($vertices);
     }
 
     /**
-     * return array/list of all vertices of walk (in sequence visited in walk, may contain duplicates)
+     * return set of all Vertices of walk (in sequence visited in walk, may contain duplicates)
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     public function getVerticesSequence()
     {
-        return $this->vertices;
+        return new Vertices($this->vertices);
     }
 
     /**
@@ -267,12 +269,7 @@ class Walk extends Set
      */
     public function getVerticesSequenceId()
     {
-        $ids = array();
-        foreach ($this->vertices as $vertex) {
-            $ids []= $vertex->getId();
-        }
-
-        return $ids;
+        return $this->getVerticesSequence()->getIds();
     }
 
     /**
@@ -282,7 +279,7 @@ class Walk extends Set
      */
     public function getVerticesId()
     {
-        return array_keys($this->getVertices());
+        return $this->getVertices()->getIds();
     }
 
     /**
@@ -375,7 +372,7 @@ class Walk extends Set
      */
     public function isValid()
     {
-        $vertices = $this->getGraph()->getVertices();
+        $vertices = $this->getGraph()->getVertices()->getMap();
         // check source graph contains all vertices
         foreach ($this->vertices as $vertex) {
             $vid = $vertex->getId();

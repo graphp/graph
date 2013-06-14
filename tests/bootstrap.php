@@ -27,7 +27,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         // each vertex has a unique ID, therefor it's easy to search a matching partner
         // do not use assertVertexEquals() in order to not increase assertion counter
 
-        foreach ($expected->getVertices() as $vid => $vertex) {
+        foreach ($expected->getVertices()->getMap() as $vid => $vertex) {
             try {
                 $other = $actual->getVertex($vid);
             } catch (Exception $e) {
@@ -87,7 +87,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         if ($edge instanceof Directed) {
             $ret .= $edge->getVertexStart()->getId() . ' -> ' . $edge->getVertexEnd()->getId();
         } else {
-            $vertices = Vertices::factory($edge->getVertices(), Vertices::ORDER_ID())->getIds();
+            $vertices = $edge->getVertices()->getIds();
             $ret .= $vertices[0]->getId() . ' -- ' . $vertices[1]->getId();
         }
         $ret .= PHP_EOL . 'flow: ' . $edge->getFlow();

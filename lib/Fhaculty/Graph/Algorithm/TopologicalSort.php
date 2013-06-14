@@ -17,13 +17,13 @@ use Fhaculty\Graph\Graph;
 class TopologicalSort extends BaseGraph
 {
     /**
-     * run algorithm and return an ordered/sorted list of vertices
+     * run algorithm and return an ordered/sorted set of Vertices
      *
      * the topologic sorting may be non-unique depending on your edges. this
      * algorithm tries to keep the order of vertices as added to the graph in
      * this case.
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     public function getVertices()
     {
@@ -53,7 +53,7 @@ class TopologicalSort extends BaseGraph
             // temporary mark
             $visited[$vid] = false;
 
-            foreach (array_reverse($vertex->getVerticesEdgeTo()) as $v) {
+            foreach (array_reverse($vertex->getVerticesEdgeTo()->getVector()) as $v) {
                 $this->visit($v, $visited, $tsl);
             }
 

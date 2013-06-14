@@ -66,7 +66,7 @@ class ConnectedComponents extends BaseGraph
         $components = 0;
 
         // for each vertices
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             // did I visit this vertex before?
             if (!isset($visitedVertices[$vid])) {
 
@@ -99,7 +99,7 @@ class ConnectedComponents extends BaseGraph
         $graphs = array();
 
         // for each vertices
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             // did I visit this vertex before?
             if (!isset($visitedVertices[$vid])) {
 
@@ -108,7 +108,7 @@ class ConnectedComponents extends BaseGraph
                 $newVertices = $alg->getVertices();
 
                 // mark the vertices of this component as visited
-                foreach ($newVertices as $vid => $unusedVertex) {
+                foreach ($newVertices->getIds() as $vid) {
                     $visitedVertices[$vid] = true;
                 }
 

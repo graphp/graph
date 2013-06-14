@@ -155,7 +155,7 @@ class GraphTest extends TestCase
         $this->assertEquals(2, $graph->getNumberOfEdges());
         $this->assertEquals(2, count($v1->getEdges()));
 
-        $this->assertEquals(array(2), array_keys($v1->getVerticesEdge()));
+        $this->assertEquals(array(2), $v1->getVerticesEdge()->getIds());
     }
 
     public function testCreateMixedGraph()
@@ -175,8 +175,8 @@ class GraphTest extends TestCase
         $this->assertEquals(2, count($v2->getEdgesOut()));
         $this->assertEquals(1, count($v2->getEdgesIn()));
 
-        $this->assertEquals(array(1, 3), array_keys($v2->getVerticesEdgeTo()));
-        $this->assertEquals(array(1), array_keys($v2->getVerticesEdgeFrom()));
+        $this->assertEquals(array(1, 3), $v2->getVerticesEdgeTo()->getIds());
+        $this->assertEquals(array(1), $v2->getVerticesEdgeFrom()->getIds());
     }
 
     public function testCreateVerticesNone()

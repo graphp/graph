@@ -3,11 +3,10 @@
 namespace Fhaculty\Graph\Algorithm\Search;
 
 use Fhaculty\Graph\Algorithm\BaseVertex;
-
 use Fhaculty\Graph\Exception\DomainException;
-
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 
 abstract class Base extends BaseVertex
 {
@@ -60,9 +59,9 @@ abstract class Base extends BaseVertex
     }
 
     /**
-     * get array of all vertices that can be reached from start vertex
+     * get set of all Vertices that can be reached from start vertex
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     abstract public function getVertices();
 
@@ -74,6 +73,6 @@ abstract class Base extends BaseVertex
      */
     public function getVerticesIds()
     {
-        return array_keys($this->getVertices());
+        return $this->getVertices()->getIds();
     }
 }

@@ -44,13 +44,12 @@ class MinimumSpanningTree extends Base
 
         $alg = new SearchDepthFirst($minimumSpanningTree->getVertexFirst());
         // Depth first search in minmum spanning tree (for the eulerian path)
-        $depthFirstSearch = $alg->getVertices();
 
         $startVertex = NULL;
         $oldVertex = NULL;
 
         // connect vertices in order of the depth first search
-        foreach ($depthFirstSearch as $vertex) {
+        foreach ($alg->getVertices() as $vertex) {
 
             // get vertex from the original graph (not from the depth first search)
             $vertex = $this->graph->getVertex($vertex->getId());

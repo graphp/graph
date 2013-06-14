@@ -51,7 +51,7 @@ class Bipartit extends BaseGraph
         $colors = array();
 
         // get color for each vertex
-        foreach ($this->graph->getVertices() as $vid => $startVertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $startVertex) {
             if (!isset($colors[$vid])) {
                 $queue = array($startVertex);
                 // initialize each components color
@@ -92,7 +92,7 @@ class Bipartit extends BaseGraph
         $colors = $this->getColors();
         $ret = array(0 => array(), 1 => array());
 
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             $ret[$colors[$vid]][$vid] = $vertex;
         }
 
@@ -113,7 +113,7 @@ class Bipartit extends BaseGraph
         $colors = $this->getColors();
 
         $graph = $this->graph->createGraphClone();
-        foreach ($graph->getVertices() as $vid => $vertex) {
+        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
             $vertex->setGroup($colors[$vid]);
         }
 

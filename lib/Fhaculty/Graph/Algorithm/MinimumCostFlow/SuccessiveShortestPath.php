@@ -133,7 +133,7 @@ class SuccessiveShortestPath extends Base
         if ($graph->getNumberOfVertices() !== $this->graph->getNumberOfVertices()) {
             throw new DomainException('Given graph does not appear to be a clone of input graph');
         }
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             if ($vertex->getBalance() !== $graph->getVertex($vid)->getBalance()) {
                 return false;
             }
@@ -152,7 +152,7 @@ class SuccessiveShortestPath extends Base
      */
     private function getVertexSource(Graph $graph)
     {
-        foreach ($graph->getVertices() as $vid => $vertex) {
+        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
             if ($this->graph->getVertex($vid)->getBalance() - $vertex->getBalance() > 0) {
                 return $vertex;
             }
@@ -174,7 +174,7 @@ class SuccessiveShortestPath extends Base
         // search for reachable Vertices
         $algBFS = new SearchBreadthFirst($source);
 
-        foreach ($algBFS->getVertices() as $vid => $vertex) {
+        foreach ($algBFS->getVertices()->getMap() as $vid => $vertex) {
             if ($this->graph->getVertex($vid)->getBalance() - $vertex->getBalance() < 0) {
                 return $vertex;
             }

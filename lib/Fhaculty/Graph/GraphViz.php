@@ -318,7 +318,7 @@ class GraphViz
         } else {
             // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
             // other vertices wil be added automatically due to below edge definitions
-            foreach ($this->graph->getVertices() as $vid => $vertex){
+            foreach ($this->graph->getVertices()->getMap() as $vid => $vertex){
                 $layout = $this->getLayoutVertex($vertex);
 
                 if($vertex->isIsolated() || $layout){
@@ -335,7 +335,7 @@ class GraphViz
 
         // add all edges as directed edges
         foreach ($this->graph->getEdges() as $currentEdge) {
-            $both = $currentEdge->getVertices();
+            $both = $currentEdge->getVertices()->getVector();
             $currentStartVertex = $both[0];
             $currentTargetVertex = $both[1];
 

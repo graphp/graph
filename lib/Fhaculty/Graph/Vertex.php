@@ -2,20 +2,17 @@
 
 namespace Fhaculty\Graph;
 
-use Fhaculty\Graph\Exception\BadMethodCallException;
-
-use Fhaculty\Graph\Exception\UnexpectedValueException;
-
-use Fhaculty\Graph\Exception\UnderflowException;
-
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-
-use \ArrayIterator;
-use \SplPriorityQueue;
 use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst as AlgorithmSpBreadthFirst;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Edge\UndirectedId as EdgeUndirectedId;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Exception\BadMethodCallException;
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+use Fhaculty\Graph\Exception\UnderflowException;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+use \ArrayIterator;
+use \SplPriorityQueue;
 
 class Vertex extends Layoutable
 {
@@ -186,9 +183,9 @@ class Vertex extends Layoutable
     }
 
     /**
-     * get array of vertices this vertex has a path to
+     * get set of Vertices this vertex has a path to
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses AlgorithmSpBreadthFirst::getVertices()
      */
     public function getVerticesPathTo()
@@ -199,9 +196,9 @@ class Vertex extends Layoutable
     }
 
     /**
-     * get array of vertices that have a path to this vertex
+     * get set of Vertices that have a path to this vertex
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses AlgorithmSpBreadthFirst::getVertices()
      */
     public function getVerticesPathFrom()
@@ -381,9 +378,9 @@ class Vertex extends Layoutable
     }
 
     /**
-     * get all adjacent vertices of this vertex (edge FROM or TO this vertex)
+     * get set of adjacent Vertices of this vertex (edge FROM or TO this vertex)
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses Edge::hasVertexStart()
      * @uses Edge::getVerticesToFrom()
      * @uses Edge::getVerticesFromTo()
@@ -400,13 +397,13 @@ class Vertex extends Layoutable
             $ret[$vertex->getId()] = $vertex;
         }
 
-        return $ret;
+        return new Vertices($ret);
     }
 
     /**
-     * get all vertices this vertex has an edge to
+     * get set of all Vertices this vertex has an edge to
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses Vertex::getEdgesOut()
      * @uses Edge::getVerticesToFrom()
      */
@@ -418,13 +415,13 @@ class Vertex extends Layoutable
             $ret[$vertex->getId()] = $vertex;
         }
 
-        return $ret;
+        return new Vertices($ret);
     }
 
     /**
-     * get all vertices that have an edge TO this vertex
+     * get set of all Vertices that have an edge TO this vertex
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses Vertex::getEdgesIn()
      * @uses Edge::getVerticesFromTo()
      */
@@ -436,7 +433,7 @@ class Vertex extends Layoutable
             $ret[$vertex->getId()] = $vertex;
         }
 
-        return $ret;
+        return new Vertices($ret);
     }
 
     /**

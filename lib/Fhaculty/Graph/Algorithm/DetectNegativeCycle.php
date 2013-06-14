@@ -43,7 +43,7 @@ class DetectNegativeCycle extends BaseGraph
         // remember vertices already visited, as they can not lead to a new cycle
         $verticesVisited = array();
         // check for all vertices
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             // skip vertices already visited
             if (!isset($verticesVisited[$vid])) {
                 // start MBF algorithm on current vertex

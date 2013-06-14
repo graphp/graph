@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Vertices;
 
 /**
  *
@@ -35,13 +36,13 @@ abstract class Set
     }
 
     /**
-     * returns an array of all Vertices
+     * returns an set of all Vertices
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     public function getVertices()
     {
-        return $this->vertices;
+        return new Vertices($this->vertices);
     }
 
     /**

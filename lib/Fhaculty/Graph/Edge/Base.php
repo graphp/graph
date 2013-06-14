@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Layoutable;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Exception\LogicException;
 use Fhaculty\Graph\Exception\RangeException;
@@ -407,7 +408,7 @@ abstract class Base extends Layoutable
      */
     public function getEdgesParallel()
     {
-        $ends = $this->getVertices();
+        $ends = $this->getVertices()->getVector();
 
         // get all edges between this edge's endpoints
         $edges = $ends[0]->getEdgesTo($ends[1]);
@@ -434,9 +435,9 @@ abstract class Base extends Layoutable
     }
 
     /**
-     * get all vertices this edge connects
+     * get set of all Vertices this edge connects
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     abstract public function getVertices();
 
@@ -448,12 +449,7 @@ abstract class Base extends Layoutable
      */
     public function getVerticesId()
     {
-        $ret = $this->getVertices();
-        foreach ($ret as &$v) {
-            $v = $v->getId();
-        }
-
-        return $ret;
+        return $this->getVertices()->getIds();
     }
 
     /**
