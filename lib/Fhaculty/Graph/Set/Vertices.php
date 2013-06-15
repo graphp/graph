@@ -142,22 +142,40 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     }
 
     /**
-     * return first vertex found
+     * return first Vertex in this set of Vertices
      *
      * some algorithms do not need a particular vertex, but merely a (random)
      * starting point. this is a convenience function to just pick the first
      * vertex from the list of known vertices.
      *
-     * @return Vertex             first vertex found in this graph
-     * @throws UnderflowException if Graph has no vertices
+     * @return Vertex             first Vertex in this set of Vertices
+     * @throws UnderflowException if set is empty
      * @see self::getVertexOrder() if you need to apply ordering first
      */
     public function getVertexFirst()
     {
-        foreach ($this->vertices as $vertex) {
-            return $vertex;
+        if (!$this->vertices) {
+            throw new UnderflowException('Does not contain any vertices');
         }
-        throw new UnderflowException('Does not contain any vertices');
+        reset($this->vertices);
+
+        return current($this->vertices);
+    }
+
+    /**
+     * return last Vertex in this set of Vertices
+     *
+     * @return Vertex             last Vertex in this set of Vertices
+     * @throws UnderflowException if set is empty
+     */
+    public function getVertexLast()
+    {
+        if (!$this->vertices) {
+            throw new UnderflowException('Does not contain any vertices');
+        }
+        end($this->vertices);
+
+        return current($this->vertices);
     }
 
     public function getVertexMatchOrNull($callbackCheck)
@@ -272,20 +290,18 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
             // just return by random key (no need to check for DESC flag)
             return $this->vertices[array_rand($this->vertices)];
         }
+        if ($orderBy === self::ORDER_FIFO) {
+            // do not sort - needs special handling
+            if ($desc) {
+                return $this->getVertexLast();
+            } else {
+                return $this->getVertexFirst();
+            }
+        }
         $ret = NULL;
         $best = NULL;
         foreach ($this->vertices as $vertex) {
-            // do not sort - needs special handling
-            if ($orderBy === self::ORDER_FIFO) {
-                // always remember vertex from last iteration
-                if ($desc) {
-                    $ret = $vertex;
-                    continue;
-                    // just return first vertex right away
-                } else {
-                    return $vertex;
-                }
-            } elseif ($orderBy === self::ORDER_ID) {
+            if ($orderBy === self::ORDER_ID) {
                 $now = $vertex->getId();
             } elseif ($orderBy === self::ORDER_DEGREE) {
                 $now = $vertex->getDegree();
