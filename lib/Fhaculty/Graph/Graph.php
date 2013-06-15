@@ -18,6 +18,7 @@ use Fhaculty\Graph\Algorithm\Groups as AlgorithmGroups;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesMap;
 
 class Graph extends Set
 {
@@ -32,7 +33,7 @@ class Graph extends Set
 
     public function __construct()
     {
-        $this->vertices = Vertices::factoryArrayReference($this->verticesStorage);
+        $this->vertices = VerticesMap::factoryArrayReference($this->verticesStorage);
     }
 
     /**

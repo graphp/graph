@@ -11,6 +11,7 @@ use IteratorAggregate;
 use IteratorIterator;
 use ArrayIterator;
 use Fhaculty\Graph\Set\VerticesAggregate;
+use Fhaculty\Graph\Set\VerticesMap;
 
 class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 {
@@ -68,7 +69,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      */
     const ORDER_GROUP = 6;
 
-    private $vertices = array();
+    protected $vertices = array();
 
     /**
      * create new Vertices instance
@@ -86,13 +87,13 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 
     /**
      *
-     * @param unknown_type $vertices
+     * @param array $verticesArray
      */
-    public static function factoryArrayReference(array &$vertices)
+    public static function factoryArrayReference(array &$verticesArray)
     {
-        $obj = new self();
-        $obj->vertices =& $vertices;
-        return $obj;
+        $vertices = new static();
+        $vertices->vertices =& $verticesArray;
+        return $vertices;
     }
 
     public function __construct(array $vertices = array())
@@ -312,14 +313,14 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     }
 
     /**
-     * get a new set Vertices where each Vertex is distinct/unique
+     * get a new set of Vertices where each Vertex is distinct/unique
      *
-     * @return Vertices a new Vertices instance
+     * @return VerticesMap a new VerticesMap instance
      * @uses self::getMap()
      */
     public function getVerticesDistinct()
     {
-        return new self($this->getMap());
+        return new VerticesMap($this->getMap());
     }
 
     /**
