@@ -2,15 +2,16 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesAggregate;
+
 /**
  *
  * @author clue
  * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  */
-use Fhaculty\Graph\Set\Vertices;
-
-class Walk extends Set
+class Walk extends Set implements VerticesAggregate
 {
     /**
      * construct new walk from given start vertex and given array of edges

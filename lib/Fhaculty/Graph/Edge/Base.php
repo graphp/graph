@@ -5,14 +5,16 @@ namespace Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Layoutable;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Exception\LogicException;
 use Fhaculty\Graph\Exception\RangeException;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\BadMethodCallException;
+use Fhaculty\Graph\Set\VerticesAggregate;
 
-abstract class Base extends Layoutable
+abstract class Base extends Layoutable implements VerticesAggregate
 {
     /**
      * do not change order - FIFO : first in, first out

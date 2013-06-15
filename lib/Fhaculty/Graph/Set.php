@@ -4,6 +4,7 @@ namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesAggregate;
 
 /**
  *
@@ -11,7 +12,7 @@ use Fhaculty\Graph\Set\Vertices;
  * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  */
-abstract class Set
+abstract class Set implements VerticesAggregate
 {
     /**
      *

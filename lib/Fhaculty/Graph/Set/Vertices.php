@@ -10,8 +10,9 @@ use Countable;
 use IteratorAggregate;
 use IteratorIterator;
 use ArrayIterator;
+use Fhaculty\Graph\Set\VerticesAggregate;
 
-class Vertices implements Countable, IteratorAggregate
+class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 {
     /**
      * do not change order - FIFO : first in, first out
@@ -72,13 +73,13 @@ class Vertices implements Countable, IteratorAggregate
     /**
      * create new Vertices instance
      *
-     * @param array|Vertices $vertices
+     * @param array|Vertices|VerticesAggregate $vertices
      * @return Vertices
      */
     public static function factory($vertices)
     {
-        if ($vertices instanceof self) {
-            return $vertices;
+        if ($vertices instanceof VerticesAggregate) {
+            return $vertices->getVertices();
         }
         return new self($vertices);
     }
@@ -303,6 +304,11 @@ class Vertices implements Countable, IteratorAggregate
         }
 
         return $ret;
+    }
+
+    public function getVertices()
+    {
+        return $this;
     }
 
     /**
