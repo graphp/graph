@@ -444,17 +444,6 @@ abstract class Base extends Layoutable implements VerticesAggregate
     abstract public function getVertices();
 
     /**
-     * get IDs of all vertices this edge connects
-     *
-     * @return int[]
-     * @see Edge::getVertices()
-     */
-    public function getVerticesId()
-    {
-        return $this->getVertices()->getIds();
-    }
-
-    /**
      * get graph instance this edge is attached to
      *
      * @return Graph

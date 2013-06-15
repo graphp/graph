@@ -64,15 +64,4 @@ abstract class Base extends BaseVertex
      * @return Vertices
      */
     abstract public function getVertices();
-
-    /**
-     * get array of all vertices' IDs that can be reached from start vertex
-     *
-     * @return int[]
-     * @uses AlgorithmSearch::getVertices()
-     */
-    public function getVerticesIds()
-    {
-        return $this->getVertices()->getIds();
-    }
 }

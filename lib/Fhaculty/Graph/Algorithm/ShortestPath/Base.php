@@ -111,17 +111,6 @@ abstract class Base extends BaseVertex
     }
 
     /**
-     * get array of all vertices' IDs the given start vertex has a path to
-     *
-     * @return int[]
-     * @uses AlgorithmSp::getDistanceMap()
-     */
-    public function getVerticesId()
-    {
-        return array_keys($this->getDistanceMap());
-    }
-
-    /**
      * get map of vertex IDs to distance
      *
      * @return float[]

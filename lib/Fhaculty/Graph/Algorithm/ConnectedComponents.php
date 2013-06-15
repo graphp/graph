@@ -18,7 +18,7 @@ class ConnectedComponents extends BaseGraph
      * @param  Vertex                   $vertex
      * @return Graph
      * @throws InvalidArgumentException if given vertex is not from same graph
-     * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
+     * @uses AlgorithmSearchBreadthFirst::getVertices()
      * @uses Graph::createGraphCloneVertices()
      */
     public function createGraphComponentVertex(Vertex $vertex)
@@ -30,6 +30,11 @@ class ConnectedComponents extends BaseGraph
         return $this->graph->createGraphCloneVertices($this->createSearch($vertex)->getVertices());
     }
 
+    /**
+     *
+     * @param Vertex $vertex
+     * @return SearchBreadthFirst
+     */
     private function createSearch(Vertex $vertex)
     {
         $alg = new SearchBreadthFirst($vertex);
@@ -58,7 +63,7 @@ class ConnectedComponents extends BaseGraph
     /**
      * @return int number of components
      * @uses Graph::getVertices()
-     * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
+     * @uses AlgorithmSearchBreadthFirst::getVertices()
      */
     public function getNumberOfComponents()
     {
@@ -71,7 +76,7 @@ class ConnectedComponents extends BaseGraph
             if (!isset($visitedVertices[$vid])) {
 
                 // get all vertices of this component
-                $newVertices = $this->createSearch($vertex)->getVerticesIds();
+                $newVertices = $this->createSearch($vertex)->getVertices()->getIds();
 
                 ++$components;
 

@@ -65,11 +65,6 @@ class UndirectedId extends Base
         return new Vertices(array($this->graph->getVertex($this->a), $this->graph->getVertex($this->b)));
     }
 
-    public function getVerticesId()
-    {
-        return array($this->a, $this->b);
-    }
-
     public function isLoop()
     {
         return ($this->a === $this->b);

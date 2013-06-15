@@ -78,9 +78,10 @@ class Kruskal extends Base
         // Füge billigste Kanten zu neuen Graphen hinzu und verschmelze teilgragen wenn es nötig ist (keine Kreise)
         // solange ich mehr als einen Graphen habe mit weniger als n-1 kanten (bei n knoten im original)
         foreach ($sortedEdges as $edge) {
+            /* @var $edge EdgeDirected */
             // Gucke Kante an:
 
-            $vertices = $edge->getVerticesId();
+            $vertices = $edge->getVertices()->getIds();
 
             $aId = $vertices[0];
             $bId = $vertices[1];

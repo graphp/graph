@@ -36,7 +36,7 @@ class DetectNegativeCycle extends BaseGraph
      *
      * @return Cycle
      * @throws UnderflowException if there's no negative cycle
-     * @uses AlgorithmSpMooreBellmanFord::getVerticesId()
+     * @uses AlgorithmSpMooreBellmanFord::getVertices()
      */
     public function getCycleNegative()
     {
@@ -51,7 +51,7 @@ class DetectNegativeCycle extends BaseGraph
 
                 try {
                     // try to get all connected vertices (or throw new cycle)
-                    foreach ($alg->getVerticesId() as $vid) {
+                    foreach ($alg->getVertices()->getIds() as $vid) {
                         // getting connected vertices succeeded, so skip over all of them
                         $verticesVisited[$vid] = true;
                     // no cycle found, check next vertex...

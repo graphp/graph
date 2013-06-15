@@ -201,7 +201,7 @@ class Graph extends Set
      * @param  int  $ia           index of start vertex
      * @param  int  $ib           index of end vertex
      * @return Edge new edge in this graph
-     * @uses Edge::getVerticesId()
+     * @uses Edge::getVertices()
      * @uses Graph::getVertex()
      * @uses Vertex::createEdge() to create a new undirected edge if given edge was undrected
      * @uses Vertex::createEdgeTo() to create a new directed edge if given edge was directed
@@ -214,7 +214,7 @@ class Graph extends Set
      */
     private function createEdgeCloneInternal(Edge $originalEdge, $ia, $ib)
     {
-        $ends = $originalEdge->getVerticesId();
+        $ends = $originalEdge->getVertices()->getIds();
 
         // get start vertex from old start vertex id
         $a = $this->getVertex($ends[$ia]);

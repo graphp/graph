@@ -274,16 +274,6 @@ class Walk extends Set implements VerticesAggregate
     }
 
     /**
-     * get IDs of all vertices in the walk
-     *
-     * @return int[]
-     */
-    public function getVerticesId()
-    {
-        return $this->getVertices()->getIds();
-    }
-
-    /**
      * return source vertex (first vertex of walk)
      *
      * @return Vertex

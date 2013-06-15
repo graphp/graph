@@ -38,7 +38,8 @@ class TrivialGraphFormat implements ExporterInterface
         $output .= '#' . self::EOL;
 
         foreach ($graph->getEdges() as $edge) {
-            $ids = $edge->getVerticesId();
+            /* @var $edge Edge */
+            $ids = $edge->getVertices()->getIds();
             $a = $tids[$ids[0]];
             $b = $tids[$ids[1]];
 
