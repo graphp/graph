@@ -11,7 +11,6 @@ use Countable;
 use IteratorAggregate;
 use IteratorIterator;
 use ArrayIterator;
-use SplPriorityQueue;
 use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Set\VerticesMap;
 
@@ -211,11 +210,10 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     /**
      * get iterator for vertices (optionally ordered by given criterium $by) from given array of vertices
      *
-     * @param  int                      $orderBy       criterium to sort by. see Vertex::ORDER_ID, etc.
+     * @param  int                      $orderBy  criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param  boolean                  $desc     whether to return biggest first (true) instead of smallest first (default:false)
-     * @return Iterator                 iterator object (supporting at the very least foreach)
+     * @return Vertices                 a new Vertices set ordered by the given $orderBy criterium
      * @throws InvalidArgumentException if criterium is unknown
-     * @throws UnexpectedValueException if trying to sort by reverse string IDs
      * @uses Vertex::getId()
      * @uses Vertex::getDegree()
      * @uses Vertex::getDegreeIn()
@@ -232,22 +230,23 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
             return new self($vertices);
         }
 
-        if ($orderBy === self::ORDER_ID && $desc) {
-            throw new UnexpectedValueException('Unable to reverse sorting for string IDs');
-        }
         $callback = $this->getCallback($orderBy);
+        $array    = $this->vertices;
 
-        $it = new SplPriorityQueue();
-        foreach ($this->vertices as $vertex) {
-            $now = $callback($vertex);
+        uasort($array, function (Vertex $va, Vertex $vb) use ($callback, $desc) {
+            $ra = $callback($desc ? $vb : $va);
+            $rb = $callback($desc ? $va : $vb);
 
-            if ($desc && $now !== NULL) {
-                $now = -$now;
+            if ($ra < $rb) {
+                return -1;
+            } elseif ($ra > $rb) {
+                return 1;
+            } else {
+                return 0;
             }
-            $it->insert($vertex, $now);
-        }
+        });
 
-        return $it;
+        return new self($array);
     }
 
     /**
