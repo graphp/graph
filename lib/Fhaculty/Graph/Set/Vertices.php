@@ -18,13 +18,6 @@ use Fhaculty\Graph\Set\VerticesMap;
 class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 {
     /**
-     * do not change order - FIFO : first in, first out
-     *
-     * @var int
-     */
-    const ORDER_FIFO = 0;
-
-    /**
      * order by vertex ID
      *
      * @var int
@@ -231,9 +224,6 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      */
     public function getVerticesOrder($orderBy = self::ORDER_FIFO, $desc = false)
     {
-        if ($orderBy === self::ORDER_FIFO) {
-            return new self($desc ? array_reverse($this->vertices, true) : $this->vertices);
-        }
         if ($orderBy === self::ORDER_RANDOM) {
             $vertices = $this->vertices;
             shuffle($vertices);
@@ -284,14 +274,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
             // just return by random key (no need to check for DESC flag)
             return $this->vertices[array_rand($this->vertices)];
         }
-        if ($orderBy === self::ORDER_FIFO) {
-            // do not sort - needs special handling
-            if ($desc) {
-                return $this->getVertexLast();
-            } else {
-                return $this->getVertexFirst();
-            }
-        }
+
         $callback = $this->getCallback($orderBy);
 
         $ret = NULL;
