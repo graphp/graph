@@ -368,6 +368,27 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return new IteratorIterator(new ArrayIterator($this->vertices));
     }
 
+    /**
+     * call given $callback on each Vertex and sum their results
+     *
+     * @param callable $callback
+     * @return number
+     * @throws InvalidArgumentException for invalid callbacks
+     * @uses self::getCallback()
+     */
+    public function getSumCallback($callback)
+    {
+        $callback = $this->getCallback($callback);
+
+        // return array_sum(array_map($callback, $this->vertices));
+
+        $sum = 0;
+        foreach ($this->vertices as $vertex) {
+            $sum += $callback($vertex);
+        }
+        return $sum;
+    }
+
     private function getCallbackId($id)
     {
         return function (Vertex $vertex) use ($id) {
@@ -384,7 +405,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      */
     private function getCallback($callback)
     {
-        if ($callback instanceof Closure) {
+        if (is_callable($callback)) {
             return $callback;
         }
 
