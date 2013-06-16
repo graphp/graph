@@ -6,7 +6,7 @@ you spot any mistakes.
 
 ## 0.6.0 (2013-xx-xx)
 
-* BC break: Move algorithm definitions in base classes to separate algorithm classes (#27).
+* BC break: Move algorithm definitions in base classes to separate algorithm classes ([#27](https://github.com/clue/graph/issues/27)).
 The following methods containing algorithms were now moved to separate algorithm classes. This
 change encourages code-reuse, simplifies spotting algorithms, helps reducing complexity,
 improves testablity and avoids tight coupling. Update your references if applicable:
