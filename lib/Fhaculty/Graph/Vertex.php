@@ -9,10 +9,7 @@ use Fhaculty\Graph\Edge\UndirectedId as EdgeUndirectedId;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-use \ArrayIterator;
-use \SplPriorityQueue;
 
 class Vertex extends Layoutable
 {
