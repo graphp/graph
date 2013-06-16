@@ -605,19 +605,6 @@ class Vertex extends Layoutable
     }
 
     /**
-     * check whether this is a leaf node (i.e. has only one edge)
-     *
-     * @return boolean
-     * @throws Exception if this is directed graph
-     * @uses Vertex::getDegree()
-     * @todo check logic! should be indegree=1 and outdegree=0 for directed and degree=indegree=outdegree=1 for undirected?
-     */
-    public function isLeaf()
-    {
-        return ($this->getDegree() === 1);
-    }
-
-    /**
      * get indegree of this vertex (number of edges TO this vertex)
      *
      * @return int
