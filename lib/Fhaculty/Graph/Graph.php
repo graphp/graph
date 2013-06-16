@@ -422,7 +422,12 @@ class Graph extends Set
      */
     public function removeVertex(Vertex $vertex)
     {
-        unset($this->verticesStorage[$this->vertices->getIndexVertex($vertex)]);
+        try {
+            unset($this->verticesStorage[$this->vertices->getIndexVertex($vertex)]);
+        }
+        catch (OutOfBoundsException $e) {
+            throw new InvalidArgumentException('Invalid Vertex does not exist in this Graph');
+        }
     }
 
     /**

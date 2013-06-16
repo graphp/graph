@@ -131,14 +131,14 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * Vertex ID do not necessarily have to match.
      *
      * @param Vertex $vertex
-     * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
      * @return mixed
      */
     public function getIndexVertex(Vertex $vertex)
     {
         $id = array_search($vertex, $this->vertices, true);
         if ($id === false) {
-            throw new InvalidArgumentException('Given vertex does NOT exist');
+            throw new OutOfBoundsException('Given vertex does NOT exist');
         }
         return $id;
     }

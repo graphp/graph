@@ -2,10 +2,9 @@
 
 namespace Fhaculty\Graph\Set;
 
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Exporter\Image;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Set\Vertices;
 
 /**
@@ -49,7 +48,7 @@ class VerticesMap extends Vertices
     {
         $id = $vertex->getId();
         if (!isset($this->vertices[$id]) || $this->vertices[$id] !== $vertex) {
-            throw new InvalidArgumentException();
+            throw new OutOfBoundsException();
         }
         return $id;
     }
