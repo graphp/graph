@@ -241,24 +241,16 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
             // create iterator for shuffled array (no need to check DESC flag)
             return new self($vertices);
         }
+
+        if ($orderBy === self::ORDER_ID && $desc) {
+            throw new UnexpectedValueException('Unable to reverse sorting for string IDs');
+        }
+        $callback = $this->getCallback($orderBy);
+
         $it = new SplPriorityQueue();
         foreach ($this->vertices as $vertex) {
-            if ($orderBy === self::ORDER_ID) {
-                $now = $vertex->getId();
-                if ($desc && is_string($now)) {
-                    throw new UnexpectedValueException('Unable to reverse sorting for string IDs');
-                }
-            } elseif ($orderBy === self::ORDER_DEGREE) {
-                $now = $vertex->getDegree();
-            } elseif ($orderBy === self::ORDER_INDEGREE) {
-                $now = $vertex->getDegreeIn();
-            } elseif ($orderBy === self::ORDER_OUTDEGREE) {
-                $now = $vertex->getDegreeOut();
-            } elseif ($orderBy === self::ORDER_GROUP) {
-                $now = $vertex->getGroup();
-            } else {
-                throw new InvalidArgumentException('Invalid order flag "' . $orderBy . '"');
-            }
+            $now = $callback($vertex);
+
             if ($desc && $now !== NULL) {
                 $now = -$now;
             }
@@ -300,22 +292,13 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
                 return $this->getVertexFirst();
             }
         }
+        $callback = $this->getCallback($orderBy);
+
         $ret = NULL;
         $best = NULL;
         foreach ($this->vertices as $vertex) {
-            if ($orderBy === self::ORDER_ID) {
-                $now = $vertex->getId();
-            } elseif ($orderBy === self::ORDER_DEGREE) {
-                $now = $vertex->getDegree();
-            } elseif ($orderBy === self::ORDER_INDEGREE) {
-                $now = $vertex->getDegreeIn();
-            } elseif ($orderBy === self::ORDER_OUTDEGREE) {
-                $now = $vertex->getDegreeOut();
-            } elseif ($orderBy === self::ORDER_GROUP) {
-                $now = $vertex->getGroup();
-            } else {
-                throw new InvalidArgumentException('Invalid order flag "' . $orderBy . '"');
-            }
+            $now = $callback($vertex);
+
             if ($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)) {
                 $ret = $vertex;
                 $best = $now;
@@ -389,6 +372,38 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     {
         return function (Vertex $vertex) use ($id) {
             return ($vertex->getId() == $id);
+        };
+    }
+
+    /**
+     * get callback/Closure to be called on Vertex instances for given callback identifier
+     *
+     * @param callable|int $callback
+     * @throws InvalidArgumentException
+     * @return Closure
+     */
+    private function getCallback($callback)
+    {
+        if ($callback instanceof Closure) {
+            return $callback;
+        }
+
+        static $methods = array(
+            self::ORDER_ID => 'getId',
+            self::ORDER_DEGREE => 'getDegree',
+            self::ORDER_INDEGREE => 'getDegreeIn',
+            self::ORDER_OUTDEGREE => 'getDegreeOut',
+            self::ORDER_GROUP => 'getGroup'
+        );
+
+        if (!is_int($callback) || !isset($methods[$callback])) {
+            throw new InvalidArgumentException('Invalid callback given');
+        }
+
+        $method = $methods[$callback];
+
+        return function (Vertex $vertex) use ($method) {
+            return $vertex->$method();
         };
     }
 }
