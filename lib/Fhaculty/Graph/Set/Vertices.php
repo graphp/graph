@@ -6,10 +6,12 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
+use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Countable;
 use IteratorAggregate;
 use IteratorIterator;
 use ArrayIterator;
+use SplPriorityQueue;
 use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Set\VerticesMap;
 
@@ -178,7 +180,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return current($this->vertices);
     }
 
-    public function getVertexMatchOrNull($callbackCheck)
+    private function getVertexMatchOrNull($callbackCheck)
     {
         foreach ($this->vertices as $vertex) {
             if ($callbackCheck($vertex)) {
@@ -210,7 +212,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      */
     public function getVerticesMatch($callbackCheck)
     {
-        return new self(array_filter($callbackCheck, $this->vertices));
+        return new self(array_filter($this->vertices, $callbackCheck));
     }
 
     /**

@@ -12,7 +12,6 @@ use Fhaculty\Graph\Exception\RangeException;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\BadMethodCallException;
-use Fhaculty\Graph\Set\VerticesAggregate;
 
 abstract class Base extends Layoutable implements VerticesAggregate
 {
