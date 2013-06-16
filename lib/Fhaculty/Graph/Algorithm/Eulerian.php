@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Algorithm\Degree;
 
 class Eulerian extends BaseGraph
 {
@@ -12,16 +13,18 @@ class Eulerian extends BaseGraph
      *
      * @return boolean
      * @uses Graph::isConnected()
-     * @uses Vertex::getDegree()
+     * @uses Degree::getDegreeVertex()
      * @todo isolated vertices should be ignored
      * @todo definition is only valid for undirected graphs
      */
     public function hasCycle()
     {
         if ($this->graph->isConnected()) {
+            $alg = new Degree($this->graph);
+
             foreach ($this->graph->getVertices() as $vertex) {
                 // uneven degree => fail
-                if ($vertex->getDegree() & 1) {
+                if ($alg->getDegreeVertex($vertex) & 1) {
                     return false;
                 }
             }
