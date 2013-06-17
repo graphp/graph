@@ -440,7 +440,7 @@ abstract class Base extends Layoutable implements VerticesAggregate
      *
      * @return Vertices
      */
-    abstract public function getVertices();
+    //abstract public function getVertices();
 
     /**
      * get graph instance this edge is attached to
