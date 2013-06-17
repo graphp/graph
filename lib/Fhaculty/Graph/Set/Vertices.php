@@ -189,16 +189,25 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     /**
      * get a new set of Vertices that match the given callback filter function
      *
+     * This only keeps Vertex elements if the $callbackCheck returns a boolean
+     * true and filters out everything else.
+     *
+     * Vertex index positions will be left unchanged, so if you call this method
+     * on a VerticesMap, it will also return a VerticesMap.
+     *
      * @param callable $callbackCheck
      * @return Vertices a new Vertices instance
      */
     public function getVerticesMatch($callbackCheck)
     {
-        return new self(array_filter($this->vertices, $callbackCheck));
+        return new static(array_filter($this->vertices, $callbackCheck));
     }
 
     /**
      * get iterator for vertices (optionally ordered by given criterium $by) from given array of vertices
+     *
+     * Vertex index positions will be left unchanged, so if you call this method
+     * on a VerticesMap, it will also return a VerticesMap.
      *
      * @param  int                      $orderBy  criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param  boolean                  $desc     whether to return biggest first (true) instead of smallest first (default:false)
@@ -213,11 +222,18 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     public function getVerticesOrder($orderBy = self::ORDER_FIFO, $desc = false)
     {
         if ($orderBy === self::ORDER_RANDOM) {
-            $vertices = $this->vertices;
-            shuffle($vertices);
+            // shuffle the vertex positions
+            $keys = array_keys($this->vertices);
+            shuffle($keys);
+
+            // re-order according to shuffled vertex positions
+            $vertices = array();
+            foreach ($keys as $key) {
+                $vertices[$key] = $this->vertices[$key];
+            }
 
             // create iterator for shuffled array (no need to check DESC flag)
-            return new self($vertices);
+            return new static($vertices);
         }
 
         $callback = $this->getCallback($orderBy);
@@ -236,7 +252,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
             }
         });
 
-        return new self($array);
+        return new static($array);
     }
 
     /**
