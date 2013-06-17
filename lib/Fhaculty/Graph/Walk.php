@@ -244,39 +244,16 @@ class Walk extends Set implements VerticesAggregate
     }
 
     /**
-     * return set of all unique Vertices of walk
+     * return set of all Vertices of walk (in sequence visited in walk, may contain duplicates)
+     *
+     * If you need to return set a of all unique Vertices of walk, use
+     * `Walk::getVertices()->getVerticesDistinct()` instead.
      *
      * @return Vertices
      */
     public function getVertices()
     {
-        $vertices = array();
-        foreach ($this->vertices as $vertex) {
-            $vertices[$vertex->getId()] = $vertex;
-        }
-
-        return new Vertices($vertices);
-    }
-
-    /**
-     * return set of all Vertices of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return Vertices
-     */
-    public function getVerticesSequence()
-    {
         return new Vertices($this->vertices);
-    }
-
-    /**
-     * return array of all vertex ids of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return string[]
-     * @uses Vertex::getId()
-     */
-    public function getVerticesSequenceId()
-    {
-        return $this->getVerticesSequence()->getIds();
     }
 
     /**
@@ -371,8 +348,7 @@ class Walk extends Set implements VerticesAggregate
     {
         $vertices = $this->getGraph()->getVertices()->getMap();
         // check source graph contains all vertices
-        foreach ($this->vertices as $vertex) {
-            $vid = $vertex->getId();
+        foreach ($this->getVertices()->getMap() as $vid => $vertex) {
             // make sure vertex ID exists and has not been replaced
             if (!isset($vertices[$vid]) || $vertices[$id] !== $vertex) {
                 return false;
