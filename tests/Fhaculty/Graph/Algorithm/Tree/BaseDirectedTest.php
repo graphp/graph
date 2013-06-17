@@ -4,15 +4,30 @@ use Fhaculty\Graph\Algorithm\Tree\BaseDirected;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Set\Vertices;
 
 abstract class BaseDirectedTest extends TestCase
 {
+    /**
+     *
+     * @param Graph $graph
+     * @return BaseDirected
+     */
     abstract protected function createTreeAlg(Graph $graph);
 
+    /**
+     * @return Graph
+     */
     abstract protected function createGraphNonTree();
 
+    /**
+     * @return Graph
+     */
     abstract protected function createGraphTree();
 
+    /**
+     * @return Graph
+     */
     abstract protected function createGraphParallelEdge();
 
     public function testEmptyGraph()
@@ -21,8 +36,8 @@ abstract class BaseDirectedTest extends TestCase
 
         $tree = $this->createTreeAlg($graph);
         $this->assertTrue($tree->isTree());
-        $this->assertEquals(array(), $tree->getVerticesLeaf());
-        $this->assertEquals(array(), $tree->getVerticesInternal());
+        $this->assertTrue($tree->getVerticesLeaf()->isEmpty());
+        $this->assertTrue($tree->getVerticesInternal()->isEmpty());
 
         return $tree;
     }
@@ -62,24 +77,25 @@ abstract class BaseDirectedTest extends TestCase
         $graph = $this->createGraphTree();
         $root = $graph->getVertexFirst();
 
-        $nonRoot = $graph->getVertices();
+        $nonRoot = $graph->getVertices()->getMap();
         unset($nonRoot[$root->getId()]);
+        $nonRoot = new Vertices($nonRoot);
 
-        $c1 = current($nonRoot);
+        $c1 = $nonRoot->getVertexFirst();
 
         $tree = $this->createTreeAlg($graph);
 
         $this->assertTrue($tree->isTree());
         $this->assertSame($root, $tree->getVertexRoot());
-        $this->assertSame(array_values($graph->getVertices()), array_values($tree->getVerticesSubtree($root)));
-        $this->assertSame(array_values($nonRoot), array_values($tree->getVerticesChildren($root)));
-        $this->assertSame(array_values($nonRoot), array_values($tree->getVerticesDescendant($root)));
-        $this->assertSame(array_values($nonRoot), array_values($tree->getVerticesLeaf()));
-        $this->assertSame(array(), array_values($tree->getVerticesInternal()));
+        $this->assertSame($graph->getVertices()->getVector(), $tree->getVerticesSubtree($root)->getVector());
+        $this->assertSame($nonRoot->getVector(), $tree->getVerticesChildren($root)->getVector());
+        $this->assertSame($nonRoot->getVector(), $tree->getVerticesDescendant($root)->getVector());
+        $this->assertSame($nonRoot->getVector(), $tree->getVerticesLeaf()->getVector());
+        $this->assertSame(array(), $tree->getVerticesInternal()->getVector());
         $this->assertSame($root, $tree->getVertexParent($c1));
-        $this->assertSame(array(), $tree->getVerticesChildren($c1));
-        $this->assertSame(array(), $tree->getVerticesDescendant($c1));
-        $this->assertSame(array($c1), array_values($tree->getVerticesSubtree($c1)));
+        $this->assertSame(array(), $tree->getVerticesChildren($c1)->getVector());
+        $this->assertSame(array(), $tree->getVerticesDescendant($c1)->getVector());
+        $this->assertSame(array($c1), $tree->getVerticesSubtree($c1)->getVector());
         $this->assertEquals(2, $tree->getDegree());
         $this->assertEquals(0, $tree->getDepthVertex($root));
         $this->assertEquals(1, $tree->getDepthVertex($c1));
