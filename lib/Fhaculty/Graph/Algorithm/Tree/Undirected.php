@@ -10,6 +10,7 @@ use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\UndirectedId as UndirectedEdge;
+use Fhaculty\Graph\Algorithm\Degree;
 
 /**
  * Undirected tree implementation
@@ -76,11 +77,11 @@ class Undirected extends Tree
      *
      * @param Vertex $vertex
      * @return boolean
-     * @uses Vertex::getDegree()
+     * @uses Degree::getDegreeVertex()
      */
     public function isVertexLeaf(Vertex $vertex)
     {
-        return ($vertex->getDegree() === 1);
+        return ($this->degree->getDegreeVertex($vertex) === 1);
     }
 
     /**
@@ -88,11 +89,11 @@ class Undirected extends Tree
      *
      * @param Vertex $vertex
      * @return boolean
-     * @uses Vertex::getDegree()
+     * @uses Degree::getDegreeVertex()
      */
     public function isVertexInternal(Vertex $vertex)
     {
-        return ($vertex->getDegree() >= 2);
+        return ($this->degree->getDegreeVertex($vertex) >= 2);
     }
 
     /**

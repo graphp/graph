@@ -4,6 +4,7 @@ namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Algorithm\Directed;
 use Fhaculty\Graph\Algorithm\Groups;
+use Fhaculty\Graph\Algorithm\Degree;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Edge\Base as Edge;
@@ -316,12 +317,14 @@ class GraphViz
                 $script .= '  }' . self::EOL;
             }
         } else {
+            $alg = new Degree($this->graph);
+
             // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
             // other vertices wil be added automatically due to below edge definitions
             foreach ($this->graph->getVertices() as $vid => $vertex){
                 $layout = $this->getLayoutVertex($vertex);
 
-                if($vertex->isIsolated() || $layout){
+                if($layout || $alg->isVertexIsolated($vertex)){
                     $script .= $this->formatIndent . $this->escapeId($vid);
                     if($layout){
                         $script .= ' ' . $this->escapeAttributes($layout);

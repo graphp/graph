@@ -8,6 +8,7 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
+use Fhaculty\Graph\Algorithm\Degree;
 
 /**
  * Abstract base class for tree algorithms
@@ -35,6 +36,19 @@ use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
  */
 abstract class Base extends BaseGraph
 {
+    /**
+     *
+     * @var Degree
+     */
+    protected $degree;
+
+    public function __construct(Graph $graph)
+    {
+        parent::__construct($graph);
+
+        $this->degree = new Degree($graph);
+    }
+
     /**
      * checks whether the given graph is actually a tree
      *

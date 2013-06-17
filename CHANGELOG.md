@@ -23,6 +23,12 @@ improves testablity and avoids tight coupling. Update your references if applica
 | `Graph::getDegreeMax()` | `Algorithm\Degree::getDegreeMax()` | [#29](https://github.com/clue/graph/issues/29) |
 | `Graph::isRegular()` | `Algorithm\Degree::isRegular()` | [#29](https://github.com/clue/graph/issues/29) |
 | `Graph::isBalanced()` | `Algorithm\Degree::isBalanced()` | [#29](https://github.com/clue/graph/issues/29) |
+| `Vertex::getDegree()` | `Algorithm\Degree:getDegreeVertex()` | [#49](https://github.com/clue/graph/issues/49) |
+| `Vertex::getDegreeIn()` | `Algorithm\Degree:getDegreeInVertex()` | [#49](https://github.com/clue/graph/issues/49) |
+| `Vertex::getDegreeOut()` | `Algorithm\Degree:getDegreeOutVertex()` | [#49](https://github.com/clue/graph/issues/49) |
+| `Vertex::isSink()` | `Algorithm\Degree:isVertexSink()` | [#49](https://github.com/clue/graph/issues/49) |
+| `Vertex::isSource()` | `Algorithm\Degree:isVertexSource()` | [#49](https://github.com/clue/graph/issues/49) |
+| `Vertex::isIsolated()` | `Algorithm\Degree::isVertexIsolated()` | [#49](https://github.com/clue/graph/issues/49) |
 |-|-|-|
 | `Set::isDirected()` | `Algorithm\Directed::isDirected()` | [#34](https://github.com/clue/graph/issues/34) |
 |-|-|-|
@@ -55,7 +61,7 @@ unchanged. Update your references if applicable:
 * Feature: New `Algorithm\Tree` namespace with algorithms for undirected and directed, rooted trees ([#44](https://github.com/clue/graph/issues/44))
 * Feature: According to be above list of moved algorithm methods, the following algorithm classes have been added ([#27](https://github.com/clue/graph/issues/27)):
     * New `Algorithm\Weight` ([#33](https://github.com/clue/graph/issues/33))
-    * New `Algorithm\Degree` ([#29](https://github.com/clue/graph/issues/29))
+    * New `Algorithm\Degree` ([#29](https://github.com/clue/graph/issues/29), [#49](https://github.com/clue/graph/issues/49))
     * New `Algorithm\Directed` ([#34](https://github.com/clue/graph/issues/34))
     * New `Algorithm\Symmetric` ([#41](https://github.com/clue/graph/issues/41))
     * New `Algorithm\Complete` ([#43](https://github.com/clue/graph/issues/43))
