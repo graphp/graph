@@ -19,7 +19,6 @@ use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
 class SuccessiveShortestPath extends Base
 {
     /**
-     * @uses Vertex::getFlow()
      * @uses Graph::createGraphClone()
      * @uses AlgorithmResidualGraph::createGraph()
      * @uses AlgorithmSpMooreBellmanFord::getEdgesTo(Vertex $targetVertex)

@@ -58,23 +58,6 @@ abstract class Set implements VerticesAggregate
     }
 
     /**
-     * check if this graph has any flow set (any edge has a non-NULL flow)
-     *
-     * @return boolean
-     * @uses Edge::getFlow()
-     */
-    public function hasFlow()
-    {
-        foreach ($this->edges as $edge) {
-            if ($edge->getFlow() !== NULL) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * checks whether this graph has any loops (edges from vertex to itself)
      *
      * @return boolean
