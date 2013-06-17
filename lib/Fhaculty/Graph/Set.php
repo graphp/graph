@@ -21,12 +21,6 @@ abstract class Set implements VerticesAggregate
     protected $edges = array();
 
     /**
-     *
-     * @var Vertex[]
-     */
-    protected $vertices = array();
-
-    /**
      * returns an array of ALL Edges in this graph
      *
      * @return Edge[]
@@ -37,14 +31,11 @@ abstract class Set implements VerticesAggregate
     }
 
     /**
-     * returns an set of all Vertices
+     * returns a set of all Vertices
      *
      * @return Vertices
      */
-    public function getVertices()
-    {
-        return new Vertices($this->vertices);
-    }
+    // abstract public function getVertices();
 
     /**
      * return number of vertices (aka. size of graph, |V| or just 'n')
@@ -53,7 +44,7 @@ abstract class Set implements VerticesAggregate
      */
     public function getNumberOfVertices()
     {
-        return count($this->vertices);
+        return count($this->getVertices());
     }
 
     /**

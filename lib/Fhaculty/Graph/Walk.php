@@ -32,6 +32,12 @@ class Walk extends Set implements VerticesAggregate
         return new self($vertices, $edges);
     }
 
+    /**
+     *
+     * @var Vertex[]
+     */
+    protected $vertices = array();
+
     protected function __construct(array $vertices, array $edges)
     {
         $this->vertices = $vertices;
