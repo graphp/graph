@@ -173,6 +173,25 @@ abstract class BaseVerticesTest extends TestCase
         $this->assertEquals($vertices->getVector(), $values);
     }
 
+    /**
+     *
+     * @param Vertices $vertices
+     * @depends testTwo
+     */
+    public function testTwoMatch(Vertices $vertices)
+    {
+        $verticesMatch = $vertices->getVerticesMatch(array($this, 'returnTrue'));
+        $this->assertEquals($vertices->getVector(), $verticesMatch->getVector());
+
+        $vertexMatch = $vertices->getVertexMatch(array($this, 'returnTrue'));
+        $this->assertEquals($vertices->getVertexFirst(), $vertexMatch);
+    }
+
+    public function returnTrue(Vertex $vertex)
+    {
+        return true;
+    }
+
     public function testOrderByGroup()
     {
         $graph = new Graph();

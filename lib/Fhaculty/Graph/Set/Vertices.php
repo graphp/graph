@@ -172,16 +172,6 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return current($this->vertices);
     }
 
-    private function getVertexMatchOrNull($callbackCheck)
-    {
-        foreach ($this->vertices as $vertex) {
-            if ($callbackCheck($vertex)) {
-                return $vertex;
-            }
-        }
-        return null;
-    }
-
     public function getVertexMatch($callbackCheck)
     {
         $ret = $this->getVertexMatchOrNull($callbackCheck);
@@ -378,6 +368,18 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         };
     }
 
+    private function getVertexMatchOrNull($callbackCheck)
+    {
+        $callbackCheck = $this->getCallback($callbackCheck);
+
+        foreach ($this->vertices as $vertex) {
+            if ($callbackCheck($vertex)) {
+                return $vertex;
+            }
+        }
+        return null;
+    }
+
     /**
      * get callback/Closure to be called on Vertex instances for given callback identifier
      *
@@ -388,6 +390,11 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     private function getCallback($callback)
     {
         if (is_callable($callback)) {
+            if (is_array($callback)) {
+                $callback = function (Vertex $vertex) use ($callback) {
+                    return call_user_func($callback, $vertex);
+                };
+            }
             return $callback;
         }
 
