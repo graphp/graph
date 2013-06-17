@@ -57,7 +57,7 @@ class BreadthFirstTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($distance, $walk->getNumberOfEdges());
 
             if ($debug) {
-                echo ' (vertex walk: ' . implode(', ', $walk->getVerticesSequenceId()) . ')';
+                echo ' (vertex walk: ' . implode(', ', $walk->getVertices()->getVerticesDistinct()->getIds()) . ')';
                 echo PHP_EOL;
 
                 $vis = new GraphViz($walk->createGraph());
