@@ -88,7 +88,7 @@ class TestCase extends PHPUnit_Framework_TestCase
             $ret .= $edge->getVertexStart()->getId() . ' -> ' . $edge->getVertexEnd()->getId();
         } else {
             $vertices = $edge->getVertices()->getIds();
-            $ret .= $vertices[0]->getId() . ' -- ' . $vertices[1]->getId();
+            $ret .= $vertices[0] . ' -- ' . $vertices[1];
         }
         $ret .= PHP_EOL . 'flow: ' . $edge->getFlow();
         $ret .= PHP_EOL . 'capacity: ' . $edge->getCapacity();
