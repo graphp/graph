@@ -2,6 +2,8 @@
 
 namespace Fhaculty\Graph;
 
+
+
 use Fhaculty\Graph\Exception\BadMethodCallException;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
@@ -16,6 +18,7 @@ use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst as AlgorithmSpBreadthFirs
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Edge\UndirectedId as EdgeUndirectedId;
+use Fhaculty\Graph\Algorithm\Degree;
 
 class Vertex extends Layoutable
 {
@@ -38,7 +41,7 @@ class Vertex extends Layoutable
      * order by vertex degree
      *
      * @var int
-     * @see Vertex::getDegree()
+     * @see Degree::getDegreeVertex()
      */
     const ORDER_DEGREE = 2;
 
@@ -46,7 +49,7 @@ class Vertex extends Layoutable
      * order by indegree of vertex
      *
      * @var int
-     * @see Vertex::getDegreeIn()
+     * @see Degree::getDegreeInVertex()
      */
     const ORDER_INDEGREE = 3;
 
@@ -54,7 +57,7 @@ class Vertex extends Layoutable
      * order by outdegree of vertex
      *
      * @var int
-     * @see Vertex::getDegreeOut()
+     * @see Degree::getDegreeOutVertex()
      */
     const ORDER_OUTDEGREE = 4;
 
@@ -84,9 +87,9 @@ class Vertex extends Layoutable
      * @throws UnderflowException       if no vertices exist
      * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
-     * @uses Vertex::getDegree()
-     * @uses Vertex::getDegreeIn()
-     * @uses Vertex::getDegreeOut()
+     * @uses Degree::getDegreeVertex()
+     * @uses Degree::getDegreeInVertex()
+     * @uses Degree::getDegreeOutVertex()
      * @uses Vertex::getGroup()
      */
     public static function getFirst($vertices, $by = self::ORDER_FIFO, $desc = false)
@@ -99,6 +102,12 @@ class Vertex extends Layoutable
 
             // just return by random key (no need to check for DESC flag)
             return $vertices[array_rand($vertices)];
+        }
+        if ($by === self::ORDER_DEGREE || $by === self::ORDER_INDEGREE || $by === self::ORDER_OUTDEGREE) {
+            foreach ($vertices as $vertex) {
+                $degree = new Degree($vertex->getGraph());
+                break;
+            }
         }
         $ret = NULL;
         $best = NULL;
@@ -116,11 +125,11 @@ class Vertex extends Layoutable
             } elseif ($by === self::ORDER_ID) {
                 $now = $vertex->getId();
             } elseif ($by === self::ORDER_DEGREE) {
-                $now = $vertex->getDegree();
+                $now = $degree->getDegreeVertex($vertex);
             } elseif ($by === self::ORDER_INDEGREE) {
-                $now = $vertex->getDegreeIn();
+                $now = $degree->getDegreeInVertex($vertex);
             } elseif ($by === self::ORDER_OUTDEGREE) {
-                $now = $vertex->getDegreeOut();
+                $now = $degree->getDegreeOutVertex($vertex);
             } elseif ($by === self::ORDER_GROUP) {
                 $now = $vertex->getGroup();
             } else {
@@ -149,9 +158,9 @@ class Vertex extends Layoutable
      * @throws UnexpectedValueException if trying to sort by reverse string IDs
      * @uses Graph::getVertices() if graph is given instead of vertices
      * @uses Vertex::getId()
-     * @uses Vertex::getDegree()
-     * @uses Vertex::getDegreeIn()
-     * @uses Vertex::getDegreeOut()
+     * @uses Degree::getDegreeVertex()
+     * @uses Degree::getDegreeInVertex()
+     * @uses Degree::getDegreeOutVertex()
      * @uses Vertex::getGroup()
      */
     public static function getAll($vertices, $by = self::ORDER_FIFO, $desc = false)
@@ -168,6 +177,12 @@ class Vertex extends Layoutable
             // create iterator for shuffled array (no need to check DESC flag)
             return new ArrayIterator($vertices);
         }
+        if ($by === self::ORDER_DEGREE || $by === self::ORDER_INDEGREE || $by === self::ORDER_OUTDEGREE) {
+            foreach ($vertices as $vertex) {
+                $degree = new Degree($vertex->getGraph());
+                break;
+            }
+        }
         $it = new SplPriorityQueue();
         foreach ($vertices as $vertex) {
             if ($by === self::ORDER_ID) {
@@ -176,11 +191,11 @@ class Vertex extends Layoutable
                     throw new UnexpectedValueException('Unable to reverse sorting for string IDs');
                 }
             } elseif ($by === self::ORDER_DEGREE) {
-                $now = $vertex->getDegree();
+                $now = $degree->getDegreeVertex($vertex);
             } elseif ($by === self::ORDER_INDEGREE) {
-                $now = $vertex->getDegreeIn();
+                $now = $degree->getDegreeInVertex($vertex);
             } elseif ($by === self::ORDER_OUTDEGREE) {
-                $now = $vertex->getDegreeOut();
+                $now = $degree->getDegreeOutVertex($vertex);
             } elseif ($by === self::ORDER_GROUP) {
                 $now = $vertex->getGroup();
             } else {
@@ -576,108 +591,6 @@ class Vertex extends Layoutable
         }
 
         return $ret;
-    }
-
-    /**
-     * get degree of this vertex (total number of edges)
-     *
-     * vertex degree counts the total number of edges attached to this vertex
-     * regardless of whether they're directed or not. loop edges are counted
-     * twice as both start and end form a 'line' to the same vertex.
-     *
-     * @return int
-     * @see Vertex::getDegreeIn()
-     * @see Vertex::getDegreeOut()
-     */
-    public function getDegree()
-    {
-        return count($this->edges);
-    }
-
-    /**
-     * check whether this vertex is isolated (i.e. has no edges attached)
-     *
-     * @return boolean
-     */
-    public function isIsolated()
-    {
-        return !$this->edges;
-    }
-
-    /**
-     * get indegree of this vertex (number of edges TO this vertex)
-     *
-     * @return int
-     * @uses Edge::hasVertexTarget()
-     * @see Vertex::getDegree()
-     */
-    public function getDegreeIn()
-    {
-        $n = 0;
-        foreach ($this->edges as $edge) {
-            if ($edge->hasVertexTarget($this)) {
-                ++$n;
-            }
-        }
-
-        return $n;
-    }
-
-    /**
-     * get outdegree of this vertex (number of edges FROM this vertex TO other vertices)
-     *
-     * @return int
-     * @uses Edge::hasVertexStart()
-     * @see Vertex::getDegree()
-     */
-    public function getDegreeOut()
-    {
-        $n = 0;
-        foreach ($this->edges as $edge) {
-            if ($edge->hasVertexStart($this)) {
-                ++$n;
-            }
-        }
-
-        return $n;
-    }
-
-    /**
-     * checks whether this vertex is a source, i.e. its indegree is zero
-     *
-     * @return boolean
-     * @uses Edge::hasVertexTarget()
-     * @see Vertex::getDegreeIn()
-     */
-    public function isSource()
-    {
-        foreach ($this->edges as $edge) {
-            if ($edge->hasVertexTarget($this)) {
-                return false;
-            }
-        }
-
-        // reach this point: no edge to this vertex
-        return true;
-    }
-
-    /**
-     * checks whether this vertex is a sink, i.e. its outdegree is zero
-     *
-     * @return boolean
-     * @uses Edge::hasVertexStart()
-     * @see Vertex::getDegreeOut()
-     */
-    public function isSink()
-    {
-        foreach ($this->edges as $edge) {
-            if ($edge->hasVertexStart($this)) {
-                return false;
-            }
-        }
-
-        // reach this point: no edge away from this vertex
-        return true;
     }
 
     /**
