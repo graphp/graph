@@ -17,7 +17,7 @@ use \SplPriorityQueue;
 use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst as AlgorithmSpBreadthFirst;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
-use Fhaculty\Graph\Edge\UndirectedId as EdgeUndirectedId;
+use Fhaculty\Graph\Edge\Undirected as EdgeUndirected;
 use Fhaculty\Graph\Algorithm\Degree;
 
 class Vertex extends Layoutable
@@ -403,7 +403,7 @@ class Vertex extends Layoutable
             throw new InvalidArgumentException('Target vertex has to be within the same graph');
         }
 
-        $edge = new EdgeUndirectedId($this, $vertex);
+        $edge = new EdgeUndirected($this, $vertex);
         $this->edges []= $edge;
         $vertex->edges []= $edge;
         $this->graph->addEdge($edge);

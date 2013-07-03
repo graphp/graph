@@ -9,7 +9,7 @@ use Fhaculty\Graph\Algorithm\Search\Base as Search;
 use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Edge\UndirectedId as UndirectedEdge;
+use Fhaculty\Graph\Edge\Undirected as UndirectedEdge;
 use Fhaculty\Graph\Algorithm\Degree;
 
 /**
