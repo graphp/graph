@@ -58,6 +58,7 @@ unchanged. Update your references if applicable:
 * BC break: `Graph::createVertices()` now returns an array of vertices instead of the chainable `Graph` ([#19](https://github.com/clue/graph/issues/19))
 * BC break: Move `Loader\UmlClassDiagram` to separate [fhaculty/graph-uml](https://github.com/fhaculty/graph-uml) repo ([#38](https://github.com/clue/graph/issues/38))
 * BC break: Remove needless `Algorithm\MinimumSpanningTree\PrimWithIf` (use `Algorithm\MinimumSpanningTree\Prim` instead) ([#45](https://github.com/clue/graph/issues/45))
+* BC break: `Vertex::createEdgeTo()` now returns an instance of type `Edge\Undirected` instead of `Edge\UndirectedId` ([#46](https://github.com/clue/graph/issues/46))
 * Feature: New `Algorithm\Tree` namespace with algorithms for undirected and directed, rooted trees ([#44](https://github.com/clue/graph/issues/44))
 * Feature: According to be above list of moved algorithm methods, the following algorithm classes have been added ([#27](https://github.com/clue/graph/issues/27)):
     * New `Algorithm\Weight` ([#33](https://github.com/clue/graph/issues/33))
