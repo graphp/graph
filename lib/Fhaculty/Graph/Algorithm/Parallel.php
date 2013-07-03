@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm;
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Graph;
+use LogicException;
 
 /**
  * Basic algorithms for working with parallel edges
@@ -70,8 +71,11 @@ class Parallel extends BaseGraph
         }
 
         $pos = array_search($edge, $edges, true);
+
         if ($pos === false) {
+            // @codeCoverageIgnoreStart
             throw new LogicException('Internal error: Current edge not found');
+            // @codeCoverageIgnoreEnd
         }
 
         // exclude current edge from parallel edges
