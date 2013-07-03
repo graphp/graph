@@ -26,11 +26,57 @@ class Parallel extends BaseGraph
     public function hasEdgeParallel()
     {
         foreach ($this->graph->getEdges() as $edge) {
-            if ($edge->hasEdgeParallel()) {
+            if ($this->hasEdgeParallelEdge($edge)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+
+    /**
+     * checks whether this edge has any parallel edges
+     *
+     * @return boolean
+     * @uses Edge::getEdgesParallel()
+     */
+    public function hasEdgeParallelEdge(Edge $edge)
+    {
+        return !!$this->getEdgesParallelEdge($edge);
+    }
+
+    /**
+     * get all edges parallel to this edge (excluding self)
+     *
+     * @return Edge[]
+     * @throws LogicException
+     */
+    public function getEdgesParallelEdge(Edge $edge)
+    {
+        $ends = $edge->getVertices();
+
+        // get all edges between this edge's endpoints
+        $edges = $ends[0]->getEdgesTo($ends[1]);
+        // edge points into both directions (undirected/bidirectional edge)
+        if ($edge->isConnection($ends[1], $ends[0])) {
+            // also get all edges in other direction
+            $back = $ends[1]->getEdgesTo($ends[0]);
+            foreach ($back as $edgee) {
+                if (!in_array($edgee, $edges)) {
+                    $edges[] = $edgee;
+                }
+            } // alternative implementation for array_unique(), because it requires casting edges to string
+        }
+
+        $pos = array_search($edge, $edges, true);
+        if ($pos === false) {
+            throw new LogicException('Internal error: Current edge not found');
+        }
+
+        // exclude current edge from parallel edges
+        unset($edges[$pos]);
+
+        return array_values($edges);
     }
 }
