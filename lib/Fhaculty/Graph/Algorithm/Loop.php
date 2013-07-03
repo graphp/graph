@@ -32,4 +32,21 @@ class Loop extends BaseSet
 
         return false;
     }
+
+    /**
+     * checks whether this vertex has a loop (edge to itself)
+     *
+     * @return boolean
+     * @uses Edge::isLoop()
+     */
+    public function hasLoopVertex(Vertex $vertex)
+    {
+        foreach ($vertex->getEdges() as $edge) {
+            if ($edge->isLoop()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
