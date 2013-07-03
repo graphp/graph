@@ -14,7 +14,6 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
 
 use \ArrayIterator;
 use \SplPriorityQueue;
-use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst as AlgorithmSpBreadthFirst;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Edge\Undirected as EdgeUndirected;
@@ -311,60 +310,6 @@ class Vertex extends Layoutable
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * checks whether this start vertex has a path to the given target vertex
-     *
-     * @param  Vertex  $vertex
-     * @return boolean
-     * @uses AlgorithmSpBreadthFirst::hasVertex()
-     */
-    public function hasPathTo(Vertex $vertex)
-    {
-        $alg = new AlgorithmSpBreadthFirst($this);
-
-        return $alg->hasVertex($vertex);
-    }
-
-    /**
-     * checks whether the given vertex has a path TO THIS vertex
-     *
-     * @param  Vertex  $vertex
-     * @return boolean
-     * @uses Vertex::hasPathTo()
-     */
-    public function hasPathFrom(Vertex $vertex)
-    {
-        return $vertex->hasPathTo($this);
-    }
-
-    /**
-     * get array of vertices this vertex has a path to
-     *
-     * @return Vertex[]
-     * @uses AlgorithmSpBreadthFirst::getVertices()
-     */
-    public function getVerticesPathTo()
-    {
-        $alg = new AlgorithmSpBreadthFirst($this);
-
-        return $alg->getVertices();
-    }
-
-    /**
-     * get array of vertices that have a path to this vertex
-     *
-     * @return Vertex[]
-     * @uses AlgorithmSpBreadthFirst::getVertices()
-     */
-    public function getVerticesPathFrom()
-    {
-        throw new BadMethodCallException('TODO');
-
-        $alg = new AlgorithmSpBreadthFirst($this, true);
-
-        return $alg->getVertices();
     }
 
     /**
