@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Edge\Directed as DirectedEdge;
 use Fhaculty\Graph\Graph;
 use LogicException;
 
@@ -55,19 +56,18 @@ class Parallel extends BaseGraph
      */
     public function getEdgesParallelEdge(Edge $edge)
     {
-        $ends = $edge->getVertices();
-
-        // get all edges between this edge's endpoints
-        $edges = $ends[0]->getEdgesTo($ends[1]);
-        // edge points into both directions (undirected/bidirectional edge)
-        if ($edge->isConnection($ends[1], $ends[0])) {
+        if ($edge instanceof DirectedEdge) {
+            // get all edges between this edge's endpoints
+            $edges = $edge->getVertexStart()->getEdgesTo($edge->getVertexEnd());
+        } else {
+            // edge points into both directions (undirected/bidirectional edge)
             // also get all edges in other direction
-            $back = $ends[1]->getEdgesTo($ends[0]);
-            foreach ($back as $edgee) {
-                if (!in_array($edgee, $edges)) {
-                    $edges[] = $edgee;
-                }
-            } // alternative implementation for array_unique(), because it requires casting edges to string
+            $ends       = $edge->getVertices();
+            $edgesOther = $ends[1]->getEdges();
+
+            $edges = array_filter($ends[0]->getEdges(), function(Edge $edge) use ($edgesOther) {
+                return in_array($edge, $edgesOther, true);
+            });
         }
 
         $pos = array_search($edge, $edges, true);
