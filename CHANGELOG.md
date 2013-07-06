@@ -83,6 +83,7 @@ unchanged. Update your references if applicable:
     * New `Algorithm\Parallel` ([#52](https://github.com/clue/graph/issues/52))
 * Feature: `Graph::createVertices()` now also accepts an array of vertex IDs ([#19](https://github.com/clue/graph/issues/19))
 * Fix: Various issues with `Vertex`/`Edge` layout attributes ([#32](https://github.com/clue/graph/issues/32))
+* Fix: Getting multiple parallel edges for undirected edges ([#52](https://github.com/clue/graph/issues/52))
 
 ## 0.5.0 (2013-05-07)
 
