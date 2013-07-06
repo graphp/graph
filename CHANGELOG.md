@@ -42,6 +42,9 @@ improves testablity and avoids tight coupling. Update your references if applica
 | `Vertex::getFlow()` | `Algorithm\Flow::getFlowVertex()` | [#47](https://github.com/clue/graph/issues/47) |
 |-|-|-|
 | `Vertex::isLeaf()` | `Algorithm\Tree\Undirected::isVertexLeaf()` | [#44](https://github.com/clue/graph/issues/44) |
+|-|-|-|
+| `Set::hasLoop()` | `Algorithm\Loop::hasLoop()` | [#51](https://github.com/clue/graph/issues/51) |
+| `Vertex::hasLoop()` | `Algorithm\Loop::hasLoopVertex()` | [#51](https://github.com/clue/graph/issues/51) |
 
 * BC break: Remove unneeded algorithm alias definitions ([#31](https://github.com/clue/graph/issues/31), [#50](https://github.com/clue/graph/issues/50)). The following *alias definitions*
 have been removed, their original/actual name has already existed before and continues to work
@@ -72,6 +75,7 @@ unchanged. Update your references if applicable:
     * New `Algorithm\Complete` ([#43](https://github.com/clue/graph/issues/43))
     * New `Algorithm\Flow` ([#30](https://github.com/clue/graph/issues/30), [#47](https://github.com/clue/graph/issues/47))
     * New `Algorithm\Tree` ([#44](https://github.com/clue/graph/issues/44))
+    * New `Algorithm\Loop` ([#51](https://github.com/clue/graph/issues/51))
 * Feature: `Graph::createVertices()` now also accepts an array of vertex IDs ([#19](https://github.com/clue/graph/issues/19))
 * Fix: Various issues with `Vertex`/`Edge` layout attributes ([#32](https://github.com/clue/graph/issues/32))
 
