@@ -63,21 +63,4 @@ abstract class Set
     {
         return count($this->edges);
     }
-
-    /**
-     * checks whether this graph has any loops (edges from vertex to itself)
-     *
-     * @return boolean
-     * @uses Edge::isLoop()
-     */
-    public function hasLoop()
-    {
-        foreach ($this->edges as $edge) {
-            if ($edge->isLoop()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
