@@ -329,23 +329,6 @@ class Graph extends Set
     }
 
     /**
-     * checks whether this graph has any parallel edges (aka multigraph)
-     *
-     * @return boolean
-     * @uses Edge::hasEdgeParallel() for every edge
-     */
-    public function hasEdgeParallel()
-    {
-        foreach ($this->edges as $edge) {
-            if ($edge->hasEdgeParallel()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * checks whether this graph is empty (no vertex - and thus no edges, aka null graph)
      *
      * @return boolean

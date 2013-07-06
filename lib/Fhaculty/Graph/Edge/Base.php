@@ -389,51 +389,6 @@ abstract class Base extends Layoutable
     }
 
     /**
-     * checks whether this edge has any parallel edges
-     *
-     * @return boolean
-     * @uses Edge::getEdgesParallel()
-     */
-    public function hasEdgeParallel()
-    {
-        return !!$this->getEdgesParallel();
-    }
-
-    /**
-     * get all edges parallel to this edge (excluding self)
-     *
-     * @return Edge[]
-     * @throws LogicException
-     */
-    public function getEdgesParallel()
-    {
-        $ends = $this->getVertices();
-
-        // get all edges between this edge's endpoints
-        $edges = $ends[0]->getEdgesTo($ends[1]);
-        // edge points into both directions (undirected/bidirectional edge)
-        if ($this->isConnection($ends[1], $ends[0])) {
-            // also get all edges in other direction
-            $back = $ends[1]->getEdgesTo($ends[0]);
-            foreach ($back as $edge) {
-                if (!in_array($edge, $edges)) {
-                    $edges[] = $edge;
-                }
-            } // alternative implementation for array_unique(), because it requires casting edges to string
-        }
-
-        $pos = array_search($this, $edges, true);
-        if ($pos === false) {
-            throw new LogicException('Internal error: Current edge not found');
-        }
-
-        // exclude current edge from parallel edges
-        unset($edges[$pos]);
-
-        return array_values($edges);
-    }
-
-    /**
      * get all vertices this edge connects
      *
      * @return Vertex[]
