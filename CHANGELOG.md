@@ -43,7 +43,7 @@ improves testablity and avoids tight coupling. Update your references if applica
 |-|-|-|
 | `Vertex::isLeaf()` | `Algorithm\Tree\Undirected::isVertexLeaf()` | [#44](https://github.com/clue/graph/issues/44) |
 
-* BC break: Remove unneeded algorithm alias definitions ([#31](https://github.com/clue/graph/issues/31)). The following *alias definitions*
+* BC break: Remove unneeded algorithm alias definitions ([#31](https://github.com/clue/graph/issues/31), [#50](https://github.com/clue/graph/issues/50)). The following *alias definitions*
 have been removed, their original/actual name has already existed before and continues to work
 unchanged. Update your references if applicable:
 
@@ -53,7 +53,11 @@ unchanged. Update your references if applicable:
 | `Graph::hasEulerianCycle()` | `Algorithm\Eulerian::hasCycle()` |
 | `Graph::getNumberOfComponents()` | `Algorithm\ConnectedComponents::getNumberOfComponents()` |
 | `Graph::getNumberOfGroups()` | `Algorithm\Groups::getNumberOfGroups()` |
-| `Graph::isBipartit()` | `AlgorithmBipartit::isBipartit()` |
+| `Graph::isBipartit()` | `Algorithm\Bipartit::isBipartit()` |
+| `Vertex::hasPathTo()` | `Algorithm\ShortestPath\BreadthFirst::hasVertex()` |
+| `Vertex::hasPathFrom()` | `Algorithm\ShortestPath\BreadthFirst::hasVertex()` |
+| `Vertex::getVerticesPathTo()` | `Algorithm\ShortestPath\BreadthFirst::getVertices()` |
+| `Vertex::getVerticesPathFrom()` | `Algorithm\ShortestPath\BreadthFirst::getVertices()` |
 
 * BC break: `Graph::createVertices()` now returns an array of vertices instead of the chainable `Graph` ([#19](https://github.com/clue/graph/issues/19))
 * BC break: Move `Loader\UmlClassDiagram` to separate [fhaculty/graph-uml](https://github.com/fhaculty/graph-uml) repo ([#38](https://github.com/clue/graph/issues/38))
