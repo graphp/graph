@@ -332,8 +332,8 @@ abstract class Base extends Layoutable
      *
      * @param  float|int|NULL           $capacity
      * @return Edge                     $this (chainable)
-     * @throws DomainException          if $capacity is invalid (not numeric or negative)
-     * @throws InvalidArgumentException if current flow exceeds new capacity
+     * @throws InvalidArgumentException if $capacity is invalid (not numeric or negative)
+     * @throws RangeException           if current flow exceeds new capacity
      */
     public function setCapacity($capacity)
     {
@@ -345,7 +345,7 @@ abstract class Base extends Layoutable
                 throw new InvalidArgumentException('Capacity must not be negative');
             }
             if ($this->flow !== NULL && $this->flow > $capacity) {
-                throw new InvalidArgumentException('Current flow of ' . $this->flow . ' exceeds new capacity');
+                throw new RangeException('Current flow of ' . $this->flow . ' exceeds new capacity');
             }
         }
         $this->capacity = $capacity;
@@ -366,9 +366,10 @@ abstract class Base extends Layoutable
     /**
      * set new total flow (capacity currently in use)
      *
-     * @param  float|int|NULL $flow
-     * @return Edge           $this (chainable)
-     * @throws Exception      if $flow is invalid or flow exceeds maximum capacity
+     * @param  float|int|NULL           $flow
+     * @return Edge                     $this (chainable)
+     * @throws InvalidArgumentException if $flow is invalid (not numeric or negative)
+     * @throws RangeException           if flow exceeds current maximum capacity
      */
     public function setFlow($flow)
     {
