@@ -404,8 +404,14 @@ abstract class Base extends Layoutable
     {
         foreach ($this->getVertices() as $vertex) {
             return $vertex->getGraph();
+
+            // the following code can only be reached if this edge does not
+            // contain any vertices (invalid state), so ignore its coverage
+            // @codeCoverageIgnoreStart
         }
+
         throw new LogicException('Internal error: should not be reached');
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -452,6 +458,8 @@ abstract class Base extends Layoutable
      */
     private function __clone()
     {
+        // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
+        // @codeCoverageIgnoreEnd
     }
 }
