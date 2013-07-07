@@ -27,11 +27,15 @@ class EdgeBaseTest extends TestCase
     {
         $this->edge->setCapacity(100);
         $this->edge->setFlow(10);
+
+        $this->assertEquals(90, $this->edge->getCapacityRemaining());
     }
 
     public function testCanSetFlowBeforeCapacity()
     {
         $this->edge->setFlow(20);
+
+        $this->assertEquals(null, $this->edge->getCapacityRemaining());
     }
 
     /**
@@ -41,5 +45,54 @@ class EdgeBaseTest extends TestCase
     {
         $this->edge->setCapacity(20);
         $this->edge->setFlow(100);
+    }
+
+    /**
+     * @expectedException RangeException
+     */
+    public function testCapacityMustBeGreaterThanFlow()
+    {
+        $this->edge->setFlow(100);
+        $this->edge->setCapacity(20);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testWeightMustBeNumeric()
+    {
+        $this->edge->setWeight("10");
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testCapacityMustBeNumeric()
+    {
+        $this->edge->setCapacity("10");
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testCapacityMustBePositive()
+    {
+        $this->edge->setCapacity(-10);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testFlowMustBeNumeric()
+    {
+        $this->edge->setFlow("10");
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testFlowMustBePositive()
+    {
+        $this->edge->setFlow(-10);
     }
 }
