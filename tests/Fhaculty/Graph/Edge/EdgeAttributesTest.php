@@ -3,7 +3,7 @@
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
 
-class EdgeBaseTest extends TestCase
+class EdgeAttributesTest extends TestCase
 {
 
     /**
