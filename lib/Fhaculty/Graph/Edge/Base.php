@@ -218,16 +218,7 @@ abstract class Base extends Layoutable
      * @return boolean
      * @uses Vertex::getVertexToFrom()
      */
-    public function hasVertexStart(Vertex $startVertex)
-    {
-        try {
-            $this->getVertexToFrom($startVertex);
-
-            return true;
-        } catch (InvalidArgumentException $ignore) { }
-
-        return false;
-    }
+    abstract public function hasVertexStart(Vertex $startVertex);
 
     /**
      * return true if this edge is an ingoing edge of the given vertex (i . e. the given vertex is a valid end vertex of this edge)
@@ -236,16 +227,7 @@ abstract class Base extends Layoutable
      * @return boolean
      * @uses Vertex::getVertexFromTo()
      */
-    public function hasVertexTarget(Vertex $targetVertex)
-    {
-        try {
-            $this->getVertexFromTo($targetVertex);
-
-            return true;
-        } catch (InvalidArgumentException $ignore) { }
-
-        return false;
-    }
+    abstract function hasVertexTarget(Vertex $targetVertex);
 
     abstract public function isConnection(Vertex $from, Vertex $to);
 
