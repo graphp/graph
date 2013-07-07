@@ -559,6 +559,8 @@ class Vertex extends Layoutable
      */
     private function __clone()
     {
+        // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
+        // @codeCoverageIgnoreEnd
     }
 }
