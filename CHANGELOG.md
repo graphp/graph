@@ -49,6 +49,18 @@ improves testablity and avoids tight coupling. Update your references if applica
 | `Set::hasEdgeParallel()` | `Algorithm\Parallel::hasEdgeParallel()` | [#52](https://github.com/clue/graph/issues/52) |
 | `Edge\Base::hasEdgeParallel()` | `Algorithm\Parallel::hasEdgeParallelEdge()` | [#52](https://github.com/clue/graph/issues/52) |
 | `Edge\Base::getEdgesParallel()` | `Algorithm\Parallel::getEdgeParallelEdge()` | [#52](https://github.com/clue/graph/issues/52) |
+|-|-|-|
+| `Graph::isEdgeless()` | `Algorithm\Property\GraphProperty::isEdgeless()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Graph::isTrivial()` | `Algorithm\Property\GraphProperty::isTrivial()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Walk::isCycle()` | `Algorithm\Property\WalkProperty::isCycle()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Walk::isPath()` | `Algorithm\Property\WalkProperty::isPath()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Walk::hasCycle()` | `Algorithm\Property\WalkProperty::hasCycle()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Walk::isLoop()` | `Algorithm\Property\WalkProperty::isLoop()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Walk::isDigon()` | `Algorithm\Property\WalkProperty::isDigon()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Walk::isTriangle()` | `Algorithm\Property\WalkProperty::isTriangle()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Walk::isSimple()` | `Algorithm\Property\WalkProperty::isSimple()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Walk::isHamiltonian()` | `Algorithm\Property\WalkProperty::isHamiltonian()` | [#54](https://github.com/clue/graph/issues/54) |
+| `Walk::isEulerian()` | `Algorithm\Property\WalkProperty::isEulerian()` | [#54](https://github.com/clue/graph/issues/54) |
 
 * BC break: Remove unneeded algorithm alias definitions ([#31](https://github.com/clue/graph/issues/31), [#50](https://github.com/clue/graph/issues/50)). The following *alias definitions*
 have been removed, their original/actual name has already existed before and continues to work
@@ -82,7 +94,9 @@ unchanged. Update your references if applicable:
     * New `Algorithm\Tree` ([#44](https://github.com/clue/graph/issues/44))
     * New `Algorithm\Loop` ([#51](https://github.com/clue/graph/issues/51))
     * New `Algorithm\Parallel` ([#52](https://github.com/clue/graph/issues/52))
+    * New `Algorithm\Property` ([#54](https://github.com/clue/graph/issues/54))
 * Feature: `Graph::createVertices()` now also accepts an array of vertex IDs ([#19](https://github.com/clue/graph/issues/19))
+* Feature: Add `Algorithm\Property\WalkProperty::hasLoop()` alias definition for completeness ([#54](https://github.com/clue/graph/issues/54))
 * Fix: Various issues with `Vertex`/`Edge` layout attributes ([#32](https://github.com/clue/graph/issues/32))
 * Fix: Getting multiple parallel edges for undirected edges ([#52](https://github.com/clue/graph/issues/52))
 
