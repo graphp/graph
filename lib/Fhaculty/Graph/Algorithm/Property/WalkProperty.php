@@ -23,13 +23,16 @@ class WalkProperty extends BaseAlgorithm
     /**
      * checks whether walk is a cycle (i.e. source vertex = target vertex)
      *
+     * A walk with no edges is not considered a cycle. The shortest possible
+     * cycle is a single loop edge.
+     *
      * @return bool
      * @link http://en.wikipedia.org/wiki/Cycle_%28graph_theory%29
      */
     public function isCycle()
     {
         $vertices = $this->walk->getVerticesSequence();
-        return (reset($vertices) === end($vertices));
+        return (reset($vertices) === end($vertices) && $this->walk->getEdges());
     }
 
     /**
