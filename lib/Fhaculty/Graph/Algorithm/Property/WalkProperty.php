@@ -28,7 +28,7 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isCycle()
     {
-        $vertices = $this->walk->getVertices();
+        $vertices = $this->walk->getVerticesSequence();
         return (reset($vertices) === end($vertices));
     }
 
