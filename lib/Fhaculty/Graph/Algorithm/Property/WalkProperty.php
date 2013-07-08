@@ -33,6 +33,9 @@ class WalkProperty extends BaseAlgorithm
     /**
      * checks whether walk is a cycle (i.e. source vertex = target vertex)
      *
+     * A cycle is also known as a closed path, a walk that is NOT a cycle is
+     * alsos known as an open path.
+     *
      * A walk with no edges is not considered a cycle. The shortest possible
      * cycle is a single loop edge.
      *
@@ -48,8 +51,11 @@ class WalkProperty extends BaseAlgorithm
     /**
      * checks whether walk is a path (i.e. does not contain any duplicate edges)
      *
+     * A path Walk is also known as a trail.
+     *
      * @return bool
      * @uses self::hasArrayDuplicates()
+     * @link http://www.proofwiki.org/wiki/Definition:Trail
      */
     public function isPath()
     {
@@ -140,6 +146,8 @@ class WalkProperty extends BaseAlgorithm
      * contains no duplicate/repeated vertices (and thus no duplicate edges either)
      * other than the starting and ending vertices of cycles.
      *
+     * A simple Walk is also known as a chain.
+     *
      * @return boolean
      * @uses self::isCycle()
      * @uses self::hasArrayDuplicates()
@@ -157,6 +165,8 @@ class WalkProperty extends BaseAlgorithm
 
     /**
      * checks whether walk is hamiltonian (i.e. walk over ALL VERTICES of the graph)
+     *
+     * A hamiltonian Walk is also known as a spanning walk.
      *
      * @return boolean
      * @see self::isEulerian() if you want to check for all EDGES instead of VERTICES
