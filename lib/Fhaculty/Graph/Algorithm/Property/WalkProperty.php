@@ -152,7 +152,7 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isHamiltonian()
     {
-        return $this->isArrayContentsEqual($this->walk->getVerticesSequence(), $this->getGraph()->getVertices());
+        return $this->isArrayContentsEqual($this->walk->getVerticesSequence(), $this->walk->getGraph()->getVertices());
     }
 
     /**
@@ -165,7 +165,7 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isEulerian()
     {
-        return $this->isArrayContentsEqual($this->walk->getEdgesSequence(), $this->getGraph()->getEdges());
+        return $this->isArrayContentsEqual($this->walk->getEdgesSequence(), $this->walk->getGraph()->getEdges());
     }
 
     /**
