@@ -100,7 +100,7 @@ class WalkProperty extends BaseAlgorithm
                 // no duplicate edges
                 !$this->hasArrayDuplicates($this->walk->getEdgesSequence()) &&
                 // exactly two distinct vertices
-                $this->walk->getNumberOfVertices() === 2 &&
+                count($this->walk->getVertices()) === 2 &&
                 // this is actually a cycle
                 $this->isCycle());
     }
@@ -116,7 +116,7 @@ class WalkProperty extends BaseAlgorithm
         // exactly 3 (implicitly distinct) edges
         return ($this->walk->getNumberOfEdges() === 3 &&
                 // exactly three distinct vertices
-                $this->walk->getNumberOfVertices() === 3 &&
+                count($this->walk->getVertices()) === 3 &&
                 // this is actually a cycle
                 $this->isCycle());
     }
