@@ -115,6 +115,25 @@ class GraphTest extends TestCase
         $graph->createVertex(33);
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testCreateInvalidId()
+    {
+        $graph = new Graph();
+        $graph->createVertex(array('invalid'));
+    }
+
+    public function testCreateDuplicateReturn()
+    {
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+
+        $v1again = $graph->createVertex(1, true);
+
+        $this->assertSame($v1, $v1again);
+    }
+
     public function testExporter()
     {
         $graph = new Graph();
@@ -123,6 +142,20 @@ class GraphTest extends TestCase
         $this->assertNotEquals('', (string)$graph);
 
         $this->assertInstanceOf('\\Fhaculty\\Graph\\Exporter\\ExporterInterface', $graph->getExporter());
+    }
+
+    public function testExporterGetSet()
+    {
+        $graph = new Graph();
+
+        $exporter = $graph->getExporter();
+
+        $this->assertInstanceOf('Fhaculty\Graph\Exporter\ExporterInterface', $exporter);
+
+        // multiple calls should return the same exporter
+        $this->assertSame($exporter, $graph->getExporter());
+
+        $graph->setExporter($exporter);
     }
 
     public function testHasVertex()
@@ -251,5 +284,134 @@ class GraphTest extends TestCase
         catch (InvalidArgumentException $ignoreExpected) {
             $this->assertEquals(10, $graph->getNumberOfVertices());
         }
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testCreateVerticesContainsInvalid()
+    {
+        $graph = new Graph();
+        $graph->createVertices(array(1, 2, array(), 3));
+    }
+
+    public function testRemoveEdge()
+    {
+        // 1 -- 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $edge = $v1->createEdge($v2);
+
+        $this->assertEquals(array($edge), $graph->getEdges());
+
+        $edge->destroy();
+        //$graph->removeEdge($edge);
+
+        $this->assertEquals(array(), $graph->getEdges());
+
+        return $graph;
+    }
+
+    /**
+     * @param Graph $graph
+     * @expectedException InvalidArgumentException
+     * @depends testRemoveEdge
+     */
+    public function testRemoveEdgeInvalid(Graph $graph)
+    {
+        $edge = $graph->getVertex(1)->createEdge($graph->getVertex(2));
+
+        $edge->destroy();
+        $edge->destroy();
+    }
+
+    public function testRemoveVertex()
+    {
+        $graph = new Graph();
+        $vertex = $graph->createVertex(1);
+
+        $this->assertEquals(array(1 => $vertex), $graph->getVertices());
+
+        $vertex->destroy();
+
+        $this->assertEquals(array(), $graph->getVertices());
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testRemoveVertexInvalid()
+    {
+        $graph = new Graph();
+        $vertex = $graph->createVertex(1);
+
+        $vertex->destroy();
+        $vertex->destroy();
+    }
+
+    public function testGetEdgesClones()
+    {
+        // 1 -> 2 -> 1
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdgeTo($v2);
+        $e2 = $v2->createEdgeTo($v1);
+
+        $graphClone = $graph->createGraphClone();
+
+        $this->assertEdgeEquals($e1, $graphClone->getEdgeClone($e1));
+        $this->assertEdgeEquals($e2, $graphClone->getEdgeCloneInverted($e1));
+    }
+
+    /**
+     * @expectedException OverflowException
+     */
+    public function testEdgesFailParallel()
+    {
+        // 1 -> 2, 1 -> 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdgeTo($v2);
+        $e2 = $v1->createEdgeTo($v2);
+
+        // which one to return? e1? e2?
+        $graph->getEdgeClone($e1);
+    }
+
+    /**
+     * @expectedException UnderflowException
+     */
+    public function testEdgesFailEdgeless()
+    {
+        // 1 -> 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdgeTo($v2);
+        $e2 = $v1->createEdgeTo($v2);
+
+        $graphCloneEdgeless = $graph->createGraphCloneEdgeless();
+
+        // nothing to return
+        $graphCloneEdgeless->getEdgeClone($e1);
+    }
+
+    public function testCreateGraphCloneVertices()
+    {
+        // 1 -- 2 -- 3
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $v3 = $graph->createVertex(3);
+        $e1 = $v1->createEdgeTo($v2);
+        $e2 = $v2->createEdgeTo($v3);
+
+        $graphClone = $graph->createGraphCloneVertices(array(1 => $v1, 2 => $v2));
+
+        $this->assertEquals(2, $graphClone->getNumberOfVertices());
+        $this->assertEquals(1, $graphClone->getNumberOfEdges());
     }
 }
