@@ -152,7 +152,12 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isHamiltonian()
     {
-        return $this->isArrayContentsEqual($this->walk->getVerticesSequence(), $this->walk->getGraph()->getVertices());
+        $vertices = $this->walk->getVerticesSequence();
+        // ignore starting vertex for cycles as it's always the same as ending vertex
+        if ($this->isCycle()) {
+            unset($vertices[0]);
+        }
+        return $this->isArrayContentsEqual($vertices, $this->walk->getGraph()->getVertices());
     }
 
     /**
