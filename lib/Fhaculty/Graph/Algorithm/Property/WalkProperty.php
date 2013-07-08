@@ -34,18 +34,59 @@ class WalkProperty extends BaseAlgorithm
      * checks whether walk is a cycle (i.e. source vertex = target vertex)
      *
      * A cycle is also known as a closed path, a walk that is NOT a cycle is
-     * alsos known as an open path.
+     * also known as an open path.
      *
      * A walk with no edges is not considered a cycle. The shortest possible
      * cycle is a single loop edge.
      *
      * @return bool
      * @link http://en.wikipedia.org/wiki/Cycle_%28graph_theory%29
+     * @see self::isCircuit()
+     * @see self::isLoop()
      */
     public function isCycle()
     {
         $vertices = $this->walk->getVerticesSequence();
         return (reset($vertices) === end($vertices) && $this->walk->getEdges());
+    }
+
+    /**
+     * checks whether this walk is a circuit (i.e. a cycle with no duplicate edges)
+     *
+     * A circuit is also known as a closed (=cycle) trail (=path), that has at
+     * least one edge.
+     *
+     * The following Walk is considered both a valid cycle and a valid circuit:
+     *
+     * 1 -> 2 -> 3 -\
+     * ^            |
+     * |            |
+     * \------------/
+     *
+     * The following Walk is also considered both a valid cycle and a valid circuit:
+     *
+     *      /->3--\
+     *      |     |
+     * 1 -> 2 -\  |
+     * ^    ^  |  |
+     * |    \--/  |
+     * |          |
+     * \----------/
+     *
+     * The later circuit walk can be expressed by its Vertex IDs as
+     * "1, 2, 2, 3, 1". If however, the inner loop would be "walked along"
+     * several times, the resulting walk would be expressed as
+     * "1, 2, 2, 2, 3, 1", which would still be a valid cycle, but NOT a valid
+     * circuit anymore.
+     *
+     * @return boolean
+     * @link http://www.proofwiki.org/wiki/Definition:Circuit
+     * @uses self::isCycle()
+     * @uses self::isPath()
+     */
+    public function isCircuit()
+    {
+        return ($this->isCycle() && $this->isPath());
     }
 
     /**
@@ -66,6 +107,14 @@ class WalkProperty extends BaseAlgorithm
      * checks whether walk contains a cycle (i.e. contains a duplicate vertex)
      *
      * a walk that CONTAINS a cycle does not neccessarily have to BE a cycle
+     *
+     * The following Walk is NOT a cycle, but it contains a valid cycle:
+     *
+     *      /->4
+     *      |
+     * 1 -> 2 -> 3 -\
+     *      ^       |
+     *      \-------/
      *
      * @return bool
      * @uses self::hasArrayDuplicates()
@@ -89,7 +138,15 @@ class WalkProperty extends BaseAlgorithm
     }
 
     /**
-     * checks whether this walk HAS a look (single edge connecting vertex A with vertex A again)
+     * checks whether this walk HAS a loop (single edge connecting vertex A with vertex A again)
+     *
+     * The following Walk is NOT a valid loop, but it contains a valid loop:
+     *
+     *      /->3
+     *      |
+     * 1 -> 2 -\
+     *      ^  |
+     *      \--/
      *
      * @return boolean
      * @uses AlgorithmLoop::hasLoop()
@@ -105,8 +162,22 @@ class WalkProperty extends BaseAlgorithm
     /**
      * checks whether this walk is a digon (a pair of parallel edges in a multigraph or a pair of antiparallel edges in a digraph)
      *
-     * a digon is a cycle connecting exactly two distinct vertices with exactly
+     * A digon is a cycle connecting exactly two distinct vertices with exactly
      * two distinct edges.
+     *
+     * The following Graph represents a digon in an undirected Graph:
+     *
+     *  /--\
+     * 1    2
+     *  \--/
+     *
+     * The following Graph represents a digon as a set of antiparallel directed
+     * Edges in directed Graph:
+     *
+     * 1 -> 2
+     * ^    |
+     * |    |
+     * \----/
      *
      * @return boolean
      * @uses self::hasArrayDuplicates()
@@ -126,6 +197,12 @@ class WalkProperty extends BaseAlgorithm
 
     /**
      * checks whether this walk is a triangle (a simple cycle with exactly three distinct vertices)
+     *
+     * The following Graph is a valid directed triangle:
+     *
+     * 1->2->3
+     * ^     |
+     * \-----/
      *
      * @return boolean
      * @uses self::isCycle()
