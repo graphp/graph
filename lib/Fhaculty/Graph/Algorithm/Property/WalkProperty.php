@@ -37,7 +37,21 @@ class WalkProperty extends BaseAlgorithm
      * also known as an open path.
      *
      * A walk with no edges is not considered a cycle. The shortest possible
-     * cycle is a single loop edge.
+     * cycle is a single loop edge:
+     *
+     * 1--\
+     * ^  |
+     * \--/
+     *
+     * The following Walk is also considered a valid cycle:
+     *
+     *      /->3--\
+     *      |     |
+     * 1 -> 2 -\  |
+     * ^    ^  |  |
+     * |    \--/  |
+     * |          |
+     * \----------/
      *
      * @return bool
      * @link http://en.wikipedia.org/wiki/Cycle_%28graph_theory%29
@@ -106,9 +120,11 @@ class WalkProperty extends BaseAlgorithm
     /**
      * checks whether walk contains a cycle (i.e. contains a duplicate vertex)
      *
-     * a walk that CONTAINS a cycle does not neccessarily have to BE a cycle
+     * A walk that CONTAINS a cycle does not neccessarily have to BE a cycle.
+     * Conversely, a Walk that *is* a cycle, automatically always *contains* a
+     * cycle.
      *
-     * The following Walk is NOT a cycle, but it contains a valid cycle:
+     * The following Walk is NOT a cycle, but it *contains* a valid cycle:
      *
      *      /->4
      *      |
@@ -127,6 +143,17 @@ class WalkProperty extends BaseAlgorithm
 
     /**
      * checks whether this walk IS a loop (single edge connecting vertex A with vertex A again)
+     *
+     * A loop is the simplest possible cycle. As such, each loop is also a
+     * cycle. Accordingly, every Walk that *is* a loop, automatically also *is*
+     * a cycle and automatically *contains* a loop and automatically *contains*
+     * a cycle.
+     *
+     * The following Walk represents a simple (directed) loop:
+     *
+     * 1--\
+     * ^  |
+     * \--/
      *
      * @return boolean
      * @uses self::isCycle()
@@ -172,7 +199,7 @@ class WalkProperty extends BaseAlgorithm
      *  \--/
      *
      * The following Graph represents a digon as a set of antiparallel directed
-     * Edges in directed Graph:
+     * Edges in a directed Graph:
      *
      * 1 -> 2
      * ^    |
@@ -225,9 +252,44 @@ class WalkProperty extends BaseAlgorithm
      *
      * A simple Walk is also known as a chain.
      *
+     * The term "simple walk" is somewhat related to a walk with no cycles. If
+     * a Walk has a cycle, it is not simple - with one single exception: a Walk
+     * that IS a cycle automatically also contains a cycle, but if it contains
+     * no "further" additional cycles, it is considered a simple cycle.
+     *
+     * The following Graph represents a (very) simple Walk:
+     *
+     * 1 -- 2
+     *
+     * The following Graph IS a cycle and is simple:
+     *
+     * 1 -> 2
+     * ^    |
+     * \----/
+     *
+     * The following Graph contains a cycle and is NOT simple:
+     *
+     *      /->4
+     *      |
+     * 1 -> 2 -> 3 -\
+     *      ^       |
+     *      \-------/
+     *
+     * The following Graph IS a cycle and thus automatically contains a cycle.
+     * Due to the additional "inner" cycle (loop at vertex 2), it is NOT simple:
+     *
+     *      /->3--\
+     *      |     |
+     * 1 -> 2 -\  |
+     * ^    ^  |  |
+     * |    \--/  |
+     * |          |
+     * \----------/
+     *
      * @return boolean
      * @uses self::isCycle()
      * @uses self::hasArrayDuplicates()
+     * @see self::hasCycle()
      */
     public function isSimple()
     {
