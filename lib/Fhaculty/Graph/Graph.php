@@ -456,7 +456,9 @@ class Graph extends Set
      */
     private function __clone()
     {
+        // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
+        // @codeCoverageIgnoreEnd
     }
 
     /**
