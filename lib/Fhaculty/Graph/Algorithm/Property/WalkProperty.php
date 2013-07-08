@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm\Property;
 
 use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Algorithm\Base as BaseAlgorithm;
+use Fhaculty\Graph\Algorithm\Loop as AlgorithmLoop;
 
 /**
  * Simple algorithms for working with Walk properties
@@ -57,14 +58,29 @@ class WalkProperty extends BaseAlgorithm
     }
 
     /**
-     * checks whether this walk is a loop (single edge connecting vertex A with vertex A again)
+     * checks whether this walk IS a loop (single edge connecting vertex A with vertex A again)
      *
      * @return boolean
      * @uses self::isCycle()
+     * @see self::hasLoop()
      */
     public function isLoop()
     {
         return ($this->walk->getNumberOfEdges() === 1 && $this->isCycle());
+    }
+
+    /**
+     * checks whether this walk HAS a look (single edge connecting vertex A with vertex A again)
+     *
+     * @return boolean
+     * @uses AlgorithmLoop::hasLoop()
+     * @see self::isLoop()
+     */
+    public function hasLoop()
+    {
+        $alg = new AlgorithmLoop($this->walk);
+
+        return $alg->hasLoop();
     }
 
     /**
