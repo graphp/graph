@@ -81,6 +81,49 @@ class WalkPropertyTest extends TestCase
         $this->assertTrue($alg->isHamiltonian());
     }
 
+    public function testCircuit()
+    {
+        // 1 -> 2 -> 1, 2 -> 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdgeTo($v2);
+        $e2 = $v2->createEdgeTo($v1);
+        $e3 = $v2->createEdgeTo($v2);
+
+        // 1 -> 2 -> 2 -> 1
+        $walk = Walk::factoryFromEdges(array($e1, $e3, $e2), $v1);
+
+        $this->assertEquals(array(1, 2, 2, 1), $walk->getVerticesSequenceId());
+
+        $alg = new WalkProperty($walk);
+
+        $this->assertTrue($alg->isCycle());
+        $this->assertTrue($alg->isCircuit());
+    }
+
+    public function testNonCircuit()
+    {
+        // 1 -> 2 -> 1, 2 -> 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdgeTo($v2);
+        $e2 = $v2->createEdgeTo($v1);
+        $e3 = $v2->createEdgeTo($v2);
+
+        // non-circuit: taking loop twice
+        // 1 -> 2 -> 2 -> 2 -> 1
+        $walk = Walk::factoryFromEdges(array($e1, $e3, $e3, $e2), $v1);
+
+        $this->assertEquals(array(1, 2, 2, 2, 1), $walk->getVerticesSequenceId());
+
+        $alg = new WalkProperty($walk);
+
+        $this->assertTrue($alg->isCycle());
+        $this->assertFalse($alg->isCircuit());
+    }
+
     public function testDigon()
     {
         // 1 -> 2 -> 1
