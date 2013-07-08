@@ -3,10 +3,14 @@
 namespace Fhaculty\Graph;
 
 /**
+ * Base Walk class
  *
- * @author clue
+ * The general term "Walk" bundles the following mathematical concepts:
+ * walk, path, cycle, circuit, loop, trail, tour, etc.
+ *
  * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
+ * @see Fhaculty\Graph\Algorithm\Property\WalkProperty for checking special cases, such as cycles, loops, closed trails, etc.
  */
 class Walk extends Set
 {

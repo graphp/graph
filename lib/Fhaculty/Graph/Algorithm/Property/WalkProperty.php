@@ -13,8 +13,18 @@ use Fhaculty\Graph\Algorithm\Loop as AlgorithmLoop;
  */
 class WalkProperty extends BaseAlgorithm
 {
+    /**
+     * the Walk to operate on
+     *
+     * @var Walk
+     */
     protected $walk;
 
+    /**
+     * instantiate new WalkProperty algorithm
+     *
+     * @param Walk $walk
+     */
     public function __construct(Walk $walk)
     {
         $this->walk = $walk;
