@@ -97,6 +97,9 @@ unchanged. Update your references if applicable:
     * New `Algorithm\Property` ([#54](https://github.com/clue/graph/issues/54))
 * Feature: `Graph::createVertices()` now also accepts an array of vertex IDs ([#19](https://github.com/clue/graph/issues/19))
 * Feature: Add `Algorithm\Property\WalkProperty::hasLoop()` alias definition for completeness ([#54](https://github.com/clue/graph/issues/54))
+* Feature: Add `Algorithm\Property\WalkProperty::isCircuit()` definition to distinguish circuits from cycles ([#54](https://github.com/clue/graph/issues/54))
+* Fix: Checking hamiltonian cycles always returned false ([#54](https://github.com/clue/graph/issues/54))
+* Fix: A Walk with no edges is no longer considered a valid cycle ([#54](https://github.com/clue/graph/issues/54))
 * Fix: Various issues with `Vertex`/`Edge` layout attributes ([#32](https://github.com/clue/graph/issues/32))
 * Fix: Getting multiple parallel edges for undirected edges ([#52](https://github.com/clue/graph/issues/52))
 
