@@ -256,6 +256,39 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     }
 
     /**
+     * get intersection of Vertices with given other Vertices
+     *
+     * The intersection contains all Vertex instances that are present in BOTH
+     * this set of Vertices and the given set of other Vertices.
+     *
+     * Vertex index/keys will be preserved from original array.
+     *
+     * Duplicate Vertex instances will be kept if the corresponding number of
+     * Vertex instances is also found in $otherVertices.
+     *
+     * @param Vertices|Vertex[] $otherVertices
+     * @return Vertices a new Vertices set
+     */
+    public function getVerticesIntersection($otherVertices)
+    {
+        $otherArray = self::factory($otherVertices)->getVector();
+
+        $vertices = array();
+        foreach ($this->vertices as $vid => $vertex) {
+            $i = array_search($vertex, $otherArray, true);
+
+            if ($i !== false) {
+                // remove from other array in order to check for duplicate matches
+                unset($otherArray[$i]);
+
+                $vertices[$vid] = $vertex;
+            }
+        }
+
+        return new static($vertices);
+    }
+
+    /**
      * get first vertex (optionally ordered by given criterium $by) from given array of vertices
      *
      * @param  int                      $orderBy  criterium to sort by. see Vertex::ORDER_ID, etc.
