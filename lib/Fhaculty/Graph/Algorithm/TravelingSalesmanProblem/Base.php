@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 use Fhaculty\Graph\Cycle;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
 abstract class Base extends AlgorithmBase
@@ -63,7 +64,7 @@ abstract class Base extends AlgorithmBase
     /**
      * get array of edges connecting all vertices in a circle
      *
-     * @return Edge[]
+     * @return Edges
      */
     abstract public function getEdges();
 }

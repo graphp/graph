@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use \SplPriorityQueue;
 
@@ -10,7 +11,7 @@ class Dijkstra extends Base
     /**
      * get all edges on shortest path for this vertex
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {

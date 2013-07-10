@@ -11,13 +11,13 @@ class MooreBellmanFord extends Base
     /**
      *
      *
-     * @param Edge[]   $edges
+     * @param Edges    $edges
      * @param int[]    $totalCostOfCheapestPathTo
      * @param Vertex[] $predecessorVertexOfCheapestPathTo
      *
      * @return Vertex|NULL
      */
-    private function bigStep(array &$edges, array &$totalCostOfCheapestPathTo, array &$predecessorVertexOfCheapestPathTo)
+    private function bigStep(Edges $edges, array &$totalCostOfCheapestPathTo, array &$predecessorVertexOfCheapestPathTo)
     {
         $changed = NULL;
         // check for all edges
@@ -50,7 +50,7 @@ class MooreBellmanFord extends Base
     /**
      * Calculate the Moore-Bellman-Ford-Algorithm and get all edges on shortest path for this vertex
      *
-     * @return Edge[]
+     * @return Edges
      * @throws NegativeCycleException if there is a negative cycle
      */
     public function getEdges()

@@ -32,7 +32,7 @@ abstract class Base extends BaseVertex
      *
      * @param  Vertex    $endVertex
      * @throws Exception
-     * @return Edge[]
+     * @return Edges
      * @uses AlgorithmSp::getEdges()
      * @uses AlgorithmSp::getEdgesToInternal()
      */
@@ -47,7 +47,7 @@ abstract class Base extends BaseVertex
      * @param  Vertex    $endVertex
      * @param  array     $edges     array of all input edges to operate on
      * @throws Exception
-     * @return Edge[]
+     * @return Edges
      * @uses AlgorithmSp::getEdges() if no edges were given
      */
     protected function getEdgesToInternal(Vertex $endVertex, array $edges)
@@ -72,17 +72,17 @@ abstract class Base extends BaseVertex
             }
         }
 
-        return array_reverse($path);
+        return new Edges(array_reverse($path));
     }
 
     /**
      * get sum of weight of given edges
      *
-     * @param  Edge[] $edges
+     * @param  Edges $edges
      * @return float
      * @uses Edge::getWeight()
      */
-    private function sumEdges(array $edges)
+    private function sumEdges(Edges $edges)
     {
         $sum = 0;
         foreach ($edges as $edge) {

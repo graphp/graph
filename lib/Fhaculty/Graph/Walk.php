@@ -18,11 +18,11 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
     /**
      * construct new walk from given start vertex and given array of edges
      *
-     * @param  array                $edges
+     * @param  Edges|Edge[]         $edges
      * @param  Vertex               $startVertex
      * @return \Fhaculty\Graph\Walk
      */
-    public static function factoryFromEdges(array $edges, Vertex $startVertex)
+    public static function factoryFromEdges($edges, Vertex $startVertex)
     {
         $vertices = array($startVertex);
         $vertexCurrent = $startVertex;

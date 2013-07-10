@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Layoutable;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Graph;
@@ -244,7 +245,7 @@ abstract class Base extends Layoutable implements VerticesAggregate
     /**
      * get all edges parallel to this edge (excluding self)
      *
-     * @return Edge[]
+     * @return Edges
      * @throws LogicException
      */
     public function getEdgesParallel()
@@ -252,7 +253,7 @@ abstract class Base extends Layoutable implements VerticesAggregate
         $ends = $this->getVertices()->getVector();
 
         // get all edges between this edge's endpoints
-        $edges = $ends[0]->getEdgesTo($ends[1]);
+        $edges = $ends[0]->getEdgesTo($ends[1])->getVector();
         // edge points into both directions (undirected/bidirectional edge)
         if ($this->isConnection($ends[1], $ends[0])) {
             // also get all edges in other direction
@@ -272,7 +273,7 @@ abstract class Base extends Layoutable implements VerticesAggregate
         // exclude current edge from parallel edges
         unset($edges[$pos]);
 
-        return array_values($edges);
+        return new Edges(array_values($edges));
     }
 
     /**

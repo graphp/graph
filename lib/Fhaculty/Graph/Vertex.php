@@ -320,7 +320,7 @@ class Vertex extends Layoutable implements EdgesAggregate
      * get set of Edges FROM the given vertex TO this vertex
      *
      * @param  Vertex $vertex
-     * @return Edge[]
+     * @return Edges
      * @uses Vertex::getEdgesTo()
      */
     public function getEdgesFrom(Vertex $vertex)

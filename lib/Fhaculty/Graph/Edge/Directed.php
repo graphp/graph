@@ -6,6 +6,7 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\LogicException;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\Edges;
 
 class Directed extends Base
 {
@@ -124,7 +125,7 @@ class Directed extends Base
     /**
      * get all edges parallel to this edge (excluding self)
      *
-     * @return Edge[]
+     * @return Edges
      * @throws LogicException
      */
     public function getEdgesParallel()

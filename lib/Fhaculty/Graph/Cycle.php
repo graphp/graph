@@ -105,11 +105,11 @@ class Cycle extends Walk
     /**
      * create new cycle instance with vertices connected by given edges
      *
-     * @param  Edge[] $edges
-     * @param  Vertex $startVertex
+     * @param  Edges|Edge[] $edges
+     * @param  Vertex       $startVertex
      * @return Cycle
      */
-    public static function factoryFromEdges(array $edges, Vertex $startVertex)
+    public static function factoryFromEdges($edges, Vertex $startVertex)
     {
         $vertices = array($startVertex->getId() => $startVertex);
         foreach ($edges as $edge) {
