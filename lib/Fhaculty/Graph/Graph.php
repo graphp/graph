@@ -319,16 +319,6 @@ class Graph extends Set
     }
 
     /**
-     * checks whether this graph is trivial (one vertex and no edges)
-     *
-     * @return boolean
-     */
-    public function isTrivial()
-    {
-        return (!$this->edges && count($this->vertices) === 1);
-    }
-
-    /**
      * checks whether this graph is empty (no vertex - and thus no edges, aka null graph)
      *
      * @return boolean
@@ -336,16 +326,6 @@ class Graph extends Set
     public function isEmpty()
     {
         return !$this->vertices;
-    }
-
-    /**
-     * checks whether this graph has no edges
-     *
-     * @return boolean
-     */
-    public function isEdgeless()
-    {
-        return !$this->edges;
     }
 
     /**
