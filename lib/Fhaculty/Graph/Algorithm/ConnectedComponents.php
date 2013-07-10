@@ -9,6 +9,13 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\UnderflowException;
 
+/**
+ * Algorithm for working with connected components
+ *
+ * @link http://en.wikipedia.org/wiki/Connected_component_%28graph_theory%29
+ * @link http://mathworld.wolfram.com/ConnectedGraph.html
+ * @link http://math.stackexchange.com/questions/50551/is-the-empty-graph-connected
+ */
 class ConnectedComponents extends BaseGraph
 {
     /**
@@ -40,12 +47,21 @@ class ConnectedComponents extends BaseGraph
     /**
      * check whether this graph consists of only a single component
      *
-     * this is faster than calling getNumberOfComponents(), as it only has to
+     * If a Graph consists of only a single component, it is said to be a
+     * connected Graph, otherwise it's called a disconnected Graph.
+     *
+     * This method returns exactly the same result as checking
+     * <pre>($this->getNumberOfComponents() === 1)</pre>. However, using this
+     * method is faster than calling getNumberOfComponents(), as it only has to
      * count all vertices in one component to see if the graph consists of only
-     * a single component
+     * a single component.
+     *
+     * As such, a null Graph (a Graph with no vertices) is not considered
+     * connected here.
      *
      * @return boolean
      * @uses AlgorithmSearchBreadthFirst::getNumberOfVertices()
+     * @see self::getNumberOfComponents()
      */
     public function isSingle()
     {
@@ -62,6 +78,10 @@ class ConnectedComponents extends BaseGraph
     }
 
     /**
+     * count number of connected components
+     *
+     * A null Graph (a Graph with no vertices) will return 0 components.
+     *
      * @return int number of components
      * @uses Graph::getVertices()
      * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
