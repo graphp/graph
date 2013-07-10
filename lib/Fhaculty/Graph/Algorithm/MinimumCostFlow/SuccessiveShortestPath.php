@@ -12,6 +12,7 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
@@ -98,7 +99,7 @@ class SuccessiveShortestPath extends Base
             }
 
             // get minimum of capacity remaining on path
-            $minCapacity = Edge::getFirst($edgesOnFlow, Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
+            $minCapacity = $edgesOnFlow->getEdgeOrder(Edges::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
             if ($minCapacity < $newflow) {
                 $newflow = $minCapacity;
             }

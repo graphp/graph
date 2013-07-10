@@ -2,11 +2,13 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
 use Fhaculty\Graph\Algorithm\DetectNegativeCycle;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
@@ -66,7 +68,7 @@ class CycleCanceling extends Base
             }
 
             // calculate maximal possible flow = minimum capacity remaining for all edges
-            $newFlow = Edge::getFirst($clonedEdges, Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
+            $newFlow = $clonedEdges->getEdgeOrder(Edges::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
 
             // set flow on original graph
             $this->addFlow($resultGraph, $clonedEdges, $newFlow);

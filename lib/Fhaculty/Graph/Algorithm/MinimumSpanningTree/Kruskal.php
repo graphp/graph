@@ -36,7 +36,7 @@ class Kruskal extends Base
 
     /**
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {

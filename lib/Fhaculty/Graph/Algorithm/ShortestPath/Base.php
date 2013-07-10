@@ -8,6 +8,7 @@ use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Set\Vertices;
 
 abstract class Base extends BaseVertex
@@ -162,10 +163,10 @@ abstract class Base extends BaseVertex
      * get cheapest edges (lowest weight) for given map of vertex predecessors
      *
      * @param  Vertex[] $predecessor
-     * @return Edge[]
+     * @return Edges
      * @uses Graph::getVertices()
      * @uses Vertex::getEdgesTo()
-     * @uses Edge::getFirst()
+     * @uses Edges::getEdgeOrder()
      */
     protected function getEdgesCheapestPredecesor(array $predecessor)
     {
@@ -180,17 +181,17 @@ abstract class Base extends BaseVertex
                 $predecesVertex = $predecessor[$vid];
 
                 // get cheapest edge
-                $edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex), Edge::ORDER_WEIGHT);
+                $edges []= $predecesVertex->getEdgesTo($vertex)->getEdgeOrder(Edges::ORDER_WEIGHT);
             }
         }
 
-        return $edges;
+        return new Edges($edges);
     }
 
     /**
      * get all edges on shortest path for this vertex
      *
-     * @return Edge[]
+     * @return Edges
      */
     abstract public function getEdges();
 }

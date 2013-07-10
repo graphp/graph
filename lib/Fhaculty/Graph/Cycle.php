@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Exception\UnderflowException;
 
 class Cycle extends Walk
@@ -12,14 +13,14 @@ class Cycle extends Walk
      *
      * @param  Vertex[]           $predecessors map of vid => predecessor vertex instance
      * @param  Vertex             $vertex       start vertex to search predecessors from
-     * @param  int                $by
+     * @param  int|null           $by
      * @param  boolean            $desc
      * @return Cycle
      * @throws UnderflowException
-     * @see Edge::getFirst() for parameters $by and $desc
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
      * @uses Cycle::factoryFromVertices()
      */
-    public static function factoryFromPredecessorMap($predecessors, $vertex, $by = Edge::ORDER_FIFO, $desc = false)
+    public static function factoryFromPredecessorMap($predecessors, $vertex, $by = null, $desc = false)
     {
         /*$checked = array();
         foreach ($predecessors as $vertex) {
@@ -63,13 +64,13 @@ class Cycle extends Walk
      * create new cycle instance with edges between given vertices
      *
      * @param  Vertex[]           $vertices
-     * @param  int                $by
+     * @param  int|null           $by
      * @param  boolean            $desc
      * @return Cycle
      * @throws UnderflowException if no vertices were given
-     * @see Edge::getFirst() for parameters $by and $desc
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
      */
-    public static function factoryFromVertices($vertices, $by = Edge::ORDER_FIFO, $desc = false)
+    public static function factoryFromVertices($vertices, $by = null, $desc = false)
     {
         $edges = array();
         $first = NULL;
@@ -80,7 +81,11 @@ class Cycle extends Walk
                 $first = $vertex;
             } else {
                 // pick edge between last vertex and this vertex
-                $edges []= Edge::getFirst($last->getEdgesTo($vertex), $by, $desc);
+                if ($by === null) {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeFirst();
+                } else {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeOrder($by, $desc);
+                }
             }
             $last = $vertex;
         }
@@ -88,7 +93,11 @@ class Cycle extends Walk
             throw new UnderflowException('No vertices given');
         }
         // additional edge from last vertex to first vertex
-        $edges []= Edge::getFirst($last->getEdgesTo($first), $by, $desc);
+        if ($by === null) {
+            $edges []= $last->getEdgesTo($first)->getEdgeFirst();
+        } else {
+            $edges []= $last->getEdgesTo($first)->getEdgeOrder($by, $desc);
+        }
 
         return new Cycle($vertices, $edges);
     }

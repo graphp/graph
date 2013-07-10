@@ -6,6 +6,7 @@ use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Algorithm\Weight as AlgorithmWeight;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Graph;
 
@@ -32,14 +33,14 @@ abstract class Base extends BaseGraph
      * helper used to add $newFlow to original edges of $clonedEdges in graph $resultGraph
      *
      * @param Graph  $resultGraph graph to look for original edges
-     * @param Edge[] $clonedEdges array of cloned edges to be modified
+     * @param Edges  $clonedEdges set of cloned edges to be modified
      * @param number $newFlow     flow to add
      * @uses Graph::getEdgeClone()
      * @uses Graph::getEdgeCloneInverted()
      * @uses Edge::getFlow()
      * @uses Edge::setFlow()
      */
-    protected function addFlow(Graph $resultGraph, $clonedEdges, $newFlow)
+    protected function addFlow(Graph $resultGraph, Edges $clonedEdges, $newFlow)
     {
         foreach ($clonedEdges as $clonedEdge) {
             try {
