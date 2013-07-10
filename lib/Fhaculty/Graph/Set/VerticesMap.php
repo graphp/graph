@@ -61,4 +61,9 @@ class VerticesMap extends Vertices
     {
         return $this;
     }
+
+    public function hasDuplicates()
+    {
+        return false;
+    }
 }

@@ -384,6 +384,17 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return !$this->vertices;
     }
 
+    /**
+     * check whether this set contains any duplicate vertex instances
+     *
+     * @return boolean
+     * @uses self::getMap()
+     */
+    public function hasDuplicates()
+    {
+        return (count($this->vertices) !== count($this->getMap()));
+    }
+
     public function getIterator()
     {
         return new IteratorIterator(new ArrayIterator($this->vertices));
