@@ -16,13 +16,6 @@ use Fhaculty\Graph\Set\EdgesAggregate;
 class Edges implements Countable, IteratorAggregate, EdgesAggregate
 {
     /**
-     * do not change order - FIFO : first in, first out
-     *
-     * @var int
-     */
-    const ORDER_FIFO = 0;
-
-    /**
      * order by edge weight
      *
      * @var int
@@ -166,8 +159,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
      * This only keeps Edge elements if the $callbackCheck returns a boolean
      * true and filters out everything else.
      *
-     * Edge index positions will be left unchanged, so if you call this method
-     * on a EdgesMap, it will also return a EdgesMap.
+     * Edge index positions will be left unchanged.
      *
      * @param callable $callbackCheck
      * @return Edges a new Edges instance
@@ -178,22 +170,16 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     }
 
     /**
-     * get iterator for edges (optionally ordered by given criterium $by) from given array of edges
+     * get new set of Edges ordered by given criterium $orderBy
      *
-     * Edge index positions will be left unchanged, so if you call this method
-     * on a EdgesMap, it will also return a EdgesMap.
+     * Edge index positions will be left unchanged.
      *
      * @param  int                      $orderBy  criterium to sort by. see self::ORDER_WEIGHT, etc.
      * @param  boolean                  $desc     whether to return biggest first (true) instead of smallest first (default:false)
-     * @return Edges                 a new Edges set ordered by the given $orderBy criterium
+     * @return Edges                    a new Edges set ordered by the given $orderBy criterium
      * @throws InvalidArgumentException if criterium is unknown
-     * @uses Edge::getId()
-     * @uses Edge::getDegree()
-     * @uses Edge::getDegreeIn()
-     * @uses Edge::getDegreeOut()
-     * @uses Edge::getGroup()
      */
-    public function getEdgesOrder($orderBy = self::ORDER_FIFO, $desc = false)
+    public function getEdgesOrder($orderBy, $desc = false)
     {
         if ($orderBy === self::ORDER_RANDOM) {
             // shuffle the edge positions
@@ -230,18 +216,13 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     }
 
     /**
-     * get first edge (optionally ordered by given criterium $by) from given array of edges
+     * get first edge ordered by given criterium $orderBy
      *
      * @param  int                      $orderBy  criterium to sort by. see self::ORDER_WEIGHT, etc.
      * @param  boolean                  $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Edge
      * @throws InvalidArgumentException if criterium is unknown
      * @throws UnderflowException       if no edges exist
-     * @uses Edge::getId()
-     * @uses Edge::getDegree()
-     * @uses Edge::getDegreeIn()
-     * @uses Edge::getDegreeOut()
-     * @uses Edge::getGroup()
      */
     public function getEdgeOrder($orderBy, $desc=false)
     {
