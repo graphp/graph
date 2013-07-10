@@ -4,11 +4,10 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
-
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Exception\UnderflowException;
 
 class ConnectedComponents extends BaseGraph
 {
@@ -50,7 +49,14 @@ class ConnectedComponents extends BaseGraph
      */
     public function isSingle()
     {
-        $alg = $this->createSearch($this->graph->getVertexFirst());
+        try {
+            $vertex = $this->graph->getVertexFirst();
+        }
+        catch (UnderflowException $e) {
+            // no first vertex => empty graph => has zero components
+            return false;
+        }
+        $alg = $this->createSearch($vertex);
 
         return ($this->graph->getNumberOfVertices() === $alg->getNumberOfVertices());
     }
