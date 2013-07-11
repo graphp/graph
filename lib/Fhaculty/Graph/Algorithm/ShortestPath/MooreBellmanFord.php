@@ -3,7 +3,7 @@
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Cycle;
+use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Exception\NegativeCycleException;
 use Fhaculty\Graph\Exception\UnderflowException;
 
@@ -97,7 +97,7 @@ class MooreBellmanFord extends Base
         // Check for negative cycles (only if last step didn't already finish anyway)
         // something is still changing...
         if ($changed && $changed = $this->bigStep($edges, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)) {
-            $cycle = Cycle::factoryFromPredecessorMap($predecessorVertexOfCheapestPathTo, $changed, Edge::ORDER_WEIGHT);
+            $cycle = Walk::factoryCycleFromPredecessorMap($predecessorVertexOfCheapestPathTo, $changed, Edge::ORDER_WEIGHT);
             throw new NegativeCycleException('Negative cycle found', 0, NULL, $cycle);
         }
 
@@ -107,7 +107,7 @@ class MooreBellmanFord extends Base
     /**
      * get negative cycle
      *
-     * @return Cycle
+     * @return Walk
      * @throws UnderflowException if there's no negative cycle
      */
     public function getCycleNegative()
