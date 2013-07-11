@@ -37,12 +37,12 @@ class Undirected extends Base
 
     public function getVerticesTarget()
     {
-        return array($this->b, $this->a);
+        return new Vertices(array($this->b, $this->a));
     }
 
     public function getVerticesStart()
     {
-        return  array($this->a, $this->b);
+        return new Vertices(array($this->a, $this->b));
     }
 
     public function getVertices()

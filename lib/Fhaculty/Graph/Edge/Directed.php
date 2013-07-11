@@ -40,12 +40,12 @@ class Directed extends Base
 
     public function getVerticesTarget()
     {
-        return array($this->to);
+        return new Vertices(array($this->to));
     }
 
     public function getVerticesStart()
     {
-        return array($this->from);
+        return new Vertices(array($this->from));
     }
 
     public function getVertices()
