@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm;
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as DirectedEdge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Graph;
 use LogicException;
 
@@ -49,9 +50,10 @@ class Parallel extends BaseGraph
     }
 
     /**
-     * get all edges parallel to this edge (excluding self)
+     * get set of all Edges parallel to this edge (excluding self)
      *
-     * @return Edge[]
+     * @param Edge $edge
+     * @return Edges
      * @throws LogicException
      */
     public function getEdgesParallelEdge(Edge $edge)
@@ -63,7 +65,7 @@ class Parallel extends BaseGraph
             // edge points into both directions (undirected/bidirectional edge)
             // also get all edges in other direction
             $ends  = $edge->getVertices();
-            $edges = $ends[0]->getEdges()->getEdgesIntersection($ends[1]->getEdges())->getVector();
+            $edges = $ends->getVertexFirst()->getEdges()->getEdgesIntersection($ends->getVertexLast()->getEdges())->getVector();
         }
 
         $pos = array_search($edge, $edges, true);
