@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## 0.6.0 (2013-xx-xx)
+## 0.6.0 (2013-07-11)
 
 * BC break: Move algorithm definitions in base classes to separate algorithm classes ([#27](https://github.com/clue/graph/issues/27)).
 The following methods containing algorithms were now moved to separate algorithm classes. This
