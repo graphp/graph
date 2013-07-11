@@ -175,7 +175,7 @@ class Degree extends BaseGraph
      */
     public function isVertexIsolated(Vertex $vertex)
     {
-        return !$vertex->getEdges();
+        return $vertex->getEdges()->isEmpty();
     }
 
     /**

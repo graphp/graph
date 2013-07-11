@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm\Property;
 
 use Fhaculty\Graph\Walk;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\Base as BaseAlgorithm;
 use Fhaculty\Graph\Algorithm\Loop as AlgorithmLoop;
 
@@ -60,8 +61,8 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isCycle()
     {
-        $vertices = $this->walk->getVerticesSequence();
-        return (reset($vertices) === end($vertices) && $this->walk->getEdges());
+        $vertices = $this->walk->getVertices()->getVector();
+        return (reset($vertices) === end($vertices) && !$this->walk->getEdges()->isEmpty());
     }
 
     /**
@@ -114,7 +115,7 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isPath()
     {
-        return !$this->hasArrayDuplicates($this->walk->getEdgesSequence());
+        return !$this->hasArrayDuplicates($this->walk->getEdges()->getVector());
     }
 
     /**
@@ -138,7 +139,7 @@ class WalkProperty extends BaseAlgorithm
      */
     public function hasCycle()
     {
-        return $this->hasArrayDuplicates($this->walk->getVerticesSequence());
+        return $this->hasArrayDuplicates($this->walk->getVertices()->getVector());
     }
 
     /**
@@ -215,9 +216,9 @@ class WalkProperty extends BaseAlgorithm
         // exactly 2 edges
         return ($this->walk->getNumberOfEdges() === 2 &&
                 // no duplicate edges
-                !$this->hasArrayDuplicates($this->walk->getEdgesSequence()) &&
+                !$this->hasArrayDuplicates($this->walk->getEdges()->getVector()) &&
                 // exactly two distinct vertices
-                count($this->walk->getVertices()) === 2 &&
+                count($this->walk->getVertices()->getVerticesDistinct()) === 2 &&
                 // this is actually a cycle
                 $this->isCycle());
     }
@@ -239,7 +240,7 @@ class WalkProperty extends BaseAlgorithm
         // exactly 3 (implicitly distinct) edges
         return ($this->walk->getNumberOfEdges() === 3 &&
                 // exactly three distinct vertices
-                count($this->walk->getVertices()) === 3 &&
+                count($this->walk->getVertices()->getVerticesDistinct()) === 3 &&
                 // this is actually a cycle
                 $this->isCycle());
     }
@@ -293,7 +294,7 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isSimple()
     {
-        $vertices = $this->walk->getVerticesSequence();
+        $vertices = $this->walk->getVertices()->getVector();
         // ignore starting vertex for cycles as it's always the same as ending vertex
         if ($this->isCycle()) {
             unset($vertices[0]);
@@ -314,12 +315,12 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isHamiltonian()
     {
-        $vertices = $this->walk->getVerticesSequence();
+        $vertices = $this->walk->getVertices()->getVector();
         // ignore starting vertex for cycles as it's always the same as ending vertex
         if ($this->isCycle()) {
             unset($vertices[0]);
         }
-        return $this->isArrayContentsEqual($vertices, $this->walk->getGraph()->getVertices());
+        return $this->isArrayContentsEqual($vertices, $this->walk->getGraph()->getVertices()->getVector());
     }
 
     /**
@@ -332,7 +333,7 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isEulerian()
     {
-        return $this->isArrayContentsEqual($this->walk->getEdgesSequence(), $this->walk->getGraph()->getEdges());
+        return $this->isArrayContentsEqual($this->walk->getEdges()->getVector(), $this->walk->getGraph()->getEdges()->getVector());
     }
 
     /**

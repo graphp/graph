@@ -54,6 +54,7 @@ class Prim extends Base
                 try {
                     // Get next cheapest edge
                     $cheapestEdge = $edgeQueue->extract();
+                    /* @var $cheapestEdge EdgeDirected */
                 } catch (Exception $e) {
                     return $returnEdges;
                     throw new UnexpectedValueException('Graph has more than one component');
@@ -61,8 +62,7 @@ class Prim extends Base
 
                 // Check if edge is between unmarked and marked edge
 
-                $startVertices = $cheapestEdge->getVerticesStart();
-                $vertexA = $startVertices[0];
+                $vertexA = $cheapestEdge->getVerticesStart()->getVertexFirst();
                 $vertexB = $cheapestEdge->getVertexToFrom($vertexA);
 
             // Edge is between marked and unmared vertex

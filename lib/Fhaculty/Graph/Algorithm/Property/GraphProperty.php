@@ -18,7 +18,7 @@ class GraphProperty extends BaseGraph
      */
     public function isEdgeless()
     {
-        return !$this->graph->getEdges();
+        return $this->graph->getEdges()->isEmpty();
     }
 
     /**
@@ -28,6 +28,6 @@ class GraphProperty extends BaseGraph
      */
     public function isTrivial()
     {
-        return (!$this->graph->getEdges() && $this->graph->getNumberOfVertices() === 1);
+        return ($this->graph->getEdges()->isEmpty() && $this->graph->getNumberOfVertices() === 1);
     }
 }
