@@ -4,6 +4,7 @@ namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Exception\UnderflowException;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
 
 /**
  * Base Walk class
@@ -128,17 +129,19 @@ class Walk extends Set
      * @param  Edge[] $edges
      * @param  Vertex $startVertex
      * @return Walk
+     * @throws InvalidArgumentException if the given array of edges does not represent a valid cycle
+     * @uses self::factoryFromEdges()
      */
     public static function factoryCycleFromEdges(array $edges, Vertex $startVertex)
     {
-        $vertices = array($startVertex->getId() => $startVertex);
-        foreach ($edges as $edge) {
-            $vertex = $edge->getVertexToFrom($startVertex);
-            $vertices[$vertex->getId()] = $vertex;
-            $startVertex = $vertex;
+        $cycle = self::factoryFromEdges($edges, $startVertex);
+
+        // ensure this walk is actually a cycle by checking start = end
+        if ($cycle->getVertexTarget() !== $startVertex) {
+            throw new InvalidArgumentException('The given array of edges does not represent a cycle');
         }
 
-        return new self($vertices, $edges);
+        return $cycle;
     }
 
     protected function __construct(array $vertices, array $edges)
