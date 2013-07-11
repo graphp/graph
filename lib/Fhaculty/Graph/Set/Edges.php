@@ -274,6 +274,39 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
         return new Edges($edges);
     }
 
+    /**
+     * get intersection of Edges with given other Edges
+     *
+     * The intersection contains all Edge instances that are present in BOTH
+     * this set of Edges and the given set of other Edges.
+     *
+     * Edge index/keys will be preserved from original array.
+     *
+     * Duplicate Edge instances will be kept if the corresponding number of
+     * Edge instances is also found in $otherEdges.
+     *
+     * @param Edges|Edge[] $otherEdges
+     * @return Edges a new Edges set
+     */
+    public function getEdgesIntersection($otherEdges)
+    {
+        $otherArray = self::factory($otherEdges)->getVector();
+
+        $edges = array();
+        foreach ($this->edges as $eid => $edge) {
+            $i = array_search($edge, $otherArray, true);
+
+            if ($i !== false) {
+                // remove from other array in order to check for duplicate matches
+                unset($otherArray[$i]);
+
+                $edges[$eid] = $edge;
+            }
+        }
+
+        return new static($edges);
+    }
+
     public function getVector()
     {
         return array_values($this->edges);
