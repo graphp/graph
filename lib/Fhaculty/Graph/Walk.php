@@ -40,16 +40,20 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
 
     /**
      *
-     * @var Vertex[]
+     * @var Vertices
      */
-    protected $vertices = array();
+    protected $vertices;
 
-    protected $edges = array();
+    /**
+     *
+     * @var Edges
+     */
+    protected $edges;
 
-    protected function __construct(array $vertices, array $edges)
+    protected function __construct($vertices, $edges)
     {
-        $this->vertices = $vertices;
-        $this->edges    = $edges;
+        $this->vertices = Vertices::factory($vertices);
+        $this->edges    = Edges::factory($edges);
     }
 
     /**
@@ -99,7 +103,7 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      */
     public function getEdges()
     {
-        return new Edges($this->edges);
+        return $this->edges;
     }
 
     /**
@@ -112,7 +116,7 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      */
     public function getVertices()
     {
-        return new Vertices($this->vertices);
+        return $this->vertices;
     }
 
     /**
@@ -122,7 +126,7 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      */
     public function getVertexSource()
     {
-        return reset($this->vertices);
+        return $this->vertices->getVertexFirst();
     }
 
     /**
@@ -132,7 +136,7 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      */
     public function getVertexTarget()
     {
-        return end($this->vertices);
+        return $this->vertices->getVertexLast();
     }
 
     /**
@@ -142,12 +146,15 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      */
     public function getAlternatingSequence()
     {
+        $edges    = $this->edges->getVector();
+        $vertices = $this->vertices->getVector();
+
         $ret = array();
         for ($i = 0, $l = count($this->edges); $i < $l; ++$i) {
-            $ret []= $this->vertices[$i];
-            $ret []= $this->edges[$i];
+            $ret []= $vertices[$i];
+            $ret []= $edges[$i];
         }
-        $ret[] = $this->vertices[$i];
+        $ret[] = $vertices[$i];
 
         return $ret;
     }
