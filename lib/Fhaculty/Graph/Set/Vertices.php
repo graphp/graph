@@ -13,6 +13,7 @@ use IteratorIterator;
 use ArrayIterator;
 use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Set\VerticesMap;
+use Fhaculty\Graph\Algorithm\Degree;
 
 class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 {
@@ -28,7 +29,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * order by vertex degree
      *
      * @var int
-     * @see Vertex::getDegree()
+     * @see Degree::getDegreeVertex()
      */
     const ORDER_DEGREE = 2;
 
@@ -36,7 +37,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * order by indegree of vertex
      *
      * @var int
-     * @see Vertex::getDegreeIn()
+     * @see Degree::getDegreeInVertex()
      */
     const ORDER_INDEGREE = 3;
 
@@ -44,7 +45,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * order by outdegree of vertex
      *
      * @var int
-     * @see Vertex::getDegreeOut()
+     * @see Degree::getDegreeOutVertex()
      */
     const ORDER_OUTDEGREE = 4;
 
@@ -214,9 +215,6 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * @return Vertices                 a new Vertices set ordered by the given $orderBy criterium
      * @throws InvalidArgumentException if criterium is unknown
      * @uses Vertex::getId()
-     * @uses Vertex::getDegree()
-     * @uses Vertex::getDegreeIn()
-     * @uses Vertex::getDegreeOut()
      * @uses Vertex::getGroup()
      */
     public function getVerticesOrder($orderBy = self::ORDER_FIFO, $desc = false)
@@ -297,9 +295,6 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * @throws InvalidArgumentException if criterium is unknown
      * @throws UnderflowException       if no vertices exist
      * @uses Vertex::getId()
-     * @uses Vertex::getDegree()
-     * @uses Vertex::getDegreeIn()
-     * @uses Vertex::getDegreeOut()
      * @uses Vertex::getGroup()
      */
     public function getVertexOrder($orderBy, $desc=false)
@@ -460,9 +455,9 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 
         static $methods = array(
             self::ORDER_ID => 'getId',
-            self::ORDER_DEGREE => 'getDegree',
-            self::ORDER_INDEGREE => 'getDegreeIn',
-            self::ORDER_OUTDEGREE => 'getDegreeOut',
+            self::ORDER_DEGREE => 'getDegreeVertex',
+            self::ORDER_INDEGREE => 'getDegreeInVertex',
+            self::ORDER_OUTDEGREE => 'getDegreeOutVertex',
             self::ORDER_GROUP => 'getGroup'
         );
 
@@ -472,8 +467,20 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 
         $method = $methods[$callback];
 
+        if (in_array($callback, array(self::ORDER_DEGREE, self::ORDER_INDEGREE, self::ORDER_OUTDEGREE))) {
+            $degree = new Degree($this->getGraph());
+            return function (Vertex $vertex) use ($method, $degree) {
+                return $degree->$method($vertex);
+            };
+        }
+
         return function (Vertex $vertex) use ($method) {
             return $vertex->$method();
         };
+    }
+
+    private function getGraph()
+    {
+        return $this->getVertexFirst()->getGraph();
     }
 }
