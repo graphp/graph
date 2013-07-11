@@ -315,7 +315,7 @@ class Walk extends Set
         foreach ($this->vertices as $vertex) {
             $vid = $vertex->getId();
             // make sure vertex ID exists and has not been replaced
-            if (!isset($vertices[$vid]) || $vertices[$id] !== $vertex) {
+            if (!isset($vertices[$vid]) || $vertices[$vid] !== $vertex) {
                 return false;
             }
         }
