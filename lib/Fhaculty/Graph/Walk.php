@@ -177,7 +177,7 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
                 return false;
             }
         }
-        $edges = $this->getGraph()->getEdges();
+        $edges = $this->getGraph()->getEdges()->getVector();
         // check source graph contains all edges
         foreach ($this->edges as $edge) {
             if (!in_array($edge, $edges, true)) {
