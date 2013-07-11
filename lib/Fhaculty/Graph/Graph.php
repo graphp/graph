@@ -19,6 +19,7 @@ use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesMap;
+use Fhaculty\Graph\Set\Edges;
 
 class Graph extends Set
 {
@@ -31,9 +32,13 @@ class Graph extends Set
     protected $verticesStorage = array();
     protected $vertices;
 
+    protected $edgesStorage = array();
+    protected $edges;
+
     public function __construct()
     {
         $this->vertices = VerticesMap::factoryArrayReference($this->verticesStorage);
+        $this->edges = Edges::factoryArrayReference($this->edgesStorage);
     }
 
     /**
@@ -44,6 +49,16 @@ class Graph extends Set
     public function getVertices()
     {
         return $this->vertices;
+    }
+
+    /**
+     * return set of ALL Edges added to this graph
+     *
+     * @return Edges
+     */
+    public function getEdges()
+    {
+        return $this->edges;
     }
 
     /**
@@ -122,7 +137,7 @@ class Graph extends Set
     /**
      * create new clone/copy of this graph - copy all attributes and vertices. but only copy all given edges
      *
-     * @param  Edge[] $edges array of edges to be cloned
+     * @param  Edges|Edge[] $edges set or array of edges to be cloned
      * @return Graph
      * @uses Graph::createGraphCloneEdgeless()
      * @uses Graph::createEdgeClone() for each edge to be cloned
@@ -390,7 +405,7 @@ class Graph extends Set
      */
     public function addEdge(Edge $edge)
     {
-        $this->edges []= $edge;
+        $this->edgesStorage []= $edge;
     }
 
     /**
@@ -404,11 +419,12 @@ class Graph extends Set
      */
     public function removeEdge(Edge $edge)
     {
-        $id = array_search($edge, $this->edges, true);
-        if ($id === false) {
-            throw new InvalidArgumentException('Given edge does NOT exist');
+        try {
+            unset($this->edgesStorage[$this->edges->getIndexEdge($edge)]);
         }
-        unset($this->edges[$id]);
+        catch (OutOfBoundsException $e) {
+            throw new InvalidArgumentException('Invalid Edge does not exist in this Graph');
+        }
     }
 
     /**
@@ -470,6 +486,7 @@ class Graph extends Set
 
         // Now get the edge
         $residualEdgeArray = $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
+        $residualEdgeArray = Edges::factory($residualEdgeArray)->getVector();
 
         // Check for parallel edges
         if (!$residualEdgeArray) {

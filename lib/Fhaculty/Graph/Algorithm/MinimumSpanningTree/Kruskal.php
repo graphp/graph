@@ -8,6 +8,7 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Set\Edges;
 use \SplPriorityQueue;
 
 class Kruskal extends Base
@@ -36,7 +37,7 @@ class Kruskal extends Base
 
     /**
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
@@ -153,6 +154,6 @@ class Kruskal extends Base
             throw new UnexpectedValueException('Graph is not connected');
         }
 
-        return $returnEdges;
+        return new Edges($returnEdges);
     }
 }

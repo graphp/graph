@@ -4,6 +4,7 @@ use Fhaculty\Graph\Vertex;
 
 use Fhaculty\Graph\GraphViz;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst;
 use Fhaculty\Graph\Loader\CompleteGraph;
 use Fhaculty\Graph\Set\Vertices;
@@ -21,7 +22,7 @@ class BreadthFirstTest extends PHPUnit_Framework_TestCase
         $graph = $loader->createGraph();
 
         // randomly remove 70% of the edges
-        foreach (array_slice(Edge::getAll($graph->getEdges(), Edge::ORDER_RANDOM), 0, $graph->getNumberOfEdges()*0.8) as $edge) {
+        foreach (array_slice($graph->getEdges()->getEdgesOrder(Edges::ORDER_RANDOM)->getVector(), 0, $graph->getNumberOfEdges()*0.8) as $edge) {
             $edge->destroy();
         }
 

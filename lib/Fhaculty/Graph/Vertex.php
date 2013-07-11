@@ -6,12 +6,14 @@ use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst as AlgorithmSpBreadthFirs
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Edge\UndirectedId as EdgeUndirectedId;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\EdgesAggregate;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 
-class Vertex extends Layoutable
+class Vertex extends Layoutable implements EdgesAggregate
 {
     private $id;
 
@@ -241,13 +243,11 @@ class Vertex extends Layoutable
      */
     public function hasEdgeTo(Vertex $vertex)
     {
-        foreach ($this->edges as $edge) {
-            if ($edge->isConnection($this, $vertex)) {
-                return true;
-            }
-        }
+        $that = $this;
 
-        return false;
+        return $this->getEdges()->hasEdgeMatch(function (Edge $edge) use ($that, $vertex) {
+            return $edge->isConnection($that, $vertex);
+        });
     }
 
     /**
@@ -263,73 +263,64 @@ class Vertex extends Layoutable
     }
 
     /**
-     * get ALL edges attached to this vertex
+     * get set of ALL Edges attached to this vertex
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
-        return $this->edges;
+        return new Edges($this->edges);
     }
 
     /**
-     * get ALL outgoing edges attached to this vertex
+     * get set of all outgoing Edges attached to this vertex
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdgesOut()
     {
-        $outgoingEdges = array();
-        foreach ($this->edges as $edge) {
-            if ($edge->hasVertexStart($this)) {
-                $outgoingEdges[] = $edge;
-            }
-        }
+        $that = $this;
 
-        return $outgoingEdges;
+        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that) {
+            return $edge->hasVertexStart($that);
+        });
     }
 
     /**
-     * get ALL ingoing edges attached to this vertex
+     * get set of all ingoing Edges attached to this vertex
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdgesIn()
     {
-        $ingoingEdges = array() ;
-        foreach ($this->edges as $edge) {
-            if ($edge->hasVertexTarget($this)) {
-                $ingoingEdges[] = $edge;
-            }
-        }
+        $that = $this;
 
-        return $ingoingEdges;
+        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that) {
+            return $edge->hasVertexTarget($that);
+        });
     }
 
     /**
-     * get edges FROM this vertex TO the given vertex
+     * get set of Edges FROM this vertex TO the given vertex
      *
      * @param  Vertex $vertex
-     * @return Edge[]
+     * @return Edges
      * @uses Edge::hasVertexTarget()
      */
     public function getEdgesTo(Vertex $vertex)
     {
-        $ret = array();
-        foreach ($this->edges as $edge) {
-            if ($edge->isConnection($this, $vertex)) {
-                $ret[] = $edge;
-            }
-        }
+        $that = $this;
 
-        return $ret;
+        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that, $vertex) {
+            return $edge->isConnection($that, $vertex);
+        });
     }
 
     /**
-     * get edges FROM the given vertex TO this vertex
+     * get set of Edges FROM the given vertex TO this vertex
      *
      * @param  Vertex $vertex
-     * @return Edge[]
+     * @return Edges
      * @uses Vertex::getEdgesTo()
      */
     public function getEdgesFrom(Vertex $vertex)

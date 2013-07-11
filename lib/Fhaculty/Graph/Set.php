@@ -3,6 +3,8 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\EdgesAggregate;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesAggregate;
 
@@ -12,23 +14,14 @@ use Fhaculty\Graph\Set\VerticesAggregate;
  * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  */
-abstract class Set implements VerticesAggregate
+abstract class Set implements VerticesAggregate, EdgesAggregate
 {
     /**
+     * returns a set of ALL Edges in this graph
      *
-     * @var Edge[]
+     * @return Edges
      */
-    protected $edges = array();
-
-    /**
-     * returns an array of ALL Edges in this graph
-     *
-     * @return Edge[]
-     */
-    public function getEdges()
-    {
-        return $this->edges;
-    }
+    // abstract public function getEdges();
 
     /**
      * returns a set of all Vertices
@@ -54,7 +47,7 @@ abstract class Set implements VerticesAggregate
      */
     public function getNumberOfEdges()
     {
-        return count($this->edges);
+        return count($this->getEdges());
     }
 
     /**

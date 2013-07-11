@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Vertex;
 use \SplPriorityQueue;
 use \Exception;
@@ -22,7 +23,7 @@ class Prim extends Base
 
     /**
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
@@ -78,7 +79,7 @@ class Prim extends Base
             }
         }
 
-        return $returnEdges;
+        return new Edges($returnEdges);
     }
 
     protected function getGraph()

@@ -8,6 +8,7 @@ use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\TravelingSalesmanProblem\MinimumSpanningTree as AlgorithmTspMst;
 
 class Bruteforce extends Base
@@ -103,7 +104,7 @@ class Bruteforce extends Base
      * get resulting (first) best circle of edges connecting all vertices
      *
      * @throws Exception on error
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
@@ -128,7 +129,7 @@ class Bruteforce extends Base
             throw new UnexpectedValueException('No resulting solution for TSP found');
         }
 
-        return $result;
+        return new Edges($result);
     }
 
     /**
