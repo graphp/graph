@@ -303,12 +303,12 @@ class GraphTest extends TestCase
         $v2 = $graph->createVertex(2);
         $edge = $v1->createEdge($v2);
 
-        $this->assertEquals(array($edge), $graph->getEdges());
+        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
 
         $edge->destroy();
         //$graph->removeEdge($edge);
 
-        $this->assertEquals(array(), $graph->getEdges());
+        $this->assertEquals(array(), $graph->getEdges()->getVector());
 
         return $graph;
     }
@@ -331,11 +331,11 @@ class GraphTest extends TestCase
         $graph = new Graph();
         $vertex = $graph->createVertex(1);
 
-        $this->assertEquals(array(1 => $vertex), $graph->getVertices());
+        $this->assertEquals(array(1 => $vertex), $graph->getVertices()->getMap());
 
         $vertex->destroy();
 
-        $this->assertEquals(array(), $graph->getVertices());
+        $this->assertEquals(array(), $graph->getVertices()->getVector());
     }
 
     /**

@@ -7,7 +7,7 @@ class PropertyGraphTest extends TestCase
 {
     public function testEmptyIsEdgeless()
     {
-        $graph = new Graph($graph);
+        $graph = new Graph();
 
         $alg = new GraphProperty($graph);
 

@@ -29,8 +29,8 @@ abstract class EdgeBaseTest extends TestCase
 
     public function testEdgeVertices()
     {
-        $this->assertEquals(array($this->v1, $this->v2), $this->edge->getVertices());
-        $this->assertEquals(array(1, 2), $this->edge->getVerticesId());
+        $this->assertEquals(array($this->v1, $this->v2), $this->edge->getVertices()->getVector());
+        $this->assertEquals(array(1, 2), $this->edge->getVertices()->getIds());
 
         $this->assertSame($this->graph, $this->edge->getGraph());
     }

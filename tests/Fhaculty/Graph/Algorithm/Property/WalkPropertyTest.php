@@ -94,7 +94,7 @@ class WalkPropertyTest extends TestCase
         // 1 -> 2 -> 2 -> 1
         $walk = Walk::factoryFromEdges(array($e1, $e3, $e2), $v1);
 
-        $this->assertEquals(array(1, 2, 2, 1), $walk->getVerticesSequenceId());
+        $this->assertEquals(array(1, 2, 2, 1), $walk->getVertices()->getIds());
 
         $alg = new WalkProperty($walk);
 
@@ -116,7 +116,7 @@ class WalkPropertyTest extends TestCase
         // 1 -> 2 -> 2 -> 2 -> 1
         $walk = Walk::factoryFromEdges(array($e1, $e3, $e3, $e2), $v1);
 
-        $this->assertEquals(array(1, 2, 2, 2, 1), $walk->getVerticesSequenceId());
+        $this->assertEquals(array(1, 2, 2, 2, 1), $walk->getVertices()->getIds());
 
         $alg = new WalkProperty($walk);
 

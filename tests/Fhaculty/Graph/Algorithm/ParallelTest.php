@@ -27,8 +27,8 @@ class ParallelTest extends TestCase
         $alg = new AlgorithmParallel($graph);
 
         $this->assertFalse($alg->hasEdgeParallel());
-        $this->assertEquals(array(), $alg->getEdgesParallelEdge($e1));
-        $this->assertEquals(array(), $alg->getEdgesParallelEdge($e2));
+        $this->assertEquals(array(), $alg->getEdgesParallelEdge($e1)->getVector());
+        $this->assertEquals(array(), $alg->getEdgesParallelEdge($e2)->getVector());
     }
 
     public function testDirectedParallelEdge()
@@ -44,8 +44,8 @@ class ParallelTest extends TestCase
         $alg = new AlgorithmParallel($graph);
 
         $this->assertTrue($alg->hasEdgeParallel());
-        $this->assertEquals(array($e2), $alg->getEdgesParallelEdge($e1));
-        $this->assertEquals(array($e1), $alg->getEdgesParallelEdge($e2));
+        $this->assertEquals(array($e2), $alg->getEdgesParallelEdge($e1)->getVector());
+        $this->assertEquals(array($e1), $alg->getEdgesParallelEdge($e2)->getVector());
     }
 
     public function testMixedParallelEdge()
@@ -61,8 +61,8 @@ class ParallelTest extends TestCase
         $alg = new AlgorithmParallel($graph);
 
         $this->assertTrue($alg->hasEdgeParallel());
-        $this->assertEquals(array($e2), $alg->getEdgesParallelEdge($e1));
-        $this->assertEquals(array($e1), $alg->getEdgesParallelEdge($e2));
+        $this->assertEquals(array($e2), $alg->getEdgesParallelEdge($e1)->getVector());
+        $this->assertEquals(array($e1), $alg->getEdgesParallelEdge($e2)->getVector());
     }
 
     public function testMixedParallelEdgesMultiple()
@@ -86,12 +86,12 @@ class ParallelTest extends TestCase
         $alg = new AlgorithmParallel($graph);
 
         $this->assertTrue($alg->hasEdgeParallel());
-        $this->assertEquals(array($e2, $e3, $e4), $alg->getEdgesParallelEdge($e1));
-        $this->assertEquals(array($e1, $e3, $e4), $alg->getEdgesParallelEdge($e2));
-        $this->assertEquals(array($e1, $e2, $e4, $e5, $e6), $alg->getEdgesParallelEdge($e3));
-        $this->assertEquals(array($e1, $e2, $e3, $e5, $e6), $alg->getEdgesParallelEdge($e4));
-        $this->assertEquals(array($e3, $e4, $e6), $alg->getEdgesParallelEdge($e5));
-        $this->assertEquals(array($e3, $e4, $e5), $alg->getEdgesParallelEdge($e6));
+        $this->assertEquals(array($e2, $e3, $e4), $alg->getEdgesParallelEdge($e1)->getVector());
+        $this->assertEquals(array($e1, $e3, $e4), $alg->getEdgesParallelEdge($e2)->getVector());
+        $this->assertEquals(array($e1, $e2, $e4, $e5, $e6), $alg->getEdgesParallelEdge($e3)->getVector());
+        $this->assertEquals(array($e1, $e2, $e3, $e5, $e6), $alg->getEdgesParallelEdge($e4)->getVector());
+        $this->assertEquals(array($e3, $e4, $e6), $alg->getEdgesParallelEdge($e5)->getVector());
+        $this->assertEquals(array($e3, $e4, $e5), $alg->getEdgesParallelEdge($e6)->getVector());
     }
 
 }
