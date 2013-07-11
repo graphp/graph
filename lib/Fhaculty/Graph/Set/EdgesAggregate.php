@@ -6,5 +6,8 @@ use Fhaculty\Graph\Set\Edges;
 
 interface EdgesAggregate
 {
+    /**
+     * @return Edges
+     */
     public function getEdges();
 }
