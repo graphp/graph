@@ -188,7 +188,7 @@ class GraphTest extends TestCase
         $this->assertEquals(2, $graph->getNumberOfEdges());
         $this->assertEquals(2, count($v1->getEdges()));
 
-        $this->assertEquals(array(2), $v1->getVerticesEdge()->getIds());
+        $this->assertEquals(array(2, 2), $v1->getVerticesEdge()->getIds());
     }
 
     public function testCreateMixedGraph()

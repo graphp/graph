@@ -25,7 +25,7 @@ class InTree extends DirectedTree
     public function getVerticesChildren(Vertex $vertex)
     {
         $vertices = $vertex->getVerticesEdgeFrom();
-        if (count($vertices) !== $this->degree->getDegreeInVertex($vertex)) {
+        if ($vertices->hasDuplicates()) {
             throw new UnexpectedValueException();
         }
 
@@ -35,7 +35,7 @@ class InTree extends DirectedTree
     protected function getVerticesParent(Vertex $vertex)
     {
         $vertices = $vertex->getVerticesEdgeTo();
-        if (count($vertices) !== $this->degree->getDegreeOutVertex($vertex)) {
+        if ($vertices->hasDuplicates()) {
             throw new UnexpectedValueException();
         }
 
