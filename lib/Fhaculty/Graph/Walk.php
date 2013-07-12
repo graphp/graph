@@ -117,8 +117,12 @@ class Walk extends Set
         if ($last === NULL) {
             throw new UnderflowException('No vertices given');
         }
+
         // additional edge from last vertex to first vertex
-        $edges []= Edge::getFirst($last->getEdgesTo($first), $by, $desc);
+        if ($last !== $first) {
+            $edges []= Edge::getFirst($last->getEdgesTo($first), $by, $desc);
+            $vertices []= $first;
+        }
 
         return new self($vertices, $edges);
     }
