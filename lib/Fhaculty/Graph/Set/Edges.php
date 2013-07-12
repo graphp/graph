@@ -139,6 +139,21 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
         return current($this->edges);
     }
 
+    /**
+     * return Edge at given array index
+     *
+     * @param mixed $index
+     * @throws OutOfBoundsException if the given index does not exist
+     * @return Edge
+     */
+    public function getEdgeIndex($index)
+    {
+        if (!isset($this->edges[$index])) {
+            throw new OutOfBoundsException('Invalid edge index');
+        }
+        return $this->edges[$index];
+    }
+
     public function getEdgeMatch($callbackCheck)
     {
         $ret = $this->getEdgeMatchOrNull($callbackCheck);
