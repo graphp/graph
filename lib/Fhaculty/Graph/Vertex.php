@@ -276,6 +276,10 @@ class Vertex extends Layoutable implements EdgesAggregate
     /**
      * get set of adjacent Vertices of this vertex (edge FROM or TO this vertex)
      *
+     * If there are multiple parallel edges between the same Vertex, it will be
+     * returned several times in the resulting Set of Vertices. If you only
+     * want unique Vertex instances, use `getVerticesDistinct()`.
+     *
      * @return Vertices
      * @uses Edge::hasVertexStart()
      * @uses Edge::getVerticesToFrom()
@@ -286,11 +290,10 @@ class Vertex extends Layoutable implements EdgesAggregate
         $ret = array();
         foreach ($this->edges as $edge) {
             if ($edge->hasVertexStart($this)) {
-                $vertex = $edge->getVertexToFrom($this);
+                $ret []= $edge->getVertexToFrom($this);
             } else {
-                $vertex = $edge->getVertexFromTo($this);
+                $ret []= $edge->getVertexFromTo($this);
             }
-            $ret[$vertex->getId()] = $vertex;
         }
 
         return new Vertices($ret);
@@ -298,6 +301,10 @@ class Vertex extends Layoutable implements EdgesAggregate
 
     /**
      * get set of all Vertices this vertex has an edge to
+     *
+     * If there are multiple parallel edges to the same Vertex, it will be
+     * returned several times in the resulting Set of Vertices. If you only
+     * want unique Vertex instances, use `getVerticesDistinct()`.
      *
      * @return Vertices
      * @uses Vertex::getEdgesOut()
@@ -307,8 +314,7 @@ class Vertex extends Layoutable implements EdgesAggregate
     {
         $ret = array();
         foreach ($this->getEdgesOut() as $edge) {
-            $vertex = $edge->getVertexToFrom($this);
-            $ret[$vertex->getId()] = $vertex;
+            $ret []= $edge->getVertexToFrom($this);
         }
 
         return new Vertices($ret);
@@ -316,6 +322,10 @@ class Vertex extends Layoutable implements EdgesAggregate
 
     /**
      * get set of all Vertices that have an edge TO this vertex
+     *
+     * If there are multiple parallel edges from the same Vertex, it will be
+     * returned several times in the resulting Set of Vertices. If you only
+     * want unique Vertex instances, use `getVerticesDistinct()`.
      *
      * @return Vertices
      * @uses Vertex::getEdgesIn()
@@ -325,8 +335,7 @@ class Vertex extends Layoutable implements EdgesAggregate
     {
         $ret = array();
         foreach ($this->getEdgesIn() as $edge) {
-            $vertex = $edge->getVertexFromTo($this);
-            $ret[$vertex->getId()] = $vertex;
+            $ret []= $edge->getVertexFromTo($this);
         }
 
         return new Vertices($ret);
