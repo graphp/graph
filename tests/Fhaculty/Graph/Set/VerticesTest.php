@@ -41,4 +41,24 @@ class VerticesTest extends BaseVerticesTest
 
         $vertices->getVerticesOrder('not a valid callback');
     }
+
+    public function testDuplicates()
+    {
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+
+        $vertices = $this->createVertices(array($v1, $v1, $v1));
+
+        $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $vertices);
+        $this->assertCount(3, $vertices);
+        $this->assertTrue($vertices->hasDuplicates());
+
+        $verticesDistinct = $vertices->getVerticesDistinct();
+
+        $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $verticesDistinct);
+        $this->assertCount(1, $verticesDistinct);
+        $this->assertFalse($verticesDistinct->hasDuplicates());
+
+        $this->assertSame($verticesDistinct, $verticesDistinct->getVerticesDistinct());
+    }
 }

@@ -41,6 +41,7 @@ abstract class BaseVerticesTest extends TestCase
         $this->assertTrue($vertices->getVerticesOrder(Vertices::ORDER_ID)->isEmpty());
         $this->assertTrue($vertices->getVerticesDistinct()->isEmpty());
         $this->assertTrue($vertices->getVerticesMatch(function() { })->isEmpty());
+        $this->assertFalse($vertices->hasDuplicates());
 
         return $vertices;
     }
@@ -218,5 +219,54 @@ abstract class BaseVerticesTest extends TestCase
         };
         $this->assertSame(508, $vertices->getSumCallback($sumgroups));
         $this->assertSame(508, $verticesOrdered->getSumCallback($sumgroups));
+    }
+
+    /**
+     *
+     * @param Vertices $vertices
+     * @depends testEmpty
+     */
+    public function testEmptyIntersectionSelf(Vertices $vertices)
+    {
+        $verticesIntersection = $vertices->getVerticesIntersection($vertices);
+        $this->assertCount(0, $verticesIntersection);
+    }
+
+    /**
+     *
+     * @param Vertices $verticesEmpty
+     * @param Vertices $verticesTwo
+     * @depends testEmpty
+     * @depends testTwo
+     */
+    public function testEmptyIntersectionTwo(Vertices $verticesEmpty, Vertices $verticesTwo)
+    {
+        $verticesIntersection = $verticesEmpty->getVerticesIntersection($verticesTwo);
+        $this->assertCount(0, $verticesIntersection);
+    }
+
+    /**
+     *
+     * @param Vertices $vertices
+     * @depends testTwo
+     */
+    public function testTwoIntersectionSelf(Vertices $vertices)
+    {
+        $verticesIntersection = $vertices->getVerticesIntersection($vertices);
+        $this->assertCount(2, $verticesIntersection);
+        $this->assertEquals($vertices->getMap(), $verticesIntersection->getMap());
+    }
+
+    /**
+     *
+     * @param Vertices $verticesTwo
+     * @param Vertices $verticesEmpty
+     * @depends testTwo
+     * @depends testEmpty
+     */
+    public function testTwoIntersectionEmpty(Vertices $verticesTwo, Vertices $verticesEmpty)
+    {
+        $verticesIntersection = $verticesTwo->getVerticesIntersection($verticesEmpty);
+        $this->assertCount(0, $verticesIntersection);
     }
 }
