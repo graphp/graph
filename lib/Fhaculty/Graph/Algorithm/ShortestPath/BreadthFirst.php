@@ -36,6 +36,8 @@ class BreadthFirst extends Base
         $vertexQueue = array();
         $edges = array();
 
+        // $edges[$this->vertex->getId()] = array();
+
         $vertexCurrent = $this->vertex;
         $edgesCurrent = array();
 
@@ -62,15 +64,14 @@ class BreadthFirst extends Base
 
     public function getEdgesTo(Vertex $endVertex)
     {
-        if ($endVertex->getGraph() !== $this->vertex->getGraph()) {
-            throw new InvalidArgumentException('Given target vertex does not belong to the same graph instance');
-        }
-        $map = $this->getEdgesMap();
-        if (!isset($map[$endVertex->getId()])) {
-            throw new OutOfBoundsException('Given target vertex can not be reached from start vertex');
-        }
+        if ($endVertex->getGraph() === $this->vertex->getGraph()) {
+            $map = $this->getEdgesMap();
 
-        return $map[$endVertex->getId()];
+            if (isset($map[$endVertex->getId()])) {
+                return $map[$endVertex->getId()];
+            }
+        }
+        throw new OutOfBoundsException('Given target vertex can not be reached from start vertex');
     }
 
     /**
@@ -94,23 +95,24 @@ class BreadthFirst extends Base
      *
      * @param  Vertex  $endVertex
      * @return boolean
-     * @uses AlgorithmSpBreadthFirst::getEdgesMap()
+     * @uses self::getEdgesTo()
      */
-    public function hasVertex(Vertex $endVertex)
+    public function hasVertex(Vertex $vertex)
     {
-        if ($endVertex->getGraph() !== $this->vertex->getGraph()) {
-            throw new InvalidArgumentException('Given target vertex does not belong to the same graph instance');
+        try {
+            $this->getEdgesTo($vertex);
         }
-        $map = $this->getEdgesMap();
-
-        return isset($map[$endVertex->getId()]);
+        catch (OutOfBoundsException $e) {
+            return false;
+        }
+        return true;
     }
 
     /**
      * get array of all target vertices this vertex has a path to
      *
      * @return Vertex[]
-     * @uses AlgorithmSpBreadthFirst::getDistanceMap()
+     * @uses self::getEdgesMap()
      */
     public function getVertices()
     {

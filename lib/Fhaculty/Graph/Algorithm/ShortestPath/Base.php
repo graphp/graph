@@ -4,11 +4,8 @@ namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Algorithm\BaseVertex;
 use Fhaculty\Graph\Walk;
-
-use Fhaculty\Graph\Exception\UnderflowException;
-
+use Fhaculty\Graph\Exception\OutOfBoundsException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
 
@@ -19,7 +16,7 @@ abstract class Base extends BaseVertex
      *
      * @param  Vertex    $endVertex
      * @return Walk
-     * @throws Exception when there's no walk from start to end vertex
+     * @throws OutOfBoundsException if there's no path to the given end vertex
      * @uses self::getEdgesTo()
      * @uses Walk::factoryFromEdges()
      */
@@ -32,7 +29,7 @@ abstract class Base extends BaseVertex
      * get array of edges (path) from start vertex to given end vertex
      *
      * @param  Vertex    $endVertex
-     * @throws Exception
+     * @throws OutOfBoundsException if there's no path to the given end vertex
      * @return Edge[]
      * @uses AlgorithmSp::getEdges()
      * @uses AlgorithmSp::getEdgesToInternal()
@@ -47,7 +44,7 @@ abstract class Base extends BaseVertex
      *
      * @param  Vertex    $endVertex
      * @param  array     $edges     array of all input edges to operate on
-     * @throws Exception
+     * @throws OutOfBoundsException if there's no path to the given vertex
      * @return Edge[]
      * @uses AlgorithmSp::getEdges() if no edges were given
      */
@@ -69,7 +66,7 @@ abstract class Base extends BaseVertex
                 } // ignore: this edge does not point TO current vertex
             }
             if ($pre === NULL) {
-                throw new UnderflowException('No edge leading to vertex');
+                throw new OutOfBoundsException('No edge leading to vertex');
             }
         }
 
@@ -138,7 +135,7 @@ abstract class Base extends BaseVertex
         foreach ($this->vertex->getGraph()->getVertices() as $vid => $vertex) {
             try {
                 $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex, $edges));
-            } catch (UnderflowException $ignore) {
+            } catch (OutOfBoundsException $ignore) {
             } // ignore vertices that can not be reached
         }
 
@@ -150,7 +147,7 @@ abstract class Base extends BaseVertex
      *
      * @param  Vertex    $endVertex
      * @return float
-     * @throws Exception if given vertex is invalid or there's no path to given end vertex
+     * @throws OutOfBoundsException if there's no path to the given end vertex
      * @uses AlgorithmSp::getEdgesTo()
      * @uses AlgorithmSp::sumEdges()
      */
