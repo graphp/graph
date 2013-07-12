@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm\ShortestPath;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Cycle;
 use Fhaculty\Graph\Exception\NegativeCycleException;
+use Fhaculty\Graph\Exception\UnderflowException;
 
 class MooreBellmanFord extends Base
 {
