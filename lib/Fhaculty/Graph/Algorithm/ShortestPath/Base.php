@@ -52,7 +52,7 @@ abstract class Base extends BaseVertex
     {
         $currentVertex = $endVertex;
         $path = array();
-        while ($currentVertex !== $this->vertex) {
+        do {
             $pre = NULL;
             // check all edges to search for edge that points TO current vertex
             foreach ($edges as $edge) {
@@ -68,7 +68,7 @@ abstract class Base extends BaseVertex
             if ($pre === NULL) {
                 throw new OutOfBoundsException('No edge leading to vertex');
             }
-        }
+        } while ($currentVertex !== $this->vertex);
 
         return array_reverse($path);
     }
@@ -198,8 +198,6 @@ abstract class Base extends BaseVertex
     protected function getEdgesCheapestPredecesor(array $predecessor)
     {
         $vertices = $this->vertex->getGraph()->getVertices();
-        // start vertex doesn't have a predecessor
-        unset($vertices[$this->vertex->getId()]);
 
         $edges = array();
         foreach ($vertices as $vid => $vertex) {

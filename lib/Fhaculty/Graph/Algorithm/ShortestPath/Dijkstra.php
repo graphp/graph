@@ -16,7 +16,7 @@ class Dijkstra extends Base
     {
         $totalCostOfCheapestPathTo  = Array();
         // start node distance
-        $totalCostOfCheapestPathTo[$this->vertex->getId()] = 0;
+        $totalCostOfCheapestPathTo[$this->vertex->getId()] = INF;
 
         // just to get the cheapest vertex in the correct order
         $cheapestVertex = new SplPriorityQueue();
@@ -28,6 +28,8 @@ class Dijkstra extends Base
 
         // mark vertices when their cheapest path has been found
         $usedVertices  = Array();
+
+        $isFirst = true;
 
         // Repeat until all vertices have been marked
         $totalCountOfVertices = $this->vertex->getGraph()->getNumberOfVertices();
@@ -52,8 +54,12 @@ class Dijkstra extends Base
                 break;
             }
 
-            // mark this vertex
-            $usedVertices[$currentVertexId] = true;
+            if ($isFirst) {
+                $isFirst = false;
+            } else {
+                // mark this vertex
+                $usedVertices[$currentVertexId] = true;
+            }
 
             // check for all edges of current vertex if there is a cheaper path (or IN OTHER WORDS: Add reachable nodes from currently added node and refresh the current possible distances)
             foreach ($currentVertex->getEdgesOut() as $edge) {
@@ -69,6 +75,9 @@ class Dijkstra extends Base
                 if (!isset($usedVertices[$targetVertexId])) {
                     // calculate new cost to vertex
                     $newCostsToTargetVertex = $totalCostOfCheapestPathTo[$currentVertexId] + $weight;
+                    if (is_infinite($newCostsToTargetVertex)) {
+                        $newCostsToTargetVertex = $weight;
+                    }
 
                     if ((!isset($predecesVertexOfCheapestPathTo[$targetVertexId]))
                            // is the new path cheaper?
@@ -86,6 +95,10 @@ class Dijkstra extends Base
                     }
                 }
             }
+        }
+
+        if ($totalCostOfCheapestPathTo[$this->vertex->getId()] === INF) {
+            unset($predecesVertexOfCheapestPathTo[$this->vertex->getId()]);
         }
 
         // algorithm is done, return resulting edges
