@@ -45,7 +45,7 @@ class Parallel extends BaseGraph
      */
     public function hasEdgeParallelEdge(Edge $edge)
     {
-        return !!$this->getEdgesParallelEdge($edge);
+        return !$this->getEdgesParallelEdge($edge)->isEmpty();
     }
 
     /**
@@ -58,16 +58,12 @@ class Parallel extends BaseGraph
     {
         if ($edge instanceof DirectedEdge) {
             // get all edges between this edge's endpoints
-            $edges = $edge->getVertexStart()->getEdgesTo($edge->getVertexEnd());
+            $edges = $edge->getVertexStart()->getEdgesTo($edge->getVertexEnd())->getVector();
         } else {
             // edge points into both directions (undirected/bidirectional edge)
             // also get all edges in other direction
-            $ends       = $edge->getVertices();
-            $edgesOther = $ends[1]->getEdges();
-
-            $edges = array_filter($ends[0]->getEdges(), function(Edge $edge) use ($edgesOther) {
-                return in_array($edge, $edgesOther, true);
-            });
+            $ends  = $edge->getVertices();
+            $edges = $ends[0]->getEdges()->getEdgesIntersection($ends[1]->getEdges())->getVector();
         }
 
         $pos = array_search($edge, $edges, true);
@@ -81,6 +77,6 @@ class Parallel extends BaseGraph
         // exclude current edge from parallel edges
         unset($edges[$pos]);
 
-        return array_values($edges);
+        return new Edges(array_values($edges));
     }
 }

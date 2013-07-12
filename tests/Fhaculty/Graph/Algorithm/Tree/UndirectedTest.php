@@ -18,8 +18,8 @@ class UndirectedTest extends TestCase
         $tree = $this->createTree($graph);
 
         $this->assertTrue($tree->isTree());
-        $this->assertSame(array(), $tree->getVerticesInternal());
-        $this->assertSame(array(), $tree->getVerticesLeaf());
+        $this->assertSame(array(), $tree->getVerticesInternal()->getVector());
+        $this->assertSame(array(), $tree->getVerticesLeaf()->getVector());
     }
 
     public function testGraphTrivial()
@@ -29,8 +29,8 @@ class UndirectedTest extends TestCase
 
         $tree = $this->createTree($graph);
         $this->assertTrue($tree->isTree());
-        $this->assertSame(array(), $tree->getVerticesInternal());
-        $this->assertSame(array(), $tree->getVerticesLeaf());
+        $this->assertSame(array(), $tree->getVerticesInternal()->getVector());
+        $this->assertSame(array(), $tree->getVerticesLeaf()->getVector());
     }
 
     public function testGraphSimplePair()
@@ -41,8 +41,8 @@ class UndirectedTest extends TestCase
 
         $tree = $this->createTree($graph);
         $this->assertTrue($tree->isTree());
-        $this->assertSame(array(), $tree->getVerticesInternal());
-        $this->assertSame($graph->getVertices(), $tree->getVerticesLeaf());
+        $this->assertSame(array(), $tree->getVerticesInternal()->getVector());
+        $this->assertSame($graph->getVertices()->getVector(), $tree->getVerticesLeaf()->getVector());
     }
 
     public function testGraphSimpleLine()
@@ -54,8 +54,8 @@ class UndirectedTest extends TestCase
 
         $tree = $this->createTree($graph);
         $this->assertTrue($tree->isTree());
-        $this->assertSame(array($graph->getVertex('v2')), array_values($tree->getVerticesInternal()));
-        $this->assertSame(array($graph->getVertex('v1'), $graph->getVertex('v3')), array_values($tree->getVerticesLeaf()));
+        $this->assertSame(array($graph->getVertex('v2')), $tree->getVerticesInternal()->getVector());
+        $this->assertSame(array($graph->getVertex('v1'), $graph->getVertex('v3')), $tree->getVerticesLeaf()->getVector());
     }
 
     public function testGraphPairParallelIsNotTree()

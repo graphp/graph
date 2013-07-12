@@ -2,6 +2,11 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\EdgesAggregate;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesAggregate;
+
 /**
  * Base Walk class
  *
@@ -12,16 +17,16 @@ namespace Fhaculty\Graph;
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  * @see Fhaculty\Graph\Algorithm\Property\WalkProperty for checking special cases, such as cycles, loops, closed trails, etc.
  */
-class Walk extends Set
+class Walk extends Set implements VerticesAggregate, EdgesAggregate
 {
     /**
      * construct new walk from given start vertex and given array of edges
      *
-     * @param  array                $edges
+     * @param  Edges|Edge[]         $edges
      * @param  Vertex               $startVertex
      * @return \Fhaculty\Graph\Walk
      */
-    public static function factoryFromEdges(array $edges, Vertex $startVertex)
+    public static function factoryFromEdges($edges, Vertex $startVertex)
     {
         $vertices = array($startVertex);
         $vertexCurrent = $startVertex;
@@ -32,6 +37,14 @@ class Walk extends Set
 
         return new self($vertices, $edges);
     }
+
+    /**
+     *
+     * @var Vertex[]
+     */
+    protected $vertices = array();
+
+    protected $edges = array();
 
     protected function __construct(array $vertices, array $edges)
     {
@@ -64,9 +77,9 @@ class Walk extends Set
     {
         // create new graph clone with only edges of walk
         $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());
-        $vertices = $this->getVertices();
+        $vertices = $this->getVertices()->getMap();
         // get all vertices
-        foreach ($graph->getVertices() as $vid => $vertex) {
+        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
             if (!isset($vertices[$vid])) {
                 // remove those not present in the walk (isolated vertices, etc.)
                 $vertex->destroy();
@@ -77,82 +90,29 @@ class Walk extends Set
     }
 
     /**
-     * return array of all unique edges of walk
+     * return set of all Edges of walk (in sequence visited in walk, may contain duplicates)
      *
-     * @return Edge[]
+     * If you need to return set a of all unique Edges of walk, use
+     * `Walk::getEdges()->getEdgesDistinct()` instead.
+     *
+     * @return Edges
      */
     public function getEdges()
     {
-        $edges = array();
-        foreach ($this->edges as $edge) {
-            // filter duplicate edges
-            if (!in_array($edge, $edges, true)) {
-                $edges []= $edge;
-            }
-        }
-
-        return $edges;
+        return new Edges($this->edges);
     }
 
     /**
-     * return array/list of all edges of walk (in sequence visited in walk, may contain duplicates)
+     * return set of all Vertices of walk (in sequence visited in walk, may contain duplicates)
      *
-     * @return Edge[]
-     */
-    public function getEdgesSequence()
-    {
-        return $this->edges;
-    }
-
-    /**
-     * return array of all unique vertices of walk
+     * If you need to return set a of all unique Vertices of walk, use
+     * `Walk::getVertices()->getVerticesDistinct()` instead.
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     public function getVertices()
     {
-        $vertices = array();
-        foreach ($this->vertices as $vertex) {
-            $vertices[$vertex->getId()] = $vertex;
-        }
-
-        return $vertices;
-    }
-
-    /**
-     * return array/list of all vertices of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return Vertex[]
-     */
-    public function getVerticesSequence()
-    {
-        return $this->vertices;
-    }
-
-    /**
-     * return array of all vertex ids of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return string[]
-     * @uses Vertex::getId()
-     */
-    public function getVerticesSequenceId()
-    {
-        $ids = array();
-        foreach ($this->vertices as $vertex) {
-            $ids []= $vertex->getId();
-        }
-
-        return $ids;
-    }
-
-    /**
-     * get IDs of all vertices in the walk
-     *
-     * @return int[]
-     */
-    public function getVerticesId()
-    {
-        return array_keys($this->getVertices());
+        return new Vertices($this->vertices);
     }
 
     /**
@@ -202,10 +162,9 @@ class Walk extends Set
      */
     public function isValid()
     {
-        $vertices = $this->getGraph()->getVertices();
+        $vertices = $this->getGraph()->getVertices()->getMap();
         // check source graph contains all vertices
-        foreach ($this->vertices as $vertex) {
-            $vid = $vertex->getId();
+        foreach ($this->getVertices()->getMap() as $vid => $vertex) {
             // make sure vertex ID exists and has not been replaced
             if (!isset($vertices[$vid]) || $vertices[$id] !== $vertex) {
                 return false;

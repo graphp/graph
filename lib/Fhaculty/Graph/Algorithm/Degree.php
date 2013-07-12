@@ -6,6 +6,7 @@ use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
+use Fhaculty\Graph\Set\Vertices;
 
 /**
  * Basic algorithms for working with the degrees of Graphs.
@@ -49,12 +50,12 @@ class Degree extends BaseGraph
      *
      * @return int
      * @throws Exception if graph is empty or directed
-     * @uses Vertex::getFirst()
+     * @uses Vertices::getVertexOrder()
      * @uses self::getDegreeVertex()
      */
     public function getDegreeMin()
     {
-        return $this->getDegreeVertex(Vertex::getFirst($this->graph->getVertices(), Vertex::ORDER_DEGREE));
+        return $this->getDegreeVertex($this->graph->getVertices()->getVertexOrder(Vertices::ORDER_DEGREE));
     }
 
     /**
@@ -62,12 +63,12 @@ class Degree extends BaseGraph
      *
      * @return int
      * @throws Exception if graph is empty or directed
-     * @uses Vertex::getFirst()
+     * @uses Vertices::getVertexOrder()
      * @uses self::getDegreeVertex()
      */
     public function getDegreeMax()
     {
-        return $this->getDegreeVertex(Vertex::getFirst($this->graph->getVertices(), Vertex::ORDER_DEGREE, true));
+        return $this->getDegreeVertex($this->graph->getVertices()->getVertexOrder(Vertices::ORDER_DEGREE, true));
     }
 
     /**

@@ -188,7 +188,7 @@ class GraphTest extends TestCase
         $this->assertEquals(2, $graph->getNumberOfEdges());
         $this->assertEquals(2, count($v1->getEdges()));
 
-        $this->assertEquals(array(2), array_keys($v1->getVerticesEdge()));
+        $this->assertEquals(array(2), $v1->getVerticesEdge()->getIds());
     }
 
     public function testCreateMixedGraph()
@@ -208,16 +208,16 @@ class GraphTest extends TestCase
         $this->assertEquals(2, count($v2->getEdgesOut()));
         $this->assertEquals(1, count($v2->getEdgesIn()));
 
-        $this->assertEquals(array(1, 3), array_keys($v2->getVerticesEdgeTo()));
-        $this->assertEquals(array(1), array_keys($v2->getVerticesEdgeFrom()));
+        $this->assertEquals(array(1, 3), $v2->getVerticesEdgeTo()->getIds());
+        $this->assertEquals(array(1), $v2->getVerticesEdgeFrom()->getIds());
     }
 
     public function testCreateVerticesNone()
     {
         $graph = new Graph();
 
-        $this->assertEquals(array(), $graph->createVertices(0));
-        $this->assertEquals(array(), $graph->createVertices(array()));
+        $this->assertEquals(array(), $graph->createVertices(0)->getVector());
+        $this->assertEquals(array(), $graph->createVertices(array())->getVector());
 
         $this->assertEquals(0, $graph->getNumberOfVertices());
     }
@@ -250,15 +250,15 @@ class GraphTest extends TestCase
 
         $vertices = $graph->createVertices(2);
         $this->assertCount(2, $vertices);
-        $this->assertEquals(array(0, 1), array_keys($graph->getVertices()));
+        $this->assertEquals(array(0, 1), $graph->getVertices()->getIds());
 
         $vertices = $graph->createVertices(array(7, 9));
         $this->assertCount(2, $vertices);
-        $this->assertEquals(array(0, 1, 7, 9), array_keys($graph->getVertices()));
+        $this->assertEquals(array(0, 1, 7, 9), $graph->getVertices()->getIds());
 
         $vertices = $graph->createVertices(3);
         $this->assertCount(3, $vertices);
-        $this->assertEquals(array(0, 1, 7, 9, 10, 11, 12), array_keys($graph->getVertices()));
+        $this->assertEquals(array(0, 1, 7, 9, 10, 11, 12), $graph->getVertices()->getIds());
     }
 
     public function testCreateVerticesAtomic()

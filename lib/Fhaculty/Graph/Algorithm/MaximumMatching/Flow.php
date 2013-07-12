@@ -29,11 +29,6 @@ class Flow extends Base
         // create temporary flow graph with supersource and supersink
         $graphFlow = $this->graph->createGraphCloneEdgeless();
 
-        // get all vertices
-        $vertices = $graphFlow->getVertices();
-        // above $vertices does NOT contain supersource and supersink, because
-        // we want to skip over them as they do not have a partition assigned
-
         $superSource = $graphFlow->createVertex()->setLayoutAttribute('label', 's*');
         $superSink   = $graphFlow->createVertex()->setLayoutAttribute('label', 't*');
 
@@ -42,7 +37,10 @@ class Flow extends Base
         $groupB = $groups[1];
 
         // connect supersource s* to set A and supersink t* to set B
-        foreach ($vertices as $vertex) {
+        foreach ($graphFlow->getVertices() as $vertex) {
+            // we want to skip over supersource & supersink as they do not have a partition assigned
+            if ($vertex === $superSource || $vertex === $superSink) continue;
+
             $group = $vertex->getGroup();
 
             // source

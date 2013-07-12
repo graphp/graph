@@ -5,6 +5,8 @@ namespace Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\LogicException;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\Edges;
 
 class Directed extends Base
 {
@@ -48,7 +50,7 @@ class Directed extends Base
 
     public function getVertices()
     {
-        return array($this->from, $this->to);
+        return new Vertices(array($this->from, $this->to));
     }
 
     /**

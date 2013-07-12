@@ -8,6 +8,7 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\Search\Base as Search;
 use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Undirected as UndirectedEdge;
 use Fhaculty\Graph\Algorithm\Degree;
@@ -106,7 +107,7 @@ class Undirected extends Tree
      * @uses self::getVerticesNeighbor()
      * @uses self::getVerticesSubtreeRecursive() to recurse into sub-subtrees
      */
-    private function getVerticesSubtreeRecursive(Vertex $vertex, &$vertices, Vertex $ignore = null)
+    private function getVerticesSubtreeRecursive(Vertex $vertex, array &$vertices, Vertex $ignore = null)
     {
         if (isset($vertices[$vertex->getId()])) {
             // vertex already visited => must be a cycle
@@ -129,7 +130,7 @@ class Undirected extends Tree
      *
      * @param Vertex $vertex
      * @throws UnexpectedValueException for directed edges
-     * @return Vertex[] (might include possible duplicates)
+     * @return Vertices (might include possible duplicates)
      * @uses Vertex::getEdges()
      * @uses Edge::getVertexToFrom()
      * @see Vertex::getVerticesEdge()
@@ -144,6 +145,6 @@ class Undirected extends Tree
             }
             $vertices[] = $edge->getVertexToFrom($vertex);
         }
-        return $vertices;
+        return new Vertices($vertices);
     }
 }

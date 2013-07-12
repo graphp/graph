@@ -24,7 +24,7 @@ class ConnectedComponents extends BaseGraph
      * @param  Vertex                   $vertex
      * @return Graph
      * @throws InvalidArgumentException if given vertex is not from same graph
-     * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
+     * @uses AlgorithmSearchBreadthFirst::getVertices()
      * @uses Graph::createGraphCloneVertices()
      */
     public function createGraphComponentVertex(Vertex $vertex)
@@ -36,6 +36,11 @@ class ConnectedComponents extends BaseGraph
         return $this->graph->createGraphCloneVertices($this->createSearch($vertex)->getVertices());
     }
 
+    /**
+     *
+     * @param Vertex $vertex
+     * @return SearchBreadthFirst
+     */
     private function createSearch(Vertex $vertex)
     {
         $alg = new SearchBreadthFirst($vertex);
@@ -84,7 +89,7 @@ class ConnectedComponents extends BaseGraph
      *
      * @return int number of components
      * @uses Graph::getVertices()
-     * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
+     * @uses AlgorithmSearchBreadthFirst::getVertices()
      */
     public function getNumberOfComponents()
     {
@@ -92,12 +97,12 @@ class ConnectedComponents extends BaseGraph
         $components = 0;
 
         // for each vertices
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             // did I visit this vertex before?
             if (!isset($visitedVertices[$vid])) {
 
                 // get all vertices of this component
-                $newVertices = $this->createSearch($vertex)->getVerticesIds();
+                $newVertices = $this->createSearch($vertex)->getVertices()->getIds();
 
                 ++$components;
 
@@ -125,7 +130,7 @@ class ConnectedComponents extends BaseGraph
         $graphs = array();
 
         // for each vertices
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             // did I visit this vertex before?
             if (!isset($visitedVertices[$vid])) {
 
@@ -134,7 +139,7 @@ class ConnectedComponents extends BaseGraph
                 $newVertices = $alg->getVertices();
 
                 // mark the vertices of this component as visited
-                foreach ($newVertices as $vid => $unusedVertex) {
+                foreach ($newVertices->getIds() as $vid) {
                     $visitedVertices[$vid] = true;
                 }
 

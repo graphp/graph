@@ -4,13 +4,12 @@ namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Algorithm\BaseVertex;
 use Fhaculty\Graph\Walk;
-
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\Vertices;
 
 abstract class Base extends BaseVertex
 {
@@ -33,7 +32,7 @@ abstract class Base extends BaseVertex
      *
      * @param  Vertex    $endVertex
      * @throws Exception
-     * @return Edge[]
+     * @return Edges
      * @uses AlgorithmSp::getEdges()
      * @uses AlgorithmSp::getEdgesToInternal()
      */
@@ -48,7 +47,7 @@ abstract class Base extends BaseVertex
      * @param  Vertex    $endVertex
      * @param  array     $edges     array of all input edges to operate on
      * @throws Exception
-     * @return Edge[]
+     * @return Edges
      * @uses AlgorithmSp::getEdges() if no edges were given
      */
     protected function getEdgesToInternal(Vertex $endVertex, array $edges)
@@ -73,17 +72,17 @@ abstract class Base extends BaseVertex
             }
         }
 
-        return array_reverse($path);
+        return new Edges(array_reverse($path));
     }
 
     /**
      * get sum of weight of given edges
      *
-     * @param  Edge[] $edges
+     * @param  Edges $edges
      * @return float
      * @uses Edge::getWeight()
      */
-    private function sumEdges(array $edges)
+    private function sumEdges(Edges $edges)
     {
         $sum = 0;
         foreach ($edges as $edge) {
@@ -94,33 +93,22 @@ abstract class Base extends BaseVertex
     }
 
     /**
-     * get array of all vertices the given start vertex has a path to
+     * get set of all Vertices the given start vertex has a path to
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses AlgorithmSp::getDistanceMap()
      */
     public function getVertices()
     {
         $vertices = array();
         $map = $this->getDistanceMap();
-        foreach ($this->vertex->getGraph()->getVertices() as $vid => $vertex) {
+        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
             if (isset($map[$vid])) {
                 $vertices[$vid] = $vertex;
             }
         }
 
-        return $vertices;
-    }
-
-    /**
-     * get array of all vertices' IDs the given start vertex has a path to
-     *
-     * @return int[]
-     * @uses AlgorithmSp::getDistanceMap()
-     */
-    public function getVerticesId()
-    {
-        return array_keys($this->getDistanceMap());
+        return new Vertices($vertices);
     }
 
     /**
@@ -135,7 +123,7 @@ abstract class Base extends BaseVertex
     {
         $edges = $this->getEdges();
         $ret = array();
-        foreach ($this->vertex->getGraph()->getVertices() as $vid => $vertex) {
+        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
             try {
                 $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex, $edges));
             } catch (UnderflowException $ignore) {
@@ -175,14 +163,14 @@ abstract class Base extends BaseVertex
      * get cheapest edges (lowest weight) for given map of vertex predecessors
      *
      * @param  Vertex[] $predecessor
-     * @return Edge[]
+     * @return Edges
      * @uses Graph::getVertices()
      * @uses Vertex::getEdgesTo()
-     * @uses Edge::getFirst()
+     * @uses Edges::getEdgeOrder()
      */
     protected function getEdgesCheapestPredecesor(array $predecessor)
     {
-        $vertices = $this->vertex->getGraph()->getVertices();
+        $vertices = $this->vertex->getGraph()->getVertices()->getMap();
         // start vertex doesn't have a predecessor
         unset($vertices[$this->vertex->getId()]);
 
@@ -193,17 +181,17 @@ abstract class Base extends BaseVertex
                 $predecesVertex = $predecessor[$vid];
 
                 // get cheapest edge
-                $edges []= Edge::getFirst($predecesVertex->getEdgesTo($vertex), Edge::ORDER_WEIGHT);
+                $edges []= $predecesVertex->getEdgesTo($vertex)->getEdgeOrder(Edges::ORDER_WEIGHT);
             }
         }
 
-        return $edges;
+        return new Edges($edges);
     }
 
     /**
      * get all edges on shortest path for this vertex
      *
-     * @return Edge[]
+     * @return Edges
      */
     abstract public function getEdges();
 }

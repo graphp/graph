@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
+use Fhaculty\Graph\Set\Edges;
 
 abstract class Base extends AlgorithmBase
 {
@@ -24,7 +25,7 @@ abstract class Base extends AlgorithmBase
     /**
      * get all edges on minimum spanning tree
      *
-     * @return Edge[]
+     * @return Edges
      */
     abstract public function getEdges();
 }

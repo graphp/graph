@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\MinimumSpanningTree\Kruskal as MstKruskal;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchDepthFirst;
 
@@ -32,7 +33,7 @@ class MinimumSpanningTree extends Base
 
     /**
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
@@ -44,13 +45,12 @@ class MinimumSpanningTree extends Base
 
         $alg = new SearchDepthFirst($minimumSpanningTree->getVertexFirst());
         // Depth first search in minmum spanning tree (for the eulerian path)
-        $depthFirstSearch = $alg->getVertices();
 
         $startVertex = NULL;
         $oldVertex = NULL;
 
         // connect vertices in order of the depth first search
-        foreach ($depthFirstSearch as $vertex) {
+        foreach ($alg->getVertices() as $vertex) {
 
             // get vertex from the original graph (not from the depth first search)
             $vertex = $this->graph->getVertex($vertex->getId());
@@ -59,7 +59,7 @@ class MinimumSpanningTree extends Base
                 $startVertex = $vertex;
             } else {
                 // get edge(s) to clone, multiple edges are possible (returns an array if undirected edge)
-                $returnEdges []= Edge::getFirst($oldVertex->getEdgesTo($vertex));
+                $returnEdges []= $oldVertex->getEdgesTo($vertex)->getEdgeFirst();
             }
 
             $oldVertex = $vertex;
@@ -67,8 +67,8 @@ class MinimumSpanningTree extends Base
 
         // connect last vertex with start vertex
         // multiple edges are possible (returns an array if undirected edge)
-        $returnEdges []= Edge::getFirst($oldVertex->getEdgesTo($startVertex));
+        $returnEdges []= $oldVertex->getEdgesTo($startVertex)->getEdgeFirst();
 
-        return $returnEdges;
+        return new Edges($returnEdges);
     }
 }

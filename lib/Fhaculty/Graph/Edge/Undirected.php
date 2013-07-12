@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 
 class Undirected extends Base
 {
@@ -46,7 +47,7 @@ class Undirected extends Base
 
     public function getVertices()
     {
-        return array($this->a, $this->b);
+        return new Vertices(array($this->a, $this->b));
     }
 
     public function isConnection(Vertex $from, Vertex $to)
