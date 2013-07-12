@@ -91,24 +91,6 @@ class BreadthFirst extends Base
     }
 
     /**
-     * checks whether there's a path from this start vertex to given end vertex
-     *
-     * @param  Vertex  $endVertex
-     * @return boolean
-     * @uses self::getEdgesTo()
-     */
-    public function hasVertex(Vertex $vertex)
-    {
-        try {
-            $this->getEdgesTo($vertex);
-        }
-        catch (OutOfBoundsException $e) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * get array of all target vertices this vertex has a path to
      *
      * @return Vertex[]

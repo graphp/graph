@@ -121,6 +121,24 @@ abstract class Base extends BaseVertex
     }
 
     /**
+     * checks whether there's a path from this start vertex to given end vertex
+     *
+     * @param  Vertex  $endVertex
+     * @return boolean
+     * @uses self::getEdgesTo()
+     */
+    public function hasVertex(Vertex $vertex)
+    {
+        try {
+            $this->getEdgesTo($vertex);
+        }
+        catch (OutOfBoundsException $e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * get map of vertex IDs to distance
      *
      * @return float[]
