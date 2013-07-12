@@ -7,6 +7,16 @@ use Fhaculty\Graph\Cycle;
 use Fhaculty\Graph\Exception\NegativeCycleException;
 use Fhaculty\Graph\Exception\UnderflowException;
 
+/**
+ * Moore-Bellman-Ford's shortest path algorithm
+ *
+ * It is slower than Dijkstra's algorithm for the same problem, but more
+ * versatile, as it is capable of handling Graphs with negative Edge weights.
+ *
+ * Also known as just "Bellman–Ford algorithm".
+ *
+ * @link http://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm
+ */
 class MooreBellmanFord extends Base
 {
     /**
