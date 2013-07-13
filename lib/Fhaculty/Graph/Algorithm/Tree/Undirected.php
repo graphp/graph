@@ -49,13 +49,13 @@ class Undirected extends Tree
      * checks if this is a tree
      *
      * @return boolean
-     * @uses Graph::isEmpty() to skip empty Graphs (an empty Graph is a valid tree)
+     * @uses Vertices::isEmpty() to skip empty Graphs (an empty Graph is a valid tree)
      * @uses Graph::getVertexFirst() to get get get random "root" Vertex to start search from
      * @uses self::getVerticesSubtreeRecursive() to count number of vertices connected to root
      */
     public function isTree()
     {
-        if ($this->graph->isEmpty()) {
+        if ($this->graph->getVertices()->isEmpty()) {
             return true;
         }
 
