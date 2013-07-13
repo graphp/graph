@@ -13,6 +13,15 @@ use IteratorIterator;
 use ArrayIterator;
 use Fhaculty\Graph\Set\EdgesAggregate;
 
+/**
+ * A Set of Edges
+ *
+ * Contains any number of Edge (directed and/or undirected) instances.
+ *
+ * The Set is a readonly instance and it provides methods to get single Edge
+ * instances or to get a new Set of Edges. This way it's safe to pass around
+ * the original Set of Edges, because it will never be modified.
+ */
 class Edges implements Countable, IteratorAggregate, EdgesAggregate
 {
     /**
@@ -59,6 +68,13 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     /**
      * create new Edges instance
      *
+     * You can pass in just about anything that can be expressed as a Set of
+     * Edges, such as:
+     * - an array of Edge instances
+     * - any Algorithm that implements the EdgesAggregate interface
+     * - a Graph instance or
+     * - an existing Set of Edges which will be returned as-is
+     *
      * @param array|Edges|EdgesAggregate $edges
      * @return Edges
      */
@@ -71,8 +87,14 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     }
 
     /**
+     * create new Edges instance that references the given source array of Edge instances
+     *
+     * Any changes in the referenced source array will automatically be
+     * reflected in this Set of Edges, e.g. if you add an Edge instance to the
+     * array, it will automatically be included in this Set.
      *
      * @param array $edgesArray
+     * @return Edges
      */
     public static function factoryArrayReference(array &$edgesArray)
     {
@@ -81,6 +103,11 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
         return $edges;
     }
 
+    /**
+     * instantiate new Set of Edges
+     *
+     * @param array $edges
+     */
     public function __construct(array $edges = array())
     {
         $this->edges = $edges;
@@ -154,6 +181,15 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
         return $this->edges[$index];
     }
 
+    /**
+     * return first Edge that matches the given callback filter function
+     *
+     * @param callback $callbackCheck
+     * @return Edge
+     * @throws UnderflowException if no Edge matches the given callback filter function
+     * @uses self::getEdgeMatchOrNull()
+     * @see self::getEdgesMatch() if you want to return *all* Edges that match
+     */
     public function getEdgeMatch($callbackCheck)
     {
         $ret = $this->getEdgeMatchOrNull($callbackCheck);
@@ -163,6 +199,14 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
         return $ret;
     }
 
+    /**
+     * checks whethere there's an Edge that matches the given callback filter function
+     *
+     * @param callback $callbackCheck
+     * @return boolean
+     * @see self::getEdgeMatch() to return the Edge instance that matches the given callback filter function
+     * @uses self::getEdgeMatchOrNull()
+     */
     public function hasEdgeMatch($callbackCheck)
     {
         return ($this->getEdgeMatchOrNull($callbackCheck) !== null);
@@ -178,6 +222,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
      *
      * @param callable $callbackCheck
      * @return Edges a new Edges instance
+     * @see self::getEdgeMatch()
      */
     public function getEdgesMatch($callbackCheck)
     {
@@ -266,6 +311,12 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
         return $ret;
     }
 
+    /**
+     * return self reference to Set of Edges
+     *
+     * @return Edges
+     * @see self::factory()
+     */
     public function getEdges()
     {
         return $this;
@@ -322,21 +373,48 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
         return new static($edges);
     }
 
+    /**
+     * return array of Edge instances
+     *
+     * @return Edge[]
+     */
     public function getVector()
     {
         return array_values($this->edges);
     }
 
+    /**
+     * count number of Edges
+     *
+     * @return int
+     * @see self::isEmpty()
+     */
     public function count()
     {
         return count($this->edges);
     }
 
+    /**
+     * check whether this Set of Edges is empty
+     *
+     * A Set if empty if no single Edge instance is added. This is faster
+     * than calling `count() === 0`.
+     *
+     * @return boolean
+     */
     public function isEmpty()
     {
         return !$this->edges;
     }
 
+    /**
+     * get Iterator
+     *
+     * This method implements the IteratorAggregate interface and allows this
+     * Set of Edges to be used in foreach loops.
+     *
+     * @return IteratorIterator
+     */
     public function getIterator()
     {
         return new IteratorIterator(new ArrayIterator($this->edges));

@@ -15,6 +15,15 @@ use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Set\VerticesMap;
 use Fhaculty\Graph\Algorithm\Degree;
 
+/**
+ * A Set of Vertices
+ *
+ * Contains any number of Vertex instances.
+ *
+ * The Set is a readonly instance and it provides methods to get single Vertex
+ * instances or to get a new Set of Vertices. This way it's safe to pass around
+ * the original Set of Vertices, because it will never be modified.
+ */
 class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 {
     /**
@@ -69,6 +78,13 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     /**
      * create new Vertices instance
      *
+     * You can pass in just about anything that can be expressed as a Set of
+     * Vertices, such as:
+     * - an array of Vertex instances
+     * - any Algorithm that implements the VerticesAggregate interface
+     * - a Graph instance or
+     * - an existing Set of Vertices which will be returned as-is
+     *
      * @param array|Vertices|VerticesAggregate $vertices
      * @return Vertices
      */
@@ -81,8 +97,14 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     }
 
     /**
+     * create new Vertices instance that references the given source array of Vertex instances
+     *
+     * Any changes in the referenced source array will automatically be
+     * reflected in this Set of Vertices, e.g. if you add a Vertex instance to
+     * the array, it will automatically be included in this Set.
      *
      * @param array $verticesArray
+     * @return Vertices
      */
     public static function factoryArrayReference(array &$verticesArray)
     {
@@ -91,11 +113,24 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return $vertices;
     }
 
+    /**
+     * instantiate new Set of Vertices
+     *
+     * @param array $vertices
+     */
     public function __construct(array $vertices = array())
     {
         $this->vertices = $vertices;
     }
 
+    /**
+     * get Vertex with the given vertex $id
+     *
+     * @param int|string $id
+     * @return Vertex
+     * @throws OutOfBoundsException if no Vertex with the given ID exists
+     * @uses self::getVertexMatch()
+     */
     public function getVertexId($id)
     {
         try {
@@ -111,6 +146,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      *
      * @param int|string $id identifier of Vertex
      * @return boolean
+     * @uses self::hasVertexMatch()
      */
     public function hasVertexId($id)
     {
@@ -173,6 +209,15 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return current($this->vertices);
     }
 
+    /**
+     * return first Vertex that matches the given callback filter function
+     *
+     * @param callback $callbackCheck
+     * @return Vertex
+     * @throws UnderflowException if no Vertex matches the given callback filter function
+     * @uses self::getVertexMatchOrNull()
+     * @see self::getVerticesMatch() if you want to return *all* Vertices that match
+     */
     public function getVertexMatch($callbackCheck)
     {
         $ret = $this->getVertexMatchOrNull($callbackCheck);
@@ -182,6 +227,14 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return $ret;
     }
 
+    /**
+     * checks whethere there's a Vertex that matches the given callback filter function
+     *
+     * @param callback $callbackCheck
+     * @return boolean
+     * @see self::getVertexMatch() to return the Vertex instance that matches the given callback filter function
+     * @uses self::getVertexMatchOrNull()
+     */
     public function hasVertexMatch($callbackCheck)
     {
         return ($this->getVertexMatchOrNull($callbackCheck) !== null);
@@ -198,6 +251,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      *
      * @param callable $callbackCheck
      * @return Vertices a new Vertices instance
+     * @see self::getVertexMatch()
      */
     public function getVerticesMatch($callbackCheck)
     {
@@ -205,7 +259,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     }
 
     /**
-     * get iterator for vertices (optionally ordered by given criterium $by) from given array of vertices
+     * get new Set of Vertices ordered by given criterium $orderBy
      *
      * Vertex index positions will be left unchanged, so if you call this method
      * on a VerticesMap, it will also return a VerticesMap.
@@ -214,8 +268,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * @param  boolean                  $desc     whether to return biggest first (true) instead of smallest first (default:false)
      * @return Vertices                 a new Vertices set ordered by the given $orderBy criterium
      * @throws InvalidArgumentException if criterium is unknown
-     * @uses Vertex::getId()
-     * @uses Vertex::getGroup()
+     * @see self::getVertexOrder()
      */
     public function getVerticesOrder($orderBy = self::ORDER_FIFO, $desc = false)
     {
@@ -294,8 +347,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * @return Vertex
      * @throws InvalidArgumentException if criterium is unknown
      * @throws UnderflowException       if no vertices exist
-     * @uses Vertex::getId()
-     * @uses Vertex::getGroup()
+     * @see self::getVerticesOrder()
      */
     public function getVertexOrder($orderBy, $desc=false)
     {
@@ -324,6 +376,12 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return $ret;
     }
 
+    /**
+     * return self reference to Set of Vertices
+     *
+     * @return Vertices
+     * @see self::factory()
+     */
     public function getVertices()
     {
         return $this;
@@ -355,6 +413,11 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return $vertices;
     }
 
+    /**
+     * return array of Vertex IDs
+     *
+     * @return array
+     */
     public function getIds()
     {
         $ids = array();
@@ -364,16 +427,35 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return $ids;
     }
 
+    /**
+     * return array of Vertex instances
+     *
+     * @return Vertex[]
+     */
     public function getVector()
     {
         return array_values($this->vertices);
     }
 
+    /**
+     * count number of vertices
+     *
+     * @return int
+     * @see self::isEmpty()
+     */
     public function count()
     {
         return count($this->vertices);
     }
 
+    /**
+     * check whether this Set of Vertices is empty
+     *
+     * A Set if empty if no single Vertex instance is added. This is faster
+     * than calling `count() === 0`.
+     *
+     * @return boolean
+     */
     public function isEmpty()
     {
         return !$this->vertices;
@@ -390,6 +472,14 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
         return (count($this->vertices) !== count($this->getMap()));
     }
 
+    /**
+     * get Iterator
+     *
+     * This method implements the IteratorAggregate interface and allows this
+     * Set of Vertices to be used in foreach loops.
+     *
+     * @return IteratorIterator
+     */
     public function getIterator()
     {
         return new IteratorIterator(new ArrayIterator($this->vertices));
