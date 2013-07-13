@@ -78,4 +78,30 @@ class EdmondsKarpTest extends PHPUnit_Framework_TestCase
 //         $this->assertEquals(0.735802, $alg->getFlowMax());
 //     }
 
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInvalidFlowToOtherGraph()
+    {
+        $graph1 = new Graph();
+        $vg1 = $graph1->createVertex(1);
+
+        $graph2 = new Graph();
+        $vg2 = $graph2->createVertex(2);
+
+        new AlgorithmMaxFlowEdmondsKarp($vg1, $vg2);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInvalidFlowToSelf()
+    {
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+
+        new AlgorithmMaxFlowEdmondsKarp($v1, $v1);
+    }
+
 }
