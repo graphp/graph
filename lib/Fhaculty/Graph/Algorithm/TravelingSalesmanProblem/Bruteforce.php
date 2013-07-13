@@ -92,7 +92,8 @@ class Bruteforce extends Base
 
     protected function getVertexStart()
     {
-        return $this->graph->getVertexFirst();
+        // actual start doesn't really matter as we're only considering complete graphs here
+        return $this->graph->getVertices()->getVertexFirst();
     }
 
     protected function getGraph()
@@ -116,8 +117,7 @@ class Bruteforce extends Base
         // numEdges 3-12 should work
 
         $this->bestWeight = $this->upperLimit;
-        // actual start doesn't really matter as we're only considering complete graphs here
-        $this->startVertex = $this->graph->getVertexFirst();
+        $this->startVertex = $this->getVertexStart();
 
         $result = $this->step($this->startVertex,
                               0,

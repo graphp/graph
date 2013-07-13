@@ -23,7 +23,7 @@ class MinimumSpanningTree extends Base
 
     protected function getVertexStart()
     {
-        return $this->graph->getVertexFirst();
+        return $this->graph->getVertices()->VertexFirst();
     }
 
     protected function getGraph()
@@ -43,7 +43,7 @@ class MinimumSpanningTree extends Base
         $minimumSpanningTreeAlgorithm = new MstKruskal($this->graph);
         $minimumSpanningTree = $minimumSpanningTreeAlgorithm->createGraph();
 
-        $alg = new SearchDepthFirst($minimumSpanningTree->getVertexFirst());
+        $alg = new SearchDepthFirst($minimumSpanningTree->getVertices()->getVertexFirst());
         // Depth first search in minmum spanning tree (for the eulerian path)
 
         $startVertex = NULL;
