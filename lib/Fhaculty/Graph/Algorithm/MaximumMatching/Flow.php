@@ -58,7 +58,9 @@ class Flow extends Base
             } elseif ($group === $groupB) {
                 $vertex->createEdgeTo($superSink)->setCapacity(1)->setFlow(0);
             } else {
+                // @codeCoverageIgnoreStart
                 throw new LogicException('Should not happen. Unknown set: ' + $belongingSet);
+                // @codeCoverageIgnoreEnd
             }
         }
 
