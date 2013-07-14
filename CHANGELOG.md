@@ -15,6 +15,10 @@ As such, its static factory methods had to be renamed. Update your references if
 | `Cycle::factoryFromVertices()` | `Walk::factoryCycleFromVertices()` |
 | `Cycle::factoryFromEdges()` | `Walk::factoryCycleFromEdges()` |
 
+* BC break: Each of the above methods (`Walk::factoryCycleFromPredecessorMap()`,
+`Walk::factoryCycleFromVertices()`, `Walk::factoryCycleFromEdges()`) now
+actually makes sure the returned `Walk` instance is actually a valid Cycle,
+i.e. the start `Vertex` is the same as the end `Vertex` ([#61](https://github.com/clue/graph/issues/61))
 * BC break: Each `Algorithm\ShortestPath` algorithm now consistenly does not
 return a zero weight for the root Vertex and now supports loop edges on the root
 Vertex ([#62](https://github.com/clue/graph/issues/62))
