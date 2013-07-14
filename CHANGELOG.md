@@ -4,6 +4,21 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## 0.7.0 (2013-xx-xx)
+
+* BC break: Each `Algorithm\ShortestPath` algorithm now consistenly does not
+return a zero weight for the root Vertex and now supports loop edges on the root
+Vertex ([#62](https://github.com/clue/graph/issues/62))
+* BC break: Each `Algorithm\ShortestPath` algorithm now consistently throws an
+`OutOfBoundsException` for unreachable vertices
+([#62](https://github.com/clue/graph/issues/62))
+* Feature: Add `Algorithm\ShortestPath::hasVertex(Vertex $vertex)` to check whether
+a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).
+* Fix: Missing import prevented
+`Algorithm\ShortestPath\MooreBellmanFord::getCycleNegative()` from actually
+throwing the right `UnderflowException` if no cycle was actually found
+([#62](https://github.com/clue/graph/issues/62))
+
 ## 0.6.0 (2013-07-11)
 
 * BC break: Move algorithm definitions in base classes to separate algorithm classes ([#27](https://github.com/clue/graph/issues/27)).
