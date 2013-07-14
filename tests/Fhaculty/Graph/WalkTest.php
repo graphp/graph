@@ -33,6 +33,9 @@ class WalkTest extends TestCase
         $this->assertSame(array($v1, $e1, $v2, $e2, $v3), $walk->getAlternatingSequence());
         $this->assertTrue($walk->isValid());
 
+        $graphClone = $walk->createGraph();
+        $this->assertGraphEquals($graph, $graphClone);
+
         return $walk;
     }
 
@@ -46,6 +49,34 @@ class WalkTest extends TestCase
         $walk->getVertexTarget()->destroy();
 
         $this->assertFalse($walk->isValid());
+    }
+
+    public function testWalkWithinGraph()
+    {
+        // 1 -- 2 -- 3
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $v3 = $graph->createVertex(3);
+        $e1 = $v1->createEdgeTo($v2);
+        $e2 = $v2->createEdgeTo($v3);
+
+        // construct partial walk "1 -- 2"
+        $walk = Walk::factoryFromEdges(array($e1), $v1);
+
+        $this->assertEquals(2, $walk->getNumberOfVertices());
+        $this->assertEquals(1, $walk->getNumberOfEdges());
+        $this->assertSame($v1, $walk->getVertexSource());
+        $this->assertSame($v2, $walk->getVertexTarget());
+        $this->assertSame(array($v1, $e1, $v2), $walk->getAlternatingSequence());
+        $this->assertTrue($walk->isValid());
+
+        $graphExpected = new Graph();
+        $graphExpected->createVertex(1)->createEdgeTo($graphExpected->createVertex(2));
+
+        $this->assertGraphEquals($graphExpected, $walk->createGraph());
+
+        return $walk;
     }
 
     public function testWalkLoop()
