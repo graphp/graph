@@ -31,6 +31,10 @@ class FlowTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $alg->getNumberOfMatches());
         // actual edge instance returned
         $this->assertEquals(array($edge), $alg->getEdges());
+
+        // check
+        $flowgraph = $alg->createGraph();
+        $this->assertInstanceOf('Fhaculty\Graph\Graph', $flowgraph);
     }
 
     /**
