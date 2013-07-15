@@ -128,6 +128,25 @@ class WalkTest extends TestCase
         $this->assertTrue($walk->isValid());
     }
 
+    public function testWalkCycleFromVerticesAutocomplete()
+    {
+        // 1 -- 2 -- 1
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdge($v2);
+        $e2 = $v2->createEdge($v1);
+
+        // should actually be v1, v2, v1, but cycle factory automatically adds missing vertex + edge
+        $walk = Walk::factoryCycleFromVertices(array($v1, $v2));
+
+        $this->assertEquals(3, $walk->getNumberOfVertices());
+        $this->assertEquals(2, $walk->getNumberOfEdges());
+        $this->assertSame($v1, $walk->getVertexSource());
+        $this->assertSame($v1, $walk->getVertexTarget());
+        $this->assertTrue($walk->isValid());
+    }
+
     /**
      * @expectedException InvalidArgumentException
      */
