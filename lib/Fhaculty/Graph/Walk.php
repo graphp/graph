@@ -6,6 +6,9 @@ use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Set\EdgesAggregate;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesAggregate;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Exception\UnderflowException;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
 
 /**
  * Base Walk class
@@ -24,7 +27,7 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      *
      * @param  Edges|Edge[]         $edges
      * @param  Vertex               $startVertex
-     * @return \Fhaculty\Graph\Walk
+     * @return Walk
      */
     public static function factoryFromEdges($edges, Vertex $startVertex)
     {
@@ -36,6 +39,125 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
         }
 
         return new self($vertices, $edges);
+    }
+
+    /**
+     * create new cycle instance from given predecessor map
+     *
+     * @param  Vertex[]           $predecessors map of vid => predecessor vertex instance
+     * @param  Vertex             $vertex       start vertex to search predecessors from
+     * @param  int|null           $by
+     * @param  boolean            $desc
+     * @return Walk
+     * @throws UnderflowException
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
+     * @uses self::factoryFromVertices()
+     */
+    public static function factoryCycleFromPredecessorMap($predecessors, $vertex, $by = null, $desc = false)
+    {
+        /*$checked = array();
+         foreach ($predecessors as $vertex) {
+        $vid = $vertex->getId();
+        if (!isset($checked[$vid])) {
+
+        }
+        }*/
+
+        // find a vertex in the cycle
+        $vid = $vertex->getId();
+        $startVertices = array();
+        do {
+            $startVertices[$vid] = $vertex;
+
+            $vertex = $predecessors[$vid];
+            $vid = $vertex->getId();
+        } while (!isset($startVertices[$vid]));
+
+        // find negative cycle
+        $vid = $vertex->getId();
+        // build array of vertices in cycle
+        $vertices = array();
+        do {
+            // add new vertex to cycle
+            $vertices[$vid] = $vertex;
+
+            // get predecessor of vertex
+            $vertex = $predecessors[$vid];
+            $vid = $vertex->getId();
+            // continue until we find a vertex that's already in the circle (i.e. circle is closed)
+        } while (!isset($vertices[$vid]));
+
+        // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
+        $vertices = array_reverse($vertices, true);
+
+        return self::factoryCycleFromVertices($vertices, $by, $desc);
+    }
+
+    /**
+     * create new cycle instance with edges between given vertices
+     *
+     * @param  Vertex[]           $vertices
+     * @param  int|null           $by
+     * @param  boolean            $desc
+     * @return Walk
+     * @throws UnderflowException if no vertices were given
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
+     */
+    public static function factoryCycleFromVertices($vertices, $by = null, $desc = false)
+    {
+        $edges = array();
+        $first = NULL;
+        $last = NULL;
+        foreach ($vertices as $vertex) {
+            // skip first vertex as last is unknown
+            if ($first === NULL) {
+                $first = $vertex;
+            } else {
+                // pick edge between last vertex and this vertex
+                if ($by === null) {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeFirst();
+                } else {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeOrder($by, $desc);
+                }
+            }
+            $last = $vertex;
+        }
+        if ($last === NULL) {
+            throw new UnderflowException('No vertices given');
+        }
+
+        // additional edge from last vertex to first vertex
+        if ($last !== $first) {
+            if ($by === null) {
+                $edges []= $last->getEdgesTo($first)->getEdgeFirst();
+            } else {
+                $edges []= $last->getEdgesTo($first)->getEdgeOrder($by, $desc);
+            }
+            $vertices []= $first;
+        }
+
+        return new self($vertices, $edges);
+    }
+
+    /**
+     * create new cycle instance with vertices connected by given edges
+     *
+     * @param  Edges|Edge[] $edges
+     * @param  Vertex       $startVertex
+     * @return Walk
+     * @throws InvalidArgumentException if the given array of edges does not represent a valid cycle
+     * @uses self::factoryFromEdges()
+     */
+    public static function factoryCycleFromEdges($edges, Vertex $startVertex)
+    {
+        $cycle = self::factoryFromEdges($edges, $startVertex);
+
+        // ensure this walk is actually a cycle by checking start = end
+        if ($cycle->getVertexTarget() !== $startVertex) {
+            throw new InvalidArgumentException('The given array of edges does not represent a cycle');
+        }
+
+        return $cycle;
     }
 
     /**
@@ -173,7 +295,7 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
         // check source graph contains all vertices
         foreach ($this->getVertices()->getMap() as $vid => $vertex) {
             // make sure vertex ID exists and has not been replaced
-            if (!isset($vertices[$vid]) || $vertices[$id] !== $vertex) {
+            if (!isset($vertices[$vid]) || $vertices[$vid] !== $vertex) {
                 return false;
             }
         }
