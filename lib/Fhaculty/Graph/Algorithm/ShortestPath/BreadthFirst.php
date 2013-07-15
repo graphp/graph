@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm\ShortestPath;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
 use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\Edges;
 use \Exception;
 
 /**
@@ -76,7 +77,7 @@ class BreadthFirst extends Base
             $map = $this->getEdgesMap();
 
             if (isset($map[$endVertex->getId()])) {
-                return $map[$endVertex->getId()];
+                return new Edges($map[$endVertex->getId()]);
             }
         }
         throw new OutOfBoundsException('Given target vertex can not be reached from start vertex');
@@ -126,6 +127,6 @@ class BreadthFirst extends Base
             }
         }
 
-        return $ret;
+        return new Edges($ret);
     }
 }

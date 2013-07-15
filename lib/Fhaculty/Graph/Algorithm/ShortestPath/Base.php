@@ -83,13 +83,13 @@ abstract class Base extends BaseVertex
     /**
      * get array of edges (path) from start vertex to given end vertex
      *
-     * @param  Vertex    $endVertex
-     * @param  array     $edges     array of all input edges to operate on
+     * @param  Vertex       $endVertex
+     * @param  Edges|Edge[] $edges     set or array of all input edges to operate on
      * @throws OutOfBoundsException if there's no path to the given vertex
      * @return Edges
      * @uses self::getEdges() if no edges were given
      */
-    protected function getEdgesToInternal(Vertex $endVertex, array $edges)
+    protected function getEdgesToInternal(Vertex $endVertex, $edges)
     {
         $currentVertex = $endVertex;
         $path = array();
