@@ -6,6 +6,19 @@ you spot any mistakes.
 
 ## 0.7.0 (2013-xx-xx)
 
+* BC break: Merge `Cycle` into `Walk` ([#61](https://github.com/clue/graph/issues/61)).
+As such, its static factory methods had to be renamed. Update your references if applicable:
+
+| Old name | New name |
+|---|---|
+| `Cycle::factoryFromPredecessorMap()` | `Walk::factoryCycleFromPredecessorMap()` |
+| `Cycle::factoryFromVertices()` | `Walk::factoryCycleFromVertices()` |
+| `Cycle::factoryFromEdges()` | `Walk::factoryCycleFromEdges()` |
+
+* BC break: Each of the above methods (`Walk::factoryCycleFromPredecessorMap()`,
+`Walk::factoryCycleFromVertices()`, `Walk::factoryCycleFromEdges()`) now
+actually makes sure the returned `Walk` instance is actually a valid Cycle,
+i.e. the start `Vertex` is the same as the end `Vertex` ([#61](https://github.com/clue/graph/issues/61))
 * BC break: Each `Algorithm\ShortestPath` algorithm now consistenly does not
 return a zero weight for the root Vertex and now supports loop edges on the root
 Vertex ([#62](https://github.com/clue/graph/issues/62))
@@ -14,6 +27,7 @@ Vertex ([#62](https://github.com/clue/graph/issues/62))
 ([#62](https://github.com/clue/graph/issues/62))
 * Feature: Add `Algorithm\ShortestPath::hasVertex(Vertex $vertex)` to check whether
 a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).
+* Fix: Checking `Walk::isValid()` ([#61](https://github.com/clue/graph/issues/61))
 * Fix: Missing import prevented
 `Algorithm\ShortestPath\MooreBellmanFord::getCycleNegative()` from actually
 throwing the right `UnderflowException` if no cycle was actually found

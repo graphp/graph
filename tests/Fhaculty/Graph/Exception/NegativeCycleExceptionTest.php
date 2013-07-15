@@ -1,14 +1,13 @@
 <?php
 
-use Fhaculty\Graph\Cycle;
-
+use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Exception\NegativeCycleException;
 
 class NegativeCycleExceptionTest extends TestCase
 {
     public function testConstructor()
     {
-        $cycle = $this->getMockBuilder('Fhaculty\Graph\Cycle')
+        $cycle = $this->getMockBuilder('Fhaculty\Graph\Walk')
                       ->disableOriginalConstructor()
                       ->getMock();
 

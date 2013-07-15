@@ -7,6 +7,7 @@ use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Exception\NegativeCycleException;
 use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
 
@@ -34,7 +35,7 @@ class DetectNegativeCycle extends BaseGraph
     /**
      * Searches all vertices for the first negative cycle
      *
-     * @return Cycle
+     * @return Walk
      * @throws UnderflowException if there's no negative cycle
      * @uses AlgorithmSpMooreBellmanFord::getVerticesId()
      */
@@ -72,7 +73,7 @@ class DetectNegativeCycle extends BaseGraph
      * @return Graph
      * @throws Exception if there's no negative cycle
      * @uses AlgorithmDetectNegativeCycle::getCycleNegative()
-     * @uses Cycle::createGraph()
+     * @uses Walk::createGraph()
      */
     public function createGraph()
     {
