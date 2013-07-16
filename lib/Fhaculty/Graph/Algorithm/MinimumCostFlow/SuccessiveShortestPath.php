@@ -3,11 +3,8 @@
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
 use Fhaculty\Graph\Exception\DomainException;
-
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
@@ -21,10 +18,9 @@ class SuccessiveShortestPath extends Base
 {
     /**
      * @uses Graph::createGraphClone()
-     * @uses AlgorithmResidualGraph::createGraph()
-     * @uses AlgorithmSpMooreBellmanFord::getEdgesTo(Vertex $targetVertex)
-     *
-     * @see AlgorithmMCF::createGraph()
+     * @uses ResidualGraph::createGraph()
+     * @uses SpMooreBellmanFord::getEdgesTo(Vertex $targetVertex)
+     * @see Base::createGraph()
      */
     public function createGraph()
     {
@@ -40,7 +36,7 @@ class SuccessiveShortestPath extends Base
         // initial flow of edges
         $edges = $resultGraph->getEdges();
         foreach ($edges as $edge) {
-            // 0 if weight of edge is positiv
+            // 0 if weight of edge is positive
             $flow = 0;
 
             // maximal flow if weight of edge is negative
@@ -62,7 +58,7 @@ class SuccessiveShortestPath extends Base
             $edge->setFlow($flow);
         }
 
-        // return or Exception insite this while
+        // return or Exception inside this while
         while (true) {
             // create residual graph
             $algRG = new ResidualGraph($resultGraph);
@@ -71,17 +67,17 @@ class SuccessiveShortestPath extends Base
             // search for a source
             try {
                 $sourceVertex = $this->getVertexSource($residualGraph);
-            // if no source is found the minimum-cost flow is found
             } catch (UnderflowException $ignore) {
+                // no source is found => minimum-cost flow is found
                 break;
             }
 
-            // search for reachble sink from this source
+            // search for reachable target sink from this source
             try {
                 $targetVertex = $this->getVertexSink($sourceVertex);
-            // if no target is found the network has not enough capacity
-            } catch (UnderflowException $ignore) {
-                throw new UnexpectedValueException('The graph has not enough capacity for the minimum-cost flow');
+            } catch (UnderflowException $e) {
+                // no target found => network does not have enough capacity
+                throw new UnexpectedValueException('The graph has not enough capacity for the minimum-cost flow', 0, $e);
             }
 
             // calculate shortest path between source- and target-vertex
@@ -89,7 +85,7 @@ class SuccessiveShortestPath extends Base
             $edgesOnFlow = $algSP->getEdgesTo($targetVertex);
 
             // calculate the maximal possible flow
-                                                                                // new flow is the maximal possible flow for this path
+            // new flow is the maximal possible flow for this path
             $newflow    =    $this->graph->getVertex($sourceVertex->getId())->getBalance() - $sourceVertex->getBalance();
             $targetFlow = - ($this->graph->getVertex($targetVertex->getId())->getBalance() - $targetVertex->getBalance());
 
@@ -107,7 +103,7 @@ class SuccessiveShortestPath extends Base
             // add the new flow to the path
             $this->addFlow($resultGraph, $edgesOnFlow, $newflow);
 
-            // add balance to source and remove for the sink
+            // add balance to source and remove for the target sink
             $oriSourceVertex = $resultGraph->getVertex($sourceVertex->getId());
             $oriTargetVertex = $resultGraph->getVertex($targetVertex->getId());
 
