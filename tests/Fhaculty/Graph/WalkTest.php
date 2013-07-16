@@ -76,6 +76,14 @@ class WalkTest extends TestCase
 
         $this->assertGraphEquals($graphExpected, $walk->createGraph());
 
+        // construct same partial walk "1 -- 2"
+        $walkVertices = Walk::factoryFromVertices(array($v1, $v2));
+
+        $this->assertEquals(2, $walkVertices->getNumberOfVertices());
+        $this->assertEquals(1, $walkVertices->getNumberOfEdges());
+
+        $this->assertGraphEquals($graphExpected, $walkVertices->createGraph());
+
         return $walk;
     }
 
