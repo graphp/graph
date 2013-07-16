@@ -43,16 +43,12 @@ class SuccessiveShortestPath extends Base
             if ($edge->getWeight() < 0) {
                 $flow = $edge->getCapacity();
 
-                if ($edge instanceof EdgeDirected) {
-                    $startVertex = $edge->getVertexStart();
-                    $endVertex = $edge->getVertexEnd();
+                $startVertex = $edge->getVertexStart();
+                $endVertex = $edge->getVertexEnd();
 
-                    // add balance to start- and end-vertex
-                    $this->addBalance($startVertex, $flow);
-                    $this->addBalance($endVertex, - $flow);
-                } else {
-                    throw new UnexpectedValueException('Undirected Edges not suported');
-                }
+                // add balance to start- and end-vertex
+                $this->addBalance($startVertex, $flow);
+                $this->addBalance($endVertex, - $flow);
             }
 
             $edge->setFlow($flow);
@@ -112,30 +108,6 @@ class SuccessiveShortestPath extends Base
         }
 
         return $resultGraph;
-    }
-
-    /**
-     * check if balance on each vertex of the given graph matches the original graph's
-     *
-     * @param  Graph     $graph
-     * @return boolean
-     * @throws Exception if given graph is not a clone of the original graph (each vertex has to be present in both graphs)
-     * @uses Graph::getNumberOfVertices()
-     * @uses Graph::getBalanace()
-     * @uses Graph::getVertex()
-     */
-    private function isBalanceReached(Graph $graph)
-    {
-        if ($graph->getNumberOfVertices() !== $this->graph->getNumberOfVertices()) {
-            throw new DomainException('Given graph does not appear to be a clone of input graph');
-        }
-        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
-            if ($vertex->getBalance() !== $graph->getVertex($vid)->getBalance()) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
