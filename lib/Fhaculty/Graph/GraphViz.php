@@ -132,14 +132,19 @@ class GraphViz
             sleep(self::DELAY_OPEN);
         }
 
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            echo "ausgabe\n";
-            exec($tmp . ' >NUL');
-        } else {
-            // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
-            exec('xdg-open ' . escapeshellarg($tmp) . ' > /dev/null 2>&1 &');
-
-        }
+    	switch(true) {
+			case (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'):
+            	echo "ausgabe\n";
+            	exec($tmp . ' >NUL');
+				break;
+			case (strtoupper(PHP_OS) === 'DARWIN'):
+           	 	// open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
+            	exec('open ' . escapeshellarg($tmp) . ' > /dev/null 2>&1 &');
+				break;
+			default:
+	            // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
+	            exec('xdg-open ' . escapeshellarg($tmp) . ' > /dev/null 2>&1 &');
+		}
 
         $next = microtime(true) + self::DELAY_OPEN;
         // echo "... done\n";
