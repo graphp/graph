@@ -27,6 +27,7 @@ Vertex ([#62](https://github.com/clue/graph/issues/62))
 ([#62](https://github.com/clue/graph/issues/62))
 * Feature: Add `Algorithm\ShortestPath::hasVertex(Vertex $vertex)` to check whether
 a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).
+* Feature: Add `Walk::factoryFromVertices()` ([#64](https://github.com/clue/graph/issues/64)).
 * Fix: Checking `Walk::isValid()` ([#61](https://github.com/clue/graph/issues/61))
 * Fix: Missing import prevented
 `Algorithm\ShortestPath\MooreBellmanFord::getCycleNegative()` from actually

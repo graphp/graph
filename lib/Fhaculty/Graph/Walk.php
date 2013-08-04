@@ -42,6 +42,42 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
     }
 
     /**
+     * create new walk instance between given set of Vertices / array of Vertex instances
+     *
+     * @param  Vertices|Vertex[]  $vertices
+     * @param  int|null           $by
+     * @param  boolean            $desc
+     * @return Walk
+     * @throws UnderflowException if no vertices were given
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
+     */
+    public static function factoryFromVertices($vertices, $by = null, $desc = false)
+    {
+        $edges = array();
+        $first = NULL;
+        $last = NULL;
+        foreach ($vertices as $vertex) {
+            // skip first vertex as last is unknown
+            if ($first === NULL) {
+                $first = $vertex;
+            } else {
+                // pick edge between last vertex and this vertex
+                if ($by === null) {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeFirst();
+                } else {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeOrder($by, $desc);
+                }
+            }
+            $last = $vertex;
+        }
+        if ($last === NULL) {
+            throw new UnderflowException('No vertices given');
+        }
+
+        return new self($vertices, $edges);
+    }
+
+    /**
      * create new cycle instance from given predecessor map
      *
      * @param  Vertex[]           $predecessors map of vid => predecessor vertex instance
@@ -102,41 +138,31 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      * @return Walk
      * @throws UnderflowException if no vertices were given
      * @see Edges::getEdgeOrder() for parameters $by and $desc
+     * @uses self::factoryFromVertices()
      */
     public static function factoryCycleFromVertices($vertices, $by = null, $desc = false)
     {
-        $edges = array();
-        $first = NULL;
-        $last = NULL;
-        foreach ($vertices as $vertex) {
-            // skip first vertex as last is unknown
-            if ($first === NULL) {
-                $first = $vertex;
-            } else {
-                // pick edge between last vertex and this vertex
-                if ($by === null) {
-                    $edges []= $last->getEdgesTo($vertex)->getEdgeFirst();
-                } else {
-                    $edges []= $last->getEdgesTo($vertex)->getEdgeOrder($by, $desc);
-                }
-            }
-            $last = $vertex;
-        }
-        if ($last === NULL) {
-            throw new UnderflowException('No vertices given');
-        }
+        $cycle = self::factoryFromVertices($vertices, $by, $desc);
+
+        $first = $cycle->getVertexSource();
+        $last  = $cycle->getVertexTarget();
 
         // additional edge from last vertex to first vertex
         if ($last !== $first) {
+            $vertices = $cycle->getVertices()->getVector();
+            $edges    = $cycle->getEdges()->getVector();
+
             if ($by === null) {
                 $edges []= $last->getEdgesTo($first)->getEdgeFirst();
             } else {
                 $edges []= $last->getEdgesTo($first)->getEdgeOrder($by, $desc);
             }
             $vertices []= $first;
+
+            $cycle = new self($vertices, $edges);
         }
 
-        return new self($vertices, $edges);
+        return $cycle;
     }
 
     /**
