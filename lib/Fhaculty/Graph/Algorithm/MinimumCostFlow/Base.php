@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Algorithm\Weight as AlgorithmWeight;
+use Fhaculty\Graph\Algorithm\Flow as AlgorithmFlow;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Set\Edges;
@@ -20,7 +21,9 @@ abstract class Base extends BaseGraph
      */
     protected function checkBalance()
     {
-        $balance = $this->graph->getBalance();
+        $alg = new AlgorithmFlow($this->graph);
+        $balance = $alg->getBalance();
+
         $tolerance = 0.000001;
         if ($balance >= $tolerance || $balance <= -$tolerance) {
             throw new UnexpectedValueException('The given graph is not balanced value is: ' . $balance);
