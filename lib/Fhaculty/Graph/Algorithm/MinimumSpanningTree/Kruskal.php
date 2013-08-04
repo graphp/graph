@@ -61,10 +61,6 @@ class Kruskal extends Base
             }
         }
 
-        if ($sortedEdges->isEmpty()) {
-            throw new RuntimeException('No edges found');
-        }
-
         // $sortedEdges = $this->graph->getEdgesOrdered('weight');
 
         $returnEdges = array();
