@@ -11,6 +11,7 @@ class PropertyGraphTest extends TestCase
 
         $alg = new GraphProperty($graph);
 
+        $this->assertTrue($alg->isNull());
         $this->assertTrue($alg->isEdgeless());
         $this->assertFalse($alg->isTrivial());
     }
@@ -22,6 +23,8 @@ class PropertyGraphTest extends TestCase
 
         $alg = new GraphProperty($graph);
 
+        $this->assertFalse($alg->isNull());
+        $this->assertTrue($alg->isEdgeless());
         $this->assertTrue($alg->isTrivial());
     }
 }

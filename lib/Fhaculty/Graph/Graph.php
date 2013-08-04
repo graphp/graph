@@ -349,16 +349,6 @@ class Graph extends Set
     }
 
     /**
-     * checks whether this graph is empty (no vertex - and thus no edges, aka null graph)
-     *
-     * @return boolean
-     */
-    public function isEmpty()
-    {
-        return $this->vertices->isEmpty();
-    }
-
-    /**
      * adds a new Edge to the Graph (MUST NOT be called manually!)
      *
      * @param  Edge $edge instance of the new Edge

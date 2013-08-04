@@ -80,7 +80,7 @@ class Degree extends BaseGraph
     public function isRegular()
     {
         // an empty graph is considered regular
-        if ($this->graph->isEmpty()) {
+        if ($this->graph->getVertices()->isEmpty()) {
             return true;
         }
         try {
