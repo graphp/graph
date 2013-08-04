@@ -73,13 +73,13 @@ abstract class BaseDirected extends Tree
      * checks if this is a tree
      *
      * @return boolean
-     * @uses Graph::isEmpty() to skip empty Graphs (an empty Graph is a valid tree)
+     * @uses Vertices::isEmpty() to skip empty Graphs (an empty Graph is a valid tree)
      * @uses self::getVertexRoot() to get root Vertex to start search from
      * @uses self::getVerticesSubtree() to count number of vertices connected to root
      */
     public function isTree()
     {
-        if ($this->graph->isEmpty()) {
+        if ($this->graph->getVertices()->isEmpty()) {
             return true;
         }
 

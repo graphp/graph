@@ -14,11 +14,29 @@ class GraphProperty extends BaseGraph
     /**
      * checks whether this graph has no edges
      *
+     * Also known as empty Graph. An empty Graph contains no edges, but can
+     * possibly contain any number of isolated vertices.
+     *
      * @return boolean
      */
     public function isEdgeless()
     {
         return $this->graph->getEdges()->isEmpty();
+    }
+
+    /**
+     * checks whether this graph is a null graph (no vertex - and thus no edges)
+     *
+     * Each Edge is incident to two Vertices, or in case of an loop Edge,
+     * incident to the same Vertex twice. As such an Edge can not exist when
+     * no Vertices exist. So if we check we have no Vertices, we can also be
+     * sure that no Edges exist either.
+     *
+     * @return boolean
+     */
+    public function isNull()
+    {
+        return $this->graph->getVertices()->isEmpty();
     }
 
     /**
