@@ -6,6 +6,8 @@ use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Edge\Base as Edge;
+use SplPriorityQueue;
 
 /**
  * Abstract base class for minimum spanning tree (MST) algorithms
@@ -51,4 +53,28 @@ abstract class Base extends AlgorithmBase
      * @return Graph
      */
     abstract protected function getGraph();
+
+    /**
+     * helper method to add a set of Edges to the given set of sorted edges
+     *
+     * @param Edges            $edges
+     * @param SplPriorityQueue $sortedEdges
+     * @throws UnexpectedValueException when encountering directed edges
+     */
+    protected function addEdgesSorted(Edges $edges, SplPriorityQueue $sortedEdges)
+    {
+        // For all edges
+        foreach ($edges as $edge) {
+            /* @var $edge Edge */
+            // ignore loops (a->a)
+            if (!$edge->isLoop()) {
+                if ($edge instanceof EdgeDirected) {
+                    throw new UnexpectedValueException('Minimum spanning tree for directed edges not supported');
+                }
+
+                // Add edges with negative weight because of order in stl
+                $sortedEdges->insert($edge, -$edge->getWeight());
+            }
+        }
+    }
 }

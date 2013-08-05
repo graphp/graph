@@ -40,18 +40,7 @@ class Kruskal extends Base
         $sortedEdges = new SplPriorityQueue();
 
         // For all edges
-        foreach ($this->graph->getEdges() as $edge) {
-            // ignore loops (a->a)
-            if (!$edge->isLoop()) {
-                if ($edge instanceof EdgeDirected) {
-                    throw new UnexpectedValueException('Kruskal for directed edges not supported');
-                }
-                // Add edges with negativ Weight because of order in stl
-                $sortedEdges->insert($edge, -$edge->getWeight());
-            }
-        }
-
-        // $sortedEdges = $this->graph->getEdgesOrdered('weight');
+        $this->addEdgesSorted($this->graph->getEdges(), $sortedEdges);
 
         $returnEdges = array();
 

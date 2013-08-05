@@ -40,15 +40,7 @@ class Prim extends Base
 
             // get unvisited vertex of the edge and add edges from new vertex
             // Add all edges from $currentVertex to priority queue
-            foreach ($vertexCurrent->getEdges() as $currentEdge) {
-                if (!$currentEdge->isLoop()) {
-                    if ($currentEdge instanceof EdgeDirected) {
-                        throw new UnexpectedValueException('Unable to create MST for directed graphs');
-                    }
-                    // Add edges to priority queue with inverted weights (priority queue has high values at the front)
-                    $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
-                }
-            }
+            $this->addEdgesSorted($vertexCurrent->getEdges(), $edgeQueue);
 
             do {
                 try {
