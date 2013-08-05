@@ -37,14 +37,14 @@ class DetectNegativeCycle extends BaseGraph
      *
      * @return Walk
      * @throws UnderflowException if there's no negative cycle
-     * @uses AlgorithmSpMooreBellmanFord::getVerticesId()
+     * @uses AlgorithmSpMooreBellmanFord::getVertices()
      */
     public function getCycleNegative()
     {
         // remember vertices already visited, as they can not lead to a new cycle
         $verticesVisited = array();
         // check for all vertices
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             // skip vertices already visited
             if (!isset($verticesVisited[$vid])) {
                 // start MBF algorithm on current vertex
@@ -52,7 +52,7 @@ class DetectNegativeCycle extends BaseGraph
 
                 try {
                     // try to get all connected vertices (or throw new cycle)
-                    foreach ($alg->getVerticesId() as $vid) {
+                    foreach ($alg->getVertices()->getIds() as $vid) {
                         // getting connected vertices succeeded, so skip over all of them
                         $verticesVisited[$vid] = true;
                     // no cycle found, check next vertex...

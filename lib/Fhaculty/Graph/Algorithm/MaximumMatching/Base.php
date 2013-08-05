@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm\MaximumMatching;
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 
 abstract class Base extends BaseGraph
 {
@@ -35,7 +36,7 @@ abstract class Base extends BaseGraph
     /**
      * create new resulting graph with minimum-cost flow on edges
      *
-     * @return Edge[]
+     * @return Edges
      */
     abstract public function getEdges();
 }

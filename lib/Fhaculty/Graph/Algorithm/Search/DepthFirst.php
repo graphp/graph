@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm\Search;
 
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 
 class DepthFirst extends Base
 {
@@ -39,20 +40,19 @@ class DepthFirst extends Base
             if (!isset($visited[$vertex->getId()])) {
                 $visited[$vertex->getId()] = $vertex;
 
-                foreach (array_reverse($this->getVerticesAdjacent($vertex), true) as $vid => $nextVertex) {
+                foreach (array_reverse($this->getVerticesAdjacent($vertex)->getMap(), true) as $vid => $nextVertex) {
                     $todo[] = $nextVertex;
                 }
             }
         }
 
-        return $visited;
+        return new Vertices($visited);
     }
 
     /**
-     *
      * calculates a recursive depth-first search
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     public function getVertices()
     {

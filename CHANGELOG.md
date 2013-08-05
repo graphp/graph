@@ -15,6 +15,12 @@ As such, its static factory methods had to be renamed. Update your references if
 | `Cycle::factoryFromVertices()` | `Walk::factoryCycleFromVertices()` |
 | `Cycle::factoryFromEdges()` | `Walk::factoryCycleFromEdges()` |
 
+* BC break: Remove `Graph::isEmpty()` because it's not well-defined and might
+be confusing. Most literature suggests it should check for existing edges,
+whereas the old behavior was to check for existing vertices instead. Use either
+of the more transparent methods
+`Algorithm\Property\GraphProperty::isNull()` (old behavior) or (where applicable)
+`Algorithm\Property\GraphProperty::isEmpty()` ([#59](https://github.com/clue/graph/issues/59)).
 * BC break: Each of the above methods (`Walk::factoryCycleFromPredecessorMap()`,
 `Walk::factoryCycleFromVertices()`, `Walk::factoryCycleFromEdges()`) now
 actually makes sure the returned `Walk` instance is actually a valid Cycle,
@@ -27,6 +33,7 @@ Vertex ([#62](https://github.com/clue/graph/issues/62))
 ([#62](https://github.com/clue/graph/issues/62))
 * Feature: Add `Algorithm\ShortestPath::hasVertex(Vertex $vertex)` to check whether
 a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).
+* Feature: Add `Walk::factoryFromVertices()` ([#64](https://github.com/clue/graph/issues/64)).
 * Fix: Checking `Walk::isValid()` ([#61](https://github.com/clue/graph/issues/61))
 * Fix: Missing import prevented
 `Algorithm\ShortestPath\MooreBellmanFord::getCycleNegative()` from actually

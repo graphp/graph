@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Vertex;
 use \SplPriorityQueue;
 use \Exception;
@@ -22,7 +23,7 @@ class Prim extends Base
 
     /**
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
@@ -53,6 +54,7 @@ class Prim extends Base
                 try {
                     // Get next cheapest edge
                     $cheapestEdge = $edgeQueue->extract();
+                    /* @var $cheapestEdge EdgeDirected */
                 } catch (Exception $e) {
                     return $returnEdges;
                     throw new UnexpectedValueException('Graph has more than one component');
@@ -60,8 +62,7 @@ class Prim extends Base
 
                 // Check if edge is between unmarked and marked edge
 
-                $startVertices = $cheapestEdge->getVerticesStart();
-                $vertexA = $startVertices[0];
+                $vertexA = $cheapestEdge->getVerticesStart()->getVertexFirst();
                 $vertexB = $cheapestEdge->getVertexToFrom($vertexA);
 
             // Edge is between marked and unmared vertex
@@ -78,7 +79,7 @@ class Prim extends Base
             }
         }
 
-        return $returnEdges;
+        return new Edges($returnEdges);
     }
 
     protected function getGraph()

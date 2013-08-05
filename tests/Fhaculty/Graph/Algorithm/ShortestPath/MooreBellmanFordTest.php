@@ -26,11 +26,11 @@ class MooreBellmanFordTest extends BaseShortestPathTest
         // $this->assertEquals(0, $alg->getDistance($v1));
         $this->assertEquals(-1, $alg->getDistance($v2));
         $this->assertEquals(array(2 => -1), $alg->getDistanceMap());
-        $this->assertEquals(array($e2), $alg->getEdges());
+        $this->assertEquals(array($e2), $alg->getEdges()->getVector());
         //$this->assertEquals(array(), $alg->getEdgesTo($v1));
-        $this->assertEquals(array($e2), $alg->getEdgesTo($v2));
-        $this->assertEquals(array(2 => $v2), $alg->getVertices());
-        $this->assertEquals(array(2), $alg->getVerticesId());
+        $this->assertEquals(array($e2), $alg->getEdgesTo($v2)->getVector());
+        $this->assertEquals(array(2 => $v2), $alg->getVertices()->getMap());
+        $this->assertEquals(array(2), $alg->getVertices()->getIds());
 
         return $alg;
     }

@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Exception\NegativeCycleException;
 use Fhaculty\Graph\Exception\UnderflowException;
@@ -22,13 +23,13 @@ class MooreBellmanFord extends Base
     /**
      *
      *
-     * @param Edge[]   $edges
+     * @param Edges    $edges
      * @param int[]    $totalCostOfCheapestPathTo
      * @param Vertex[] $predecessorVertexOfCheapestPathTo
      *
      * @return Vertex|NULL
      */
-    private function bigStep(array &$edges, array &$totalCostOfCheapestPathTo, array &$predecessorVertexOfCheapestPathTo)
+    private function bigStep(Edges $edges, array &$totalCostOfCheapestPathTo, array &$predecessorVertexOfCheapestPathTo)
     {
         $changed = NULL;
         // check for all edges
@@ -64,7 +65,7 @@ class MooreBellmanFord extends Base
     /**
      * Calculate the Moore-Bellman-Ford-Algorithm and get all edges on shortest path for this vertex
      *
-     * @return Edge[]
+     * @return Edges
      * @throws NegativeCycleException if there is a negative cycle
      */
     public function getEdges()
@@ -97,7 +98,7 @@ class MooreBellmanFord extends Base
         // Check for negative cycles (only if last step didn't already finish anyway)
         // something is still changing...
         if ($changed && $changed = $this->bigStep($edges, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)) {
-            $cycle = Walk::factoryCycleFromPredecessorMap($predecessorVertexOfCheapestPathTo, $changed, Edge::ORDER_WEIGHT);
+            $cycle = Walk::factoryCycleFromPredecessorMap($predecessorVertexOfCheapestPathTo, $changed, Edges::ORDER_WEIGHT);
             throw new NegativeCycleException('Negative cycle found', 0, NULL, $cycle);
         }
 

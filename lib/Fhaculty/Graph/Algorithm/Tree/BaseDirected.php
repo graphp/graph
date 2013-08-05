@@ -6,6 +6,7 @@ use Fhaculty\Graph\Algorithm\Tree\Base as Tree;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 
 /**
  * Abstract algorithm base class for working with directed, rooted trees
@@ -72,13 +73,13 @@ abstract class BaseDirected extends Tree
      * checks if this is a tree
      *
      * @return boolean
-     * @uses Graph::isEmpty() to skip empty Graphs (an empty Graph is a valid tree)
+     * @uses Vertices::isEmpty() to skip empty Graphs (an empty Graph is a valid tree)
      * @uses self::getVertexRoot() to get root Vertex to start search from
      * @uses self::getVerticesSubtree() to count number of vertices connected to root
      */
     public function isTree()
     {
-        if ($this->graph->isEmpty()) {
+        if ($this->graph->getVertices()->isEmpty()) {
             return true;
         }
 
@@ -116,20 +117,20 @@ abstract class BaseDirected extends Tree
     {
         $parents = $this->getVerticesParent($vertex);
         if (count($parents) !== 1) {
-            if (!$parents) {
+            if ($parents->isEmpty()) {
                 throw new UnderflowException('No parents for given vertex found');
             } else {
                 throw new UnexpectedValueException('More than one parent');
             }
         }
-        return current($parents);
+        return $parents->getVertexFirst();
     }
 
     /**
      * get array of child vertices for given $vertex
      *
      * @param Vertex $vertex
-     * @return Vertex[]
+     * @return Vertices
      * @throws UnexpectedValueException if the given $vertex contains invalid / parallel edges (check isTree()!)
      */
     abstract public function getVerticesChildren(Vertex $vertex);
@@ -141,7 +142,7 @@ abstract class BaseDirected extends Tree
      * which has none.
      *
      * @param Vertex $vertex
-     * @return Vertex[]
+     * @return Vertices
      * @throws UnexpectedValueException if the given $vertex contains invalid / parallel edges (check isTree()!)
      */
     abstract protected function getVerticesParent(Vertex $vertex);
@@ -181,7 +182,7 @@ abstract class BaseDirected extends Tree
      */
     public function isVertexInternal(Vertex $vertex)
     {
-        return ($this->getVerticesParent($vertex) && $this->getVerticesChildren($vertex));
+        return (!$this->getVerticesParent($vertex)->isEmpty() && !$this->getVerticesChildren($vertex)->isEmpty());
     }
 
     /**
@@ -275,7 +276,7 @@ abstract class BaseDirected extends Tree
      *
      * @param Vertex $vertex
      * @throws UnexpectedValueException if there are invalid edges (check isTree()!)
-     * @return Vertex[]
+     * @return Vertices
      * @uses self::getVerticesSubtreeRecursive()
      * @uses self::getVerticesSubtree()
      */
@@ -284,7 +285,7 @@ abstract class BaseDirected extends Tree
         $vertices = array();
         $this->getVerticesSubtreeRecursive($vertex, $vertices);
 
-        return $vertices;
+        return new Vertices($vertices);
     }
 
     /**
@@ -296,7 +297,7 @@ abstract class BaseDirected extends Tree
      * @uses self::getVerticesChildren()
      * @uses self::getVerticesSubtreeRecursive() to recurse into subtrees
      */
-    private function getVerticesSubtreeRecursive(Vertex $vertex, &$vertices)
+    private function getVerticesSubtreeRecursive(Vertex $vertex, array &$vertices)
     {
         $vid = $vertex->getId();
         if (isset($vertices[$vid])) {
@@ -315,15 +316,15 @@ abstract class BaseDirected extends Tree
      * think of this as the recursive version of getVerticesChildren()
      *
      * @param Vertex $vertex
-     * @return Vertex[]
+     * @return Vertices
      * @throws UnexpectedValueException if there are invalid edges (check isTree()!)
      * @uses self::getVerticesSubtree()
      */
     public function getVerticesDescendant(Vertex $vertex)
     {
-        $vertices = $this->getVerticesSubtree($vertex);
+        $vertices = $this->getVerticesSubtree($vertex)->getMap();
         unset($vertices[$vertex->getId()]);
 
-        return $vertices;
+        return new Vertices($vertices);
     }
 }
