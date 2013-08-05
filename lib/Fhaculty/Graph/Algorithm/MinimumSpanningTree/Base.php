@@ -4,7 +4,6 @@ namespace Fhaculty\Graph\Algorithm\MinimumSpanningTree;
 
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Edge\Base as Edge;
 use SplPriorityQueue;
@@ -20,6 +19,11 @@ use SplPriorityQueue;
  * otherwise we can span multiple trees (spanning forest) within each component.
  * Because a null graph (a Graph with no vertices) is not considered connected,
  * it also can not contain a spanning tree.
+ *
+ * Most authors demand that the input graph has to be undirected, whereas this
+ * library supports also directed and mixed graphs. The actual direction of the
+ * edge will be ignored, only its incident vertices will be checked. This is
+ * done in order to be consistent to how ConnectedComponents are checked.
  *
  * @link http://en.wikipedia.org/wiki/Minimum_Spanning_Tree
  * @link http://en.wikipedia.org/wiki/Spanning_Tree
@@ -71,7 +75,6 @@ abstract class Base extends AlgorithmBase
      *
      * @param Edges            $edges
      * @param SplPriorityQueue $sortedEdges
-     * @throws UnexpectedValueException when encountering directed edges
      */
     protected function addEdgesSorted(Edges $edges, SplPriorityQueue $sortedEdges)
     {
@@ -80,10 +83,6 @@ abstract class Base extends AlgorithmBase
             /* @var $edge Edge */
             // ignore loops (a->a)
             if (!$edge->isLoop()) {
-                if ($edge instanceof EdgeDirected) {
-                    throw new UnexpectedValueException('Minimum spanning tree for directed edges not supported');
-                }
-
                 // Add edges with negative weight because of order in stl
                 $sortedEdges->insert($edge, -$edge->getWeight());
             }

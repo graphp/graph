@@ -53,8 +53,9 @@ class Prim extends Base
 
                 // Check if edge is between unmarked and marked edge
 
-                $vertexA = $cheapestEdge->getVerticesStart()->getVertexFirst();
-                $vertexB = $cheapestEdge->getVertexToFrom($vertexA);
+                $vertices = $cheapestEdge->getVertices();
+                $vertexA  = $vertices->getVertexFirst();
+                $vertexB  = $vertices->getVertexLast();
 
             // Edge is between marked and unmared vertex
             } while (!(isset($markInserted[$vertexA->getId()]) XOR isset($markInserted[$vertexB->getId()])));
