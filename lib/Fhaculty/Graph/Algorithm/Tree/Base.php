@@ -10,6 +10,7 @@ use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
 use Fhaculty\Graph\Algorithm\Degree;
+use Fhaculty\Graph\Algorithm\ConnectedComponents;
 
 /**
  * Abstract base class for tree algorithms
@@ -18,7 +19,9 @@ use Fhaculty\Graph\Algorithm\Degree;
  * graphs that represent a tree.
  *
  * A tree is a connected Graph (single component) with no cycles. Every Tree is
- * a Graph, but not every Graph is a Tree.
+ * a Graph, but not every Graph is a Tree. A null Graph (a Graph with no Vertices
+ * and thus no Edges) is *NOT* considered a valid Tree, as it is not considered
+ * connected (@see ConnectedComponents and @link)
  *
  *    A
  *   / \
@@ -32,6 +35,7 @@ use Fhaculty\Graph\Algorithm\Degree;
  *
  * @link http://en.wikipedia.org/wiki/Tree_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Tree_%28data_structure%29
+ * @link http://mathoverflow.net/questions/120536/is-the-empty-graph-a-tree
  * @see Undirected for an implementation of these algorithms on (undirected) trees
  * @see BaseDirected for an abstract implementation of these algorithms on directed, rooted trees
  */
