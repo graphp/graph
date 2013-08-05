@@ -55,6 +55,18 @@ abstract class Base extends AlgorithmBase
     abstract protected function getGraph();
 
     /**
+     * get total weight of minimum spanning tree
+     *
+     * @return float
+     */
+    public function getWeight()
+    {
+        return $this->getEdges()->getSumCallback(function (Edge $edge) {
+            return $edge->getWeight();
+        });
+    }
+
+    /**
      * helper method to add a set of Edges to the given set of sorted edges
      *
      * @param Edges            $edges
