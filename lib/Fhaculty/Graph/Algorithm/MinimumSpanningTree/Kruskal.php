@@ -46,12 +46,8 @@ class Kruskal extends Base
                 if ($edge instanceof EdgeDirected) {
                     throw new UnexpectedValueException('Kruskal for directed edges not supported');
                 }
-                $weight = $edge->getWeight();
-                if ($weight === NULL) {
-                    throw new UnexpectedValueException('Kruskal for edges with no weight not supported');
-                }
                 // Add edges with negativ Weight because of order in stl
-                $sortedEdges->insert($edge, - $weight);
+                $sortedEdges->insert($edge, -$edge->getWeight());
             }
         }
 
