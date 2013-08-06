@@ -27,6 +27,7 @@ Vertex ([#62](https://github.com/clue/graph/issues/62))
 ([#62](https://github.com/clue/graph/issues/62))
 * Feature: Add `Algorithm\ShortestPath::hasVertex(Vertex $vertex)` to check whether
 a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).
+* Feature: Support opening GraphViz images on Mac OS X in default image viewer ([#67](https://github.com/clue/graph/issues/67) @onigoetz)
 * Fix: Checking `Walk::isValid()` ([#61](https://github.com/clue/graph/issues/61))
 * Fix: Missing import prevented
 `Algorithm\ShortestPath\MooreBellmanFord::getCycleNegative()` from actually
