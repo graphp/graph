@@ -11,6 +11,7 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
 use Fhaculty\Graph\Algorithm\Groups;
 use Fhaculty\Graph\Exception;
+use Fhaculty\Graph\Set\Edges;
 
 class Flow extends Base
 {
@@ -81,6 +82,6 @@ class Flow extends Base
             }
         }
 
-        return $returnEdges;
+        return new Edges($returnEdges);
     }
 }
