@@ -26,10 +26,10 @@ abstract class BaseShortestPathTest extends TestCase
         $this->assertFalse($alg->hasVertex($v1));
         //$this->assertEquals(0, $alg->getDistance($v1));
         $this->assertEquals(array(), $alg->getDistanceMap());
-        $this->assertEquals(array(), $alg->getEdges());
+        $this->assertEquals(array(), $alg->getEdges()->getVector());
         //$this->assertEquals(array(), $alg->getEdgesTo($v1));
-        $this->assertEquals(array(), $alg->getVertices());
-        $this->assertEquals(array(), $alg->getVerticesId());
+        $this->assertEquals(array(), $alg->getVertices()->getVector());
+        $this->assertEquals(array(), $alg->getVertices()->getIds());
 
         $clone = $alg->createGraph();
         $this->assertGraphEquals($graph,$clone);
@@ -44,15 +44,15 @@ abstract class BaseShortestPathTest extends TestCase
 
         $alg = $this->createAlg($v1);
 
-        $this->assertEquals(array($e1), $alg->getEdges());
+        $this->assertEquals(array($e1), $alg->getEdges()->getVector());
 
         $expectedWeight = $this->getExpectedWeight(array($e1));
         $this->assertTrue($alg->hasVertex($v1));
         $this->assertEquals($expectedWeight, $alg->getDistance($v1));
         $this->assertEquals(array(1 => $expectedWeight), $alg->getDistanceMap());
-        $this->assertEquals(array($e1), $alg->getEdgesTo($v1));
-        $this->assertEquals(array(1 => $v1), $alg->getVertices());
-        $this->assertEquals(array(1), $alg->getVerticesId());
+        $this->assertEquals(array($e1), $alg->getEdgesTo($v1)->getVector());
+        $this->assertEquals(array(1 => $v1), $alg->getVertices()->getMap());
+        $this->assertEquals(array(1), $alg->getVertices()->getIds());
     }
 
     public function testGraphCycle()
@@ -70,12 +70,12 @@ abstract class BaseShortestPathTest extends TestCase
 
         $expectedWeight = $this->getExpectedWeight(array($e1));
         $this->assertTrue($alg->hasVertex($v2));
-        $this->assertEquals(array($e1), $alg->getEdgesTo($v2));
+        $this->assertEquals(array($e1), $alg->getEdgesTo($v2)->getVector());
         $this->assertEquals($expectedWeight, $alg->getDistance($v2));
 
         $expectedWeight = $this->getExpectedWeight(array($e1, $e2));
         $this->assertTrue($alg->hasVertex($v1));
-        $this->assertEquals(array($e1, $e2), $alg->getEdgesTo($v1));
+        $this->assertEquals(array($e1, $e2), $alg->getEdgesTo($v1)->getVector());
         $this->assertEquals($expectedWeight, $alg->getDistance($v1));
 
         $walk = $alg->getWalkTo($v1);
@@ -133,11 +133,11 @@ abstract class BaseShortestPathTest extends TestCase
         $expectedWeight = $this->getExpectedWeight(array($e1));
         $this->assertEquals($expectedWeight, $alg->getDistance($v2));
         $this->assertEquals(array(2 => $expectedWeight), $alg->getDistanceMap());
-        $this->assertEquals(array($e1), $alg->getEdges());
+        $this->assertEquals(array($e1), $alg->getEdges()->getVector());
         // $this->assertEquals(array(), $alg->getEdgesTo($v1));
-        $this->assertEquals(array($e1), $alg->getEdgesTo($v2));
-        $this->assertEquals(array(2 => $v2), $alg->getVertices());
-        $this->assertEquals(array(2), $alg->getVerticesId());
+        $this->assertEquals(array($e1), $alg->getEdgesTo($v2)->getVector());
+        $this->assertEquals(array(2 => $v2), $alg->getVertices()->getMap());
+        $this->assertEquals(array(2), $alg->getVertices()->getIds());
     }
 
     protected function getExpectedWeight($edges)

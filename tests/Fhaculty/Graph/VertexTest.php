@@ -20,9 +20,9 @@ class VertexTest extends TestCase
         $e2 = $this->vertex->createEdge($v3);
         $e3 = $v4->createEdgeTo($this->vertex);
 
-        $this->assertEquals(array($e1, $e2, $e3), $this->vertex->getEdges());
-        $this->assertEquals(array($e2, $e3), $this->vertex->getEdgesIn());
-        $this->assertEquals(array($e1, $e2), $this->vertex->getEdgesOut());
+        $this->assertEquals(array($e1, $e2, $e3), $this->vertex->getEdges()->getVector());
+        $this->assertEquals(array($e2, $e3), $this->vertex->getEdgesIn()->getVector());
+        $this->assertEquals(array($e1, $e2), $this->vertex->getEdgesOut()->getVector());
 
         $this->assertTrue($this->vertex->hasEdgeTo($v2));
         $this->assertTrue($this->vertex->hasEdgeTo($v3));
@@ -32,13 +32,13 @@ class VertexTest extends TestCase
         $this->assertTrue($this->vertex->hasEdgeFrom($v3));
         $this->assertTrue($this->vertex->hasEdgeFrom($v4));
 
-        $this->assertEquals(array($e1), $this->vertex->getEdgesTo($v2));
-        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3));
-        $this->assertEquals(array(), $this->vertex->getEdgesTo($v4));
+        $this->assertEquals(array($e1), $this->vertex->getEdgesTo($v2)->getVector());
+        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3)->getVector());
+        $this->assertEquals(array(), $this->vertex->getEdgesTo($v4)->getVector());
 
-        $this->assertEquals(array(), $this->vertex->getEdgesFrom($v2));
-        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3));
-        $this->assertEquals(array($e3), $this->vertex->getEdgesFrom($v4));
+        $this->assertEquals(array(), $this->vertex->getEdgesFrom($v2)->getVector());
+        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3)->getVector());
+        $this->assertEquals(array($e3), $this->vertex->getEdgesFrom($v4)->getVector());
     }
 
     public function testBalance()

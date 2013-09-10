@@ -14,7 +14,7 @@ class GroupsTest extends TestCase
         $this->assertEquals(array(), $alg->getGroups());
         $this->assertEquals(0, $alg->getNumberOfGroups());
 
-        $this->assertEquals(array(), $alg->getVerticesGroup(123));
+        $this->assertTrue($alg->getVerticesGroup(123)->isEmpty());
 
         $this->assertFalse($alg->isBipartit());
     }
@@ -32,8 +32,8 @@ class GroupsTest extends TestCase
         $this->assertEquals(array(1, 2), $alg->getGroups());
         $this->assertEquals(2, $alg->getNumberOfGroups());
 
-        $this->assertEquals(array(), $alg->getVerticesGroup(123));
-        $this->assertEquals(array(1 => $v1), $alg->getVerticesGroup(1));
+        $this->assertTrue($alg->getVerticesGroup(123)->isEmpty());
+        $this->assertEquals(array(1 => $v1), $alg->getVerticesGroup(1)->getMap());
 
         $this->assertTrue($alg->isBipartit());
     }
@@ -54,8 +54,8 @@ class GroupsTest extends TestCase
         $this->assertEquals(array(1, 2), $alg->getGroups());
         $this->assertEquals(2, $alg->getNumberOfGroups());
 
-        $this->assertEquals(array(), $alg->getVerticesGroup(123));
-        $this->assertEquals(array(1 => $v1, 3 => $v3), $alg->getVerticesGroup(1));
+        $this->assertTrue($alg->getVerticesGroup(123)->isEmpty());
+        $this->assertEquals(array(1 => $v1, 3 => $v3), $alg->getVerticesGroup(1)->getMap());
 
         $this->assertFalse($alg->isBipartit());
     }

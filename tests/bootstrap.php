@@ -1,10 +1,10 @@
 <?php
 
 use Fhaculty\Graph\Edge\Directed;
-
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 
 (include_once __DIR__ . '/../vendor/autoload.php') OR die(PHP_EOL . 'ERROR: composer autoloader not found, run "composer install" or see README for instructions' . PHP_EOL);
 
@@ -27,7 +27,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         // each vertex has a unique ID, therefor it's easy to search a matching partner
         // do not use assertVertexEquals() in order to not increase assertion counter
 
-        foreach ($expected->getVertices() as $vid => $vertex) {
+        foreach ($expected->getVertices()->getMap() as $vid => $vertex) {
             try {
                 $other = $actual->getVertex($vid);
             } catch (Exception $e) {
@@ -87,7 +87,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         if ($edge instanceof Directed) {
             $ret .= $edge->getVertexStart()->getId() . ' -> ' . $edge->getVertexEnd()->getId();
         } else {
-            $vertices = $edge->getVerticesId();
+            $vertices = $edge->getVertices()->getIds();
             $ret .= $vertices[0] . ' -- ' . $vertices[1];
         }
         $ret .= PHP_EOL . 'flow: ' . $edge->getFlow();

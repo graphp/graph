@@ -3,8 +3,10 @@
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\Edges;
+use \Exception;
 
 /**
  * Simple breadth-first shortest path algorithm
@@ -75,7 +77,7 @@ class BreadthFirst extends Base
             $map = $this->getEdgesMap();
 
             if (isset($map[$endVertex->getId()])) {
-                return $map[$endVertex->getId()];
+                return new Edges($map[$endVertex->getId()]);
             }
         }
         throw new OutOfBoundsException('Given target vertex can not be reached from start vertex');
@@ -100,7 +102,7 @@ class BreadthFirst extends Base
     /**
      * get array of all target vertices this vertex has a path to
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses self::getEdgesMap()
      */
     public function getVertices()
@@ -111,7 +113,7 @@ class BreadthFirst extends Base
             $ret[$vid] = $graph->getVertex($vid);
         }
 
-        return $ret;
+        return new Vertices($ret);
     }
 
     public function getEdges()
@@ -125,6 +127,6 @@ class BreadthFirst extends Base
             }
         }
 
-        return $ret;
+        return new Edges($ret);
     }
 }

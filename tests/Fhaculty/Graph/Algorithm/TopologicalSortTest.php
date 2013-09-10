@@ -13,7 +13,8 @@ class TopologicalSortTest extends TestCase
 
         $alg = new TopologicalSort($graph);
 
-        $this->assertSame(array(), $alg->getVertices());
+        $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $alg->getVertices());
+        $this->assertTrue($alg->getVertices()->isEmpty());
     }
 
     public function testGraphIsolated()
@@ -24,7 +25,7 @@ class TopologicalSortTest extends TestCase
 
         $alg = new TopologicalSort($graph);
 
-        $this->assertSame(array(1 => $graph->getVertex(1), 2 => $graph->getVertex(2)), $alg->getVertices());
+        $this->assertSame(array($graph->getVertex(1), $graph->getVertex(2)), $alg->getVertices()->getVector());
     }
 
     public function testGraphSimple()
@@ -34,7 +35,7 @@ class TopologicalSortTest extends TestCase
 
         $alg = new TopologicalSort($graph);
 
-        $this->assertSame(array(1 => $graph->getVertex(1), 2 => $graph->getVertex(2)), $alg->getVertices());
+        $this->assertSame(array($graph->getVertex(1), $graph->getVertex(2)), $alg->getVertices()->getVector());
     }
 
     /**

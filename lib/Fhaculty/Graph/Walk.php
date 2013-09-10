@@ -2,6 +2,10 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\EdgesAggregate;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
@@ -16,16 +20,16 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  * @see Fhaculty\Graph\Algorithm\Property\WalkProperty for checking special cases, such as cycles, loops, closed trails, etc.
  */
-class Walk extends Set
+class Walk extends Set implements VerticesAggregate, EdgesAggregate
 {
     /**
      * construct new walk from given start vertex and given array of edges
      *
-     * @param  array                $edges
+     * @param  Edges|Edge[]         $edges
      * @param  Vertex               $startVertex
      * @return Walk
      */
-    public static function factoryFromEdges(array $edges, Vertex $startVertex)
+    public static function factoryFromEdges($edges, Vertex $startVertex)
     {
         $vertices = array($startVertex);
         $vertexCurrent = $startVertex;
@@ -38,18 +42,54 @@ class Walk extends Set
     }
 
     /**
+     * create new walk instance between given set of Vertices / array of Vertex instances
+     *
+     * @param  Vertices|Vertex[]  $vertices
+     * @param  int|null           $by
+     * @param  boolean            $desc
+     * @return Walk
+     * @throws UnderflowException if no vertices were given
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
+     */
+    public static function factoryFromVertices($vertices, $by = null, $desc = false)
+    {
+        $edges = array();
+        $first = NULL;
+        $last = NULL;
+        foreach ($vertices as $vertex) {
+            // skip first vertex as last is unknown
+            if ($first === NULL) {
+                $first = $vertex;
+            } else {
+                // pick edge between last vertex and this vertex
+                if ($by === null) {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeFirst();
+                } else {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeOrder($by, $desc);
+                }
+            }
+            $last = $vertex;
+        }
+        if ($last === NULL) {
+            throw new UnderflowException('No vertices given');
+        }
+
+        return new self($vertices, $edges);
+    }
+
+    /**
      * create new cycle instance from given predecessor map
      *
      * @param  Vertex[]           $predecessors map of vid => predecessor vertex instance
      * @param  Vertex             $vertex       start vertex to search predecessors from
-     * @param  int                $by
+     * @param  int|null           $by
      * @param  boolean            $desc
      * @return Walk
      * @throws UnderflowException
-     * @see Edge::getFirst() for parameters $by and $desc
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
      * @uses self::factoryFromVertices()
      */
-    public static function factoryCycleFromPredecessorMap($predecessors, $vertex, $by = Edge::ORDER_FIFO, $desc = false)
+    public static function factoryCycleFromPredecessorMap($predecessors, $vertex, $by = null, $desc = false)
     {
         /*$checked = array();
          foreach ($predecessors as $vertex) {
@@ -93,50 +133,48 @@ class Walk extends Set
      * create new cycle instance with edges between given vertices
      *
      * @param  Vertex[]           $vertices
-     * @param  int                $by
+     * @param  int|null           $by
      * @param  boolean            $desc
      * @return Walk
      * @throws UnderflowException if no vertices were given
-     * @see Edge::getFirst() for parameters $by and $desc
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
+     * @uses self::factoryFromVertices()
      */
-    public static function factoryCycleFromVertices($vertices, $by = Edge::ORDER_FIFO, $desc = false)
+    public static function factoryCycleFromVertices($vertices, $by = null, $desc = false)
     {
-        $edges = array();
-        $first = NULL;
-        $last = NULL;
-        foreach ($vertices as $vertex) {
-            // skip first vertex as last is unknown
-            if ($first === NULL) {
-                $first = $vertex;
-            } else {
-                // pick edge between last vertex and this vertex
-                $edges []= Edge::getFirst($last->getEdgesTo($vertex), $by, $desc);
-            }
-            $last = $vertex;
-        }
-        if ($last === NULL) {
-            throw new UnderflowException('No vertices given');
-        }
+        $cycle = self::factoryFromVertices($vertices, $by, $desc);
+
+        $first = $cycle->getVertexSource();
+        $last  = $cycle->getVertexTarget();
 
         // additional edge from last vertex to first vertex
         if ($last !== $first) {
-            $edges []= Edge::getFirst($last->getEdgesTo($first), $by, $desc);
+            $vertices = $cycle->getVertices()->getVector();
+            $edges    = $cycle->getEdges()->getVector();
+
+            if ($by === null) {
+                $edges []= $last->getEdgesTo($first)->getEdgeFirst();
+            } else {
+                $edges []= $last->getEdgesTo($first)->getEdgeOrder($by, $desc);
+            }
             $vertices []= $first;
+
+            $cycle = new self($vertices, $edges);
         }
 
-        return new self($vertices, $edges);
+        return $cycle;
     }
 
     /**
      * create new cycle instance with vertices connected by given edges
      *
-     * @param  Edge[] $edges
-     * @param  Vertex $startVertex
+     * @param  Edges|Edge[] $edges
+     * @param  Vertex       $startVertex
      * @return Walk
      * @throws InvalidArgumentException if the given array of edges does not represent a valid cycle
      * @uses self::factoryFromEdges()
      */
-    public static function factoryCycleFromEdges(array $edges, Vertex $startVertex)
+    public static function factoryCycleFromEdges($edges, Vertex $startVertex)
     {
         $cycle = self::factoryFromEdges($edges, $startVertex);
 
@@ -148,10 +186,22 @@ class Walk extends Set
         return $cycle;
     }
 
-    protected function __construct(array $vertices, array $edges)
+    /**
+     *
+     * @var Vertices
+     */
+    protected $vertices;
+
+    /**
+     *
+     * @var Edges
+     */
+    protected $edges;
+
+    protected function __construct($vertices, $edges)
     {
-        $this->vertices = $vertices;
-        $this->edges    = $edges;
+        $this->vertices = Vertices::factory($vertices);
+        $this->edges    = Edges::factory($edges);
     }
 
     /**
@@ -179,9 +229,9 @@ class Walk extends Set
     {
         // create new graph clone with only edges of walk
         $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());
-        $vertices = $this->getVertices();
+        $vertices = $this->getVertices()->getMap();
         // get all vertices
-        foreach ($graph->getVertices() as $vid => $vertex) {
+        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
             if (!isset($vertices[$vid])) {
                 // remove those not present in the walk (isolated vertices, etc.)
                 $vertex->destroy();
@@ -192,82 +242,29 @@ class Walk extends Set
     }
 
     /**
-     * return array of all unique edges of walk
+     * return set of all Edges of walk (in sequence visited in walk, may contain duplicates)
      *
-     * @return Edge[]
+     * If you need to return set a of all unique Edges of walk, use
+     * `Walk::getEdges()->getEdgesDistinct()` instead.
+     *
+     * @return Edges
      */
     public function getEdges()
-    {
-        $edges = array();
-        foreach ($this->edges as $edge) {
-            // filter duplicate edges
-            if (!in_array($edge, $edges, true)) {
-                $edges []= $edge;
-            }
-        }
-
-        return $edges;
-    }
-
-    /**
-     * return array/list of all edges of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return Edge[]
-     */
-    public function getEdgesSequence()
     {
         return $this->edges;
     }
 
     /**
-     * return array of all unique vertices of walk
+     * return set of all Vertices of walk (in sequence visited in walk, may contain duplicates)
      *
-     * @return Vertex[]
+     * If you need to return set a of all unique Vertices of walk, use
+     * `Walk::getVertices()->getVerticesDistinct()` instead.
+     *
+     * @return Vertices
      */
     public function getVertices()
     {
-        $vertices = array();
-        foreach ($this->vertices as $vertex) {
-            $vertices[$vertex->getId()] = $vertex;
-        }
-
-        return $vertices;
-    }
-
-    /**
-     * return array/list of all vertices of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return Vertex[]
-     */
-    public function getVerticesSequence()
-    {
         return $this->vertices;
-    }
-
-    /**
-     * return array of all vertex ids of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return string[]
-     * @uses Vertex::getId()
-     */
-    public function getVerticesSequenceId()
-    {
-        $ids = array();
-        foreach ($this->vertices as $vertex) {
-            $ids []= $vertex->getId();
-        }
-
-        return $ids;
-    }
-
-    /**
-     * get IDs of all vertices in the walk
-     *
-     * @return int[]
-     */
-    public function getVerticesId()
-    {
-        return array_keys($this->getVertices());
     }
 
     /**
@@ -277,7 +274,7 @@ class Walk extends Set
      */
     public function getVertexSource()
     {
-        return reset($this->vertices);
+        return $this->vertices->getVertexFirst();
     }
 
     /**
@@ -287,7 +284,7 @@ class Walk extends Set
      */
     public function getVertexTarget()
     {
-        return end($this->vertices);
+        return $this->vertices->getVertexLast();
     }
 
     /**
@@ -297,12 +294,15 @@ class Walk extends Set
      */
     public function getAlternatingSequence()
     {
+        $edges    = $this->edges->getVector();
+        $vertices = $this->vertices->getVector();
+
         $ret = array();
         for ($i = 0, $l = count($this->edges); $i < $l; ++$i) {
-            $ret []= $this->vertices[$i];
-            $ret []= $this->edges[$i];
+            $ret []= $vertices[$i];
+            $ret []= $edges[$i];
         }
-        $ret[] = $this->vertices[$i];
+        $ret[] = $vertices[$i];
 
         return $ret;
     }
@@ -317,16 +317,15 @@ class Walk extends Set
      */
     public function isValid()
     {
-        $vertices = $this->getGraph()->getVertices();
+        $vertices = $this->getGraph()->getVertices()->getMap();
         // check source graph contains all vertices
-        foreach ($this->vertices as $vertex) {
-            $vid = $vertex->getId();
+        foreach ($this->getVertices()->getMap() as $vid => $vertex) {
             // make sure vertex ID exists and has not been replaced
             if (!isset($vertices[$vid]) || $vertices[$vid] !== $vertex) {
                 return false;
             }
         }
-        $edges = $this->getGraph()->getEdges();
+        $edges = $this->getGraph()->getEdges()->getVector();
         // check source graph contains all edges
         foreach ($this->edges as $edge) {
             if (!in_array($edge, $edges, true)) {

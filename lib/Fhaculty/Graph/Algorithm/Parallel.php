@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm;
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as DirectedEdge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Graph;
 use LogicException;
 
@@ -45,29 +46,26 @@ class Parallel extends BaseGraph
      */
     public function hasEdgeParallelEdge(Edge $edge)
     {
-        return !!$this->getEdgesParallelEdge($edge);
+        return !$this->getEdgesParallelEdge($edge)->isEmpty();
     }
 
     /**
-     * get all edges parallel to this edge (excluding self)
+     * get set of all Edges parallel to this edge (excluding self)
      *
-     * @return Edge[]
+     * @param Edge $edge
+     * @return Edges
      * @throws LogicException
      */
     public function getEdgesParallelEdge(Edge $edge)
     {
         if ($edge instanceof DirectedEdge) {
             // get all edges between this edge's endpoints
-            $edges = $edge->getVertexStart()->getEdgesTo($edge->getVertexEnd());
+            $edges = $edge->getVertexStart()->getEdgesTo($edge->getVertexEnd())->getVector();
         } else {
             // edge points into both directions (undirected/bidirectional edge)
             // also get all edges in other direction
-            $ends       = $edge->getVertices();
-            $edgesOther = $ends[1]->getEdges();
-
-            $edges = array_filter($ends[0]->getEdges(), function(Edge $edge) use ($edgesOther) {
-                return in_array($edge, $edgesOther, true);
-            });
+            $ends  = $edge->getVertices();
+            $edges = $ends->getVertexFirst()->getEdges()->getEdgesIntersection($ends->getVertexLast()->getEdges())->getVector();
         }
 
         $pos = array_search($edge, $edges, true);
@@ -81,6 +79,6 @@ class Parallel extends BaseGraph
         // exclude current edge from parallel edges
         unset($edges[$pos]);
 
-        return array_values($edges);
+        return new Edges(array_values($edges));
     }
 }

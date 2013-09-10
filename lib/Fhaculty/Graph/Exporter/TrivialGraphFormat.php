@@ -29,7 +29,7 @@ class TrivialGraphFormat implements ExporterInterface
         $tid = 1;
         $tids = array();
 
-        foreach ($graph->getVertices() as $vid => $vertex) {
+        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
             $output .= $tid . ' ' . $this->getVertexLabel($vertex) . self::EOL;
             $tids[$vid] = $tid++;
         }
@@ -38,7 +38,8 @@ class TrivialGraphFormat implements ExporterInterface
         $output .= '#' . self::EOL;
 
         foreach ($graph->getEdges() as $edge) {
-            $ids = $edge->getVerticesId();
+            /* @var $edge Edge */
+            $ids = $edge->getVertices()->getIds();
             $a = $tids[$ids[0]];
             $b = $tids[$ids[1]];
 

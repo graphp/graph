@@ -5,6 +5,7 @@ namespace Fhaculty\Graph\Algorithm\Tree;
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\Search\StrictDepthFirst;
@@ -79,24 +80,24 @@ abstract class Base extends BaseGraph
     /**
      * get array of leaf vertices (outermost vertices with no children)
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses Graph::getVertices()
      * @uses self::isVertexLeaf()
      */
     public function getVerticesLeaf()
     {
-        return array_filter($this->graph->getVertices(), array($this, 'isVertexLeaf'));
+        return $this->graph->getVertices()->getVerticesMatch(array($this, 'isVertexLeaf'));
     }
 
     /**
      * get array of internal vertices
      *
-     * @return Vertex[]
+     * @return Vertices
      * @uses Graph::getVertices()
      * @uses self::isVertexInternal()
      */
     public function getVerticesInternal()
     {
-        return array_filter($this->graph->getVertices(), array($this, 'isVertexInternal'));
+        return $this->graph->getVertices()->getVerticesMatch(array($this, 'isVertexInternal'));
     }
 }

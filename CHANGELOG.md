@@ -6,6 +6,41 @@ you spot any mistakes.
 
 ## 0.7.0 (2013-xx-xx)
 
+*   Feature: Add new `Set\Vertices` and `Set\Edges` classes that handle common
+    operations on a Set of multiple `Vertex` and `Edge` instances respectively.
+    ([#48](https://github.com/clue/graph/issues/48))
+
+*   BC break: Move operations and their corresponding constants concerning Sets
+    to their corresponding Sets:
+
+    | Old name | New name |
+    |---|---|
+    | `Edge\Base::getFirst()` | `Set\Edges::getEdgeOrder()` |
+    | `Edge\Base::getAll()` | `Set\Edges::getEdgesOrder()` |
+    | `Edge\Base::ORDER_*` | `Set\Edges::ORDER_* |
+    |---|---|
+    | `Vertex::getFirst()` | `Set\Vertices::getVertexOrder()` |
+    | `Vertex::getAll()` | `Set\Vertices::getVerticesOrder()` |
+    | `Vertex::ORDER_` | `Set\Vertices::ORDER_*` |
+
+*   BC break: Each `getVertices*()` and `getEdges*()` method now returns a `Set`
+    instead of a primitive array of instances. *Most* of the time this should
+    work without changing your code, because each `Set` implements an `Iterator`
+    interface and can easily be iterated using `foreach`. However, using a `Set`
+    instead of a plain array differs when checking its boolean value or
+    comparing two Sets. I.e. if you happen to want to check if an `Set` is empty,
+    you now have to use the more explicit syntax `$set->isEmpty()`.
+    
+*   BC break: `Vertex::getVertices()`, `Vertex::getVerticesEdgeTo()` and
+    `Vertex::getVerticesEdgeFrom()` now return a `Set\Vertices` instance that
+    may contain duplicate vertices if parallel (multiple) edges exist. Previously
+    there was no easy way to detect this situation - this is now the default. If
+    you also want to get unique / distinct `Vertex` instances, use
+    `Vertex::getVertices()->getVerticesDistinct()` where applicable.
+
+*   BC break: Remove all occurances of `getVerticesId()`, use
+    `getVertices()->getIds()` instead.
+
 * BC break: Merge `Cycle` into `Walk` ([#61](https://github.com/clue/graph/issues/61)).
 As such, its static factory methods had to be renamed. Update your references if applicable:
 
@@ -15,6 +50,12 @@ As such, its static factory methods had to be renamed. Update your references if
 | `Cycle::factoryFromVertices()` | `Walk::factoryCycleFromVertices()` |
 | `Cycle::factoryFromEdges()` | `Walk::factoryCycleFromEdges()` |
 
+* BC break: Remove `Graph::isEmpty()` because it's not well-defined and might
+be confusing. Most literature suggests it should check for existing edges,
+whereas the old behavior was to check for existing vertices instead. Use either
+of the more transparent methods
+`Algorithm\Property\GraphProperty::isNull()` (old behavior) or (where applicable)
+`Algorithm\Property\GraphProperty::isEmpty()` ([#59](https://github.com/clue/graph/issues/59)).
 * BC break: Each of the above methods (`Walk::factoryCycleFromPredecessorMap()`,
 `Walk::factoryCycleFromVertices()`, `Walk::factoryCycleFromEdges()`) now
 actually makes sure the returned `Walk` instance is actually a valid Cycle,
@@ -28,6 +69,7 @@ Vertex ([#62](https://github.com/clue/graph/issues/62))
 * Feature: Add `Algorithm\ShortestPath::hasVertex(Vertex $vertex)` to check whether
 a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).
 * Feature: Support opening GraphViz images on Mac OS X in default image viewer ([#67](https://github.com/clue/graph/issues/67) @onigoetz)
+* Feature: Add `Walk::factoryFromVertices()` ([#64](https://github.com/clue/graph/issues/64)).
 * Fix: Checking `Walk::isValid()` ([#61](https://github.com/clue/graph/issues/61))
 * Fix: Missing import prevented
 `Algorithm\ShortestPath\MooreBellmanFord::getCycleNegative()` from actually

@@ -26,7 +26,7 @@ class Complete extends BaseGraph
     public function isComplete()
     {
         // copy of array (separate iterator but same vertices)
-        $c = $vertices = $this->graph->getVertices();
+        $c = $vertices = $this->graph->getVertices()->getVector();
         // from each vertex
         foreach ($vertices as $vertex) {
             // to each vertex

@@ -25,10 +25,10 @@ class BreadthFirstTest extends BaseShortestPathTest
 
         $this->assertEquals(1, $alg->getDistance($v2));
         $this->assertEquals(array(2 => 1), $alg->getDistanceMap());
-        $this->assertEquals(array($e1), $alg->getEdges());
-        $this->assertEquals(array($e1), $alg->getEdgesTo($v2));
-        $this->assertEquals(array(2 => $v2), $alg->getVertices());
-        $this->assertEquals(array(2), $alg->getVerticesId());
+        $this->assertEquals(array($e1), $alg->getEdges()->getVector());
+        $this->assertEquals(array($e1), $alg->getEdgesTo($v2)->getVector());
+        $this->assertEquals(array(2 => $v2), $alg->getVertices()->getMap());
+        $this->assertEquals(array(2), $alg->getVertices()->getIds());
     }
 
     protected function getExpectedWeight($edges)

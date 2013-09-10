@@ -2,213 +2,18 @@
 
 namespace Fhaculty\Graph;
 
-
-
-use Fhaculty\Graph\Exception\BadMethodCallException;
-
-use Fhaculty\Graph\Exception\UnexpectedValueException;
-
-use Fhaculty\Graph\Exception\UnderflowException;
-
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-
-use \ArrayIterator;
-use \SplPriorityQueue;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Edge\Undirected as EdgeUndirected;
-use Fhaculty\Graph\Algorithm\Degree;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\EdgesAggregate;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Exception\BadMethodCallException;
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
 
-class Vertex extends Layoutable
+class Vertex extends Layoutable implements EdgesAggregate
 {
-    /**
-     * do not change order - FIFO : first in, first out
-     *
-     * @var int
-     */
-    const ORDER_FIFO = 0;
-
-    /**
-     * order by vertex ID
-     *
-     * @var int
-     * @see Vertex::getId()
-     */
-    const ORDER_ID = 1;
-
-    /**
-     * order by vertex degree
-     *
-     * @var int
-     * @see Degree::getDegreeVertex()
-     */
-    const ORDER_DEGREE = 2;
-
-    /**
-     * order by indegree of vertex
-     *
-     * @var int
-     * @see Degree::getDegreeInVertex()
-     */
-    const ORDER_INDEGREE = 3;
-
-    /**
-     * order by outdegree of vertex
-     *
-     * @var int
-     * @see Degree::getDegreeOutVertex()
-     */
-    const ORDER_OUTDEGREE = 4;
-
-    /**
-     * random/shuffled order
-     *
-     * @var int
-     */
-    const ORDER_RANDOM = 5;
-
-    /**
-     * order by vertex group
-     *
-     * @var int
-     * @see Vertex::getGroup()
-     */
-    const ORDER_GROUP = 6;
-
-    /**
-     * get first vertex (optionally ordered by given criterium $by) from given array of vertices
-     *
-     * @param  Vertex[]|Graph           $vertices array of vertices to scan for 'first' vertex
-     * @param  int                      $by       criterium to sort by. see Vertex::ORDER_ID, etc.
-     * @param  boolean                  $desc     whether to return biggest (true) instead of smallest (default:false)
-     * @return Vertex
-     * @throws InvalidArgumentException if criterium is unknown
-     * @throws UnderflowException       if no vertices exist
-     * @uses Graph::getVertices() if graph is given instead of vertices
-     * @uses Vertex::getId()
-     * @uses Degree::getDegreeVertex()
-     * @uses Degree::getDegreeInVertex()
-     * @uses Degree::getDegreeOutVertex()
-     * @uses Vertex::getGroup()
-     */
-    public static function getFirst($vertices, $by = self::ORDER_FIFO, $desc = false)
-    {
-        if ($vertices instanceof Graph) {
-            $vertices = $vertices->getVertices();
-        }
-        // random order and there are actually some vertices to shuffle
-        if ($by === self::ORDER_RANDOM && $vertices) {
-
-            // just return by random key (no need to check for DESC flag)
-            return $vertices[array_rand($vertices)];
-        }
-        if ($by === self::ORDER_DEGREE || $by === self::ORDER_INDEGREE || $by === self::ORDER_OUTDEGREE) {
-            foreach ($vertices as $vertex) {
-                $degree = new Degree($vertex->getGraph());
-                break;
-            }
-        }
-        $ret = NULL;
-        $best = NULL;
-        foreach ($vertices as $vertex) {
-            // do not sort - needs special handling
-            if ($by === self::ORDER_FIFO) {
-                // always remember vertex from last iteration
-                if ($desc) {
-                    $ret = $vertex;
-                    continue;
-                // just return first vertex right away
-                } else {
-                    return $vertex;
-                }
-            } elseif ($by === self::ORDER_ID) {
-                $now = $vertex->getId();
-            } elseif ($by === self::ORDER_DEGREE) {
-                $now = $degree->getDegreeVertex($vertex);
-            } elseif ($by === self::ORDER_INDEGREE) {
-                $now = $degree->getDegreeInVertex($vertex);
-            } elseif ($by === self::ORDER_OUTDEGREE) {
-                $now = $degree->getDegreeOutVertex($vertex);
-            } elseif ($by === self::ORDER_GROUP) {
-                $now = $vertex->getGroup();
-            } else {
-                throw new InvalidArgumentException('Invalid order flag "' . $by . '"');
-            }
-            if ($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)) {
-                $ret = $vertex;
-                $best = $now;
-            }
-        }
-        if ($ret === NULL) {
-            throw new UnderflowException('No vertex found');
-        }
-
-        return $ret;
-    }
-
-    /**
-     * get iterator for vertices (optionally ordered by given criterium $by) from given array of vertices
-     *
-     * @param  Vertex[]|Graph           $vertices array of vertices to scan for 'first' vertex
-     * @param  int                      $by       criterium to sort by. see Vertex::ORDER_ID, etc.
-     * @param  boolean                  $desc     whether to return biggest first (true) instead of smallest first (default:false)
-     * @return Iterator                 iterator object (supporting at the very least foreach)
-     * @throws InvalidArgumentException if criterium is unknown
-     * @throws UnexpectedValueException if trying to sort by reverse string IDs
-     * @uses Graph::getVertices() if graph is given instead of vertices
-     * @uses Vertex::getId()
-     * @uses Degree::getDegreeVertex()
-     * @uses Degree::getDegreeInVertex()
-     * @uses Degree::getDegreeOutVertex()
-     * @uses Vertex::getGroup()
-     */
-    public static function getAll($vertices, $by = self::ORDER_FIFO, $desc = false)
-    {
-        if ($vertices instanceof Graph) {
-            $vertices = $vertices->getVertices();
-        }
-        if ($by === self::ORDER_FIFO) {
-            return new ArrayIterator($desc ? array_reverse($vertices) : $vertices);
-        }
-        if ($by === self::ORDER_RANDOM) {
-            shuffle($vertices);
-
-            // create iterator for shuffled array (no need to check DESC flag)
-            return new ArrayIterator($vertices);
-        }
-        if ($by === self::ORDER_DEGREE || $by === self::ORDER_INDEGREE || $by === self::ORDER_OUTDEGREE) {
-            foreach ($vertices as $vertex) {
-                $degree = new Degree($vertex->getGraph());
-                break;
-            }
-        }
-        $it = new SplPriorityQueue();
-        foreach ($vertices as $vertex) {
-            if ($by === self::ORDER_ID) {
-                $now = $vertex->getId();
-                if ($desc && is_string($now)) {
-                    throw new UnexpectedValueException('Unable to reverse sorting for string IDs');
-                }
-            } elseif ($by === self::ORDER_DEGREE) {
-                $now = $degree->getDegreeVertex($vertex);
-            } elseif ($by === self::ORDER_INDEGREE) {
-                $now = $degree->getDegreeInVertex($vertex);
-            } elseif ($by === self::ORDER_OUTDEGREE) {
-                $now = $degree->getDegreeOutVertex($vertex);
-            } elseif ($by === self::ORDER_GROUP) {
-                $now = $vertex->getGroup();
-            } else {
-                throw new InvalidArgumentException('Invalid order flag "' . $by . '"');
-            }
-            if ($desc && $now !== NULL) {
-                $now = -$now;
-            }
-            $it->insert($vertex, $now);
-        }
-
-        return $it;
-    }
-
     private $id;
 
     /**
@@ -383,13 +188,11 @@ class Vertex extends Layoutable
      */
     public function hasEdgeTo(Vertex $vertex)
     {
-        foreach ($this->edges as $edge) {
-            if ($edge->isConnection($this, $vertex)) {
-                return true;
-            }
-        }
+        $that = $this;
 
-        return false;
+        return $this->getEdges()->hasEdgeMatch(function (Edge $edge) use ($that, $vertex) {
+            return $edge->isConnection($that, $vertex);
+        });
     }
 
     /**
@@ -405,73 +208,64 @@ class Vertex extends Layoutable
     }
 
     /**
-     * get ALL edges attached to this vertex
+     * get set of ALL Edges attached to this vertex
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
-        return $this->edges;
+        return new Edges($this->edges);
     }
 
     /**
-     * get ALL outgoing edges attached to this vertex
+     * get set of all outgoing Edges attached to this vertex
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdgesOut()
     {
-        $outgoingEdges = array();
-        foreach ($this->edges as $edge) {
-            if ($edge->hasVertexStart($this)) {
-                $outgoingEdges[] = $edge;
-            }
-        }
+        $that = $this;
 
-        return $outgoingEdges;
+        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that) {
+            return $edge->hasVertexStart($that);
+        });
     }
 
     /**
-     * get ALL ingoing edges attached to this vertex
+     * get set of all ingoing Edges attached to this vertex
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdgesIn()
     {
-        $ingoingEdges = array() ;
-        foreach ($this->edges as $edge) {
-            if ($edge->hasVertexTarget($this)) {
-                $ingoingEdges[] = $edge;
-            }
-        }
+        $that = $this;
 
-        return $ingoingEdges;
+        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that) {
+            return $edge->hasVertexTarget($that);
+        });
     }
 
     /**
-     * get edges FROM this vertex TO the given vertex
+     * get set of Edges FROM this vertex TO the given vertex
      *
      * @param  Vertex $vertex
-     * @return Edge[]
+     * @return Edges
      * @uses Edge::hasVertexTarget()
      */
     public function getEdgesTo(Vertex $vertex)
     {
-        $ret = array();
-        foreach ($this->edges as $edge) {
-            if ($edge->isConnection($this, $vertex)) {
-                $ret[] = $edge;
-            }
-        }
+        $that = $this;
 
-        return $ret;
+        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that, $vertex) {
+            return $edge->isConnection($that, $vertex);
+        });
     }
 
     /**
-     * get edges FROM the given vertex TO this vertex
+     * get set of Edges FROM the given vertex TO this vertex
      *
      * @param  Vertex $vertex
-     * @return Edge[]
+     * @return Edges
      * @uses Vertex::getEdgesTo()
      */
     public function getEdgesFrom(Vertex $vertex)
@@ -480,9 +274,13 @@ class Vertex extends Layoutable
     }
 
     /**
-     * get all adjacent vertices of this vertex (edge FROM or TO this vertex)
+     * get set of adjacent Vertices of this vertex (edge FROM or TO this vertex)
      *
-     * @return Vertex[]
+     * If there are multiple parallel edges between the same Vertex, it will be
+     * returned several times in the resulting Set of Vertices. If you only
+     * want unique Vertex instances, use `getVerticesDistinct()`.
+     *
+     * @return Vertices
      * @uses Edge::hasVertexStart()
      * @uses Edge::getVerticesToFrom()
      * @uses Edge::getVerticesFromTo()
@@ -492,20 +290,23 @@ class Vertex extends Layoutable
         $ret = array();
         foreach ($this->edges as $edge) {
             if ($edge->hasVertexStart($this)) {
-                $vertex = $edge->getVertexToFrom($this);
+                $ret []= $edge->getVertexToFrom($this);
             } else {
-                $vertex = $edge->getVertexFromTo($this);
+                $ret []= $edge->getVertexFromTo($this);
             }
-            $ret[$vertex->getId()] = $vertex;
         }
 
-        return $ret;
+        return new Vertices($ret);
     }
 
     /**
-     * get all vertices this vertex has an edge to
+     * get set of all Vertices this vertex has an edge to
      *
-     * @return Vertex[]
+     * If there are multiple parallel edges to the same Vertex, it will be
+     * returned several times in the resulting Set of Vertices. If you only
+     * want unique Vertex instances, use `getVerticesDistinct()`.
+     *
+     * @return Vertices
      * @uses Vertex::getEdgesOut()
      * @uses Edge::getVerticesToFrom()
      */
@@ -513,17 +314,20 @@ class Vertex extends Layoutable
     {
         $ret = array();
         foreach ($this->getEdgesOut() as $edge) {
-            $vertex = $edge->getVertexToFrom($this);
-            $ret[$vertex->getId()] = $vertex;
+            $ret []= $edge->getVertexToFrom($this);
         }
 
-        return $ret;
+        return new Vertices($ret);
     }
 
     /**
-     * get all vertices that have an edge TO this vertex
+     * get set of all Vertices that have an edge TO this vertex
      *
-     * @return Vertex[]
+     * If there are multiple parallel edges from the same Vertex, it will be
+     * returned several times in the resulting Set of Vertices. If you only
+     * want unique Vertex instances, use `getVerticesDistinct()`.
+     *
+     * @return Vertices
      * @uses Vertex::getEdgesIn()
      * @uses Edge::getVerticesFromTo()
      */
@@ -531,11 +335,10 @@ class Vertex extends Layoutable
     {
         $ret = array();
         foreach ($this->getEdgesIn() as $edge) {
-            $vertex = $edge->getVertexFromTo($this);
-            $ret[$vertex->getId()] = $vertex;
+            $ret []= $edge->getVertexFromTo($this);
         }
 
-        return $ret;
+        return new Vertices($ret);
     }
 
     /**
