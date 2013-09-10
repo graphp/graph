@@ -33,6 +33,8 @@ a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62
 `Algorithm\ShortestPath\MooreBellmanFord::getCycleNegative()` from actually
 throwing the right `UnderflowException` if no cycle was actually found
 ([#62](https://github.com/clue/graph/issues/62))
+* Fix: Calling `Exporter\Image::setFormat()` had no effect due to misassignment
+  ([#70](https://github.com/clue/graph/issues/70) @FGM)
 
 ## 0.6.0 (2013-07-11)
 
