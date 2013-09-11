@@ -81,6 +81,18 @@ you spot any mistakes.
 *   Feature: Support opening GraphViz images on Mac OS X in default image viewer
     ([#67](https://github.com/clue/graph/issues/67) @onigoetz)
 
+*   Feature: Add `Algorithm\MinimumSpanningTree\Base::getWeight()` to get total
+    weight of resulting minimum spanning tree (MST).
+    ([#73](https://github.com/clue/graph/issues/73))
+
+*   Feature: Each `Algorithm\MinimumSpanningTree` algorithm now supports
+    undirected and mixed Graphs, as well as null weights for Edges.
+    ([#73](https://github.com/clue/graph/issues/73))
+
+*   BC break: Each `Algorithm\MinimumSpanningTree` algorithm now throws an
+    `UnexpectedValueException` for unconnected Graphs (and thus also null Graphs).
+    ([#73](https://github.com/clue/graph/issues/73))
+
 *   Feature: Add `Walk::factoryFromVertices()`
     ([#64](https://github.com/clue/graph/issues/64)).
 
