@@ -11,15 +11,15 @@ class UndirectedTest extends TestCase
         return new Undirected($graph);
     }
 
-    public function testGraphEmpty()
+    public function testNullGraph()
     {
         $graph = new Graph();
 
         $tree = $this->createTree($graph);
 
-        $this->assertTrue($tree->isTree());
-        $this->assertSame(array(), $tree->getVerticesInternal()->getVector());
-        $this->assertSame(array(), $tree->getVerticesLeaf()->getVector());
+        $this->assertFalse($tree->isTree());
+        $this->assertTrue($tree->getVerticesInternal()->isEmpty());
+        $this->assertTrue($tree->getVerticesLeaf()->isEmpty());
     }
 
     public function testGraphTrivial()

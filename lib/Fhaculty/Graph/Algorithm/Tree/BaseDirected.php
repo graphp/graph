@@ -73,16 +73,11 @@ abstract class BaseDirected extends Tree
      * checks if this is a tree
      *
      * @return boolean
-     * @uses Vertices::isEmpty() to skip empty Graphs (an empty Graph is a valid tree)
      * @uses self::getVertexRoot() to get root Vertex to start search from
      * @uses self::getVerticesSubtree() to count number of vertices connected to root
      */
     public function isTree()
     {
-        if ($this->graph->getVertices()->isEmpty()) {
-            return true;
-        }
-
         try {
             $root = $this->getVertexRoot();
         }
@@ -138,7 +133,7 @@ abstract class BaseDirected extends Tree
     /**
      * internal helper to get all parents vertices
      *
-     * a valid tree vertex only ever has a single parent, expect for the root,
+     * a valid tree vertex only ever has a single parent, except for the root,
      * which has none.
      *
      * @param Vertex $vertex
