@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## 0.7.0 (2013-xx-xx)
+## 0.7.0 (2013-09-11)
 
 *   Feature: Add new `Set\Vertices` and `Set\Edges` classes that handle common
     operations on a Set of multiple `Vertex` and `Edge` instances respectively.
