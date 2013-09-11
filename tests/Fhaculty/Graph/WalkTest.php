@@ -27,7 +27,7 @@ class WalkTest extends TestCase
         $walk = Walk::factoryFromEdges(array($e1, $e2), $v1);
 
         $this->assertEquals(3, count($walk->getVertices()));
-        $this->assertEquals(2, $walk->getNumberOfEdges());
+        $this->assertEquals(2, count($walk->getEdges()));
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v3, $walk->getVertexTarget());
         $this->assertSame(array($v1, $e1, $v2, $e2, $v3), $walk->getAlternatingSequence());
@@ -65,7 +65,7 @@ class WalkTest extends TestCase
         $walk = Walk::factoryFromEdges(array($e1), $v1);
 
         $this->assertEquals(2, count($walk->getVertices()));
-        $this->assertEquals(1, $walk->getNumberOfEdges());
+        $this->assertEquals(1, count($walk->getEdges()));
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v2, $walk->getVertexTarget());
         $this->assertSame(array($v1, $e1, $v2), $walk->getAlternatingSequence());
@@ -80,7 +80,7 @@ class WalkTest extends TestCase
         $walkVertices = Walk::factoryFromVertices(array($v1, $v2));
 
         $this->assertEquals(2, count($walkVertices->getVertices()));
-        $this->assertEquals(1, $walkVertices->getNumberOfEdges());
+        $this->assertEquals(1, count($walkVertices->getEdges()));
 
         $this->assertGraphEquals($graphExpected, $walkVertices->createGraph());
 
@@ -97,7 +97,7 @@ class WalkTest extends TestCase
         $walk = Walk::factoryFromEdges(array($e1), $v1);
 
         $this->assertEquals(2, count($walk->getVertices()));
-        $this->assertEquals(1, $walk->getNumberOfEdges());
+        $this->assertEquals(1, count($walk->getEdges()));
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v1, $walk->getVertexTarget());
         $this->assertTrue($walk->isValid());
@@ -130,7 +130,7 @@ class WalkTest extends TestCase
         $walk = Walk::factoryCycleFromEdges(array($e1), $v1);
 
         $this->assertEquals(2, count($walk->getVertices()));
-        $this->assertEquals(1, $walk->getNumberOfEdges());
+        $this->assertEquals(1, count($walk->getEdges()));
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v1, $walk->getVertexTarget());
         $this->assertTrue($walk->isValid());
@@ -149,7 +149,7 @@ class WalkTest extends TestCase
         $walk = Walk::factoryCycleFromVertices(array($v1, $v2));
 
         $this->assertEquals(3, count($walk->getVertices()));
-        $this->assertEquals(2, $walk->getNumberOfEdges());
+        $this->assertEquals(2, count($walk->getEdges()));
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v1, $walk->getVertexTarget());
         $this->assertTrue($walk->isValid());

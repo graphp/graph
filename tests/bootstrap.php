@@ -15,7 +15,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         $f = function(Graph $graph){
             $ret = get_class($graph);
             $ret .= PHP_EOL . 'vertices: ' . count($graph->getVertices());
-            $ret .= PHP_EOL . 'edges: ' . $graph->getNumberOfEdges();
+            $ret .= PHP_EOL . 'edges: ' . count($graph->getEdges());
 
             return $ret;
         };

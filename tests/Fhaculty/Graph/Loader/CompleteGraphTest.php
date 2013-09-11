@@ -29,7 +29,7 @@ class CompleteGraphTest extends TestCase
         $graph = $loader->createGraph();
 
         $this->assertEquals($n, count($graph->getVertices()));
-        $this->assertEquals($n*($n-1)/2, $graph->getNumberOfEdges());
+        $this->assertEquals($n*($n-1)/2, count($graph->getEdges()));
     }
 
     public function testDirected()
@@ -41,7 +41,7 @@ class CompleteGraphTest extends TestCase
         $graph = $loader->createGraph();
 
         $this->assertEquals($n, count($graph->getVertices()));
-        $this->assertEquals($n*($n-1), $graph->getNumberOfEdges()); // n*(n-1) for directed graphs
+        $this->assertEquals($n*($n-1), count($graph->getEdges())); // n*(n-1) for directed graphs
 
         $alg = new Directed($graph);
         $this->assertTrue($alg->isDirected());
