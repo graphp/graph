@@ -29,14 +29,4 @@ abstract class Set implements VerticesAggregate, EdgesAggregate
      * @return Vertices
      */
     // abstract public function getVertices();
-
-    /**
-     * return number of edges
-     *
-     * @return int
-     */
-    public function getNumberOfEdges()
-    {
-        return count($this->getEdges());
-    }
 }
