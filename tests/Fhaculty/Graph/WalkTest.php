@@ -26,7 +26,7 @@ class WalkTest extends TestCase
 
         $walk = Walk::factoryFromEdges(array($e1, $e2), $v1);
 
-        $this->assertEquals(3, $walk->getNumberOfVertices());
+        $this->assertEquals(3, count($walk->getVertices()));
         $this->assertEquals(2, $walk->getNumberOfEdges());
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v3, $walk->getVertexTarget());
@@ -64,7 +64,7 @@ class WalkTest extends TestCase
         // construct partial walk "1 -- 2"
         $walk = Walk::factoryFromEdges(array($e1), $v1);
 
-        $this->assertEquals(2, $walk->getNumberOfVertices());
+        $this->assertEquals(2, count($walk->getVertices()));
         $this->assertEquals(1, $walk->getNumberOfEdges());
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v2, $walk->getVertexTarget());
@@ -79,7 +79,7 @@ class WalkTest extends TestCase
         // construct same partial walk "1 -- 2"
         $walkVertices = Walk::factoryFromVertices(array($v1, $v2));
 
-        $this->assertEquals(2, $walkVertices->getNumberOfVertices());
+        $this->assertEquals(2, count($walkVertices->getVertices()));
         $this->assertEquals(1, $walkVertices->getNumberOfEdges());
 
         $this->assertGraphEquals($graphExpected, $walkVertices->createGraph());
@@ -96,7 +96,7 @@ class WalkTest extends TestCase
 
         $walk = Walk::factoryFromEdges(array($e1), $v1);
 
-        $this->assertEquals(2, $walk->getNumberOfVertices());
+        $this->assertEquals(2, count($walk->getVertices()));
         $this->assertEquals(1, $walk->getNumberOfEdges());
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v1, $walk->getVertexTarget());
@@ -129,7 +129,7 @@ class WalkTest extends TestCase
 
         $walk = Walk::factoryCycleFromEdges(array($e1), $v1);
 
-        $this->assertEquals(2, $walk->getNumberOfVertices());
+        $this->assertEquals(2, count($walk->getVertices()));
         $this->assertEquals(1, $walk->getNumberOfEdges());
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v1, $walk->getVertexTarget());
@@ -148,7 +148,7 @@ class WalkTest extends TestCase
         // should actually be v1, v2, v1, but cycle factory automatically adds missing vertex + edge
         $walk = Walk::factoryCycleFromVertices(array($v1, $v2));
 
-        $this->assertEquals(3, $walk->getNumberOfVertices());
+        $this->assertEquals(3, count($walk->getVertices()));
         $this->assertEquals(2, $walk->getNumberOfEdges());
         $this->assertSame($v1, $walk->getVertexSource());
         $this->assertSame($v1, $walk->getVertexTarget());

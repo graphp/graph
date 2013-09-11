@@ -108,7 +108,7 @@ class Bruteforce extends Base
      */
     public function getEdges()
     {
-        $this->numEdges = $this->graph->getNumberOfVertices();
+        $this->numEdges = count($this->graph->getVertices());
         if ($this->numEdges < 3) {
             throw new UnderflowException('Needs at least 3 vertices');
         }

@@ -65,7 +65,6 @@ class ConnectedComponents extends BaseGraph
      * connected here.
      *
      * @return boolean
-     * @uses AlgorithmSearchBreadthFirst::getNumberOfVertices()
      * @see self::getNumberOfComponents()
      */
     public function isSingle()
@@ -79,7 +78,7 @@ class ConnectedComponents extends BaseGraph
         }
         $alg = $this->createSearch($vertex);
 
-        return ($this->graph->getNumberOfVertices() === $alg->getNumberOfVertices());
+        return (count($this->graph->getVertices()) === count($alg->getVertices()));
     }
 
     /**

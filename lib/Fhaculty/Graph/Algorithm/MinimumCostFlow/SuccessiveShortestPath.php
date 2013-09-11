@@ -124,13 +124,12 @@ class SuccessiveShortestPath extends Base
      * @param  Graph     $graph
      * @return boolean
      * @throws Exception if given graph is not a clone of the original graph (each vertex has to be present in both graphs)
-     * @uses Graph::getNumberOfVertices()
      * @uses Graph::getBalanace()
      * @uses Graph::getVertex()
      */
     private function isBalanceReached(Graph $graph)
     {
-        if ($graph->getNumberOfVertices() !== $this->graph->getNumberOfVertices()) {
+        if (count($graph->getVertices()) !== count($this->graph->getVertices())) {
             throw new DomainException('Given graph does not appear to be a clone of input graph');
         }
         foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
