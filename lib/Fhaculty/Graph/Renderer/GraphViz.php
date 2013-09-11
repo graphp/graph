@@ -1,13 +1,17 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Fhaculty\Graph\Renderer;
 
+use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Algorithm\Directed;
 use Fhaculty\Graph\Algorithm\Groups;
 use Fhaculty\Graph\Algorithm\Degree;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use \stdClass;
+use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Edge\Base as Edge;
+
 
 class GraphViz
 {
