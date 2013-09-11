@@ -70,6 +70,11 @@ you spot any mistakes.
     `OutOfBoundsException` for unreachable vertices
     ([#62](https://github.com/clue/graph/issues/62))
 
+*   BC break: A null Graph (a Graph with no Vertices and thus no Edges) is not a
+    valid tree (because it is not connected), adjust `Algorithm\Tree\Base::isTree()`
+    accordingly.
+    ([#72](https://github.com/clue/graph/issues/72))
+
 *   Feature: Add `Algorithm\ShortestPath::hasVertex(Vertex $vertex)` to check whether
     a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).
 
