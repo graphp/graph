@@ -17,7 +17,7 @@ you spot any mistakes.
     |---|---|
     | `Edge\Base::getFirst()` | `Set\Edges::getEdgeOrder()` |
     | `Edge\Base::getAll()` | `Set\Edges::getEdgesOrder()` |
-    | `Edge\Base::ORDER_*` | `Set\Edges::ORDER_* |
+    | `Edge\Base::ORDER_*` | `Set\Edges::ORDER_*` |
     |---|---|
     | `Vertex::getFirst()` | `Set\Vertices::getVertexOrder()` |
     | `Vertex::getAll()` | `Set\Vertices::getVerticesOrder()` |
@@ -53,9 +53,9 @@ you spot any mistakes.
 *   BC break: Remove `Graph::isEmpty()` because it's not well-defined and might
     be confusing. Most literature suggests it should check for existing edges,
     whereas the old behavior was to check for existing vertices instead. Use either
-    of the more transparent methods
+    of the new and more transparent methods
     `Algorithm\Property\GraphProperty::isNull()` (old behavior) or (where applicable)
-    `Algorithm\Property\GraphProperty::isEmpty()` ([#59](https://github.com/clue/graph/issues/59)).
+    `Algorithm\Property\GraphProperty::isEdgeless()` ([#63](https://github.com/clue/graph/issues/63)).
 
 *   BC break: Each of the above methods (`Walk::factoryCycleFromPredecessorMap()`,
     `Walk::factoryCycleFromVertices()`, `Walk::factoryCycleFromEdges()`) now
@@ -75,7 +75,7 @@ you spot any mistakes.
     accordingly.
     ([#72](https://github.com/clue/graph/issues/72))
 
-*   Feature: Add `Algorithm\ShortestPath::hasVertex(Vertex $vertex)` to check whether
+*   Feature: Add `Algorithm\ShortestPath\Base::hasVertex(Vertex $vertex)` to check whether
     a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).
 
 *   Feature: Support opening GraphViz images on Mac OS X in default image viewer
@@ -89,7 +89,7 @@ you spot any mistakes.
 
 *   Fix: Missing import prevented
     `Algorithm\ShortestPath\MooreBellmanFord::getCycleNegative()` from actually
-    throwing the right `UnderflowException` if no cycle was actually found
+    throwing the right `UnderflowException` if no cycle was found
     ([#62](https://github.com/clue/graph/issues/62))
 
 *   Fix: Calling `Exporter\Image::setFormat()` had no effect due to misassignment
