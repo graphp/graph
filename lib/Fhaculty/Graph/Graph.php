@@ -38,6 +38,8 @@ class Graph extends Set implements LayoutAggregate
     protected $edges;
 
     protected $layout = null;
+    protected $layoutVertex = null;
+    protected $layoutEdge = null;
 
     public function __construct()
     {
@@ -516,5 +518,33 @@ class Graph extends Set implements LayoutAggregate
         }
 
         return $this->layout;
+    }
+
+    /**
+     * get the global default layout for all vertices
+     *
+     * @return Layout
+     */
+    public function getLayoutVertexDefault()
+    {
+        if ($this->layoutVertex === null) {
+            $this->layoutVertex = new Layout();
+        }
+
+        return $this->layoutVertex;
+    }
+
+    /**
+     * get the global default layout for all edges
+     *
+     * @return Layout
+     */
+    public function getLayoutEdgeDefault()
+    {
+        if ($this->layoutEdge === null) {
+            $this->layoutEdge = new Layout();
+        }
+
+        return $this->layoutEdge;
     }
 }

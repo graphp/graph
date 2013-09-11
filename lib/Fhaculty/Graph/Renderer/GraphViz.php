@@ -29,9 +29,6 @@ class GraphViz
      */
     private $format = 'png';
 
-    private $layoutVertex = array();
-    private $layoutEdge = array();
-
     /**
      * Either the name of full path to GraphViz layout.
      *
@@ -150,73 +147,6 @@ class GraphViz
         // echo "... done\n";
     }
 
-    const LAYOUT_GRAPH = 1;
-    const LAYOUT_EDGE = 2;
-    const LAYOUT_VERTEX = 3;
-
-    private function mergeLayout(&$old, $new)
-    {
-        if ($new === NULL) {
-            $old = array();
-        } else {
-            foreach ($new as $key => $value) {
-                if ($value === NULL) {
-                    unset($old[$key]);
-                } else {
-                    $old[$key] = $value;
-                }
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * set the global default layout for all edges
-     *
-     * @param array $layout
-     * @return self $this (chainable)
-     */
-    public function setLayoutEdgeDefault(array $layout)
-    {
-        return $this->mergeLayout($this->layoutEdge, $layout);
-    }
-
-    /**
-     * set the global default layout for all vertices
-     *
-     * @param array $layout
-     * @return self $this (chainable)
-     */
-    public function setLayoutVertexDefault(array $layout)
-    {
-        return $this->mergeLayout($this->layoutVertex, $layout);
-    }
-
-    public function setLayouts($where, $layout, $value = NULL)
-    {
-        if (!is_array($where)) {
-            $where = array($where);
-        }
-        if (func_num_args() > 2) {
-            $layout = array($layout => $value);
-        }
-        foreach ($where as $where) {
-            if ($where instanceof LayoutAggregate) {
-                $where->getLayout()->setAttributes($layout);
-            } elseif ($where === self::LAYOUT_EDGE) {
-                $this->setLayoutEdgeDefault($layout);
-            } elseif ($where === self::LAYOUT_VERTEX) {
-                $this->setLayoutVertexDefault($layout);
-            } else {
-                throw new InvalidArgumentException('Invalid layout identifier');
-            }
-        }
-
-        return $this;
-    }
-
-    // end
-
     /**
      * create image file data contents for this graph
      *
@@ -315,11 +245,15 @@ class GraphViz
         if ($layout) {
             $script .= $this->formatIndent . 'graph ' . $this->escapeAttributes($layout) . self::EOL;
         }
-        if ($this->layoutVertex) {
-            $script .= $this->formatIndent . 'node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
+
+        $layout = $this->graph->getLayoutVertexDefault()->getAttributes();
+        if ($layout) {
+            $script .= $this->formatIndent . 'node ' . $this->escapeAttributes($layout) . self::EOL;
         }
-        if ($this->layoutEdge) {
-            $script .= $this->formatIndent . 'edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
+
+        $layout = $this->graph->getLayoutEdgeDefault()->getAttributes();
+        if ($layout) {
+            $script .= $this->formatIndent . 'edge ' . $this->escapeAttributes($layout) . self::EOL;
         }
 
         $alg = new Groups($this->graph);
