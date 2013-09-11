@@ -15,7 +15,7 @@ use Fhaculty\Graph\Graph;
  *
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Weighted_graphs_and_networks
  */
-class Weight extends BaseSet
+class Weight extends BaseDual
 {
     /**
      * checks whether this graph has any weighted edges
