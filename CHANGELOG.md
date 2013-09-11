@@ -76,8 +76,9 @@ you spot any mistakes.
     ([#72](https://github.com/clue/graph/issues/72))
 
 *   BC break: Remove all occurances of `getNumberOfVertices()` and
-    `getNumberOfEdges` ([#75](https://github.com/clue/graph/issues/75) and
+    `getNumberOfEdges()` ([#75](https://github.com/clue/graph/issues/75) and
     [#48](https://github.com/clue/graph/issues/48)):
+
     | Old name | New name |
     |---|---|
     | `$set->getNumberOfVertices()` | `count($set->getVertices())` |
