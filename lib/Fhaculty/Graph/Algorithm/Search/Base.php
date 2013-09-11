@@ -48,17 +48,6 @@ abstract class Base extends BaseVertex
     }
 
     /**
-     * get total number of vertices the start vertex is connected to
-     *
-     * @return int
-     * @uses AlgorithmSearch::getVertices()
-     */
-    public function getNumberOfVertices()
-    {
-        return count($this->getVertices());
-    }
-
-    /**
      * get set of all Vertices that can be reached from start vertex
      *
      * @return Vertices
