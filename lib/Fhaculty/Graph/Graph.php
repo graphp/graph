@@ -20,8 +20,10 @@ use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesMap;
 use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Renderer\LayoutAggregate;
+use Fhaculty\Graph\Renderer\Layout;
 
-class Graph extends Set implements LayoutableInterface
+class Graph extends Set implements LayoutAggregate
 {
     /**
      * @var ExporterInterface|null
@@ -34,6 +36,8 @@ class Graph extends Set implements LayoutableInterface
 
     protected $edgesStorage = array();
     protected $edges;
+
+    protected $layout = null;
 
     public function __construct()
     {
@@ -60,13 +64,6 @@ class Graph extends Set implements LayoutableInterface
     {
         return $this->edges;
     }
-
-    /**
-     * associative array of layout settings
-     *
-     * @var array
-     */
-    private $layout = array();
 
     /**
      * create a new Vertex in the Graph
@@ -113,7 +110,7 @@ class Graph extends Set implements LayoutableInterface
         }
         $newVertex = new Vertex($id, $this);
         // TODO: properly set attributes of vertex
-        $newVertex->setLayout($originalVertex->getLayout());
+        $newVertex->getLayout()->setLayout($originalVertex->getLayout());
         $newVertex->setBalance($originalVertex->getBalance());
         $newVertex->setGroup($originalVertex->getGroup());
         $this->verticesStorage[$id] = $newVertex;
@@ -131,7 +128,7 @@ class Graph extends Set implements LayoutableInterface
     public function createGraphCloneEdgeless()
     {
         $graph = new Graph();
-//         $graph->setLayout($this->getLayout());
+        $graph->getLayout()->setLayout($this->getLayout());
         // TODO: set additional graph attributes
         foreach ($this->getVertices() as $originalVertex) {
             $vertex = $graph->createVertexClone($originalVertex);
@@ -250,7 +247,7 @@ class Graph extends Set implements LayoutableInterface
             $newEdge = $a->createEdge($b);
         }
         // TODO: copy edge attributes
-        $newEdge->setLayout($originalEdge->getLayout());
+        $newEdge->getLayout()->setLayout($originalEdge->getLayout());
         $newEdge->setWeight($originalEdge->getWeight());
         $newEdge->setFlow($originalEdge->getFlow());
         $newEdge->setCapacity($originalEdge->getCapacity());
@@ -514,44 +511,10 @@ class Graph extends Set implements LayoutableInterface
 
     public function getLayout()
     {
+        if ($this->layout === null) {
+            $this->layout = new Layout();
+        }
+
         return $this->layout;
-    }
-
-    public function setLayout(array $attributes)
-    {
-        foreach ($attributes as $key => $value) {
-            if ($value === NULL) {
-                unset($this->layout[$key]);
-            } else {
-                $this->layout[$key] = $value;
-            }
-        }
-
-        return $this;
-    }
-
-    public function setLayoutAttribute($name, $value)
-    {
-        if ($value === NULL) {
-            unset($this->layout[$name]);
-        } else {
-            $this->layout[$name] = $value;
-        }
-
-        return $this;
-    }
-
-    public function hasLayoutAttribute($name)
-    {
-        return isset($this->layout[$name]);
-    }
-
-    public function getLayoutAttribute($name)
-    {
-        if (!isset($this->layout[$name])) {
-            throw new OutOfBoundsException('Given layout attribute is not set');
-        }
-
-        return $this->layout[$name];
     }
 }
