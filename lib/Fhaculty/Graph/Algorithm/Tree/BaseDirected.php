@@ -96,7 +96,7 @@ abstract class BaseDirected extends Tree
         }
 
         // check number of vertices reachable from root should match total number of vertices
-        return ($num === $this->graph->getNumberOfVertices());
+        return ($num === count($this->graph->getVertices()));
     }
 
     /**

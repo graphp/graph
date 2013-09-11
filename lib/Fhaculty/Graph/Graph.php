@@ -20,8 +20,9 @@ use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesMap;
 use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\DualAggregate;
 
-class Graph extends Set
+class Graph implements DualAggregate
 {
     /**
      * @var ExporterInterface|null

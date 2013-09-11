@@ -185,7 +185,7 @@ class GraphTest extends TestCase
         $e1 = $v1->createEdge($v2);
         $e2 = $v1->createEdge($v2);
 
-        $this->assertEquals(2, $graph->getNumberOfEdges());
+        $this->assertEquals(2, count($graph->getEdges()));
         $this->assertEquals(2, count($v1->getEdges()));
 
         $this->assertEquals(array(2, 2), $v1->getVerticesEdge()->getIds());
@@ -202,7 +202,7 @@ class GraphTest extends TestCase
         $v1->createEdge($v2);
         $v2->createEdgeTo($v3);
 
-        $this->assertEquals(2, $graph->getNumberOfEdges());
+        $this->assertEquals(2, count($graph->getEdges()));
 
         $this->assertEquals(2, count($v2->getEdges()));
         $this->assertEquals(2, count($v2->getEdgesOut()));
@@ -219,7 +219,7 @@ class GraphTest extends TestCase
         $this->assertEquals(array(), $graph->createVertices(0)->getVector());
         $this->assertEquals(array(), $graph->createVertices(array())->getVector());
 
-        $this->assertEquals(0, $graph->getNumberOfVertices());
+        $this->assertEquals(0, count($graph->getVertices()));
     }
 
     /**
@@ -274,7 +274,7 @@ class GraphTest extends TestCase
             $this->fail('Should be unable to create vertices because of duplicate IDs');
         }
         catch (OverflowException $ignoreExpected) {
-            $this->assertEquals(10, $graph->getNumberOfVertices());
+            $this->assertEquals(10, count($graph->getVertices()));
         }
 
         try {
@@ -282,7 +282,7 @@ class GraphTest extends TestCase
             $this->fail('Should be unable to create vertices because of duplicate IDs');
         }
         catch (InvalidArgumentException $ignoreExpected) {
-            $this->assertEquals(10, $graph->getNumberOfVertices());
+            $this->assertEquals(10, count($graph->getVertices()));
         }
     }
 
@@ -411,7 +411,7 @@ class GraphTest extends TestCase
 
         $graphClone = $graph->createGraphCloneVertices(array(1 => $v1, 2 => $v2));
 
-        $this->assertEquals(2, $graphClone->getNumberOfVertices());
-        $this->assertEquals(1, $graphClone->getNumberOfEdges());
+        $this->assertEquals(2, count($graphClone->getVertices()));
+        $this->assertEquals(1, count($graphClone->getEdges()));
     }
 }
