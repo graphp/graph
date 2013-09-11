@@ -75,6 +75,19 @@ you spot any mistakes.
     accordingly.
     ([#72](https://github.com/clue/graph/issues/72))
 
+*   BC break: Remove all occurances of `getNumberOfVertices()` and
+    `getNumberOfEdges` ([#75](https://github.com/clue/graph/issues/75) and
+    [#48](https://github.com/clue/graph/issues/48)):
+    | Old name | New name |
+    |---|---|
+    | `$set->getNumberOfVertices()` | `count($set->getVertices())` |
+    | `$set->getNumberOfEdges()` | `count($set->getEdges())` |
+    
+*   BC break: Replace base `Set` class with `Set\DualAggregate` interface. This
+    is unlikely to affect you, but might potentially break your custom
+    inheritance or polymorphism for algorithms.
+    ([#75](https://github.com/clue/graph/issues/75))
+
 *   Feature: Add `Algorithm\ShortestPath\Base::hasVertex(Vertex $vertex)` to check whether
     a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).
 
