@@ -49,7 +49,13 @@ abstract class BaseMstTest extends TestCase
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $v1->createEdge($v2)->setWeight(3);
+        $v3 = $graph->createVertex(3);
+        $v4 = $graph->createVertex(4);
+        $v5 = $graph->createVertex(5);
+        $v1->createEdge($v2)->setWeight(6);
+        $v2->createEdge($v3)->setWeight(9);
+        $v3->createEdge($v4)->setWeight(7);
+        $v4->createEdge($v5)->setWeight(8);
 
         $alg = $this->createAlg($v1);
 
