@@ -24,12 +24,6 @@ class Kruskal extends Base
          $this->graph = $inputGraph;
     }
 
-    public function createGraph()
-    {
-        // Copy Graph
-        return $this->graph->createGraphCloneEdges($this->getEdges());
-    }
-
     protected function getGraph()
     {
         return $this->graph;
@@ -46,26 +40,7 @@ class Kruskal extends Base
         $sortedEdges = new SplPriorityQueue();
 
         // For all edges
-        foreach ($this->graph->getEdges() as $edge) {
-            // ignore loops (a->a)
-            if (!$edge->isLoop()) {
-                if ($edge instanceof EdgeDirected) {
-                    throw new UnexpectedValueException('Kruskal for directed edges not supported');
-                }
-                $weight = $edge->getWeight();
-                if ($weight === NULL) {
-                    throw new UnexpectedValueException('Kruskal for edges with no weight not supported');
-                }
-                // Add edges with negativ Weight because of order in stl
-                $sortedEdges->insert($edge, - $weight);
-            }
-        }
-
-        if ($sortedEdges->isEmpty()) {
-            throw new RuntimeException('No edges found');
-        }
-
-        // $sortedEdges = $this->graph->getEdgesOrdered('weight');
+        $this->addEdgesSorted($this->graph->getEdges(), $sortedEdges);
 
         $returnEdges = array();
 

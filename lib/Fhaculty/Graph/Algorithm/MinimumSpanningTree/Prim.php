@@ -40,15 +40,7 @@ class Prim extends Base
 
             // get unvisited vertex of the edge and add edges from new vertex
             // Add all edges from $currentVertex to priority queue
-            foreach ($vertexCurrent->getEdges() as $currentEdge) {
-                if (!$currentEdge->isLoop()) {
-                    if ($currentEdge instanceof EdgeDirected) {
-                        throw new UnexpectedValueException('Unable to create MST for directed graphs');
-                    }
-                    // Add edges to priority queue with inverted weights (priority queue has high values at the front)
-                    $edgeQueue->insert($currentEdge, -$currentEdge->getWeight());
-                }
-            }
+            $this->addEdgesSorted($vertexCurrent->getEdges(), $edgeQueue);
 
             do {
                 try {
@@ -56,14 +48,14 @@ class Prim extends Base
                     $cheapestEdge = $edgeQueue->extract();
                     /* @var $cheapestEdge EdgeDirected */
                 } catch (Exception $e) {
-                    return $returnEdges;
-                    throw new UnexpectedValueException('Graph has more than one component');
+                    throw new UnexpectedValueException('Graph has more than one component', 0, $e);
                 }
 
                 // Check if edge is between unmarked and marked edge
 
-                $vertexA = $cheapestEdge->getVerticesStart()->getVertexFirst();
-                $vertexB = $cheapestEdge->getVertexToFrom($vertexA);
+                $vertices = $cheapestEdge->getVertices();
+                $vertexA  = $vertices->getVertexFirst();
+                $vertexB  = $vertices->getVertexLast();
 
             // Edge is between marked and unmared vertex
             } while (!(isset($markInserted[$vertexA->getId()]) XOR isset($markInserted[$vertexB->getId()])));
