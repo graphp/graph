@@ -31,16 +31,6 @@ abstract class Set implements VerticesAggregate, EdgesAggregate
     // abstract public function getVertices();
 
     /**
-     * return number of vertices (aka. size of graph, |V| or just 'n')
-     *
-     * @return int
-     */
-    public function getNumberOfVertices()
-    {
-        return count($this->getVertices());
-    }
-
-    /**
      * return number of edges
      *
      * @return int
