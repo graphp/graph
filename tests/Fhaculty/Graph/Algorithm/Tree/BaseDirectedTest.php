@@ -30,12 +30,12 @@ abstract class BaseDirectedTest extends TestCase
      */
     abstract protected function createGraphParallelEdge();
 
-    public function testEmptyGraph()
+    public function testNullGraph()
     {
         $graph = new Graph();
 
         $tree = $this->createTreeAlg($graph);
-        $this->assertTrue($tree->isTree());
+        $this->assertFalse($tree->isTree());
         $this->assertTrue($tree->getVerticesLeaf()->isEmpty());
         $this->assertTrue($tree->getVerticesInternal()->isEmpty());
 
@@ -44,7 +44,7 @@ abstract class BaseDirectedTest extends TestCase
 
     /**
      * @param BaseDirected $tree
-     * @depends testEmptyGraph
+     * @depends testNullGraph
      * @expectedException UnderflowException
      */
     public function testEmptyGraphDoesNotHaveRootVertex(BaseDirected $tree)
@@ -54,7 +54,7 @@ abstract class BaseDirectedTest extends TestCase
 
     /**
      * @param BaseDirected $tree
-     * @depends testEmptyGraph
+     * @depends testNullGraph
      * @expectedException UnderflowException
      */
     public function testEmptyGraphDoesNotHaveDegree(BaseDirected $tree)
@@ -64,7 +64,7 @@ abstract class BaseDirectedTest extends TestCase
 
     /**
      * @param BaseDirected $tree
-     * @depends testEmptyGraph
+     * @depends testNullGraph
      * @expectedException UnderflowException
      */
     public function testEmptyGraphDoesNotHaveHeight(BaseDirected $tree)
