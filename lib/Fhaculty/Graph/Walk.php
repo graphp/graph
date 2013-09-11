@@ -3,12 +3,11 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Set\EdgesAggregate;
 use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Set\DualAggregate;
 
 /**
  * Base Walk class
@@ -20,7 +19,7 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  * @see Fhaculty\Graph\Algorithm\Property\WalkProperty for checking special cases, such as cycles, loops, closed trails, etc.
  */
-class Walk extends Set implements VerticesAggregate, EdgesAggregate
+class Walk implements DualAggregate
 {
     /**
      * construct new walk from given start vertex and given array of edges

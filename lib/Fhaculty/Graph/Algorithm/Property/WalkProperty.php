@@ -162,7 +162,7 @@ class WalkProperty extends BaseAlgorithm
      */
     public function isLoop()
     {
-        return ($this->walk->getNumberOfEdges() === 1 && $this->isCycle());
+        return (count($this->walk->getEdges()) === 1 && $this->isCycle());
     }
 
     /**
@@ -214,7 +214,7 @@ class WalkProperty extends BaseAlgorithm
     public function isDigon()
     {
         // exactly 2 edges
-        return ($this->walk->getNumberOfEdges() === 2 &&
+        return (count($this->walk->getEdges()) === 2 &&
                 // no duplicate edges
                 !$this->hasArrayDuplicates($this->walk->getEdges()->getVector()) &&
                 // exactly two distinct vertices
@@ -238,7 +238,7 @@ class WalkProperty extends BaseAlgorithm
     public function isTriangle()
     {
         // exactly 3 (implicitly distinct) edges
-        return ($this->walk->getNumberOfEdges() === 3 &&
+        return (count($this->walk->getEdges()) === 3 &&
                 // exactly three distinct vertices
                 count($this->walk->getVertices()->getVerticesDistinct()) === 3 &&
                 // this is actually a cycle

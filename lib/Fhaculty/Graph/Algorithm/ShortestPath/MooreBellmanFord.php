@@ -79,7 +79,7 @@ class MooreBellmanFord extends Base
         // the usal algorithm says we repeat (n-1) times.
         // but because we also want to check for loop edges on the start vertex,
         // we have to add an additional step:
-        $numSteps = $this->vertex->getGraph()->getNumberOfVertices();
+        $numSteps = count($this->vertex->getGraph()->getVertices());
         $edges = $this->vertex->getGraph()->getEdges();
         $changed = true;
 

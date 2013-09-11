@@ -11,7 +11,7 @@ use Fhaculty\Graph\Edge\Directed as EdgeDirected;
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Direction
  * @link http://en.wikipedia.org/wiki/Digraph_%28mathematics%29
  */
-class Directed extends BaseSet
+class Directed extends BaseDual
 {
     /**
      * checks whether the graph has any directed edges (aka digraph)

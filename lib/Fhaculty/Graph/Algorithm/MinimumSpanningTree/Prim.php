@@ -35,7 +35,7 @@ class Prim extends Base
         $returnEdges = array();
 
         // iterate n-1 times (per definition, resulting MST MUST have n-1 edges)
-        for ($i = 0, $n = $this->startVertex->getGraph()->getNumberOfVertices() - 1; $i < $n; ++$i) {
+        for ($i = 0, $n = count($this->startVertex->getGraph()->getVertices()) - 1; $i < $n; ++$i) {
             $markInserted[$vertexCurrent->getId()] = true;
 
             // get unvisited vertex of the edge and add edges from new vertex

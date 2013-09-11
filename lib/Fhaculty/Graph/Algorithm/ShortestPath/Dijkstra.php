@@ -46,7 +46,7 @@ class Dijkstra extends Base
         $isFirst = true;
 
         // Repeat until all vertices have been marked
-        $totalCountOfVertices = $this->vertex->getGraph()->getNumberOfVertices();
+        $totalCountOfVertices = count($this->vertex->getGraph()->getVertices());
         for ($i = 0; $i < $totalCountOfVertices; ++$i) {
             $currentVertex = NULL;
             $currentVertexId = NULL;
