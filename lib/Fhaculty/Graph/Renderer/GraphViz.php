@@ -201,8 +201,8 @@ class GraphViz
             $layout = array($layout => $value);
         }
         foreach ($where as $where) {
-            if ($where instanceof LayoutableInterface) {
-                $where->setLayout($layout);
+            if ($where instanceof LayoutAggregate) {
+                $where->getLayout()->setAttributes($layout);
             } elseif ($where === self::LAYOUT_EDGE) {
                 $this->setLayoutEdgeDefault($layout);
             } elseif ($where === self::LAYOUT_VERTEX) {
@@ -311,7 +311,7 @@ class GraphViz
         $script = ($directed ? 'di':'') . 'graph G {' . self::EOL;
 
         // add global attributes
-        $layout = $this->graph->getLayout();
+        $layout = $this->graph->getLayout()->getAttributes();
         if ($layout) {
             $script .= $this->formatIndent . 'graph ' . $this->escapeAttributes($layout) . self::EOL;
         }
@@ -454,7 +454,7 @@ class GraphViz
 
     protected function getLayoutVertex(Vertex $vertex)
     {
-        $layout = $vertex->getLayout();
+        $layout = $vertex->getLayout()->getAttributes();
 
         $balance = $vertex->getBalance();
         if($balance !== NULL){
@@ -472,7 +472,7 @@ class GraphViz
 
     protected function getLayoutEdge(Edge $edge)
     {
-        $layout = $edge->getLayout();
+        $layout = $edge->getLayout()->getAttributes();
 
         // use flow/capacity/weight as edge label
         $label = NULL;

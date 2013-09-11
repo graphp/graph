@@ -30,8 +30,8 @@ class Flow extends Base
         // create temporary flow graph with supersource and supersink
         $graphFlow = $this->graph->createGraphCloneEdgeless();
 
-        $superSource = $graphFlow->createVertex()->setLayoutAttribute('label', 's*');
-        $superSink   = $graphFlow->createVertex()->setLayoutAttribute('label', 't*');
+        $superSource = $graphFlow->createVertex()/*->getLayout()->setAttribute('label', 's*')*/;
+        $superSink   = $graphFlow->createVertex()/*->getLayout()->setAttribute('label', 't*')*/;
 
         $groups = $alg->getGroups();
         $groupA = $groups[0];
