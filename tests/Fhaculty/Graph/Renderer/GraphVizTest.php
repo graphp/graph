@@ -6,7 +6,7 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\OverflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\GraphViz;
+use Fhaculty\Graph\Renderer\GraphViz;
 
 class GraphVizTest extends TestCase
 {
