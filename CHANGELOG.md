@@ -4,6 +4,12 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## 0.8.0 (2013-xx-xx)
+
+*   Fix: Throwing an `UnexpectedValueException` if writing GraphViz Dot script
+    to a temporary file fails and remove its debugging output
+    ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
+
 ## 0.7.0 (2013-09-11)
 
 *   Feature: Add new `Set\Vertices` and `Set\Edges` classes that handle common
