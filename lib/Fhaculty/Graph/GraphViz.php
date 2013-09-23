@@ -253,7 +253,7 @@ class GraphViz
 
         $ret = file_put_contents($tmp, $script, LOCK_EX);
         if ($ret === false) {
-            throw new UnexpectedValuexception('Unable to write graphviz script to temporary file');
+            throw new UnexpectedValueException('Unable to write graphviz script to temporary file');
         }
 
         $ret = 0;
