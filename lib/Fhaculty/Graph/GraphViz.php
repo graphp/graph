@@ -128,12 +128,12 @@ class GraphViz
         static $next = 0;
         if ($next > microtime(true)) {
             // wait some time between calling xdg-open because earlier calls will be ignored otherwise
-            echo '[delay flooding xdg-open]' . PHP_EOL;
+            //echo '[delay flooding xdg-open]' . PHP_EOL;
             sleep(self::DELAY_OPEN);
         }
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            echo "ausgabe\n";
+            //echo "ausgabe\n";
             exec($tmp . ' >NUL');
         } elseif (strtoupper(PHP_OS) === 'DARWIN') {
             // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
