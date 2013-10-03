@@ -2,35 +2,40 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
-use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Exception\UnexpectedValueException;
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Vertex;
 
 /**
  * Class FloydWarshall
  *
- * An implementation of the Floyd Warshall algorithm to find the shortest path from each vertex to each vertex.
+ * An implementation of the Floyd Warshall algorithm to find the all-pairs
+ * shortest path, with positive and negative weights. The original algorithm
+ * calculates the shortest distances between each pair of edges without giving
+ * information about the path itself, this implementation , however, returns
+ * a list of edges representing the shortest path for each pair [A, B], being
+ * A and B the origin and destination vertices respectively.
+ *
+ * If there is no path between two vertices A and B (a distance of INF between
+ * them), the path container for that pair will be empty. If A = B, then the
+ * the distance will be initially 0 (unless it has a positive loop, then it
+ * will initially take the weight of the loop)).
+ *
+ * This algorithm only works for directed and simple graphs, graphs with
+ * parallel edges will give wrong results.
+ *
+ * If the algorithm finds a negative cycle (including negative loops), it will
+ * throw an UnexpectedValueException.
+ *
+ * If the graph has no vertices, the algorithm will return an empty array, if
+ * has no edges, it will return an empty nxn array where n is the number of
+ * vertices.
+ *
  * @link http://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
  *
- * @package Fhaculty\Graph\Algorithm\ShortestPath
  */
-class FloydWarshall
+class FloydWarshall extends BaseGraph
 {
-
-    /**
-     * @var Vertex
-     */
-    protected $vertex;
-
-    public function __construct($s)
-    {
-
-        if (!(get_class($s) === 'Fhaculty\Graph\Vertex')) {
-
-            throw new InvalidArgumentException('This algorithm only receives Vertex objects.');
-        }
-
-        $this->vertex = $s;
-    }
 
     /**
      * This method updates the cost and path arrays to create new entries if necessary
@@ -39,6 +44,7 @@ class FloydWarshall
      * @param $cheapestPaths A matrix where each i, j entry holds an arrsy of Vertices
      * @param $i int index from to update
      * @param $j int index to to update
+     * @throws UnexpectedValueException when encountering a negative cycle
      *
      */
     protected function updateInfo(&$vertexSet, &$pathCosts, &$cheapestPaths, $i, $j)
@@ -68,9 +74,9 @@ class FloydWarshall
             $pathCosts[$i] = array();
         }
 
-        // If we have an edge between Vertices in positions i, j, we update the cost and asign the edge to the
+        // If we have an edge between Vertices in positions i, j, we update the cost and assign the edge to the
         // path between them, if not, the cost will be INF
-        $edge = $this->getEdgeFromTo($vertexSet[$i], $vertexSet[$j]);
+        $edge = $this->getEdgeBetween($vertexSet[$i], $vertexSet[$j]);
 
         if ($edge) {
 
@@ -88,32 +94,32 @@ class FloydWarshall
     }
 
     /**
-     * Auxiliary method for findind a directed edge between two vertices.
+     * Auxiliary method for finding a directed edge between two vertices.
      * @param Vertex $from
      * @param Vertex $to
      * @return \Fhaculty\Graph\Edge\Base|null The edge between $from and $to
      */
-    protected function getEdgeFromTo(Vertex $from, Vertex $to)
+    protected function getEdgeBetween(Vertex $from, Vertex $to)
     {
-        foreach ($from->getEdges() as $edge) {
-            if ($edge->isConnection($from, $to)) {
-                return $edge;
-            }
-        }
 
-        return null;
+        $edges = $from->getEdgesTo($to);
+        return count($edges) > 0 ? $edges[0] : null;
     }
 
     /**
-     * Get all edges on shortest path for every vertex in the graph where this vertex belongs.
+     * Get all edges on shortest path for every vertex in the graph where this
+     * vertex belongs.
      *
-     * @return Edge[][][] For each i, j pair position of this array, an Edge list contains the shortest path from i to j
+     * @return Result A Result object with the interface for handling the
+     * generated edge table list contains the shortest path from i to j
+     * @throws UnexpectedValueException when encountering a cycle with
+     * negative weight.
      */
-    public function getEdges()
+    public function createResult()
     {
         $totalCostCheapestPathFromTo = array();
         $cheapestPathFromTo = array();
-        $vertexSet = array_values($this->vertex->getGraph()->getVertices());
+        $vertexSet = array_values($this->graph->getVertices());
 
         $nVertices = count($vertexSet);
 
@@ -154,9 +160,14 @@ class FloydWarshall
                 }
 
             }
+
+            if($totalCostCheapestPathFromTo[$k][$k] < 0) {
+
+                throw new UnexpectedValueException('Floyd-Warshall not supported for negative cycles');
+            }
         }
 
-        return $cheapestPathFromTo;
+        return new Result($cheapestPathFromTo, $this->graph);
     }
 
 }
