@@ -143,8 +143,8 @@ class Walk implements DualAggregate
     {
         $cycle = self::factoryFromVertices($vertices, $by, $desc);
 
-        $first = $cycle->getVertexSource();
-        $last  = $cycle->getVertexTarget();
+        $first = $cycle->getVertices()->getVertexFirst();
+        $last  = $cycle->getVertices()->getVertexLast();
 
         // additional edge from last vertex to first vertex
         if ($last !== $first) {
@@ -178,7 +178,7 @@ class Walk implements DualAggregate
         $cycle = self::factoryFromEdges($edges, $startVertex);
 
         // ensure this walk is actually a cycle by checking start = end
-        if ($cycle->getVertexTarget() !== $startVertex) {
+        if ($cycle->getVertices()->getVertexLast() !== $startVertex) {
             throw new InvalidArgumentException('The given array of edges does not represent a cycle');
         }
 
@@ -207,12 +207,13 @@ class Walk implements DualAggregate
      * return original graph
      *
      * @return Graph
-     * @uses Walk::getVertexSource()
+     * @uses self::getVertices()
+     * @uses Vertices::getVertexFirst()
      * @uses Vertex::getGraph()
      */
     public function getGraph()
     {
-        return $this->getVertexSource()->getGraph();
+        return $this->getVertices()->getVertexFirst()->getGraph();
     }
 
     /**
@@ -259,31 +260,17 @@ class Walk implements DualAggregate
      * If you need to return set a of all unique Vertices of walk, use
      * `Walk::getVertices()->getVerticesDistinct()` instead.
      *
+     * If you need to return the source vertex (first vertex of walk), use
+     * `Walk::getVertices()->getVertexFirst()` instead.
+     *
+     * If you need to return the target/destination vertex (last vertex of walk), use
+     * `Walk::getVertices()->getVertexLast()` instead.
+     *
      * @return Vertices
      */
     public function getVertices()
     {
         return $this->vertices;
-    }
-
-    /**
-     * return source vertex (first vertex of walk)
-     *
-     * @return Vertex
-     */
-    public function getVertexSource()
-    {
-        return $this->vertices->getVertexFirst();
-    }
-
-    /**
-     * return target vertex (last vertex of walk)
-     *
-     * @return Vertex
-     */
-    public function getVertexTarget()
-    {
-        return $this->vertices->getVertexLast();
     }
 
     /**
