@@ -1,6 +1,7 @@
 <?php
 
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Vertex;
 
 class VertexTest extends TestCase
 {
@@ -8,6 +9,32 @@ class VertexTest extends TestCase
     {
         $this->graph = new Graph();
         $this->vertex = $this->graph->createVertex(1);
+    }
+
+    public function testPrecondition()
+    {
+        $this->assertCount(1, $this->graph->getVertices());
+        $this->assertTrue($this->graph->hasVertex(1));
+        $this->assertFalse($this->graph->hasVertex(2));
+        $this->assertSame($this->vertex, $this->graph->getVertex(1));
+    }
+
+    public function testConstructor()
+    {
+        $v2 = new Vertex(2, $this->graph);
+
+        $this->assertCount(2, $this->graph->getVertices());
+        $this->assertTrue($this->graph->hasVertex(2));
+
+        $this->assertSame($v2, $this->graph->getVertex(2));
+    }
+
+    /**
+     * @expectedException OverflowException
+     */
+    public function testCanNotConstructDuplicateVertex()
+    {
+        $v2 = new Vertex(1, $this->graph);
     }
 
     public function testEdges()
