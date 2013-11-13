@@ -23,7 +23,7 @@ class MinimumSpanningTree extends Base
 
     protected function getVertexStart()
     {
-        return $this->graph->getVertices()->VertexFirst();
+        return $this->graph->getVertices()->getVertexFirst();
     }
 
     protected function getGraph()
