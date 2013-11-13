@@ -43,7 +43,7 @@ class Vertex extends Layoutable implements EdgesAggregate
     private $group = 0;
 
     /**
-     * Creates a Vertex (MUST NOT BE CALLED MANUALLY!)
+     * Create a new Vertex
      *
      * @param string|int $id    identifier used to uniquely identify this vertex in the graph
      * @param Graph      $graph graph to be added to
@@ -51,8 +51,14 @@ class Vertex extends Layoutable implements EdgesAggregate
      */
     public function __construct($id, Graph $graph)
     {
+        if (!is_int($id) && !is_string($id)) {
+            throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
+        }
+
         $this->id = $id;
         $this->graph = $graph;
+
+        $graph->addVertex($this);
     }
 
     /**
