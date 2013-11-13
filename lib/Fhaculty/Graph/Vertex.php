@@ -133,16 +133,7 @@ class Vertex extends Layoutable implements EdgesAggregate
      */
     public function createEdgeTo(Vertex $vertex)
     {
-        if ($vertex->getGraph() !== $this->graph) {
-            throw new InvalidArgumentException('Target vertex has to be within the same graph');
-        }
-
-        $edge = new EdgeDirected($this, $vertex);
-        $this->edges []= $edge;
-        $vertex->edges []= $edge;
-        $this->graph->addEdge($edge);
-
-        return $edge;
+        return new EdgeDirected($this, $vertex);
     }
 
     /**
@@ -155,16 +146,20 @@ class Vertex extends Layoutable implements EdgesAggregate
      */
     public function createEdge(Vertex $vertex)
     {
-        if ($vertex->getGraph() !== $this->graph) {
-            throw new InvalidArgumentException('Target vertex has to be within the same graph');
-        }
+        return new EdgeUndirected($this, $vertex);
+    }
 
-        $edge = new EdgeUndirected($this, $vertex);
-        $this->edges []= $edge;
-        $vertex->edges []= $edge;
-        $this->graph->addEdge($edge);
-
-        return $edge;
+    /**
+     * add the given edge to list of connected edges (MUST NOT be called manually)
+     *
+     * @param  Edge                     $edge
+     * @return void
+     * @private
+     * @see self::createEdge() instead!
+     */
+    public function addEdge(Edge $edge)
+    {
+        $this->edges[] = $edge;
     }
 
     /**
