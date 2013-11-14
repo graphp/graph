@@ -96,12 +96,13 @@ abstract class Base extends BaseVertex
         do {
             $pre = NULL;
             // check all edges to search for edge that points TO current vertex
-            foreach ($edges as $edge) {
+            foreach ($edges as $i => $edge) {
                 try {
                     // get start point of this edge (fails if current vertex is not its end point)
                     $pre = $edge->getVertexFromTo($currentVertex);
                     $path []= $edge;
                     $currentVertex = $pre;
+                    unset($edges[$i]);
                     break;
                 } catch (InvalidArgumentException $ignore) {
                 } // ignore: this edge does not point TO current vertex

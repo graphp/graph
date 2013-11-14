@@ -140,6 +140,37 @@ abstract class BaseShortestPathTest extends TestCase
         $this->assertEquals(array(2), $alg->getVertices()->getIds());
     }
 
+    public function testVertexCreationOrder()
+    {
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $v5 = $graph->createVertex(5);
+        $v6 = $graph->createVertex(6);
+
+        $v1->createEdge($v2)->setWeight(4);
+        $v2->createEdge($v5)->setWeight(4);
+        $v5->createEdge($v6)->setWeight(4);
+
+        $alg = $this->createAlg($v1);
+        $distance1 = $alg->getDistance($v6);
+
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $v6 = $graph->createVertex(6);
+        $v5 = $graph->createVertex(5);
+
+        $v1->createEdge($v2)->setWeight(4);
+        $v2->createEdge($v5)->setWeight(4);
+        $v5->createEdge($v6)->setWeight(4);
+
+        $alg = $this->createAlg($v1);
+        $distance2 = $alg->getDistance($v6);
+
+        $this->assertSame($distance1, $distance2);
+    }
+
     protected function getExpectedWeight($edges)
     {
         $sum = 0;
