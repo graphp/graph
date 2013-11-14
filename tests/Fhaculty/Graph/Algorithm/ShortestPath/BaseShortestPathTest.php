@@ -140,6 +140,74 @@ abstract class BaseShortestPathTest extends TestCase
         $this->assertEquals(array(2), $alg->getVertices()->getIds());
     }
 
+    public function testUndirectedPair()
+    {
+        // 1 --[10]-- 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdge($v2)->setWeight(10);
+
+        // test from vertex 1
+        $alg = $this->createAlg($v1);
+        $this->assertEquals($this->getExpectedWeight(array($e1)), $alg->getDistance($v2));
+        $this->assertEquals(array($e1), $alg->getEdgesTo($v2)->getVector());
+
+        // test automatic cycle (1-2-1) due to undirected edges
+        $this->assertEquals($this->getExpectedWeight(array($e1, $e1)), $alg->getDistance($v1));
+        $this->assertEquals(array($e1, $e1), $alg->getEdgesTo($v1)->getVector());
+
+        // test from vertex 2
+        $alg = $this->createAlg($v2);
+        $this->assertEquals($this->getExpectedWeight(array($e1)), $alg->getDistance($v1));
+        $this->assertEquals(array($e1), $alg->getEdgesTo($v1)->getVector());
+    }
+
+    public function testUndirectedLine()
+    {
+        // 1 --[10]-- 2 --[20]-- 3
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $v3 = $graph->createVertex(3);
+        $e1 = $v1->createEdge($v2)->setWeight(10);
+        $e2 = $v2->createEdge($v3)->setWeight(20);
+
+        $alg = $this->createAlg($v1);
+        $this->assertEquals($this->getExpectedWeight(array($e1)), $alg->getDistance($v2));
+        $this->assertEquals($this->getExpectedWeight(array($e1, $e2)), $alg->getDistance($v3));
+        $this->assertEquals(array($e1), $alg->getEdgesTo($v2)->getVector());
+        $this->assertEquals(array($e1, $e2), $alg->getEdgesTo($v3)->getVector());
+
+        $alg = $this->createAlg($v2);
+        $this->assertEquals($this->getExpectedWeight(array($e1)), $alg->getDistance($v1));
+        $this->assertEquals($this->getExpectedWeight(array($e2)), $alg->getDistance($v3));
+        $this->assertEquals(array($e1), $alg->getEdgesTo($v1)->getVector());
+        $this->assertEquals(array($e2), $alg->getEdgesTo($v3)->getVector());
+
+        // automatic cycle (2-1-2)
+        $this->assertEquals(array($e1, $e1), $alg->getEdgesTo($v2)->getVector());
+    }
+
+    public function testUndirectedSimpleGraph()
+    {
+        // 1 --[10]-- 2 --[20]-- 3
+        // \                     /
+        //  \----------[20]-----/
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $v3 = $graph->createVertex(3);
+        $e1 = $v1->createEdgeTo($v2)->setWeight(10);
+        $e2 = $v2->createEdgeTo($v3)->setWeight(20);
+        $e3 = $v1->createEdgeTo($v3)->setWeight(20);
+
+        $alg = $this->createAlg($v1);
+
+        $expectedWeight = $this->getExpectedWeight(array($e3));
+        $this->assertEquals($expectedWeight, $alg->getDistance($v3));
+    }
+
     protected function getExpectedWeight($edges)
     {
         $sum = 0;
