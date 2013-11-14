@@ -34,8 +34,10 @@ class MooreBellmanFord extends Base
         $changed = NULL;
         // check for all edges
         foreach ($edges as $edge) {
-            // check for all "ends" of this edge (or for all targetes)
+            /* @var $edge Edge */
+            // check for all "ends" of this edge (or for all targets)
             foreach ($edge->getVerticesTarget() as $toVertex) {
+                /* @var $toVertex Vertex */
                 $fromVertex = $edge->getVertexFromTo($toVertex);
 
                 // If the fromVertex already has a path
@@ -70,6 +72,11 @@ class MooreBellmanFord extends Base
      */
     public function getEdges()
     {
+        return $this->getEdgesCheapestPredecesor($this->getPredecessorMap());
+    }
+
+    private function getPredecessorMap()
+    {
         // start node distance, add placeholder weight
         $totalCostOfCheapestPathTo  = array($this->vertex->getId() => INF);
 
@@ -92,9 +99,6 @@ class MooreBellmanFord extends Base
             unset($predecessorVertexOfCheapestPathTo[$this->vertex->getId()]);
         }
 
-        // algorithm is done, build graph
-        $returnEdges = $this->getEdgesCheapestPredecesor($predecessorVertexOfCheapestPathTo);
-
         // Check for negative cycles (only if last step didn't already finish anyway)
         // something is still changing...
         if ($changed && $changed = $this->bigStep($edges, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)) {
@@ -102,7 +106,7 @@ class MooreBellmanFord extends Base
             throw new NegativeCycleException('Negative cycle found', 0, NULL, $cycle);
         }
 
-        return $returnEdges;
+        return $predecessorVertexOfCheapestPathTo;
     }
 
     /**

@@ -28,6 +28,11 @@ class Dijkstra extends Base
      */
     public function getEdges()
     {
+        return $this->getEdgesCheapestPredecesor($this->getPredecessorMap());
+    }
+
+    private function getPredecessorMap()
+    {
         $totalCostOfCheapestPathTo  = Array();
         // start node distance
         $totalCostOfCheapestPathTo[$this->vertex->getId()] = INF;
@@ -115,7 +120,6 @@ class Dijkstra extends Base
             unset($predecesVertexOfCheapestPathTo[$this->vertex->getId()]);
         }
 
-        // algorithm is done, return resulting edges
-        return $this->getEdgesCheapestPredecesor($predecesVertexOfCheapestPathTo);
+        return $predecesVertexOfCheapestPathTo;
     }
 }
