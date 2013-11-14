@@ -39,10 +39,15 @@ use Fhaculty\Graph\Set\Vertices;
  * In graph theory, it is usually assumed that each vertex has a (pseudo-)path
  * to itself with a distance of 0. In order to produce reliable, consistent
  * results, this library considers this (pseudo-)path to be non-existant, i.e.
- * there's NO "magic" path between A and A. So if you're asking for the distance
- * between A and A, you'll receive an OutOfBoundsException instead. This allows
- * us to check hether there's a real path between A and A (cycle via other
+ * there's NO "magic" path between F and F. So if you're asking for the distance
+ * between F and F, you'll receive an OutOfBoundsException instead. This allows
+ * us to check whether there's a real path between F and F (cycle via other
  * vertices) as well as working with loop edges.
+ *
+ * However, take note that there's a (hidden) path between E and E because the
+ * edge "B - E" is undirected and one can traverse it as "E - B - E". Also,
+ * similarily there's obviously a cycle path between A and A. However, the fact
+ * that "A - C - A" is the shorter than "A - B - D - C" might be a bit concealed.
  *
  * @link http://en.wikipedia.org/wiki/Shortest_path_problem
  * @link http://en.wikipedia.org/wiki/Tree_%28data_structure%29
