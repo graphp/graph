@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm\ShortestPath;
+namespace Fhaculty\Graph\Algorithm\ShortestPath\AllPairs;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Algorithm\BaseGraph;
@@ -110,7 +110,7 @@ class FloydWarshall extends BaseGraph
      * Get all edges on shortest path for every vertex in the graph where this
      * vertex belongs.
      *
-     * @return Result A Result object with the interface for handling the
+     * @return FloydWarshallResult A Result object with the interface for handling the
      * generated edge table list contains the shortest path from i to j
      * @throws UnexpectedValueException when encountering a cycle with
      * negative weight.
@@ -167,7 +167,7 @@ class FloydWarshall extends BaseGraph
             }
         }
 
-        return new Result($cheapestPathFromTo, $this->graph);
+        return new FloydWarshallResult($cheapestPathFromTo, $this->graph);
     }
 
 }

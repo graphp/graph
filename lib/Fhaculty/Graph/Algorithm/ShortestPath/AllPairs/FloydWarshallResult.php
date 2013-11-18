@@ -1,21 +1,22 @@
 <?php
 
 
-namespace Fhaculty\Graph\Algorithm\ShortestPath;
+namespace Fhaculty\Graph\Algorithm\ShortestPath\AllPairs;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Walk;
 
 /**
- * Class Result
+ * Class FloydWarshallResult
  *
- * An interface for handling the results for an all pairs shortest path
- * algorithm. The algorithm produces a result for a given graph, and this API
- * helps to get the information about this solution in a simpler way.
+ * An interface for handling the results for a Floyd Warshall all pairs
+ * shortest path algorithm. The algorithm produces a result for a given graph,
+ * and this API helps to get the information about this solution in a simpler
+ * way.
  *
- * @package Fhaculty\Graph\Algorithm\ShortestPath
+ * @package Fhaculty\Graph\Algorithm\ShortestPath\AllPairs
  */
-class Result
+class FloydWarshallResult
 {
 
     /**
@@ -43,35 +44,35 @@ class Result
     public function getEdges()
     {
 
-        return $this->createGraph()->getEdges();
-    }
+        $foundEdges = array();
 
-    /**
-     * Creates a new Graph based on the provided graph, removing the edges not
-     * present in any shortest path.
-     *
-     * @return Graph The new graph with the edges in each pair's shortest path.
-     */
-    public function createGraph()
-    {
-        $newGraph = $this->graph->createGraphCloneEdgeless();
-
-        // Copying edge from edge from the table to the new graph when needed.
         foreach ($this->edgeTable as $idx => $vertexRow) {
 
             foreach ($vertexRow as $idx2 => $vertexCol) {
 
                 foreach ($vertexCol as $edge) {
 
-                    if (!($newGraph->getVertex($edge->getVertexStart()->getId())->hasEdgeTo($newGraph->getVertex($edge->getVertexEnd()->getId())))) {
+                    if (!in_array($edge, $foundEdges, true)) {
 
-                        $newGraph->createEdgeClone($edge);
+                       $foundEdges[] = $edge;
                     }
                 }
             }
         }
 
-        return $newGraph;
+        return $foundEdges;
+    }
+
+    /**
+     * Creates a new Graph based on the provided graph, without the edges not
+     * present in any shortest path.
+     *
+     * @return Graph The new graph with the edges in each pair's shortest path.
+     */
+    public function createGraph()
+    {
+
+        return $this->graph->createGraphCloneEdges($this->getEdges());
     }
 
     /**

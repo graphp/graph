@@ -1,8 +1,8 @@
 <?php
 
+use Fhaculty\Graph\Algorithm\ShortestPath\AllPairs\FloydWarshall;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Algorithm\ShortestPath\FloydWarshall;
 
 class FloydWarshallTest extends TestCase
 {
@@ -20,87 +20,47 @@ class FloydWarshallTest extends TestCase
         self::$graphs[1] = new Graph();
         $vertex[0] = self::$graphs[1]->createVertex('A');
         $vertex[1] = self::$graphs[1]->createVertex('B');
-        $vertex[0]->createEdgeTo($vertex[1]);
-        $edges = $vertex[0]->getEdgesTo($vertex[1]);
-        $edges[0]->setWeight(1);
+        $vertex[0]->createEdgeTo($vertex[1])->setWeight(1);
 
         self::$graphs[2] = new Graph();
         $vertex[2] = self::$graphs[2]->createVertex('A');
         $vertex[3] = self::$graphs[2]->createVertex('B');
         $vertex[4] = self::$graphs[2]->createVertex('C');
-        $vertex[2]->createEdgeTo($vertex[3]);
-        $edges = $vertex[2]->getEdgesTo($vertex[3]);
-        $edges[0]->setWeight(1);
-
-        $vertex[3]->createEdgeTo($vertex[4]);
-        $edges = $vertex[3]->getEdgesTo($vertex[4]);
-        $edges[0]->setWeight(2);
+        $vertex[2]->createEdgeTo($vertex[3])->setWeight(1);
+        $vertex[3]->createEdgeTo($vertex[4])->setWeight(2);
 
         self::$graphs[3] = new Graph();
         $vertex[5] = self::$graphs[3]->createVertex('A');
         $vertex[6] = self::$graphs[3]->createVertex('B');
         $vertex[7] = self::$graphs[3]->createVertex('C');
-        $vertex[5]->createEdgeTo($vertex[6]);
-        $edges = $vertex[5]->getEdgesTo($vertex[6]);
-        $edges[0]->setWeight(1);
-
-        $vertex[6]->createEdgeTo($vertex[7]);
-        $edges = $vertex[6]->getEdgesTo($vertex[7]);
-        $edges[0]->setWeight(3);
-
-        $vertex[5]->createEdgeTo($vertex[7]);
-        $edges = $vertex[5]->getEdgesTo($vertex[7]);
-        $edges[0]->setWeight(3);
+        $vertex[5]->createEdgeTo($vertex[6])->setWeight(1);
+        $vertex[6]->createEdgeTo($vertex[7])->setWeight(3);
+        $vertex[5]->createEdgeTo($vertex[7])->setWeight(3);
 
         // Will it work with negative weighted arcs???
         self::$graphs[4] = new Graph();
         $vertex[8] = self::$graphs[4]->createVertex('A');
-        $vertex[8]->createEdgeTo($vertex[8]);
-        $edges = $vertex[8]->getEdgesTo($vertex[8]);
-        $edges[0]->setWeight(-1);
+        $vertex[8]->createEdgeTo($vertex[8])->setWeight(-1);
 
         self::$graphs[5] = new Graph();
         $vertex[9] = self::$graphs[5]->createVertex('1');
         $vertex[10] = self::$graphs[5]->createVertex('2');
         $vertex[11] = self::$graphs[5]->createVertex('3');
         $vertex[12] = self::$graphs[5]->createVertex('4');
-        $vertex[9]->createEdgeTo($vertex[11]);
-        $edges = $vertex[9]->getEdgesTo($vertex[11]);
-        $edges[0]->setWeight(-2);
-
-        $vertex[10]->createEdgeTo($vertex[11]);
-        $edges = $vertex[10]->getEdgesTo($vertex[11]);
-        $edges[0]->setWeight(3);
-
-        $vertex[11]->createEdgeTo($vertex[12]);
-        $edges = $vertex[11]->getEdgesTo($vertex[12]);
-        $edges[0]->setWeight(2);
-
-        $vertex[12]->createEdgeTo($vertex[10]);
-        $edges = $vertex[12]->getEdgesTo($vertex[10]);
-        $edges[0]->setWeight(-1);
-
-        $vertex[10]->createEdgeTo($vertex[9]);
-        $edges = $vertex[10]->getEdgesTo($vertex[9]);
-        $edges[0]->setWeight(4);
+        $vertex[9]->createEdgeTo($vertex[11])->setWeight(-2);
+        $vertex[10]->createEdgeTo($vertex[11])->setWeight(3);
+        $vertex[11]->createEdgeTo($vertex[12])->setWeight(2);
+        $vertex[12]->createEdgeTo($vertex[10])->setWeight(-1);
+        $vertex[10]->createEdgeTo($vertex[9])->setWeight(4);
 
         // And with a negative cycle??
         self::$graphs[6] = new Graph();
         $vertex[13] = self::$graphs[6]->createVertex('1');
         $vertex[14] = self::$graphs[6]->createVertex('2');
         $vertex[15] = self::$graphs[6]->createVertex('3');
-
-        $vertex[13]->createEdgeTo($vertex[14]);
-        $edges = $vertex[13]->getEdgesTo($vertex[14]);
-        $edges[0]->setWeight(-1);
-
-        $vertex[14]->createEdgeTo($vertex[15]);
-        $edges = $vertex[14]->getEdgesTo($vertex[15]);
-        $edges[0]->setWeight(-1);
-
-        $vertex[15]->createEdgeTo($vertex[13]);
-        $edges = $vertex[15]->getEdgesTo($vertex[13]);
-        $edges[0]->setWeight(-1);
+        $vertex[13]->createEdgeTo($vertex[14])->setWeight(-1);
+        $vertex[14]->createEdgeTo($vertex[15])->setWeight(-1);
+        $vertex[15]->createEdgeTo($vertex[13])->setWeight(-1);
 
         // Empty Graphs
         self::$graphs[7] = new Graph();
@@ -113,23 +73,13 @@ class FloydWarshallTest extends TestCase
         $vertex[18] = self::$graphs[8]->createVertex('3');
 
         self::$graphs[9] = new Graph();
-
         $vertex[19] = self::$graphs[9]->createVertex('1');
         $vertex[20] = self::$graphs[9]->createVertex('2');
         $vertex[21] = self::$graphs[9]->createVertex('3');
         $vertex[22] = self::$graphs[9]->createVertex('4');
-
-        $vertex[20]->createEdgeTo($vertex[21]);
-        $edges = $vertex[20]->getEdgesTo($vertex[21]);
-        $edges[0]->setWeight(1);
-
-        $vertex[21]->createEdgeTo($vertex[22]);
-        $edges = $vertex[21]->getEdgesTo($vertex[22]);
-        $edges[0]->setWeight(2);
-
-        $vertex[22]->createEdgeTo($vertex[21]);
-        $edges = $vertex[22]->getEdgesTo($vertex[21]);
-        $edges[0]->setWeight(1);
+        $vertex[20]->createEdgeTo($vertex[21])->setWeight(1);
+        $vertex[21]->createEdgeTo($vertex[22])->setWeight(2);
+        $vertex[22]->createEdgeTo($vertex[21])->setWeight(1);
     }
 
     /**
@@ -275,19 +225,11 @@ class FloydWarshallTest extends TestCase
      * Testing the Exception in case of a negative cycle.
      *
      * @dataProvider negativeCycleGraphProvider
+     * @expectedException UnexpectedValueException
      */
     public function testNegativeCycles($testGraph)
     {
-
-        try {
-
-            $alg = $this->createAlg($testGraph);
-            $alg->createResult();
-        } catch (UnexpectedValueException $uve) {
-
-            return;
-        }
-
-        $this->fail('An expected UnexpectedValueException has not been raised.');
+        $alg = $this->createAlg($testGraph);
+        $alg->createResult();
     }
 }
