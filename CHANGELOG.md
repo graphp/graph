@@ -14,7 +14,7 @@ you spot any mistakes.
     |---|---|
     | `Algorithm\Directed::isDirected()` | `Algorithm\Directed::hasDirected()` |
 
-*   Feature:: Add new `Algorithm\Directed::hasUndirected() and
+*   Feature:: Add new `Algorithm\Directed::hasUndirected()` and
     `Algorithm\Directed::isMixed()` in order to complement the renamed
     `Algorithm\Directed::hasDirected()`
     ([#80](https://github.com/clue/graph/issues/80))
