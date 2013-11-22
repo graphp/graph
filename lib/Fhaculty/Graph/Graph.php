@@ -153,7 +153,7 @@ class Graph implements DualAggregate
      */
     public function createGraphClone()
     {
-        return $this->createGraphCloneEdges($this->edges);
+        return clone $this;
     }
 
     /**
@@ -461,16 +461,33 @@ class Graph implements DualAggregate
     }
 
     /**
-     * do NOT allow cloning of objects (MUST NOT be called!)
+     * native php cloning magic function
      *
-     * @throws BadMethodCallException
-     * @see Graph::createGraphClone() instead
+     * also clone all attached vertices and edges into this instance
      */
-    private function __clone()
+    public function __clone()
     {
-        // @codeCoverageIgnoreStart
-        throw new BadMethodCallException();
-        // @codeCoverageIgnoreEnd
+        if ($this->exporter !== null) {
+            $this->exporter = clone $this->exporter;
+        }
+
+        $vertices = $this->verticesStorage;
+        unset($this->verticesStorage);
+        $this->verticesStorage = array();
+        $this->vertices = VerticesMap::factoryArrayReference($this->verticesStorage);
+
+        foreach ($vertices as $vertex) {
+            $this->createVertexClone($vertex);
+        }
+
+        $edges = $this->edgesStorage;
+        unset($this->edgesStorage);
+        $this->edgesStorage = array();
+        $this->edges = Edges::factoryArrayReference($this->edgesStorage);
+
+        foreach ($edges as $edge) {
+            $this->createEdgeClone($edge);
+        }
     }
 
     /**
