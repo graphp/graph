@@ -18,7 +18,7 @@ class Flow extends Base
     public function getEdges()
     {
         $alg = new Directed($this->graph);
-        if ($alg->isDirected()) {
+        if ($alg->hasDirected()) {
             throw new UnexpectedValueException('Input graph contains directed edges');
         }
 
