@@ -44,7 +44,7 @@ class CompleteGraphTest extends TestCase
         $this->assertEquals($n*($n-1), count($graph->getEdges())); // n*(n-1) for directed graphs
 
         $alg = new Directed($graph);
-        $this->assertTrue($alg->isDirected());
+        $this->assertTrue($alg->hasDirected());
 
         $alg = new Complete($graph);
         $this->assertTrue($alg->isComplete());

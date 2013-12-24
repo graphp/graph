@@ -11,7 +11,9 @@ class DirectedTest extends TestCase
 
         $alg = new AlgorithmDirected($graph);
 
-        $this->assertFalse($alg->isDirected());
+        $this->assertFalse($alg->hasDirected());
+        $this->assertFalse($alg->hasUndirected());
+        $this->assertFalse($alg->isMixed());
     }
 
     public function testGraphUndirected()
@@ -22,7 +24,9 @@ class DirectedTest extends TestCase
 
         $alg = new AlgorithmDirected($graph);
 
-        $this->assertFalse($alg->isDirected());
+        $this->assertFalse($alg->hasDirected());
+        $this->assertTrue($alg->hasUndirected());
+        $this->assertFalse($alg->isMixed());
     }
 
     public function testGraphDirected()
@@ -33,7 +37,9 @@ class DirectedTest extends TestCase
 
         $alg = new AlgorithmDirected($graph);
 
-        $this->assertTrue($alg->isDirected());
+        $this->assertTrue($alg->hasDirected());
+        $this->assertFalse($alg->hasUndirected());
+        $this->assertFalse($alg->isMixed());
     }
 
     public function testGraphMixed()
@@ -45,6 +51,8 @@ class DirectedTest extends TestCase
 
         $alg = new AlgorithmDirected($graph);
 
-        $this->assertTrue($alg->isDirected());
+        $this->assertTrue($alg->hasDirected());
+        $this->assertTrue($alg->hasUndirected());
+        $this->assertTrue($alg->isMixed());
     }
 }
