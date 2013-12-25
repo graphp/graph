@@ -6,6 +6,19 @@ you spot any mistakes.
 
 ## 0.8.0 (2013-xx-xx)
 
+*   BC break: Rename `Algorithm\Directed::isDirected()` to remove its ambiguity
+    in regards to mixed and/or empty graphs
+    ([#80](https://github.com/clue/graph/issues/80))
+
+    | Old name | New name |
+    |---|---|
+    | `Algorithm\Directed::isDirected()` | `Algorithm\Directed::hasDirected()` |
+
+*   Feature:: Add new `Algorithm\Directed::hasUndirected()` and
+    `Algorithm\Directed::isMixed()` in order to complement the renamed
+    `Algorithm\Directed::hasDirected()`
+    ([#80](https://github.com/clue/graph/issues/80))
+
 *   Fix: Throwing an `UnexpectedValueException` if writing GraphViz Dot script
     to a temporary file fails and remove its debugging output
     ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
