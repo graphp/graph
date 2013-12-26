@@ -19,6 +19,16 @@ you spot any mistakes.
     `Algorithm\Directed::hasDirected()`
     ([#80](https://github.com/clue/graph/issues/80))
 
+*   BC break: `Walk::factoryCycleFromVertices()` no longer tries to auto-complete
+    a cycle if the first vertex does not match the last one, but now throws an
+    `InvalidArgumentException` instead ([#87](https://github.com/clue/graph/issues/87)
+
+*   Feature: Support loop `Walk`s, i.e. a walk with only a single edge from
+    vertex A back to A ([#87](https://github.com/clue/graph/issues/87)
+
+*   Fix: Stricter checks for invalid cycles, such as one with an invalid
+    predecessor-map or no edges at all ([#87](https://github.com/clue/graph/issues/87)
+
 *   Fix: Throwing an `UnexpectedValueException` if writing GraphViz Dot script
     to a temporary file fails and remove its debugging output
     ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
