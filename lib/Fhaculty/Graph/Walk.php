@@ -88,20 +88,16 @@ class Walk implements DualAggregate
      * @see Edges::getEdgeOrder() for parameters $by and $desc
      * @uses self::factoryFromVertices()
      */
-    public static function factoryCycleFromPredecessorMap($predecessors, $vertex, $by = null, $desc = false)
+    public static function factoryCycleFromPredecessorMap(array $predecessors, Vertex $vertex, $by = null, $desc = false)
     {
-        /*$checked = array();
-         foreach ($predecessors as $vertex) {
-        $vid = $vertex->getId();
-        if (!isset($checked[$vid])) {
-
-        }
-        }*/
-
         // find a vertex in the cycle
         $vid = $vertex->getId();
         $startVertices = array();
         do {
+            if (!isset($predecessors[$vid])) {
+                throw new InvalidArgumentException('Predecessor map is incomplete and does not form a cycle');
+            }
+
             $startVertices[$vid] = $vertex;
 
             $vertex = $predecessors[$vid];
@@ -125,13 +121,16 @@ class Walk implements DualAggregate
         // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
         $vertices = array_reverse($vertices, true);
 
+        // additional edge from last vertex to first vertex
+        $vertices[] = reset($vertices);
+
         return self::factoryCycleFromVertices($vertices, $by, $desc);
     }
 
     /**
      * create new cycle instance with edges between given vertices
      *
-     * @param  Vertex[]           $vertices
+     * @param  Vertex[]|Vertices  $vertices
      * @param  int|null           $by
      * @param  boolean            $desc
      * @return Walk
@@ -143,22 +142,12 @@ class Walk implements DualAggregate
     {
         $cycle = self::factoryFromVertices($vertices, $by, $desc);
 
-        $first = $cycle->getVertices()->getVertexFirst();
-        $last  = $cycle->getVertices()->getVertexLast();
+        if ($cycle->getEdges()->isEmpty()) {
+            throw new InvalidArgumentException('Cycle with no edges can not exist');
+        }
 
-        // additional edge from last vertex to first vertex
-        if ($last !== $first) {
-            $vertices = $cycle->getVertices()->getVector();
-            $edges    = $cycle->getEdges()->getVector();
-
-            if ($by === null) {
-                $edges []= $last->getEdgesTo($first)->getEdgeFirst();
-            } else {
-                $edges []= $last->getEdgesTo($first)->getEdgeOrder($by, $desc);
-            }
-            $vertices []= $first;
-
-            $cycle = new self($vertices, $edges);
+        if ($cycle->getVertices()->getVertexFirst() !== $cycle->getVertices()->getVertexLast()) {
+            throw new InvalidArgumentException('Cycle has to start and end at the same vertex');
         }
 
         return $cycle;
