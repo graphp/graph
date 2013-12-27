@@ -32,6 +32,16 @@ you spot any mistakes.
 *   Fix: Throwing an `UnexpectedValueException` if writing GraphViz Dot script
     to a temporary file fails and remove its debugging output
     ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
+    
+*   BC break: Remove unneeded alias definitions of `getVertexFirst()`,
+    `getVertexSource()` and `getVertexTarget()`
+    [#76]https://github.com/clue/graph/issues/76)):
+
+    | Old name | New name |
+    |---|---|
+    | `Graph::getVertexFirst()` | `Graph::getVertices()->getVertexFirst()` |
+    | `Walk::getVertexSource()` | `Walk::getVertices()->getVertexFirst()` |
+    | `Walk::getVertexTarget()` | `Walk::getVertices()->getVertexLast()` |
 
 ## 0.7.0 (2013-09-11)
 

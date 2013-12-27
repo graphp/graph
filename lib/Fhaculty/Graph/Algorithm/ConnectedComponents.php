@@ -70,7 +70,7 @@ class ConnectedComponents extends BaseGraph
     public function isSingle()
     {
         try {
-            $vertex = $this->graph->getVertexFirst();
+            $vertex = $this->graph->getVertices()->getVertexFirst();
         }
         catch (UnderflowException $e) {
             // no first vertex => empty graph => has zero components

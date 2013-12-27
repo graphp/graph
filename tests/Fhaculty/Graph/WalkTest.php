@@ -29,8 +29,8 @@ class WalkTest extends TestCase
 
         $this->assertEquals(3, count($walk->getVertices()));
         $this->assertEquals(2, count($walk->getEdges()));
-        $this->assertSame($v1, $walk->getVertexSource());
-        $this->assertSame($v3, $walk->getVertexTarget());
+        $this->assertSame($v1, $walk->getVertices()->getVertexFirst());
+        $this->assertSame($v3, $walk->getVertices()->getVertexLast());
         $this->assertSame(array($v1, $e1, $v2, $e2, $v3), $walk->getAlternatingSequence());
         $this->assertTrue($walk->isValid());
 
@@ -47,7 +47,7 @@ class WalkTest extends TestCase
     public function testWalkPathInvalidateByDestroyingVertex(Walk $walk)
     {
         // delete v3
-        $walk->getVertexTarget()->destroy();
+        $walk->getVertices()->getVertexLast()->destroy();
 
         $this->assertFalse($walk->isValid());
     }
@@ -67,8 +67,8 @@ class WalkTest extends TestCase
 
         $this->assertEquals(2, count($walk->getVertices()));
         $this->assertEquals(1, count($walk->getEdges()));
-        $this->assertSame($v1, $walk->getVertexSource());
-        $this->assertSame($v2, $walk->getVertexTarget());
+        $this->assertSame($v1, $walk->getVertices()->getVertexFirst());
+        $this->assertSame($v2, $walk->getVertices()->getVertexLast());
         $this->assertSame(array($v1, $e1, $v2), $walk->getAlternatingSequence());
         $this->assertTrue($walk->isValid());
 
@@ -99,8 +99,8 @@ class WalkTest extends TestCase
 
         $this->assertEquals(2, count($walk->getVertices()));
         $this->assertEquals(1, count($walk->getEdges()));
-        $this->assertSame($v1, $walk->getVertexSource());
-        $this->assertSame($v1, $walk->getVertexTarget());
+        $this->assertSame($v1, $walk->getVertices()->getVertexFirst());
+        $this->assertSame($v1, $walk->getVertices()->getVertexLast());
         $this->assertTrue($walk->isValid());
 
         return $walk;
@@ -132,8 +132,8 @@ class WalkTest extends TestCase
 
         $this->assertEquals(2, count($walk->getVertices()));
         $this->assertEquals(1, count($walk->getEdges()));
-        $this->assertSame($v1, $walk->getVertexSource());
-        $this->assertSame($v1, $walk->getVertexTarget());
+        $this->assertSame($v1, $walk->getVertices()->getVertexFirst());
+        $this->assertSame($v1, $walk->getVertices()->getVertexLast());
         $this->assertTrue($walk->isValid());
     }
 
