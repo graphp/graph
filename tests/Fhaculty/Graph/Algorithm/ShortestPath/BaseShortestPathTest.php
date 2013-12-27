@@ -116,6 +116,24 @@ abstract class BaseShortestPathTest extends TestCase
         $alg->getEdgesTo($vg2);
     }
 
+    public function testGraphUnweighted()
+    {
+        // 1 -> 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdgeTo($v2);
+
+        $alg = $this->createAlg($v1);
+
+        $expectedWeight = $this->getExpectedWeight(array($e1));
+        $this->assertEquals($expectedWeight, $alg->getDistance($v2));
+        $this->assertEquals(array(2 => $expectedWeight), $alg->getDistanceMap());
+        $this->assertEquals(array($e1), $alg->getEdges()->getVector());
+        $this->assertEquals(array($e1), $alg->getEdgesTo($v2)->getVector());
+        $this->assertEquals(array(2), $alg->getVertices()->getIds());
+    }
+
     public function testGraphTwoComponents()
     {
         // 1 -[10]-> 2
