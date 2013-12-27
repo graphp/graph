@@ -43,7 +43,7 @@ class MooreBellmanFord extends Base
                     // New possible costs of this path
                     $newCost = $totalCostOfCheapestPathTo[$fromVertex->getId()] + $edge->getWeight();
                     if (is_infinite($newCost)) {
-                        $newCost = $edge->getWeight();
+                        $newCost = $edge->getWeight() + 0;
                     }
 
                     // No path has been found yet
