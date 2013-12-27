@@ -29,6 +29,10 @@ you spot any mistakes.
 *   Fix: Stricter checks for invalid cycles, such as one with an invalid
     predecessor-map or no edges at all ([#87](https://github.com/clue/graph/issues/87)
 
+*   Fix: The `Algorithm\ShortestPath\MooreBellmanFord` now also works for unweighted
+    edges. This also fixes an issue where `Algorithm\DetectNegativeCycle` didn't work
+    for unweighted edges. ([#81](https://github.com/clue/graph/issues/81)
+
 *   Fix: Throwing an `UnexpectedValueException` if writing GraphViz Dot script
     to a temporary file fails and remove its debugging output
     ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
