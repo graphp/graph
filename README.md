@@ -96,9 +96,13 @@ users should install from [GraphViz homepage](http://www.graphviz.org/Download.p
 ## Tests
 
 To run the test suite, you need PHPUnit. Go to the project root and run:
-````
+```
 $ phpunit
-````
+```
+
+If that fails to run
+- Install phpunit ```$ composer install```
+- Run the local available phpunit ```php vendor/phpunit/phpunit/phpunit.php```
 
 ## Contributing
 
