@@ -76,7 +76,7 @@ abstract class BaseMcfTest extends TestCase
 
     public function testEdgeCapacities()
     {
-        // 1(+2) -[0/3/4]-> 2 -[0/4/5]-> 3 ->[0/6/-2]-> 3(-2)
+        // 1(+2) -[0/3/4]-> 2 -[0/4/5]-> 3 ->[0/6/-2]-> 4(-2)
         $graph = new Graph();
         $v1 = $graph->createVertex(1)->setBalance(2);
         $v2 = $graph->createVertex(2);
@@ -88,6 +88,28 @@ abstract class BaseMcfTest extends TestCase
 
         $alg = $this->createAlgorithm($graph);
         $this->assertEquals(14, $alg->getWeightFlow()); // 2*4 + 2*5 + 2*-2
+    }
+
+    public function testEdgeFlows()
+    {
+        // 1(+4) ---[3/4/2]---> 2 ---[3/3/3]---> 4(-4)
+        //  |                   |                  ^
+        //  |                [0/2/1]               |
+        //  |                   ↓                  |
+        //  \-------[1/2/2]---> 3 ---[1/5/1]-------/
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1)->setBalance(4);
+        $v2 = $graph->createVertex(2);
+        $v3 = $graph->createVertex(3);
+        $v4 = $graph->createVertex(4)->setBalance(-4);
+        $v1->createEdgeTo($v2)->setFlow(3)->setCapacity(4)->setWeight(2);
+        $v2->createEdgeTo($v4)->setFlow(3)->setCapacity(3)->setWeight(3);
+        $v1->createEdgeTo($v3)->setFlow(1)->setCapacity(2)->setWeight(2);
+        $v3->createEdgeTo($v4)->setFlow(1)->setCapacity(5)->setWeight(1);
+        $v2->createEdgeTo($v3)->setFlow(0)->setCapacity(2)->setWeight(1);
+
+        $alg = $this->createAlgorithm($graph);
+        $this->assertEquals(14, $alg->getWeightFlow()); // 4*1 + 2*2 + 2*1 + 2*2
     }
 
     /**
