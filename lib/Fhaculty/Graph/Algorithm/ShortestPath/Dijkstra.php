@@ -23,12 +23,12 @@ class Dijkstra extends Base
     /**
      * get all edges on shortest path for this vertex
      *
-     * @return Edges
+     * @return Result
      * @throws UnexpectedValueException when encountering an Edge with negative weight
      */
-    public function getEdges()
+    public function createResult()
     {
-        return $this->getEdgesCheapestPredecesor($this->getPredecessorMap());
+        return new PredecessorResult($this->vertex, $this->getPredecessorMap());
     }
 
     private function getPredecessorMap()

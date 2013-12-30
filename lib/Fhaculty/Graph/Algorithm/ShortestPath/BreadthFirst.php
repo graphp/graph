@@ -7,6 +7,7 @@ use Fhaculty\Graph\Exception\OutOfBoundsException;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\Edges;
 use \Exception;
+use Fhaculty\Graph\Exception\BadMethodCallException;
 
 /**
  * Simple breadth-first shortest path algorithm
@@ -22,17 +23,9 @@ use \Exception;
  */
 class BreadthFirst extends Base
 {
-    /**
-     * get distance between start vertex and given end vertex
-     *
-     * @param  Vertex               $endVertex
-     * @throws OutOfBoundsException if there's no path to given end vertex
-     * @return int
-     * @uses self::getEdgesTo()
-     */
-    public function getDistance(Vertex $endVertex)
+    public function createResult()
     {
-        return count($this->getEdgesTo($endVertex));
+        return new EdgesMapResult($this->vertex, $this->getEdgesMap());
     }
 
     /**
@@ -69,64 +62,5 @@ class BreadthFirst extends Base
         } while ($vertexCurrent);
 
         return $edges;
-    }
-
-    public function getEdgesTo(Vertex $endVertex)
-    {
-        if ($endVertex->getGraph() === $this->vertex->getGraph()) {
-            $map = $this->getEdgesMap();
-
-            if (isset($map[$endVertex->getId()])) {
-                return new Edges($map[$endVertex->getId()]);
-            }
-        }
-        throw new OutOfBoundsException('Given target vertex can not be reached from start vertex');
-    }
-
-    /**
-     * get map of vertex IDs to distance
-     *
-     * @return int[]
-     * @uses Vertex::hasLoop()
-     */
-    public function getDistanceMap()
-    {
-        $ret = array();
-        foreach ($this->getEdgesMap() as $vid => $edges) {
-            $ret[$vid] = count($edges);
-        }
-
-        return $ret;
-    }
-
-    /**
-     * get array of all target vertices this vertex has a path to
-     *
-     * @return Vertices
-     * @uses self::getEdgesMap()
-     */
-    public function getVertices()
-    {
-        $ret = array();
-        $graph = $this->vertex->getGraph();
-        foreach ($this->getEdgesMap() as $vid => $unusedEdges) {
-            $ret[$vid] = $graph->getVertex($vid);
-        }
-
-        return new Vertices($ret);
-    }
-
-    public function getEdges()
-    {
-        $ret = array();
-        foreach ($this->getEdgesMap() as $edges) {
-            foreach ($edges as $edge) {
-                if (!in_array($edge, $ret, true)) {
-                    $ret []= $edge;
-                }
-            }
-        }
-
-        return new Edges($ret);
     }
 }

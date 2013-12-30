@@ -58,6 +58,11 @@ use Fhaculty\Graph\Set\Vertices;
 abstract class Base extends BaseVertex
 {
     /**
+     * @return Result
+     */
+    abstract public function createResult();
+
+    /**
      * get walk (path) from start vertex to given end vertex
      *
      * @param  Vertex    $endVertex
@@ -68,7 +73,7 @@ abstract class Base extends BaseVertex
      */
     public function getWalkTo(Vertex $endVertex)
     {
-        return Walk::factoryFromEdges($this->getEdgesTo($endVertex), $this->vertex);
+        return $this->createResult()->getWalkTo($endVertex);
     }
 
     /**
@@ -82,58 +87,7 @@ abstract class Base extends BaseVertex
      */
     public function getEdgesTo(Vertex $endVertex)
     {
-        return $this->getEdgesToInternal($endVertex, $this->getEdges());
-    }
-
-    /**
-     * get array of edges (path) from start vertex to given end vertex
-     *
-     * @param  Vertex       $endVertex
-     * @param  Edges|Edge[] $edges     set or array of all input edges to operate on
-     * @throws OutOfBoundsException if there's no path to the given vertex
-     * @return Edges
-     * @uses self::getEdges() if no edges were given
-     */
-    protected function getEdgesToInternal(Vertex $endVertex, $edges)
-    {
-        $currentVertex = $endVertex;
-        $path = array();
-        do {
-            $pre = NULL;
-            // check all edges to search for edge that points TO current vertex
-            foreach ($edges as $edge) {
-                try {
-                    // get start point of this edge (fails if current vertex is not its end point)
-                    $pre = $edge->getVertexFromTo($currentVertex);
-                    $path []= $edge;
-                    $currentVertex = $pre;
-                    break;
-                } catch (InvalidArgumentException $ignore) {
-                } // ignore: this edge does not point TO current vertex
-            }
-            if ($pre === NULL) {
-                throw new OutOfBoundsException('No edge leading to vertex');
-            }
-        } while ($currentVertex !== $this->vertex);
-
-        return new Edges(array_reverse($path));
-    }
-
-    /**
-     * get sum of weight of given edges
-     *
-     * @param  Edges $edges
-     * @return float
-     * @uses Edge::getWeight()
-     */
-    private function sumEdges(Edges $edges)
-    {
-        $sum = 0;
-        foreach ($edges as $edge) {
-            $sum += $edge->getWeight();
-        }
-
-        return $sum;
+        return $this->createResult()->getEdgesTo($endVertex);
     }
 
     /**
@@ -144,15 +98,7 @@ abstract class Base extends BaseVertex
      */
     public function getVertices()
     {
-        $vertices = array();
-        $map = $this->getDistanceMap();
-        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
-            if (isset($map[$vid])) {
-                $vertices[$vid] = $vertex;
-            }
-        }
-
-        return new Vertices($vertices);
+        return $this->createResult()->getVertices();
     }
 
     /**
@@ -164,13 +110,7 @@ abstract class Base extends BaseVertex
      */
     public function hasVertex(Vertex $vertex)
     {
-        try {
-            $this->getEdgesTo($vertex);
-        }
-        catch (OutOfBoundsException $e) {
-            return false;
-        }
-        return true;
+        return $this->createResult()->hasWalkTo($vertex);
     }
 
     /**
@@ -183,16 +123,7 @@ abstract class Base extends BaseVertex
      */
     public function getDistanceMap()
     {
-        $edges = $this->getEdges();
-        $ret = array();
-        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
-            try {
-                $ret[$vid] = $this->sumEdges($this->getEdgesToInternal($vertex, $edges));
-            } catch (OutOfBoundsException $ignore) {
-            } // ignore vertices that can not be reached
-        }
-
-        return $ret;
+        return $this->createResult()->getDistanceMap();
     }
 
     /**
@@ -206,7 +137,7 @@ abstract class Base extends BaseVertex
      */
     public function getDistance(Vertex $endVertex)
     {
-        return $this->sumEdges($this->getEdgesTo($endVertex));
+        return $this->createResult()->getDistanceTo($endVertex);
     }
 
     /**
@@ -253,34 +184,7 @@ abstract class Base extends BaseVertex
      */
     public function createGraph()
     {
-        return $this->vertex->getGraph()->createGraphCloneEdges($this->getEdges());
-    }
-
-    /**
-     * get cheapest edges (lowest weight) for given map of vertex predecessors
-     *
-     * @param  Vertex[] $predecessor
-     * @return Edges
-     * @uses Graph::getVertices()
-     * @uses Vertex::getEdgesTo()
-     * @uses Edges::getEdgeOrder()
-     */
-    protected function getEdgesCheapestPredecesor(array $predecessor)
-    {
-        $vertices = $this->vertex->getGraph()->getVertices()->getMap();
-
-        $edges = array();
-        foreach ($vertices as $vid => $vertex) {
-            if (isset($predecessor[$vid])) {
-                // get predecor
-                $predecesVertex = $predecessor[$vid];
-
-                // get cheapest edge
-                $edges []= $predecesVertex->getEdgesTo($vertex)->getEdgeOrder(Edges::ORDER_WEIGHT);
-            }
-        }
-
-        return new Edges($edges);
+        return $this->createResult()->createGraph();
     }
 
     /**
@@ -288,5 +192,8 @@ abstract class Base extends BaseVertex
      *
      * @return Edges
      */
-    abstract public function getEdges();
+    public function getEdges()
+    {
+        return $this->createResult()->getEdges();
+    }
 }
