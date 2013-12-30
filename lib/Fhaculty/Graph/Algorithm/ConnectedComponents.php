@@ -65,13 +65,12 @@ class ConnectedComponents extends BaseGraph
      * connected here.
      *
      * @return boolean
-     * @uses AlgorithmSearchBreadthFirst::getNumberOfVertices()
      * @see self::getNumberOfComponents()
      */
     public function isSingle()
     {
         try {
-            $vertex = $this->graph->getVertexFirst();
+            $vertex = $this->graph->getVertices()->getVertexFirst();
         }
         catch (UnderflowException $e) {
             // no first vertex => empty graph => has zero components
@@ -79,7 +78,7 @@ class ConnectedComponents extends BaseGraph
         }
         $alg = $this->createSearch($vertex);
 
-        return ($this->graph->getNumberOfVertices() === $alg->getNumberOfVertices());
+        return (count($this->graph->getVertices()) === count($alg->getVertices()));
     }
 
     /**

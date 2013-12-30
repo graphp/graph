@@ -81,7 +81,7 @@ The recommended way to install this library is [through composer](http://getcomp
 ```JSON
 {
     "require": {
-        "clue/graph": "dev-master"
+        "clue/graph": "0.7.*"
     }
 }
 ```

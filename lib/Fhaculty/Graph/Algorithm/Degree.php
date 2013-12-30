@@ -31,7 +31,7 @@ class Degree extends BaseGraph
     public function getDegree()
     {
         // get initial degree of any start vertex to compare others to
-        $degree = $this->getDegreeVertex($this->graph->getVertexFirst());
+        $degree = $this->getDegreeVertex($this->graph->getVertices()->getVertexFirst());
 
         foreach ($this->graph->getVertices() as $vertex) {
             /** @var $vertex Vertex */

@@ -18,7 +18,7 @@ use Fhaculty\Graph\Vertex;
  * @link http://en.wikipedia.org/wiki/Flow_network
  * @see Algorithm\Balance
  */
-class Flow extends BaseSet
+class Flow extends BaseDual
 {
     /**
      * check if this graph has any flow set (any edge has a non-NULL flow)

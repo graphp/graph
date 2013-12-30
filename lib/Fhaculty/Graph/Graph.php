@@ -20,8 +20,9 @@ use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesMap;
 use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\DualAggregate;
 
-class Graph extends Set
+class Graph implements DualAggregate
 {
     /**
      * @var ExporterInterface|null
@@ -329,23 +330,6 @@ class Graph extends Set
     public function hasVertex($id)
     {
         return $this->vertices->hasVertexId($id);
-    }
-
-    /**
-     * return first vertex found
-     *
-     * some algorithms do not need a particular vertex, but merely a (random)
-     * starting point. this is a convenience function to just pick the first
-     * vertex from the list of known vertices.
-     *
-     * @return Vertex             first vertex found in this graph
-     * @throws UnderflowException if Graph has no vertices
-     * @see Vertices::getVertexOrder() if you need to apply ordering first
-     * @uses Vertices::getVertexFirst()
-     */
-    public function getVertexFirst()
-    {
-        return $this->vertices->getVertexFirst();
     }
 
     /**

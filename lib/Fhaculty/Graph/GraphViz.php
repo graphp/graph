@@ -128,12 +128,12 @@ class GraphViz
         static $next = 0;
         if ($next > microtime(true)) {
             // wait some time between calling xdg-open because earlier calls will be ignored otherwise
-            echo '[delay flooding xdg-open]' . PHP_EOL;
+            //echo '[delay flooding xdg-open]' . PHP_EOL;
             sleep(self::DELAY_OPEN);
         }
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            echo "ausgabe\n";
+            //echo "ausgabe\n";
             exec($tmp . ' >NUL');
         } elseif (strtoupper(PHP_OS) === 'DARWIN') {
             // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
@@ -253,7 +253,7 @@ class GraphViz
 
         $ret = file_put_contents($tmp, $script, LOCK_EX);
         if ($ret === false) {
-            throw new UnexpectedValuexception('Unable to write graphviz script to temporary file');
+            throw new UnexpectedValueException('Unable to write graphviz script to temporary file');
         }
 
         $ret = 0;
@@ -273,14 +273,14 @@ class GraphViz
      * create graphviz script representing this graph
      *
      * @return string
-     * @uses Directed::isDirected()
+     * @uses Directed::hasDirected()
      * @uses Graph::getVertices()
      * @uses Graph::getEdges()
      */
     public function createScript()
     {
         $alg = new Directed($this->graph);
-        $directed = $alg->isDirected();
+        $directed = $alg->hasDirected();
 
         $script = ($directed ? 'di':'') . 'graph G {' . self::EOL;
 
