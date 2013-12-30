@@ -82,7 +82,7 @@ class Graph implements DualAggregate
             return $this->vertices->getVertexId($id);
         }
 
-        return new Vertex($id, $this);
+        return new Vertex($this, $id);
     }
 
     /**
@@ -98,7 +98,7 @@ class Graph implements DualAggregate
         if ($this->vertices->hasVertexId($id)) {
             throw new RuntimeException('Id of cloned vertex already exists');
         }
-        $newVertex = new Vertex($id, $this);
+        $newVertex = new Vertex($this, $id);
         // TODO: properly set attributes of vertex
         $newVertex->setLayout($originalVertex->getLayout());
         $newVertex->setBalance($originalVertex->getBalance());
@@ -256,7 +256,7 @@ class Graph implements DualAggregate
         $vertices = array();
         if (is_int($n) && $n >= 0) {
             for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
-                $vertices[$id] = new Vertex($id, $this);
+                $vertices[$id] = new Vertex($this, $id);
             }
         } elseif (is_array($n)) {
             // array given => check to make sure all given IDs are available (atomic operation)
@@ -275,7 +275,7 @@ class Graph implements DualAggregate
 
             // actually create all requested vertices
             foreach ($n as $id) {
-                $vertices[$id] = new Vertex($id, $this);
+                $vertices[$id] = new Vertex($this, $id);
             }
         } else {
             throw new InvalidArgumentException('Invalid number of vertices given. Must be non-negative integer or an array of Vertex IDs');

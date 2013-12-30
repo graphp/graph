@@ -21,7 +21,7 @@ class VertexTest extends TestCase
 
     public function testConstructor()
     {
-        $v2 = new Vertex(2, $this->graph);
+        $v2 = new Vertex($this->graph, 2);
 
         $this->assertCount(2, $this->graph->getVertices());
         $this->assertTrue($this->graph->hasVertex(2));
@@ -34,7 +34,7 @@ class VertexTest extends TestCase
      */
     public function testCanNotConstructDuplicateVertex()
     {
-        $v2 = new Vertex(1, $this->graph);
+        $v2 = new Vertex($this->graph, 1);
     }
 
     public function testEdges()

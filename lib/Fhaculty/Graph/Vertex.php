@@ -45,11 +45,11 @@ class Vertex extends Layoutable implements EdgesAggregate
     /**
      * Create a new Vertex
      *
-     * @param string|int $id    identifier used to uniquely identify this vertex in the graph
      * @param Graph      $graph graph to be added to
+     * @param string|int $id    identifier used to uniquely identify this vertex in the graph
      * @see Graph::createVertex() to create new vertices
      */
-    public function __construct($id, Graph $graph)
+    public function __construct(Graph $graph, $id)
     {
         if (!is_int($id) && !is_string($id)) {
             throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
