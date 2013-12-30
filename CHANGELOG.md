@@ -36,7 +36,12 @@ you spot any mistakes.
 *   Fix: Throwing an `UnexpectedValueException` if writing GraphViz Dot script
     to a temporary file fails and remove its debugging output
     ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
-    
+
+*   Fix: The `Algorithm\MinimumCostFlow` algorithms now work again. The reference
+    to a non-existant class has been updated. Also fixed several issues with
+    regards to special cases such as disconnected or undirected graphs.
+    ([#74](https://github.com/clue/graph/issues/74)
+
 *   BC break: Remove unneeded alias definitions of `getVertexFirst()`,
     `getVertexSource()` and `getVertexTarget()`
     [#76]https://github.com/clue/graph/issues/76)):
