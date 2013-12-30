@@ -69,4 +69,28 @@ class MooreBellmanFordTest extends BaseShortestPathTest
 
         $cycle = $alg->getCycleNegative();
     }
+
+    public function testNegativeComponentHasCycle()
+    {
+        // 1 -[1]-> 2     3 --[-1]--> 4
+        //                ^           |
+        //                \---[-2]----/
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $v3 = $graph->createVertex(3);
+        $v4 = $graph->createVertex(4);
+        $e1 = $v1->createEdgeTo($v2)->setWeight(1);
+        $e2 = $v3->createEdgeTo($v4)->setWeight(-1);
+        $e3 = $v4->createEdgeTo($v3)->setWeight(-2);
+
+        // second component has a cycle
+        $alg = $this->createAlg($v3);
+        $cycle = $alg->getCycleNegative();
+
+        // first component does not have a cycle
+        $alg = $this->createAlg($v1);
+        $this->setExpectedException('UnderflowException');
+        $alg->getCycleNegative();
+    }
 }

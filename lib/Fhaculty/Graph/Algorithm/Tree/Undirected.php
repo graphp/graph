@@ -50,7 +50,7 @@ class Undirected extends Tree
      *
      * @return boolean
      * @uses Vertices::isEmpty() to skip null Graphs (a Graph with no Vertices is *NOT* a valid tree)
-     * @uses Graph::getVertexFirst() to get get get random "root" Vertex to start search from
+     * @uses Vertices::getVertexFirst() to get get get random "root" Vertex to start search from
      * @uses self::getVerticesSubtreeRecursive() to count number of vertices connected to root
      */
     public function isTree()
@@ -60,7 +60,7 @@ class Undirected extends Tree
         }
 
         // every vertex can represent a root vertex, so just pick one
-        $root = $this->graph->getVertexFirst();
+        $root = $this->graph->getVertices()->getVertexFirst();
 
         $vertices = array();
         try {

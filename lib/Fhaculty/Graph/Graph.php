@@ -325,23 +325,6 @@ class Graph implements DualAggregate
     }
 
     /**
-     * return first vertex found
-     *
-     * some algorithms do not need a particular vertex, but merely a (random)
-     * starting point. this is a convenience function to just pick the first
-     * vertex from the list of known vertices.
-     *
-     * @return Vertex             first vertex found in this graph
-     * @throws UnderflowException if Graph has no vertices
-     * @see Vertices::getVertexOrder() if you need to apply ordering first
-     * @uses Vertices::getVertexFirst()
-     */
-    public function getVertexFirst()
-    {
-        return $this->vertices->getVertexFirst();
-    }
-
-    /**
      * adds a new Vertex to the Graph (MUST NOT be called manually!)
      *
      * @param  Vertex $vertex instance of the new Vertex
