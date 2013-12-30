@@ -163,4 +163,19 @@ abstract class BaseMcfTest extends TestCase
         $alg = $this->createAlgorithm($graph);
         $alg->getWeightFlow();
     }
+
+    /**
+     * @expectedException UnexpectedValueException
+     */
+    public function testUndirectedNegativeCycleFails()
+    {
+        // 1(+2) -[0/2/-1]- 2(-2)
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1)->setBalance(2);
+        $v2 = $graph->createVertex(2)->setBalance(-2);
+        $v1->createEdge($v2)->setCapacity(2)->setWeight(-1);
+
+        $alg = $this->createAlgorithm($graph);
+        $alg->getWeightFlow();
+    }
 }

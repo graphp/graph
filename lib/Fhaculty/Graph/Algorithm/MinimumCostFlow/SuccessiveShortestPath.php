@@ -36,6 +36,10 @@ class SuccessiveShortestPath extends Base
         // initial flow of edges
         $edges = $resultGraph->getEdges();
         foreach ($edges as $edge) {
+            if (!($edge instanceof EdgeDirected)) {
+                throw new UnexpectedValueException('Undirected edges are not supported for SuccessiveShortestPath');
+            }
+
             // 0 if weight of edge is positive
             $flow = 0;
 
