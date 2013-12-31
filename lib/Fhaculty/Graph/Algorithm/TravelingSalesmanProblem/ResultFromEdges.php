@@ -19,7 +19,7 @@ class ResultFromEdges implements Result
 
     public function createGraph()
     {
-        return $this->getGraph()->createGraphCloneEdges($this->getEdges());
+        return $this->startVertex->getGraph()->createGraphCloneEdges($this->getEdges());
     }
 
     public function getCycle()
