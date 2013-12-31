@@ -216,6 +216,23 @@ abstract class BaseShortestPathTest extends TestCase
         $this->assertEquals($expectedWeight, $result->getDistanceTo($v3));
     }
 
+    public function testUndirectedBugReport()
+    {
+        // 1 --[4]-- 2 --[4]-- 5 --[4]-- 6
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $v6 = $graph->createVertex(6);
+        $v5 = $graph->createVertex(5);
+
+        $e1 = $v1->createEdge($v2)->setWeight(4);
+        $e2 = $v2->createEdge($v5)->setWeight(4);
+        $e3 = $v5->createEdge($v6)->setWeight(4);
+
+        $expectedWeight = $this->getExpectedWeight(array($e1, $e2, $e3));
+        $this->assertEquals($expectedWeight, $this->createResult($v1)->getDistanceTo($v6));
+    }
+
     protected function getExpectedWeight($edges)
     {
         $sum = 0;

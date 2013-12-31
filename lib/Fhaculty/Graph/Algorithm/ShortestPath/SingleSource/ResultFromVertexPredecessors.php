@@ -31,40 +31,27 @@ class ResultFromVertexPredecessors implements Result
 
     public function getEdgesTo(Vertex $endVertex)
     {
-        return $this->getEdgesToInternal($endVertex, $this->getEdges());
-    }
+        if (!$this->hasWalkTo($endVertex)) {
+            throw new OutOfBoundsException('No edge leading to vertex');
+        }
 
-    /**
-     * get array of edges (path) from start vertex to given end vertex
-     *
-     * @param  Vertex       $endVertex
-     * @param  Edges|Edge[] $edges     set or array of all input edges to operate on
-     * @throws OutOfBoundsException if there's no path to the given vertex
-     * @return Edges
-     * @uses self::getEdges() if no edges were given
-     */
-    protected function getEdgesToInternal(Vertex $endVertex, $edges)
-    {
+        // search the tree in reverse order by checking the predecessors
         $currentVertex = $endVertex;
         $path = array();
-        do {
-            $pre = NULL;
-            // check all edges to search for edge that points TO current vertex
-            foreach ($edges as $edge) {
-                try {
-                    // get start point of this edge (fails if current vertex is not its end point)
-                    $pre = $edge->getVertexFromTo($currentVertex);
-                    $path []= $edge;
-                    $currentVertex = $pre;
-                    break;
-                } catch (InvalidArgumentException $ignore) {
-                } // ignore: this edge does not point TO current vertex
-            }
-            if ($pre === NULL) {
-                throw new OutOfBoundsException('No edge leading to vertex');
-            }
-        } while ($currentVertex !== $this->vertex);
 
+        do {
+            // get predecessor of current vertex
+            $pre = $this->predecessors[$currentVertex->getId()];
+            /* @var $pre Vertex */
+
+            // cheapest edge from predecessor to current vertex
+            $path []= $pre->getEdgesTo($currentVertex)->getEdgeOrder(Edges::ORDER_WEIGHT);
+
+            // advance to next vertex
+            $currentVertex = $pre;
+        } while($currentVertex !== $this->vertex);
+
+        // cope with our reverse order by reversing again
         return new Edges(array_reverse($path));
     }
 
