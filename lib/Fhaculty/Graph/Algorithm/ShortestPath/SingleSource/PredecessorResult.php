@@ -9,6 +9,7 @@ use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesMap;
 
 class PredecessorResult implements Result
 {
@@ -69,28 +70,19 @@ class PredecessorResult implements Result
 
     public function getVertices()
     {
-        // TODO: use keys from predecessors instead?
-
+        $graph = $this->vertex->getGraph();
         $vertices = array();
-        $map = $this->getDistanceMap();
-        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
-            if (isset($map[$vid])) {
-                $vertices[$vid] = $vertex;
-            }
+
+        foreach ($this->predecessors as $vid => $unused) {
+            $vertices[$vid] = $graph->getVertex($vid);
         }
 
-        return new Vertices($vertices);
+        return new VerticesMap($vertices);
     }
 
     public function hasWalkTo(Vertex $vertex)
     {
-        try {
-            $this->getEdgesTo($vertex);
-        }
-        catch (OutOfBoundsException $e) {
-            return false;
-        }
-        return true;
+        return (isset($this->predecessors[$vertex->getId()]) && $this->vertex->getGraph() === $vertex->getGraph());
     }
 
     public function getDistanceMap()

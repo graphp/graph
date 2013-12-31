@@ -8,6 +8,7 @@ use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
+use Fhaculty\Graph\Set\VerticesMap;
 
 class EdgesMapResult implements Result
 {
@@ -40,15 +41,7 @@ class EdgesMapResult implements Result
 
     public function hasWalkTo(Vertex $vertex)
     {
-        // TODO: check $edgeMap instead
-
-        try {
-            $this->getEdgesTo($vertex);
-        }
-        catch (OutOfBoundsException $e) {
-            return false;
-        }
-        return true;
+        return (isset($this->edgeMap[$vertex->getId()]) && $this->vertex->getGraph() === $vertex->getGraph());
     }
 
     public function createGraph()
@@ -85,11 +78,12 @@ class EdgesMapResult implements Result
     {
         $ret = array();
         $graph = $this->vertex->getGraph();
+
         foreach ($this->edgeMap as $vid => $unusedEdges) {
             $ret[$vid] = $graph->getVertex($vid);
         }
 
-        return new Vertices($ret);
+        return new VerticesMap($ret);
     }
 
     public function getEdges()
