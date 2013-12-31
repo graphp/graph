@@ -3,22 +3,14 @@
 namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\TravelingSalesmanProblem\MinimumSpanningTree as AlgorithmTspMst;
 
-class Bruteforce extends Base
+class Bruteforce
 {
-    /**
-     *
-     * @var Graph
-     */
-    private $graph;
-
     /**
      * best weight so for (used for branch-and-bound)
      *
@@ -57,13 +49,12 @@ class Bruteforce extends Base
      */
     private $branchAndBound = true;
 
-    /**
-     *
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
+    public function createResult(Graph $graph)
     {
-        $this->graph = $graph;
+        // actual start doesn't really matter as we're only considering complete graphs here
+        $startVertex = $graph->getVertices()->getVertexFirst();
+
+        return new ResultFromEdges($startvertex, $this->getEdges($startVertex));
     }
 
     /**
@@ -82,23 +73,12 @@ class Bruteforce extends Base
         return $this;
     }
 
-    public function setUpperLimitMst()
+    public function setUpperLimitMst(Graph $graph)
     {
-        $alg = new AlgorithmTspMst($this->graph);
+        $alg = new AlgorithmTspMst($graph);
         $limit = $alg->createGraph()->getWeight();
 
         return $this->setUpperLimit($limit);
-    }
-
-    protected function getVertexStart()
-    {
-        // actual start doesn't really matter as we're only considering complete graphs here
-        return $this->graph->getVertices()->getVertexFirst();
-    }
-
-    protected function getGraph()
-    {
-        return $this->graph;
     }
 
     /**
@@ -107,9 +87,9 @@ class Bruteforce extends Base
      * @throws Exception on error
      * @return Edges
      */
-    public function getEdges()
+    private function getEdges(Vertex $startVertex)
     {
-        $this->numEdges = count($this->graph->getVertices());
+        $this->numEdges = count($startVertex->getGraph()->getVertices());
         if ($this->numEdges < 3) {
             throw new UnderflowException('Needs at least 3 vertices');
         }
@@ -117,7 +97,7 @@ class Bruteforce extends Base
         // numEdges 3-12 should work
 
         $this->bestWeight = $this->upperLimit;
-        $this->startVertex = $this->getVertexStart();
+        $this->startVertex = $startVertex;
 
         $result = $this->step($this->startVertex,
                               0,

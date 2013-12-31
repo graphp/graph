@@ -3,46 +3,29 @@
 namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Set\Edges;
 use \SplPriorityQueue;
 
-class NearestNeighbor extends Base
+class NearestNeighbor
 {
-    /**
-     *
-     * @var Vertex
-     */
-    private $vertex;
-
-    public function __construct(Vertex $startVertex)
+    public function createResult(Vertex $startVertex)
     {
-         $this->vertex = $startVertex;
-    }
-
-    protected function getVertexStart()
-    {
-        return $this->vertex;
-    }
-
-    protected function getGraph()
-    {
-        return $this->vertex->getGraph();
+        return new ResultFromEdges($startVertex, $this->getEdges($startVertex));
     }
 
     /**
      *
      * @return Edges
      */
-    public function getEdges()
+    private function getEdges(Vertex $startVertex)
     {
         $returnEdges = array();
 
-        $n = count($this->vertex->getGraph()->getVertices());
+        $n = count($startVertex->getGraph()->getVertices());
 
-        $vertex = $this->vertex;
+        $vertex = $startVertex;
         $visitedVertices = array($vertex->getId() => true);
 
         for ($i = 0; $i < $n - 1; ++$i,
@@ -86,7 +69,7 @@ class NearestNeighbor extends Base
         // check if there is a way from end edge to start edge
         // get first connecting edge
         // connect the last vertex with the start vertex
-        $returnEdges []= $vertex->getEdgesTo($this->vertex)->getEdgeFirst();
+        $returnEdges []= $vertex->getEdgesTo($startVertex)->getEdgeFirst();
 
         return new Edges($returnEdges);
     }

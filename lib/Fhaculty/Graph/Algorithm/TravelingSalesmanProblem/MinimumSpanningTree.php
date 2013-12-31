@@ -8,39 +8,23 @@ use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\MinimumSpanningTree\Kruskal as MstKruskal;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchDepthFirst;
 
-class MinimumSpanningTree extends Base
+class MinimumSpanningTree
 {
-    /**
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    public function __construct(Graph $inputGraph)
+    public function createResult(Graph $inputGraph)
     {
-        $this->graph = $inputGraph;
-    }
-
-    protected function getVertexStart()
-    {
-        return $this->graph->getVertices()->getVertexFirst();
-    }
-
-    protected function getGraph()
-    {
-        return $this->graph;
+        return new ResultFromEdges($inputGraph->getVertices()->getVertexFirst(), $this->getEdges($inputGraph));
     }
 
     /**
      *
      * @return Edges
      */
-    public function getEdges()
+    private function getEdges(Graph $inputGraph)
     {
         $returnEdges = array();
 
         // Create minimum spanning tree
-        $minimumSpanningTreeAlgorithm = new MstKruskal($this->graph);
+        $minimumSpanningTreeAlgorithm = new MstKruskal($inputGraph);
         $minimumSpanningTree = $minimumSpanningTreeAlgorithm->createGraph();
 
         $alg = new SearchDepthFirst($minimumSpanningTree->getVertices()->getVertexFirst());
@@ -53,7 +37,7 @@ class MinimumSpanningTree extends Base
         foreach ($alg->getVertices() as $vertex) {
 
             // get vertex from the original graph (not from the depth first search)
-            $vertex = $this->graph->getVertex($vertex->getId());
+            $vertex = $inputGraph->getVertex($vertex->getId());
                                                                                 // need to clone the edge from the original graph, therefore i need the original edge
             if ($startVertex === NULL) {
                 $startVertex = $vertex;
