@@ -407,6 +407,12 @@ class GraphViz
             } else {
                 $script .= ' ';
             }
+            // Allowed attributes for http://www.graphviz.org/doc/info/shapes.html#html
+            if (!is_object($value) && in_array($name, array('label', 'headtail', 'taillabel'))) {
+                if (preg_match("/^\<\<.*\>\>$/", $value)) {
+                    $value = self::raw($value);
+                }
+            }
             $script .= $name . '=' . self::escape($value);
         }
         $script .= ']';
