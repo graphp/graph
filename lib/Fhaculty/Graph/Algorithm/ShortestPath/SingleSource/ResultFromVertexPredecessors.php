@@ -15,13 +15,11 @@ class ResultFromVertexPredecessors implements Result
 {
     private $vertex;
     private $predecessors;
-    private $edges;
 
     public function __construct(Vertex $vertex, array $predecessors)
     {
         $this->vertex = $vertex;
         $this->predecessors = $predecessors;
-        $this->edges = $this->getEdgesCheapestPredecesor();
     }
 
     public function getWalkTo(Vertex $endVertex)
@@ -97,30 +95,12 @@ class ResultFromVertexPredecessors implements Result
 
     public function getEdges()
     {
-        return $this->edges;
-    }
-
-    /**
-     * get cheapest edges (lowest weight) for given map of vertex predecessors
-     *
-     * @return Edges
-     * @uses Graph::getVertices()
-     * @uses Vertex::getEdgesTo()
-     * @uses Edges::getEdgeOrder()
-     */
-    protected function getEdgesCheapestPredecesor()
-    {
-        $vertices = $this->vertex->getGraph()->getVertices()->getMap();
+        $graph = $this->vertex->getGraph();
 
         $edges = array();
-        foreach ($vertices as $vid => $vertex) {
-            if (isset($this->predecessors[$vid])) {
-                // get predecor
-                $predecesVertex = $this->predecessors[$vid];
-
-                // get cheapest edge
-                $edges []= $predecesVertex->getEdgesTo($vertex)->getEdgeOrder(Edges::ORDER_WEIGHT);
-            }
+        foreach ($this->predecessors as $vid => $pre) {
+            // get cheapest edge from predecessor to current vertex
+            $edges []= $pre->getEdgesTo($graph->getVertex($vid))->getEdgeOrder(Edges::ORDER_WEIGHT);
         }
 
         return new Edges($edges);
