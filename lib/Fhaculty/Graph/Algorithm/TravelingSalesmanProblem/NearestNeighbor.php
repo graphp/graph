@@ -2,11 +2,11 @@
 
 namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
-use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Set\Edges;
 use \SplPriorityQueue;
+use Fhaculty\Graph\Exception\UnderflowException;
 
 class NearestNeighbor implements Base
 {
@@ -56,7 +56,7 @@ class NearestNeighbor implements Base
 
             // check if there is a way i can use
             if (isset($visitedVertices[$nextVertex->getId()])) {
-                throw new UnexpectedValueException('Graph is not complete - can\'t find an edge to unconnected vertex');
+                throw new UnderflowException('Graph is not complete - can\'t find an edge to unconnected vertex');
             }
 
             $visitedVertices[$nextVertex->getId()] = TRUE;

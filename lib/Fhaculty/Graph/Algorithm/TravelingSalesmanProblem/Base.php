@@ -3,6 +3,7 @@
 namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Exception\UnderflowException;
 
 interface Base
 {
@@ -14,6 +15,7 @@ interface Base
      *
      * @param Vertex $startVertex
      * @return Result
+     * @throws UnderflowException if the given graph is not complete
      */
     public function createResult(Vertex $startVertex);
 }

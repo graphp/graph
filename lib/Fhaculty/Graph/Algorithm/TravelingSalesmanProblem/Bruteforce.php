@@ -103,7 +103,7 @@ class Bruteforce implements Base
                   );
 
         if ($result === NULL) {
-            throw new UnexpectedValueException('No resulting solution for TSP found');
+            throw new UnderflowException('No resulting solution for TSP found, make sure the graph is complete');
         }
 
         return new Edges($result);
