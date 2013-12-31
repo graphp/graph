@@ -408,7 +408,7 @@ class GraphViz
                 $script .= ' ';
             }
             // Allowed attributes for http://www.graphviz.org/doc/info/shapes.html#html
-            if (in_array($name, array('label', 'headtail', 'taillabel'))) {
+            if (!is_object($value) && in_array($name, array('label', 'headtail', 'taillabel'))) {
                 if (preg_match("/^\<\<.*\>\>$/", $value)) {
                     $value = self::raw($value);
                 }
