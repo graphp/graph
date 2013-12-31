@@ -29,7 +29,7 @@ class Dijkstra extends Base
      */
     public function createResult(Vertex $startVertex)
     {
-        return new PredecessorResult($startVertex, $this->getPredecessorMap($startVertex));
+        return new ResultFromVertexPredecessors($startVertex, $this->getPredecessorMap($startVertex));
     }
 
     private function getPredecessorMap(Vertex $startVertex)

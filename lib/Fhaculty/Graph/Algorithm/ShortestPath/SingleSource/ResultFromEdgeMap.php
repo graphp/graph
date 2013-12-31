@@ -10,7 +10,7 @@ use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
 use Fhaculty\Graph\Set\VerticesMap;
 
-class EdgesMapResult implements Result
+class ResultFromEdgeMap implements Result
 {
     private $vertex;
     private $edgeMap;

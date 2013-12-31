@@ -11,7 +11,7 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesMap;
 
-class PredecessorResult implements Result
+class ResultFromVertexPredecessors implements Result
 {
     private $vertex;
     private $predecessors;

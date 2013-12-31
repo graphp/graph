@@ -24,7 +24,7 @@ class BreadthFirst extends Base
 {
     public function createResult(Vertex $startVertex)
     {
-        return new EdgesMapResult($startVertex, $this->getEdgesMap($startVertex));
+        return new ResultFromEdgeMap($startVertex, $this->getEdgesMap($startVertex));
     }
 
     /**
