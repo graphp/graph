@@ -137,7 +137,7 @@ class Bruteforce implements Base
     private function step(Vertex $vertex, $totalWeight, array $visitedVertices, array $visitedEdges)
     {
         // stop recursion if best result is exceeded (branch and bound)
-        if ($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight >= $this->bestWeight) {
+        if ($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight > $this->bestWeight) {
             return NULL;
         }
         // kreis geschlossen am Ende
