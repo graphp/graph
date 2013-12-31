@@ -8,7 +8,7 @@ use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
-abstract class Base extends AlgorithmBase
+abstract class Result extends AlgorithmBase
 {
     /**
      * get resulting graph with the (first) best circle of edges connecting all vertices
