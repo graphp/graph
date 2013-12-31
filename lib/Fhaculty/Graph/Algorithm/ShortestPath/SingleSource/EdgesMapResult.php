@@ -53,17 +53,12 @@ class EdgesMapResult implements Result
 
     public function createGraph()
     {
-        return $this->getGraph()->createGraphCloneEdges($this->getEdges());
-    }
-
-    public function getGraph()
-    {
-        return $this->vertex->getGraph();
+        return $this->vertex->getGraph()->createGraphCloneEdges($this->getEdges());
     }
 
     public function getEdgesTo(Vertex $endVertex)
     {
-        if ($endVertex->getGraph() === $this->getGraph()) {
+        if ($endVertex->getGraph() === $this->vertex->getGraph()) {
             if (isset($this->edgeMap[$endVertex->getId()])) {
                 return new Edges($this->edgeMap[$endVertex->getId()]);
             }

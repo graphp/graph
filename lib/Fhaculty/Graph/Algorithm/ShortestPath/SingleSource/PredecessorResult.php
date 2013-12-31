@@ -23,11 +23,6 @@ class PredecessorResult implements Result
         $this->edges = $this->getEdgesCheapestPredecesor();
     }
 
-    public function getGraph()
-    {
-        return $this->vertex->getGraph();
-    }
-
     public function getWalkTo(Vertex $endVertex)
     {
         return Walk::factoryFromEdges($this->getEdgesTo($endVertex), $this->vertex);
@@ -78,7 +73,7 @@ class PredecessorResult implements Result
 
         $vertices = array();
         $map = $this->getDistanceMap();
-        foreach ($this->getGraph()->getVertices()->getMap() as $vid => $vertex) {
+        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
             if (isset($map[$vid])) {
                 $vertices[$vid] = $vertex;
             }
@@ -101,7 +96,7 @@ class PredecessorResult implements Result
     public function getDistanceMap()
     {
         $ret = array();
-        foreach ($this->getGraph()->getVertices()->getMap() as $vid => $vertex) {
+        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
             try {
                 $ret[$vid] = $this->getDistanceTo($vertex);
             } catch (OutOfBoundsException $ignore) {
@@ -118,7 +113,7 @@ class PredecessorResult implements Result
 
     public function createGraph()
     {
-        return $this->getGraph()->createGraphCloneEdges($this->getEdges());
+        return $this->vertex->getGraph()->createGraphCloneEdges($this->getEdges());
     }
 
     public function getEdges()
@@ -136,7 +131,7 @@ class PredecessorResult implements Result
      */
     protected function getEdgesCheapestPredecesor()
     {
-        $vertices = $this->getGraph()->getVertices()->getMap();
+        $vertices = $this->vertex->getGraph()->getVertices()->getMap();
 
         $edges = array();
         foreach ($vertices as $vid => $vertex) {

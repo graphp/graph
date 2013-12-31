@@ -8,8 +8,6 @@ use Fhaculty\Graph\Set\EdgesAggregate;
 
 interface Result extends EdgesAggregate, VerticesAggregate
 {
-    public function getGraph();
-
     /**
      * get walk (path) from start vertex to given end vertex
      *
