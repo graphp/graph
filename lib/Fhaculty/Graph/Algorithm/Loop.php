@@ -2,7 +2,7 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
-use Fhaculty\Graph\Algorithm\BaseSet;
+use Fhaculty\Graph\Algorithm\BaseDual;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Vertex;
 
@@ -14,7 +14,7 @@ use Fhaculty\Graph\Vertex;
  *
  * @link http://en.wikipedia.org/wiki/Loop_%28graph_theory%29
  */
-class Loop extends BaseSet
+class Loop extends BaseDual
 {
     /**
      * checks whether this graph has any loops (edges from vertex to itself)

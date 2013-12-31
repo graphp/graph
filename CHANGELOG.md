@@ -4,7 +4,50 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## 0.7.0 (2013-xx-xx)
+## 0.8.0 (2013-xx-xx)
+
+*   BC break: Rename `Algorithm\Directed::isDirected()` to remove its ambiguity
+    in regards to mixed and/or empty graphs
+    ([#80](https://github.com/clue/graph/issues/80))
+
+    | Old name | New name |
+    |---|---|
+    | `Algorithm\Directed::isDirected()` | `Algorithm\Directed::hasDirected()` |
+
+*   Feature:: Add new `Algorithm\Directed::hasUndirected()` and
+    `Algorithm\Directed::isMixed()` in order to complement the renamed
+    `Algorithm\Directed::hasDirected()`
+    ([#80](https://github.com/clue/graph/issues/80))
+
+*   BC break: `Walk::factoryCycleFromVertices()` no longer tries to auto-complete
+    a cycle if the first vertex does not match the last one, but now throws an
+    `InvalidArgumentException` instead ([#87](https://github.com/clue/graph/issues/87)
+
+*   Feature: Support loop `Walk`s, i.e. a walk with only a single edge from
+    vertex A back to A ([#87](https://github.com/clue/graph/issues/87)
+
+*   Fix: Stricter checks for invalid cycles, such as one with an invalid
+    predecessor-map or no edges at all ([#87](https://github.com/clue/graph/issues/87)
+
+*   Fix: The `Algorithm\ShortestPath\MooreBellmanFord` now also works for unweighted
+    edges. This also fixes an issue where `Algorithm\DetectNegativeCycle` didn't work
+    for unweighted edges. ([#81](https://github.com/clue/graph/issues/81)
+
+*   Fix: Throwing an `UnexpectedValueException` if writing GraphViz Dot script
+    to a temporary file fails and remove its debugging output
+    ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
+    
+*   BC break: Remove unneeded alias definitions of `getVertexFirst()`,
+    `getVertexSource()` and `getVertexTarget()`
+    [#76]https://github.com/clue/graph/issues/76)):
+
+    | Old name | New name |
+    |---|---|
+    | `Graph::getVertexFirst()` | `Graph::getVertices()->getVertexFirst()` |
+    | `Walk::getVertexSource()` | `Walk::getVertices()->getVertexFirst()` |
+    | `Walk::getVertexTarget()` | `Walk::getVertices()->getVertexLast()` |
+
+## 0.7.0 (2013-09-11)
 
 *   Feature: Add new `Set\Vertices` and `Set\Edges` classes that handle common
     operations on a Set of multiple `Vertex` and `Edge` instances respectively.
@@ -74,6 +117,20 @@ you spot any mistakes.
     valid tree (because it is not connected), adjust `Algorithm\Tree\Base::isTree()`
     accordingly.
     ([#72](https://github.com/clue/graph/issues/72))
+
+*   BC break: Remove all occurances of `getNumberOfVertices()` and
+    `getNumberOfEdges()` ([#75](https://github.com/clue/graph/issues/75) and
+    [#48](https://github.com/clue/graph/issues/48)):
+
+    | Old name | New name |
+    |---|---|
+    | `$set->getNumberOfVertices()` | `count($set->getVertices())` |
+    | `$set->getNumberOfEdges()` | `count($set->getEdges())` |
+    
+*   BC break: Replace base `Set` class with `Set\DualAggregate` interface. This
+    is unlikely to affect you, but might potentially break your custom
+    inheritance or polymorphism for algorithms.
+    ([#75](https://github.com/clue/graph/issues/75))
 
 *   Feature: Add `Algorithm\ShortestPath\Base::hasVertex(Vertex $vertex)` to check whether
     a path to the given Vertex exists ([#62](https://github.com/clue/graph/issues/62)).

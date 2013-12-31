@@ -46,6 +46,6 @@ class GraphProperty extends BaseGraph
      */
     public function isTrivial()
     {
-        return ($this->graph->getEdges()->isEmpty() && $this->graph->getNumberOfVertices() === 1);
+        return ($this->graph->getEdges()->isEmpty() && count($this->graph->getVertices()) === 1);
     }
 }

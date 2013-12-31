@@ -3,12 +3,11 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Set\EdgesAggregate;
 use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Set\DualAggregate;
 
 /**
  * Base Walk class
@@ -20,7 +19,7 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  * @see Fhaculty\Graph\Algorithm\Property\WalkProperty for checking special cases, such as cycles, loops, closed trails, etc.
  */
-class Walk extends Set implements VerticesAggregate, EdgesAggregate
+class Walk implements DualAggregate
 {
     /**
      * construct new walk from given start vertex and given array of edges
@@ -89,20 +88,16 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      * @see Edges::getEdgeOrder() for parameters $by and $desc
      * @uses self::factoryFromVertices()
      */
-    public static function factoryCycleFromPredecessorMap($predecessors, $vertex, $by = null, $desc = false)
+    public static function factoryCycleFromPredecessorMap(array $predecessors, Vertex $vertex, $by = null, $desc = false)
     {
-        /*$checked = array();
-         foreach ($predecessors as $vertex) {
-        $vid = $vertex->getId();
-        if (!isset($checked[$vid])) {
-
-        }
-        }*/
-
         // find a vertex in the cycle
         $vid = $vertex->getId();
         $startVertices = array();
         do {
+            if (!isset($predecessors[$vid])) {
+                throw new InvalidArgumentException('Predecessor map is incomplete and does not form a cycle');
+            }
+
             $startVertices[$vid] = $vertex;
 
             $vertex = $predecessors[$vid];
@@ -126,13 +121,16 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
         // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
         $vertices = array_reverse($vertices, true);
 
+        // additional edge from last vertex to first vertex
+        $vertices[] = reset($vertices);
+
         return self::factoryCycleFromVertices($vertices, $by, $desc);
     }
 
     /**
      * create new cycle instance with edges between given vertices
      *
-     * @param  Vertex[]           $vertices
+     * @param  Vertex[]|Vertices  $vertices
      * @param  int|null           $by
      * @param  boolean            $desc
      * @return Walk
@@ -144,22 +142,12 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
     {
         $cycle = self::factoryFromVertices($vertices, $by, $desc);
 
-        $first = $cycle->getVertexSource();
-        $last  = $cycle->getVertexTarget();
+        if ($cycle->getEdges()->isEmpty()) {
+            throw new InvalidArgumentException('Cycle with no edges can not exist');
+        }
 
-        // additional edge from last vertex to first vertex
-        if ($last !== $first) {
-            $vertices = $cycle->getVertices()->getVector();
-            $edges    = $cycle->getEdges()->getVector();
-
-            if ($by === null) {
-                $edges []= $last->getEdgesTo($first)->getEdgeFirst();
-            } else {
-                $edges []= $last->getEdgesTo($first)->getEdgeOrder($by, $desc);
-            }
-            $vertices []= $first;
-
-            $cycle = new self($vertices, $edges);
+        if ($cycle->getVertices()->getVertexFirst() !== $cycle->getVertices()->getVertexLast()) {
+            throw new InvalidArgumentException('Cycle has to start and end at the same vertex');
         }
 
         return $cycle;
@@ -179,7 +167,7 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
         $cycle = self::factoryFromEdges($edges, $startVertex);
 
         // ensure this walk is actually a cycle by checking start = end
-        if ($cycle->getVertexTarget() !== $startVertex) {
+        if ($cycle->getVertices()->getVertexLast() !== $startVertex) {
             throw new InvalidArgumentException('The given array of edges does not represent a cycle');
         }
 
@@ -208,12 +196,13 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      * return original graph
      *
      * @return Graph
-     * @uses Walk::getVertexSource()
+     * @uses self::getVertices()
+     * @uses Vertices::getVertexFirst()
      * @uses Vertex::getGraph()
      */
     public function getGraph()
     {
-        return $this->getVertexSource()->getGraph();
+        return $this->getVertices()->getVertexFirst()->getGraph();
     }
 
     /**
@@ -260,31 +249,17 @@ class Walk extends Set implements VerticesAggregate, EdgesAggregate
      * If you need to return set a of all unique Vertices of walk, use
      * `Walk::getVertices()->getVerticesDistinct()` instead.
      *
+     * If you need to return the source vertex (first vertex of walk), use
+     * `Walk::getVertices()->getVertexFirst()` instead.
+     *
+     * If you need to return the target/destination vertex (last vertex of walk), use
+     * `Walk::getVertices()->getVertexLast()` instead.
+     *
      * @return Vertices
      */
     public function getVertices()
     {
         return $this->vertices;
-    }
-
-    /**
-     * return source vertex (first vertex of walk)
-     *
-     * @return Vertex
-     */
-    public function getVertexSource()
-    {
-        return $this->vertices->getVertexFirst();
-    }
-
-    /**
-     * return target vertex (last vertex of walk)
-     *
-     * @return Vertex
-     */
-    public function getVertexTarget()
-    {
-        return $this->vertices->getVertexLast();
     }
 
     /**
