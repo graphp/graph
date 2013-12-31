@@ -72,8 +72,8 @@ class Bruteforce implements Base
 
     public function setUpperLimitMst(Graph $graph)
     {
-        $alg = new AlgorithmTspMst($graph);
-        $limit = $alg->createGraph()->getWeight();
+        $alg = new AlgorithmTspMst();
+        $limit = $alg->createResult($graph->getVertices()->getVertexFirst())->getWeight();
 
         return $this->setUpperLimit($limit);
     }
