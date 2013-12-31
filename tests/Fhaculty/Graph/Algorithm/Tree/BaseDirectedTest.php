@@ -75,7 +75,7 @@ abstract class BaseDirectedTest extends TestCase
     public function testGraphTree()
     {
         $graph = $this->createGraphTree();
-        $root = $graph->getVertexFirst();
+        $root = $graph->getVertices()->getVertexFirst();
 
         $nonRoot = $graph->getVertices()->getMap();
         unset($nonRoot[$root->getId()]);

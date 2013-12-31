@@ -273,14 +273,14 @@ class GraphViz
      * create graphviz script representing this graph
      *
      * @return string
-     * @uses Directed::isDirected()
+     * @uses Directed::hasDirected()
      * @uses Graph::getVertices()
      * @uses Graph::getEdges()
      */
     public function createScript()
     {
         $alg = new Directed($this->graph);
-        $directed = $alg->isDirected();
+        $directed = $alg->hasDirected();
 
         $script = ($directed ? 'di':'') . 'graph G {' . self::EOL;
 
