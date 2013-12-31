@@ -9,7 +9,7 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\TravelingSalesmanProblem\MinimumSpanningTree as AlgorithmTspMst;
 
-class Bruteforce
+class Bruteforce implements Base
 {
     /**
      * best weight so for (used for branch-and-bound)
@@ -49,12 +49,9 @@ class Bruteforce
      */
     private $branchAndBound = true;
 
-    public function createResult(Graph $graph)
+    public function createResult(Vertex $startVertex)
     {
-        // actual start doesn't really matter as we're only considering complete graphs here
-        $startVertex = $graph->getVertices()->getVertexFirst();
-
-        return new ResultFromEdges($startvertex, $this->getEdges($startVertex));
+        return new ResultFromEdges($startVertex, $this->getEdges($startVertex));
     }
 
     /**

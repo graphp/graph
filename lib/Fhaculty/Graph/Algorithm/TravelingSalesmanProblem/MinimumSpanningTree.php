@@ -7,12 +7,16 @@ use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\MinimumSpanningTree\Kruskal as MstKruskal;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchDepthFirst;
+use Fhaculty\Graph\Vertex;
 
-class MinimumSpanningTree
+class MinimumSpanningTree implements Base
 {
-    public function createResult(Graph $inputGraph)
+    public function createResult(Vertex $startVertex)
     {
-        return new ResultFromEdges($inputGraph->getVertices()->getVertexFirst(), $this->getEdges($inputGraph));
+        $edges = $this->getEdges($startVertex->getGraph());
+        $startVertex = $edges->getEdgeFirst()->getVertices()->getVertexFirst();
+
+        return new ResultFromEdges($startVertex, $edges);
     }
 
     /**

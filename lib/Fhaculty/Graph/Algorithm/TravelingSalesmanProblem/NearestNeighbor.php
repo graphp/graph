@@ -8,7 +8,7 @@ use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Set\Edges;
 use \SplPriorityQueue;
 
-class NearestNeighbor
+class NearestNeighbor implements Base
 {
     public function createResult(Vertex $startVertex)
     {
