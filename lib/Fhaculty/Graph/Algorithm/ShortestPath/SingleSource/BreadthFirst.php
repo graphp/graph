@@ -20,7 +20,7 @@ use \Exception;
  * reached at all (path finding). This avoids running expensive operations to
  * determine the actual weight (distance) of a path.
  */
-class BreadthFirst extends Base
+class BreadthFirst implements Base
 {
     public function createResult(Vertex $startVertex)
     {

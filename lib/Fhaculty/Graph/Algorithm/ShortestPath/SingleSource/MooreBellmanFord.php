@@ -19,7 +19,7 @@ use Fhaculty\Graph\Vertex;
  *
  * @link http://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm
  */
-class MooreBellmanFord extends Base
+class MooreBellmanFord implements Base
 {
     /**
      * Calculate the Moore-Bellman-Ford-Algorithm and get all edges on shortest path for this vertex

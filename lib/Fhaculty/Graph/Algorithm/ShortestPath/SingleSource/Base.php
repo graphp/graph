@@ -54,10 +54,10 @@ use Fhaculty\Graph\Set\Vertices;
  * @see ShortestPath\MooreBellmanFord which also supports negative Edge weights
  * @see ShortestPath\BreadthFirst with does not consider Edge weights, but only the number of hops
  */
-abstract class Base
+interface Base
 {
     /**
      * @return Result
      */
-    abstract public function createResult(Vertex $startVertex);
+    public function createResult(Vertex $startVertex);
 }

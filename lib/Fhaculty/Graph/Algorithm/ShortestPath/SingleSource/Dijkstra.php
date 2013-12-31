@@ -19,7 +19,7 @@ use Fhaculty\Graph\Vertex;
  * @link http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
  * @see MooreBellmanFord
  */
-class Dijkstra extends Base
+class Dijkstra implements Base
 {
     /**
      * get all edges on shortest path for this vertex
