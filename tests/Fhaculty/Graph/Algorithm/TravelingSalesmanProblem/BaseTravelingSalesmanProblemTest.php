@@ -21,13 +21,7 @@ abstract class BaseTravelingSalesmanProblemTest extends TestCase
 
     public function testCompleteFive()
     {
-        $complete = new CompleteGraph(5);
-        $graph = $complete->createGraph();
-
-        foreach ($graph->getEdges() as $edge) {
-            $edge->setWeight(2);
-        }
-
+        $graph = $this->createGraphComplete(5, 2);
         $v1 = $graph->getVertex(1);
 
         $result = $this->createResult($v1);
@@ -88,5 +82,19 @@ abstract class BaseTravelingSalesmanProblemTest extends TestCase
         $v3->createEdge($v4);
 
         $this->createResult($v1);
+    }
+
+    protected function createGraphComplete($n, $weight = null)
+    {
+        $complete = new CompleteGraph($n);
+        $graph = $complete->createGraph();
+
+        if ($weight !== null) {
+            foreach ($graph->getEdges() as $edge) {
+                $edge->setWeight($weight);
+            }
+        }
+
+        return $graph;
     }
 }
