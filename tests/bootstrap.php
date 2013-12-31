@@ -74,7 +74,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         $ret = get_class($vertex);
 
         $ret .= PHP_EOL . 'id: ' . $vertex->getId();
-        $ret .= PHP_EOL . 'layout: ' . json_encode($vertex->getLayout());
+        $ret .= PHP_EOL . 'layout: ' . json_encode($vertex->getLayout()->getAttributes());
         $ret .= PHP_EOL . 'balance: ' . $vertex->getBalance();
         $ret .= PHP_EOL . 'group: ' . $vertex->getGroup();
 
@@ -93,7 +93,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         $ret .= PHP_EOL . 'flow: ' . $edge->getFlow();
         $ret .= PHP_EOL . 'capacity: ' . $edge->getCapacity();
         $ret .= PHP_EOL . 'weight: ' . $edge->getWeight();
-        $ret .= PHP_EOL . 'layout: ' . json_encode($edge->getLayout());
+        $ret .= PHP_EOL . 'layout: ' . json_encode($edge->getLayout()->getAttributes());
 
         return $ret;
     }
