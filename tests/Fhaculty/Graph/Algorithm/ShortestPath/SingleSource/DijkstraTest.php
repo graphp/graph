@@ -2,13 +2,13 @@
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Algorithm\ShortestPath\Dijkstra;
+use Fhaculty\Graph\Algorithm\ShortestPath\SingleSource\Dijkstra;
 
 class DijkstraTest extends BaseShortestPathTest
 {
-    protected function createAlg(Vertex $vertex)
+    protected function createAlg()
     {
-        return new Dijkstra($vertex);
+        return new Dijkstra();
     }
 
     /**
@@ -24,8 +24,6 @@ class DijkstraTest extends BaseShortestPathTest
         $e1 = $v1->createEdgeTo($v2)->setWeight(10);
         $e2 = $v1->createEdgeTo($v2)->setWeight(-1);
 
-        $alg = $this->createAlg($v1);
-
-        $alg->getEdges();
+        $this->createResult($v1);
     }
 }

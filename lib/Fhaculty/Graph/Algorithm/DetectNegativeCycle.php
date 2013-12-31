@@ -4,12 +4,11 @@ namespace Fhaculty\Graph\Algorithm;
 
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Exception\NegativeCycleException;
-use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
+use Fhaculty\Graph\Algorithm\ShortestPath\SingleSource\MooreBellmanFord;
 
 class DetectNegativeCycle extends BaseGraph
 {
@@ -41,18 +40,18 @@ class DetectNegativeCycle extends BaseGraph
      */
     public function getCycleNegative()
     {
+        $alg = new MooreBellmanFord();
+
         // remember vertices already visited, as they can not lead to a new cycle
         $verticesVisited = array();
         // check for all vertices
         foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             // skip vertices already visited
             if (!isset($verticesVisited[$vid])) {
-                // start MBF algorithm on current vertex
-                $alg = new SpMooreBellmanFord($vertex);
-
                 try {
+                    // start MBF algorithm on current vertex
                     // try to get all connected vertices (or throw new cycle)
-                    foreach ($alg->getVertices()->getIds() as $vid) {
+                    foreach ($alg->createResult($vertex)->getVertices()->getIds() as $vid) {
                         // getting connected vertices succeeded, so skip over all of them
                         $verticesVisited[$vid] = true;
                     // no cycle found, check next vertex...
