@@ -43,8 +43,6 @@ class Bruteforce implements Base
     /**
      * whether to use branch-and-bound
      *
-     * simply put, there's no valid reason why anybody would want to turn off this flag
-     *
      * @var boolean
      */
     private $branchAndBound = true;
@@ -76,6 +74,25 @@ class Bruteforce implements Base
         $limit = $alg->createResult($graph->getVertices()->getVertexFirst())->getWeight();
 
         return $this->setUpperLimit($limit);
+    }
+
+    /**
+     * turn branch and bound on or off
+     *
+     * Branch and bound vastly improves this bruteforce algorithm by skipping
+     * branches that exceed the best known result. So it's highly recommended
+     * to not turn this off. However, this does not work when dealing with
+     * negative edge weights, as negative weights might make an initially
+     * expensive branch much cheaper in following iterations.
+     *
+     * @param boolean $toggle
+     * @return self $this (chainable)
+     */
+    public function setBranchAndBound($toggle)
+    {
+        $this->branchAndBound = !! $toggle;
+
+        return $this;
     }
 
     /**
