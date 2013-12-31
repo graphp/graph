@@ -162,7 +162,7 @@ class Bruteforce implements Base
             $target = $edge->getVertexToFrom($vertex);
 
             $weight = $edge->getWeight();
-            if ($weight < 0) {
+            if ($weight < 0 && $this->branchAndBound) {
                 throw new UnexpectedValueException('Edge with negative weight "' . $weight . '" not supported');
             }
 
