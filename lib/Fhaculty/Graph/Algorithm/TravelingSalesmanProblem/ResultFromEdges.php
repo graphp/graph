@@ -13,7 +13,7 @@ class ResultFromEdges implements Result
 
     public function __construct(Vertex $startVertex, Edges $edges)
     {
-        $this->startvertex = $startVertex;
+        $this->startVertex = $startVertex;
         $this->edges = $edges;
     }
 
