@@ -8,6 +8,8 @@ use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\MinimumSpanningTree\Kruskal as MstKruskal;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchDepthFirst;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Exception\UnderflowException;
+use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 class MinimumSpanningTree implements Base
 {
@@ -29,7 +31,12 @@ class MinimumSpanningTree implements Base
 
         // Create minimum spanning tree
         $minimumSpanningTreeAlgorithm = new MstKruskal($inputGraph);
-        $minimumSpanningTree = $minimumSpanningTreeAlgorithm->createGraph();
+        try {
+            $minimumSpanningTree = $minimumSpanningTreeAlgorithm->createGraph();
+        }
+        catch (UnexpectedValueException $ex) {
+            throw new UnderflowException('Graph is not connected and therefor not complete', 0, $ex);
+        }
 
         $alg = new SearchDepthFirst($minimumSpanningTree->getVertices()->getVertexFirst());
         // Depth first search in minmum spanning tree (for the eulerian path)
