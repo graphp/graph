@@ -1,8 +1,8 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm\ShortestPath;
+namespace Fhaculty\Graph\Algorithm\ShortestPath\SingleSource;
 
-use Fhaculty\Graph\Algorithm\ShortestPath\Result;
+use Fhaculty\Graph\Algorithm\ShortestPath\SingleSource\Result;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Set\Vertices;

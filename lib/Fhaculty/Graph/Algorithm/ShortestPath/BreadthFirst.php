@@ -25,42 +25,8 @@ class BreadthFirst extends Base
 {
     public function createResult()
     {
-        return new EdgesMapResult($this->vertex, $this->getEdgesMap());
-    }
+        $alg = new SingleSource\BreadthFirst();
 
-    /**
-     * get array of edges on the walk for each vertex (vertex ID => array of walk edges)
-     *
-     * @return array[]
-     */
-    public function getEdgesMap()
-    {
-        $vertexQueue = array();
-        $edges = array();
-
-        // $edges[$this->vertex->getId()] = array();
-
-        $vertexCurrent = $this->vertex;
-        $edgesCurrent = array();
-
-        do {
-            foreach ($vertexCurrent->getEdgesOut() as $edge) {
-                $vertexTarget = $edge->getVertexToFrom($vertexCurrent);
-                $vid = $vertexTarget->getId();
-                if (!isset($edges[$vid])) {
-                    $vertexQueue []= $vertexTarget;
-                    $edges[$vid] = array_merge($edgesCurrent, array($edge));
-                }
-            }
-
-            // get next from queue
-            $vertexCurrent = array_shift($vertexQueue);
-            if ($vertexCurrent) {
-                $edgesCurrent = $edges[$vertexCurrent->getId()];
-            }
-        // untill queue is empty
-        } while ($vertexCurrent);
-
-        return $edges;
+        return $alg->createResult($this->vertex);
     }
 }

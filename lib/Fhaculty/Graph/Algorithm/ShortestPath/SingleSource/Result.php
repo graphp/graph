@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm\ShortestPath;
+namespace Fhaculty\Graph\Algorithm\ShortestPath\SingleSource;
 
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\VerticesAggregate;

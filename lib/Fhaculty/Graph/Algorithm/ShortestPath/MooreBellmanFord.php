@@ -28,7 +28,9 @@ class MooreBellmanFord extends Base
      */
     public function createResult()
     {
-        return new PredecessorResult($this->vertex, $this->getPredecessorMap());
+        $alg = new SingleSource\MooreBellmanFord();
+
+        return $alg->createResult($this->vertex);
     }
 
     /**
@@ -39,89 +41,8 @@ class MooreBellmanFord extends Base
      */
     public function getCycleNegative()
     {
-        try {
-            $this->getPredecessorMap();
-        } catch (NegativeCycleException $e) {
-            return $e->getCycle();
-        }
-        throw new UnderflowException('No cycle found');
-    }
+        $alg = new SingleSource\MooreBellmanFord();
 
-    /**
-     *
-     *
-     * @param Edges    $edges
-     * @param int[]    $totalCostOfCheapestPathTo
-     * @param Vertex[] $predecessorVertexOfCheapestPathTo
-     *
-     * @return Vertex|NULL
-     */
-    private function bigStep(Edges $edges, array &$totalCostOfCheapestPathTo, array &$predecessorVertexOfCheapestPathTo)
-    {
-        $changed = NULL;
-        // check for all edges
-        foreach ($edges as $edge) {
-            /* @var $edge Edge */
-            // check for all "ends" of this edge (or for all targets)
-            foreach ($edge->getVerticesTarget() as $toVertex) {
-                /* @var $toVertex Vertex */
-                $fromVertex = $edge->getVertexFromTo($toVertex);
-
-                // If the fromVertex already has a path
-                if (isset($totalCostOfCheapestPathTo[$fromVertex->getId()])) {
-                    // New possible costs of this path
-                    $newCost = $totalCostOfCheapestPathTo[$fromVertex->getId()] + $edge->getWeight();
-                    if (is_infinite($newCost)) {
-                        $newCost = $edge->getWeight();
-                    }
-
-                    // No path has been found yet
-                    if (!isset($totalCostOfCheapestPathTo[$toVertex->getId()])
-                            // OR this path is cheaper than the old path
-                            || $totalCostOfCheapestPathTo[$toVertex->getId()] > $newCost){
-
-                        $changed = $toVertex;
-                        $totalCostOfCheapestPathTo[$toVertex->getId()] = $newCost;
-                        $predecessorVertexOfCheapestPathTo[$toVertex->getId()] = $fromVertex;
-                    }
-                }
-            }
-        }
-
-        return $changed;
-    }
-
-    private function getPredecessorMap()
-    {
-        // start node distance, add placeholder weight
-        $totalCostOfCheapestPathTo  = array($this->vertex->getId() => INF);
-
-        // predecessor
-        $predecessorVertexOfCheapestPathTo  = array($this->vertex->getId() => $this->vertex);
-
-        // the usal algorithm says we repeat (n-1) times.
-        // but because we also want to check for loop edges on the start vertex,
-        // we have to add an additional step:
-        $numSteps = count($this->vertex->getGraph()->getVertices());
-        $edges = $this->vertex->getGraph()->getEdges();
-        $changed = true;
-
-        for ($i = 0; $i < $numSteps && $changed; ++$i) {
-            $changed = $this->bigStep($edges, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo);
-        }
-
-        // no cheaper edge to start vertex found => remove placeholder weight
-        if ($totalCostOfCheapestPathTo[$this->vertex->getId()] === INF) {
-            unset($predecessorVertexOfCheapestPathTo[$this->vertex->getId()]);
-        }
-
-        // Check for negative cycles (only if last step didn't already finish anyway)
-        // something is still changing...
-        if ($changed && $changed = $this->bigStep($edges, $totalCostOfCheapestPathTo, $predecessorVertexOfCheapestPathTo)) {
-            $cycle = Walk::factoryCycleFromPredecessorMap($predecessorVertexOfCheapestPathTo, $changed, Edges::ORDER_WEIGHT);
-            throw new NegativeCycleException('Negative cycle found', 0, NULL, $cycle);
-        }
-
-        return $predecessorVertexOfCheapestPathTo;
+        return $alg->getCycleNegative($this->vertex);
     }
 }
