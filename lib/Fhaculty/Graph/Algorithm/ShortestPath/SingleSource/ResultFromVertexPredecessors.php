@@ -73,11 +73,8 @@ class ResultFromVertexPredecessors implements Result
     public function getDistanceMap()
     {
         $ret = array();
-        foreach ($this->vertex->getGraph()->getVertices()->getMap() as $vid => $vertex) {
-            try {
-                $ret[$vid] = $this->getDistanceTo($vertex);
-            } catch (OutOfBoundsException $ignore) {
-            } // ignore vertices that can not be reached
+        foreach ($this->getVertices() as $vid => $vertex) {
+            $ret[$vid] = $this->getDistanceTo($vertex);
         }
 
         return $ret;
@@ -85,7 +82,12 @@ class ResultFromVertexPredecessors implements Result
 
     public function getDistanceTo(Vertex $endVertex)
     {
-        return $this->sumEdges($this->getEdgesTo($endVertex));
+        $sum = 0;
+        foreach ($this->getEdgesTo($endVertex) as $edge) {
+            $sum += $edge->getWeight();
+        }
+
+        return $sum;
     }
 
     public function createGraph()
@@ -104,22 +106,5 @@ class ResultFromVertexPredecessors implements Result
         }
 
         return new Edges($edges);
-    }
-
-    /**
-     * get sum of weight of given edges
-     *
-     * @param  Edges $edges
-     * @return float
-     * @uses Edge::getWeight()
-     */
-    private function sumEdges(Edges $edges)
-    {
-        $sum = 0;
-        foreach ($edges as $edge) {
-            $sum += $edge->getWeight();
-        }
-
-        return $sum;
     }
 }
