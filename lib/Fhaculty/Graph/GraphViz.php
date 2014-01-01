@@ -228,10 +228,10 @@ class GraphViz
     public function createImageHtml()
     {
         if ($this->format === 'svg' || $this->format === 'svgz') {
-            return '<object type="image/svg+xml" data="' . $this->createImageSrc() . '"></object>';
+            return '<object width="100%" type="image/svg+xml" data="' . $this->createImageSrc() . '"></object>';
         }
 
-        return '<img src="' . $this->createImageSrc() . '" />';
+        return '<img width="100%" src="' . $this->createImageSrc() . '" />';
     }
 
     /**
