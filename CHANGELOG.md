@@ -6,6 +6,12 @@ you spot any mistakes.
 
 ## 0.8.0 (2013-xx-xx)
 
+*   Feature: The base `Graph`, `Vertex` and `EdgeBase` classes can now be
+    extended in order to implement a custom behavior. As such, one can now also
+    instantiate them using the normal `new` operator instead of having to use
+    `Graph::createVertex()` family of methods.
+    ([#82](https://github.com/clue/graph/issues/82))
+
 *   BC break: Rename `Algorithm\Directed::isDirected()` to remove its ambiguity
     in regards to mixed and/or empty graphs
     ([#80](https://github.com/clue/graph/issues/80))
@@ -14,7 +20,7 @@ you spot any mistakes.
     |---|---|
     | `Algorithm\Directed::isDirected()` | `Algorithm\Directed::hasDirected()` |
 
-*   Feature:: Add new `Algorithm\Directed::hasUndirected()` and
+*   Feature: Add new `Algorithm\Directed::hasUndirected()` and
     `Algorithm\Directed::isMixed()` in order to complement the renamed
     `Algorithm\Directed::hasDirected()`
     ([#80](https://github.com/clue/graph/issues/80))

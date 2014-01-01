@@ -77,19 +77,12 @@ class Graph implements DualAggregate
         // no ID given
         if ($id === NULL) {
             $id = $this->getNextId();
-        } elseif (!is_int($id) && !is_string($id)) {
-            throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
         }
-        if ($this->vertices->hasVertexId($id)) {
-            if ($returnDuplicate) {
-                return $this->vertices->getVertexId($id);
-            }
-            throw new OverflowException('ID must be unique');
+        if ($returnDuplicate && $this->vertices->hasVertexId($id)) {
+            return $this->vertices->getVertexId($id);
         }
-        $vertex = new Vertex($id, $this);
-        $this->verticesStorage[$id] = $vertex;
 
-        return $vertex;
+        return new Vertex($this, $id);
     }
 
     /**
@@ -105,12 +98,11 @@ class Graph implements DualAggregate
         if ($this->vertices->hasVertexId($id)) {
             throw new RuntimeException('Id of cloned vertex already exists');
         }
-        $newVertex = new Vertex($id, $this);
+        $newVertex = new Vertex($this, $id);
         // TODO: properly set attributes of vertex
         $newVertex->setLayout($originalVertex->getLayout());
         $newVertex->setBalance($originalVertex->getBalance());
         $newVertex->setGroup($originalVertex->getGroup());
-        $this->verticesStorage[$id] = $newVertex;
 
         return $newVertex;
     }
@@ -264,7 +256,7 @@ class Graph implements DualAggregate
         $vertices = array();
         if (is_int($n) && $n >= 0) {
             for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
-                $vertices[$id] = $this->verticesStorage[$id] = new Vertex($id, $this);
+                $vertices[$id] = new Vertex($this, $id);
             }
         } elseif (is_array($n)) {
             // array given => check to make sure all given IDs are available (atomic operation)
@@ -283,7 +275,7 @@ class Graph implements DualAggregate
 
             // actually create all requested vertices
             foreach ($n as $id) {
-                $vertices[$id] = $this->verticesStorage[$id] = new Vertex($id, $this);
+                $vertices[$id] = new Vertex($this, $id);
             }
         } else {
             throw new InvalidArgumentException('Invalid number of vertices given. Must be non-negative integer or an array of Vertex IDs');
@@ -330,6 +322,22 @@ class Graph implements DualAggregate
     public function hasVertex($id)
     {
         return $this->vertices->hasVertexId($id);
+    }
+
+    /**
+     * adds a new Vertex to the Graph (MUST NOT be called manually!)
+     *
+     * @param  Vertex $vertex instance of the new Vertex
+     * @return void
+     * @private
+     * @see self::createVertex() instead!
+     */
+    public function addVertex(Vertex $vertex)
+    {
+        if (isset($this->verticesStorage[$vertex->getId()])) {
+            throw new OverflowException('ID must be unique');
+        }
+        $this->verticesStorage[$vertex->getId()] = $vertex;
     }
 
     /**

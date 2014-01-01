@@ -23,7 +23,7 @@ class Undirected extends Base
     private $b;
 
     /**
-     * create new undirected edge between given vertices (MUST NOT BE CALLED MANUALLY!)
+     * create a new undirected edge between given vertices
      *
      * @param Vertex $a
      * @param Vertex $b
@@ -31,8 +31,16 @@ class Undirected extends Base
      */
     public function __construct(Vertex $a, Vertex $b)
     {
+        if ($a->getGraph() !== $b->getGraph()) {
+            throw new InvalidArgumentException('Vertices have to be within the same graph');
+        }
+
         $this->a = $a;
         $this->b = $b;
+
+        $a->getGraph()->addEdge($this);
+        $a->addEdge($this);
+        $b->addEdge($this);
     }
 
     public function getVerticesTarget()

@@ -43,16 +43,22 @@ class Vertex extends Layoutable implements EdgesAggregate
     private $group = 0;
 
     /**
-     * Creates a Vertex (MUST NOT BE CALLED MANUALLY!)
+     * Create a new Vertex
      *
-     * @param string|int $id    identifier used to uniquely identify this vertex in the graph
      * @param Graph      $graph graph to be added to
+     * @param string|int $id    identifier used to uniquely identify this vertex in the graph
      * @see Graph::createVertex() to create new vertices
      */
-    public function __construct($id, Graph $graph)
+    public function __construct(Graph $graph, $id)
     {
+        if (!is_int($id) && !is_string($id)) {
+            throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
+        }
+
         $this->id = $id;
         $this->graph = $graph;
+
+        $graph->addVertex($this);
     }
 
     /**
@@ -127,16 +133,7 @@ class Vertex extends Layoutable implements EdgesAggregate
      */
     public function createEdgeTo(Vertex $vertex)
     {
-        if ($vertex->getGraph() !== $this->graph) {
-            throw new InvalidArgumentException('Target vertex has to be within the same graph');
-        }
-
-        $edge = new EdgeDirected($this, $vertex);
-        $this->edges []= $edge;
-        $vertex->edges []= $edge;
-        $this->graph->addEdge($edge);
-
-        return $edge;
+        return new EdgeDirected($this, $vertex);
     }
 
     /**
@@ -149,16 +146,20 @@ class Vertex extends Layoutable implements EdgesAggregate
      */
     public function createEdge(Vertex $vertex)
     {
-        if ($vertex->getGraph() !== $this->graph) {
-            throw new InvalidArgumentException('Target vertex has to be within the same graph');
-        }
+        return new EdgeUndirected($this, $vertex);
+    }
 
-        $edge = new EdgeUndirected($this, $vertex);
-        $this->edges []= $edge;
-        $vertex->edges []= $edge;
-        $this->graph->addEdge($edge);
-
-        return $edge;
+    /**
+     * add the given edge to list of connected edges (MUST NOT be called manually)
+     *
+     * @param  Edge                     $edge
+     * @return void
+     * @private
+     * @see self::createEdge() instead!
+     */
+    public function addEdge(Edge $edge)
+    {
+        $this->edges[] = $edge;
     }
 
     /**
