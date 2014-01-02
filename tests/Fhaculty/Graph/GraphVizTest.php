@@ -197,4 +197,33 @@ VIZ;
         $graphviz = new GraphViz($graph);
         return $graphviz->createScript();
     }
+
+    public function testImageResult()
+    {
+        $graph = new Graph();
+        $graph->createVertex('a')->createEdgeTo($graph->createVertex('b'));
+        $graph->createVertex('c')->createEdge($graph->getVertex('b'));
+
+        $graphviz = new GraphViz($graph);
+        $result = $graphviz->createImageHtml();
+        $this->assertStringStartsWith('<img src="data:image/png', $result, "Image HTML has img tag");
+
+        $graphviz = new GraphViz($graph);
+        $domElement = $graphviz->createImageObject();
+        $domElement->setAttribute('width', '100%');
+        $result = $domElement->ownerDocument->saveHtml($domElement);
+        $this->assertContains('width', $result, "Image HTML has width attribute");
+
+        $graphviz->setFormat('svg');
+        $result = $graphviz->createImageHtml();
+        $this->assertStringStartsWith('<object type="data:image/svg', $result, "Image HTML has object tag");
+
+        $graphviz->setFormat('svg');
+        $domElement = $graphviz->createImageObject();
+        $domElement->setAttribute('width', '100%');
+        $result = $domElement->ownerDocument->saveHtml($domElement);
+        $this->assertContains('width', $result, "Image HTML has width attribute");
+
+    }
+
 }

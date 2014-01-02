@@ -2,6 +2,9 @@ language: php
 php:
   - 5.4
   - 5.3
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq graphviz
 before_script:
   - composer install --dev --prefer-source --no-interaction
 script:
