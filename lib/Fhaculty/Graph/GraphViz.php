@@ -222,10 +222,13 @@ class GraphViz
     /**
      * Create a DomElement for clients to enrich.
      *
-     * $domElement = $this->createImageObject();
-     * $dom->setAttribute('width', '100%');
+     * @code
+     * $domElement = $graphviz->createImageObject();
+     * $domElement->setAttribute('width', '100%');
      * return $domElement->ownerDocument->saveHtml($domElement);
-     * @return type
+     * @endcode
+     *
+     * @return \DomElement
      */
     public function createImageObject() {
         $dom = new \DOMDocument('1.0', 'utf-8');
