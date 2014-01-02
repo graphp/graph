@@ -232,7 +232,7 @@ class GraphViz
         if ($this->format === 'svg' || $this->format === 'svgz') {
             $domElement = $dom->createElement('object');
             $domElement->setAttribute('type', 'image/svg+xml');
-            $domElement->setAttribute('type', $this->createImageSrc());
+            $domElement->setAttribute('data', $this->createImageSrc());
         }
         else {
             $domElement = $dom->createElement('img');
