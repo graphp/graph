@@ -36,8 +36,6 @@ foreach ($rome->getVerticesEdgeFrom() as $vertex) {
 }
 ````
 
-Looking for more example scripts? Check out [flos/graph-php](https://github.com/flos/graph-php).
-
 ## Features
 
 This library is built around the concept of [mathematical graph theory](http://en.wikipedia.org/wiki/Graph_%28mathematics%29) (i.e. it is **not** a [charting](http://en.wikipedia.org/wiki/Chart) library for drawing a [graph of a function](http://en.wikipedia.org/wiki/Graph_of_a_function)). In essence, a graph is a set of *nodes* with any number of *connections* inbetween. In graph theory, [vertices](http://en.wikipedia.org/wiki/Vertex_%28graph_theory%29) (plural of vertex) are an abstract representation of these *nodes*, while *connections* are represented as *edges*. Edges may be either undirected ("two-way") or directed ("one-way", aka di-edges, arcs).
