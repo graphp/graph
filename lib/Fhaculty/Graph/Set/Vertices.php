@@ -270,7 +270,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * @throws InvalidArgumentException if criterium is unknown
      * @see self::getVertexOrder()
      */
-    public function getVerticesOrder($orderBy = self::ORDER_FIFO, $desc = false)
+    public function getVerticesOrder($orderBy, $desc = false)
     {
         if ($orderBy === self::ORDER_RANDOM) {
             // shuffle the vertex positions
