@@ -78,7 +78,7 @@ class ConnectedComponentsTest extends TestCase
 
         $ge = new Graph();
         $ge->createVertex(5);
-        $this->assertEquals($ge, $alg->createGraphComponentVertex($v5));
+        $this->assertGraphEquals($ge, $alg->createGraphComponentVertex($v5));
     }
 
     /**

@@ -1,14 +1,16 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Fhaculty\Graph\Renderer;
 
+use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Algorithm\Directed;
 use Fhaculty\Graph\Algorithm\Groups;
 use Fhaculty\Graph\Algorithm\Degree;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Edge\Base as Edge;
 use \stdClass;
+use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Edge\Base as Edge;
 
 class GraphViz
 {
@@ -25,9 +27,6 @@ class GraphViz
      * @see GraphViz::setFormat()
      */
     private $format = 'png';
-
-    private $layoutVertex = array();
-    private $layoutEdge = array();
 
     /**
      * Either the name of full path to GraphViz layout.
@@ -147,50 +146,6 @@ class GraphViz
         // echo "... done\n";
     }
 
-    const LAYOUT_GRAPH = 1;
-    const LAYOUT_EDGE = 2;
-    const LAYOUT_VERTEX = 3;
-
-    private function mergeLayout(&$old, $new)
-    {
-        if ($new === NULL) {
-            $old = array();
-        } else {
-            foreach ($new as $key => $value) {
-                if ($value === NULL) {
-                    unset($old[$key]);
-                } else {
-                    $old[$key] = $value;
-                }
-            }
-        }
-    }
-
-    public function setLayout($where, $layout, $value = NULL)
-    {
-        if (!is_array($where)) {
-            $where = array($where);
-        }
-        if (func_num_args() > 2) {
-            $layout = array($layout => $value);
-        }
-        foreach ($where as $where) {
-            if ($where === self::LAYOUT_GRAPH) {
-                $this->graph->setLayout($layout, $value);
-            } elseif ($where === self::LAYOUT_EDGE) {
-                $this->mergeLayout($this->layoutEdge, $layout);
-            } elseif ($where === self::LAYOUT_VERTEX) {
-                $this->mergeLayout($this->layoutVertex, $layout);
-            } else {
-                throw new InvalidArgumentException('Invalid layout identifier');
-            }
-        }
-
-        return $this;
-    }
-
-    // end
-
     /**
      * create image file data contents for this graph
      *
@@ -285,15 +240,19 @@ class GraphViz
         $script = ($directed ? 'di':'') . 'graph G {' . self::EOL;
 
         // add global attributes
-        $layout = $this->graph->getLayout();
+        $layout = $this->graph->getLayout()->getAttributes();
         if ($layout) {
             $script .= $this->formatIndent . 'graph ' . $this->escapeAttributes($layout) . self::EOL;
         }
-        if ($this->layoutVertex) {
-            $script .= $this->formatIndent . 'node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
+
+        $layout = $this->graph->getLayoutVertexDefault()->getAttributes();
+        if ($layout) {
+            $script .= $this->formatIndent . 'node ' . $this->escapeAttributes($layout) . self::EOL;
         }
-        if ($this->layoutEdge) {
-            $script .= $this->formatIndent . 'edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
+
+        $layout = $this->graph->getLayoutEdgeDefault()->getAttributes();
+        if ($layout) {
+            $script .= $this->formatIndent . 'edge ' . $this->escapeAttributes($layout) . self::EOL;
         }
 
         $alg = new Groups($this->graph);
@@ -428,7 +387,7 @@ class GraphViz
 
     protected function getLayoutVertex(Vertex $vertex)
     {
-        $layout = $vertex->getLayout();
+        $layout = $vertex->getLayout()->getAttributes();
 
         $balance = $vertex->getBalance();
         if($balance !== NULL){
@@ -446,7 +405,7 @@ class GraphViz
 
     protected function getLayoutEdge(Edge $edge)
     {
-        $layout = $edge->getLayout();
+        $layout = $edge->getLayout()->getAttributes();
 
         // use flow/capacity/weight as edge label
         $label = NULL;

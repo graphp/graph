@@ -20,9 +20,11 @@ use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesMap;
 use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Renderer\LayoutAggregate;
+use Fhaculty\Graph\Renderer\Layout;
 use Fhaculty\Graph\Set\DualAggregate;
 
-class Graph implements DualAggregate
+class Graph implements DualAggregate, LayoutAggregate
 {
     /**
      * @var ExporterInterface|null
@@ -35,6 +37,10 @@ class Graph implements DualAggregate
 
     protected $edgesStorage = array();
     protected $edges;
+
+    protected $layout = null;
+    protected $layoutVertex = null;
+    protected $layoutEdge = null;
 
     public function __construct()
     {
@@ -100,7 +106,7 @@ class Graph implements DualAggregate
         }
         $newVertex = new Vertex($this, $id);
         // TODO: properly set attributes of vertex
-        $newVertex->setLayout($originalVertex->getLayout());
+        $newVertex->getLayout()->setLayout($originalVertex->getLayout());
         $newVertex->setBalance($originalVertex->getBalance());
         $newVertex->setGroup($originalVertex->getGroup());
 
@@ -117,7 +123,7 @@ class Graph implements DualAggregate
     public function createGraphCloneEdgeless()
     {
         $graph = new Graph();
-//         $graph->setLayout($this->getLayout());
+        $graph->getLayout()->setLayout($this->getLayout());
         // TODO: set additional graph attributes
         foreach ($this->getVertices() as $originalVertex) {
             $vertex = $graph->createVertexClone($originalVertex);
@@ -236,7 +242,7 @@ class Graph implements DualAggregate
             $newEdge = $a->createEdge($b);
         }
         // TODO: copy edge attributes
-        $newEdge->setLayout($originalEdge->getLayout());
+        $newEdge->getLayout()->setLayout($originalEdge->getLayout());
         $newEdge->setWeight($originalEdge->getWeight());
         $newEdge->setFlow($originalEdge->getFlow());
         $newEdge->setCapacity($originalEdge->getCapacity());
@@ -497,7 +503,40 @@ class Graph implements DualAggregate
         return $this->getExporter()->getOutput($this);
     }
 
-    public function getLayout(){
-        return array();
+    public function getLayout()
+    {
+        if ($this->layout === null) {
+            $this->layout = new Layout();
+        }
+
+        return $this->layout;
+    }
+
+    /**
+     * get the global default layout for all vertices
+     *
+     * @return Layout
+     */
+    public function getLayoutVertexDefault()
+    {
+        if ($this->layoutVertex === null) {
+            $this->layoutVertex = new Layout();
+        }
+
+        return $this->layoutVertex;
+    }
+
+    /**
+     * get the global default layout for all edges
+     *
+     * @return Layout
+     */
+    public function getLayoutEdgeDefault()
+    {
+        if ($this->layoutEdge === null) {
+            $this->layoutEdge = new Layout();
+        }
+
+        return $this->layoutEdge;
     }
 }

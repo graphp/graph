@@ -1,10 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Fhaculty\Graph\Renderer;
 
 use Fhaculty\Graph\Exception\OutOfBoundsException;
+use Fhaculty\Graph\LayoutableInterface;
 
-abstract class Layoutable
+class Layout
 {
     /**
      * associative array of layout settings
@@ -18,7 +19,7 @@ abstract class Layoutable
      *
      * @return array
      */
-    public function getLayout()
+    public function getAttributes()
     {
         return $this->layout;
     }
@@ -28,9 +29,9 @@ abstract class Layoutable
      *
      * @param  array $attributes
      * @return self  $this (chainable)
-     * @see Layoutable::setLayoutAttribute()
+     * @see Layoutable::setAttribute()
      */
-    public function setLayout(array $attributes)
+    public function setAttributes(array $attributes)
     {
         foreach ($attributes as $key => $value) {
             if ($value === NULL) {
@@ -44,14 +45,14 @@ abstract class Layoutable
     }
 
     /**
-     * set a single layouto attribute
+     * set a single layout attribute
      *
      * @param  string $name
      * @param  string $value
      * @return self
-     * @see Layoutable::setLayout()
+     * @see Layoutable::setAttributes()
      */
-    public function setLayoutAttribute($name, $value)
+    public function setAttribute($name, $value)
     {
         if ($value === NULL) {
             unset($this->layout[$name]);
@@ -68,17 +69,24 @@ abstract class Layoutable
      * @param  string  $name
      * @return boolean
      */
-    public function hasLayoutAttribute($name)
+    public function hasAttribute($name)
     {
         return isset($this->layout[$name]);
     }
 
-    public function getLayoutAttribute($name)
+    public function getAttribute($name)
     {
         if (!isset($this->layout[$name])) {
             throw new OutOfBoundsException('Given layout attribute is not set');
         }
 
         return $this->layout[$name];
+    }
+
+    public function setLayout(self $layout)
+    {
+        $this->layout = $layout->getAttributes();
+
+        return $this;
     }
 }

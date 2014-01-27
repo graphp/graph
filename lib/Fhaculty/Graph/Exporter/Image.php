@@ -2,8 +2,8 @@
 
 namespace Fhaculty\Graph\Exporter;
 
-use Fhaculty\Graph\GraphViz;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Renderer\GraphViz;
 
 class Image implements ExporterInterface
 {

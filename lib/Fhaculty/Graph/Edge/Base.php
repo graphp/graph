@@ -2,7 +2,6 @@
 
 namespace Fhaculty\Graph\Edge;
 
-use Fhaculty\Graph\Layoutable;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Set\Vertices;
@@ -13,8 +12,10 @@ use Fhaculty\Graph\Exception\RangeException;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\BadMethodCallException;
+use Fhaculty\Graph\Renderer\Layout;
+use Fhaculty\Graph\Renderer\LayoutAggregate;
 
-abstract class Base extends Layoutable implements VerticesAggregate
+abstract class Base implements VerticesAggregate, LayoutAggregate
 {
     /**
      * weight of this edge
@@ -39,6 +40,8 @@ abstract class Base extends Layoutable implements VerticesAggregate
      * @see Edge::getFlow()
      */
     protected $flow = NULL;
+
+    protected $layout = null;
 
     /**
      * get Vertices that are a target of this edge
@@ -288,5 +291,14 @@ abstract class Base extends Layoutable implements VerticesAggregate
         // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
         // @codeCoverageIgnoreEnd
+    }
+
+    public function getLayout()
+    {
+        if ($this->layout === null) {
+            $this->layout = new Layout();
+        }
+
+        return $this->layout;
     }
 }

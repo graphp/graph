@@ -11,8 +11,10 @@ use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Renderer\Layout;
+use Fhaculty\Graph\Renderer\LayoutAggregate;
 
-class Vertex extends Layoutable implements EdgesAggregate
+class Vertex implements EdgesAggregate, LayoutAggregate
 {
     private $id;
 
@@ -41,6 +43,8 @@ class Vertex extends Layoutable implements EdgesAggregate
      * @see Vertex::setGroup()
      */
     private $group = 0;
+
+    private $layout = null;
 
     /**
      * Create a new Vertex
@@ -366,5 +370,14 @@ class Vertex extends Layoutable implements EdgesAggregate
         // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
         // @codeCoverageIgnoreEnd
+    }
+
+    public function getLayout()
+    {
+        if ($this->layout === null) {
+            $this->layout = new Layout();
+        }
+
+        return $this->layout;
     }
 }

@@ -6,7 +6,7 @@ use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\OverflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\GraphViz;
+use Fhaculty\Graph\Renderer\GraphViz;
 
 class GraphVizTest extends TestCase
 {
@@ -46,8 +46,8 @@ VIZ;
         $graph->createVertex('a');
         $graph->createVertex('b¹²³ is; ok\\ay, "right"?');
         $graph->createVertex(3);
-        $graph->createVertex(4)->setLayoutAttribute('label', 'normal');
-        $graph->createVertex(5)->setLayoutAttribute('label', GraphViz::raw('<raw>'));
+        $graph->createVertex(4)->getLayout()->setAttribute('label', 'normal');
+        $graph->createVertex(5)->getLayout()->setAttribute('label', GraphViz::raw('<raw>'));
 
 
         $expected = <<<VIZ
@@ -124,8 +124,8 @@ VIZ;
         $graph->createVertex('a')->setBalance(1);
         $graph->createVertex('b')->setBalance(0);
         $graph->createVertex('c')->setBalance(-1);
-        $graph->createVertex('d')->setLayoutAttribute('label', 'test');
-        $graph->createVertex('e')->setLayoutAttribute('label', 'unnamed')->setBalance(2);
+        $graph->createVertex('d')->getLayout()->setAttribute('label', 'test');
+        $graph->createVertex('e')->setBalance(2)->getLayout()->setAttribute('label', 'unnamed');
 
         $expected = <<<VIZ
 graph G {
@@ -145,10 +145,10 @@ VIZ;
     {
         $graph = new Graph();
         $graph->createVertex('1a')->createEdge($graph->createVertex('1b'));
-        $graph->createVertex('2a')->createEdge($graph->createVertex('2b'))->setLayoutAttribute('numeric', 20);
-        $graph->createVertex('3a')->createEdge($graph->createVertex('3b'))->setLayoutAttribute('textual', "forty");
-        $graph->createVertex('4a')->createEdge($graph->createVertex('4b'))->setLayoutAttribute(1, 1)->setLayoutAttribute(2, 2);
-        $graph->createVertex('5a')->createEdge($graph->createVertex('5b'))->setLayout(array('a' => 'b', 'c' => 'd'));
+        $graph->createVertex('2a')->createEdge($graph->createVertex('2b'))->getLayout()->setAttribute('numeric', 20);
+        $graph->createVertex('3a')->createEdge($graph->createVertex('3b'))->getLayout()->setAttribute('textual', "forty");
+        $graph->createVertex('4a')->createEdge($graph->createVertex('4b'))->getLayout()->setAttribute(1, 1)->setAttribute(2, 2);
+        $graph->createVertex('5a')->createEdge($graph->createVertex('5b'))->getLayout()->setAttributes(array('a' => 'b', 'c' => 'd'));
 
         $expected = <<<VIZ
 graph G {
@@ -173,7 +173,7 @@ VIZ;
         $graph->createVertex('4a')->createEdge($graph->createVertex('4b'))->setFlow(40);
         $graph->createVertex('5a')->createEdge($graph->createVertex('5b'))->setFlow(50)->setCapacity(60);
         $graph->createVertex('6a')->createEdge($graph->createVertex('6b'))->setFlow(60)->setCapacity(70)->setWeight(80);
-        $graph->createVertex('7a')->createEdge($graph->createVertex('7b'))->setLayoutAttribute('label', 'prefixed')->setFlow(70);
+        $graph->createVertex('7a')->createEdge($graph->createVertex('7b'))->setFlow(70)->getLayout()->setAttribute('label', 'prefixed');
 
         $expected = <<<VIZ
 graph G {
