@@ -220,6 +220,30 @@ class GraphViz
     }
 
     /**
+     * Create a DomElement for clients to enrich.
+     *
+     * @code
+     * $domElement = $graphviz->createImageObject();
+     * $domElement->setAttribute('width', '100%');
+     * return $domElement->ownerDocument->saveHtml($domElement);
+     * @endcode
+     *
+     * @return \DomElement
+     */
+    public function createImageObject() {
+        $dom = new \DOMDocument('1.0', 'utf-8');
+        if ($this->format === 'svg' || $this->format === 'svgz') {
+            $domElement = $dom->createElement('object');
+            $domElement->setAttribute('type', 'image/svg+xml');
+            $domElement->setAttribute('data', $this->createImageSrc());
+        }
+        else {
+            $domElement = $dom->createElement('img');
+            $domElement->setAttribute('src', $this->createImageSrc());
+        }
+        return $domElement;
+    }
+    /**
      * create image html code for this graph
      *
      * @return string
@@ -227,11 +251,8 @@ class GraphViz
      */
     public function createImageHtml()
     {
-        if ($this->format === 'svg' || $this->format === 'svgz') {
-            return '<object type="image/svg+xml" data="' . $this->createImageSrc() . '"></object>';
-        }
-
-        return '<img src="' . $this->createImageSrc() . '" />';
+        $domElement = $this->createImageObject();
+        return $domElement->ownerDocument->saveHtml($domElement);
     }
 
     /**
