@@ -97,7 +97,7 @@ users should install from [GraphViz homepage](http://www.graphviz.org/Download.p
 
 Make sure you have done a `$ composer install` once. This sets up the developer environment.
 
-Next run `$ php vendor/phpunit/phpunit/phpunit.php` from the projects root directory.
+Next run `$ php vendor/bin/phpunit` from the projects root directory.
 
 ## Contributing
 
