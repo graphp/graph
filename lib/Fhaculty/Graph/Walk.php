@@ -2,22 +2,33 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Exception\UnderflowException;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Set\DualAggregate;
+
 /**
+ * Base Walk class
  *
- * @author clue
+ * The general term "Walk" bundles the following mathematical concepts:
+ * walk, path, cycle, circuit, loop, trail, tour, etc.
+ *
  * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
+ * @see Fhaculty\Graph\Algorithm\Property\WalkProperty for checking special cases, such as cycles, loops, closed trails, etc.
  */
-class Walk extends Set
+class Walk implements DualAggregate
 {
     /**
      * construct new walk from given start vertex and given array of edges
      *
-     * @param  array                $edges
+     * @param  Edges|Edge[]         $edges
      * @param  Vertex               $startVertex
-     * @return \Fhaculty\Graph\Walk
+     * @return Walk
      */
-    public static function factoryFromEdges(array $edges, Vertex $startVertex)
+    public static function factoryFromEdges($edges, Vertex $startVertex)
     {
         $vertices = array($startVertex);
         $vertexCurrent = $startVertex;
@@ -29,156 +40,169 @@ class Walk extends Set
         return new self($vertices, $edges);
     }
 
-    protected function __construct(array $vertices, array $edges)
-    {
-        $this->vertices = $vertices;
-        $this->edges    = $edges;
-    }
-
     /**
-     * checks whether walk is a cycle (i.e. source vertex = target vertex)
+     * create new walk instance between given set of Vertices / array of Vertex instances
      *
-     * @return bool
-     * @link http://en.wikipedia.org/wiki/Cycle_%28graph_theory%29
+     * @param  Vertices|Vertex[]  $vertices
+     * @param  int|null           $by
+     * @param  boolean            $desc
+     * @return Walk
+     * @throws UnderflowException if no vertices were given
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
      */
-    public function isCycle()
+    public static function factoryFromVertices($vertices, $by = null, $desc = false)
     {
-        return (reset($this->vertices) === end($this->vertices));
-    }
-
-    /**
-     * checks whether walk is a path (i.e. does not contain any duplicate edges)
-     *
-     * @return bool
-     * @uses Walk::hasArrayDuplicates()
-     */
-    public function isPath()
-    {
-        return !$this->hasArrayDuplicates($this->edges);
-    }
-
-    /**
-     * checks whether walk contains a cycle (i.e. contains a duplicate vertex)
-     *
-     * a walk that CONTAINS a cycle does not neccessarily have to BE a cycle
-     *
-     * @return bool
-     * @uses Walk::hasArrayDuplicates()
-     * @see Walk::isCycle()
-     */
-    public function hasCycle()
-    {
-        return $this->hasArrayDuplicates($this->vertices);
-    }
-
-    /**
-     * checks whether this walk is a loop (single edge connecting vertex A with vertex A again)
-     *
-     * @return boolean
-     * @uses Walk::isCycle()
-     */
-    public function isLoop()
-    {
-        return (count($this->edges) === 1 && $this->isCycle());
-    }
-
-    /**
-     * checks whether this walk is a digon (a pair of parallel edges in a multigraph or a pair of antiparallel edges in a digraph)
-     *
-     * a digon is a cycle connecting exactly two distinct vertices with exactly
-     * two distinct edges.
-     *
-     * @return boolean
-     * @uses Walk::hasArrayDuplicates()
-     * @uses Walk::getVertices()
-     * @uses Walk::isCycle()
-     */
-    public function isDigon()
-    {
-        // exactly 2 edges
-        return (count($this->edges) === 2 &&
-                // no duplicate edges
-                !$this->hasArrayDuplicates($this->edges) &&
-                // exactly two distinct vertices
-                count($this->getVertices()) === 2 &&
-                // this is actually a cycle
-                $this->isCycle());
-    }
-
-    /**
-     * checks whether this walk is a triangle (a simple cycle with exactly three distinct vertices)
-     *
-     * @return boolean
-     * @uses Walk::getVertices()
-     * @uses Walk::isCycle()
-     */
-    public function isTriangle()
-    {
-        // exactly 3 (implicitly distinct) edges
-        return (count($this->edges) === 3 &&
-                // exactly three distinct vertices
-                count($this->getVertices()) === 3 &&
-                // this is actually a cycle
-                $this->isCycle());
-    }
-
-    /**
-     * check whether this walk is simple
-     *
-     * contains no duplicate/repeated vertices (and thus no duplicate edges either)
-     * other than the starting and ending vertices of cycles.
-     *
-     * @return boolean
-     * @uses Walk::isCycle()
-     * @uses Walk::hasArrayDuplicates()
-     */
-    public function isSimple()
-    {
-        $vertices = $this->vertices;
-        // ignore starting vertex for cycles as it's always the same as ending vertex
-        if ($this->isCycle()) {
-            unset($vertices[0]);
+        $edges = array();
+        $first = NULL;
+        $last = NULL;
+        foreach ($vertices as $vertex) {
+            // skip first vertex as last is unknown
+            if ($first === NULL) {
+                $first = $vertex;
+            } else {
+                // pick edge between last vertex and this vertex
+                if ($by === null) {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeFirst();
+                } else {
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeOrder($by, $desc);
+                }
+            }
+            $last = $vertex;
+        }
+        if ($last === NULL) {
+            throw new UnderflowException('No vertices given');
         }
 
-        return !$this->hasArrayDuplicates($vertices);
+        return new self($vertices, $edges);
     }
 
     /**
-     * checks whether walk is hamiltonian (i.e. walk over ALL VERTICES of the graph)
+     * create new cycle instance from given predecessor map
      *
-     * @return boolean
-     * @see Walk::isEulerian() if you want to check for all EDGES instead of VERTICES
-     * @uses Walk::isArrayContentsEqual()
-     * @link http://en.wikipedia.org/wiki/Hamiltonian_path
+     * @param  Vertex[]           $predecessors map of vid => predecessor vertex instance
+     * @param  Vertex             $vertex       start vertex to search predecessors from
+     * @param  int|null           $by
+     * @param  boolean            $desc
+     * @return Walk
+     * @throws UnderflowException
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
+     * @uses self::factoryFromVertices()
      */
-    public function isHamiltonian()
+    public static function factoryCycleFromPredecessorMap(array $predecessors, Vertex $vertex, $by = null, $desc = false)
     {
-        return $this->isArrayContentsEqual($this->vertices, $this->getGraph()->getVertices());
+        // find a vertex in the cycle
+        $vid = $vertex->getId();
+        $startVertices = array();
+        do {
+            if (!isset($predecessors[$vid])) {
+                throw new InvalidArgumentException('Predecessor map is incomplete and does not form a cycle');
+            }
+
+            $startVertices[$vid] = $vertex;
+
+            $vertex = $predecessors[$vid];
+            $vid = $vertex->getId();
+        } while (!isset($startVertices[$vid]));
+
+        // find negative cycle
+        $vid = $vertex->getId();
+        // build array of vertices in cycle
+        $vertices = array();
+        do {
+            // add new vertex to cycle
+            $vertices[$vid] = $vertex;
+
+            // get predecessor of vertex
+            $vertex = $predecessors[$vid];
+            $vid = $vertex->getId();
+            // continue until we find a vertex that's already in the circle (i.e. circle is closed)
+        } while (!isset($vertices[$vid]));
+
+        // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
+        $vertices = array_reverse($vertices, true);
+
+        // additional edge from last vertex to first vertex
+        $vertices[] = reset($vertices);
+
+        return self::factoryCycleFromVertices($vertices, $by, $desc);
     }
 
     /**
-     * checks whether walk is eulerian (i.e. a walk over ALL EDGES of the graph)
+     * create new cycle instance with edges between given vertices
      *
-     * @return boolean
-     * @see Walk::isHamiltonian() if you want to check for all VERTICES instead of EDGES
-     * @uses Walk::isArrayContentsEqual()
-     * @link http://en.wikipedia.org/wiki/Eulerian_path
+     * @param  Vertex[]|Vertices  $vertices
+     * @param  int|null           $by
+     * @param  boolean            $desc
+     * @return Walk
+     * @throws UnderflowException if no vertices were given
+     * @see Edges::getEdgeOrder() for parameters $by and $desc
+     * @uses self::factoryFromVertices()
      */
-    public function isEulerian()
+    public static function factoryCycleFromVertices($vertices, $by = null, $desc = false)
     {
-        return $this->isArrayContentsEqual($this->edges, $this->getGraph()->getEdges());
+        $cycle = self::factoryFromVertices($vertices, $by, $desc);
+
+        if ($cycle->getEdges()->isEmpty()) {
+            throw new InvalidArgumentException('Cycle with no edges can not exist');
+        }
+
+        if ($cycle->getVertices()->getVertexFirst() !== $cycle->getVertices()->getVertexLast()) {
+            throw new InvalidArgumentException('Cycle has to start and end at the same vertex');
+        }
+
+        return $cycle;
+    }
+
+    /**
+     * create new cycle instance with vertices connected by given edges
+     *
+     * @param  Edges|Edge[] $edges
+     * @param  Vertex       $startVertex
+     * @return Walk
+     * @throws InvalidArgumentException if the given array of edges does not represent a valid cycle
+     * @uses self::factoryFromEdges()
+     */
+    public static function factoryCycleFromEdges($edges, Vertex $startVertex)
+    {
+        $cycle = self::factoryFromEdges($edges, $startVertex);
+
+        // ensure this walk is actually a cycle by checking start = end
+        if ($cycle->getVertices()->getVertexLast() !== $startVertex) {
+            throw new InvalidArgumentException('The given array of edges does not represent a cycle');
+        }
+
+        return $cycle;
+    }
+
+    /**
+     *
+     * @var Vertices
+     */
+    protected $vertices;
+
+    /**
+     *
+     * @var Edges
+     */
+    protected $edges;
+
+    protected function __construct($vertices, $edges)
+    {
+        $this->vertices = Vertices::factory($vertices);
+        $this->edges    = Edges::factory($edges);
     }
 
     /**
      * return original graph
      *
      * @return Graph
-     * @uses Walk::getVertexSource()
+     * @uses self::getVertices()
+     * @uses Vertices::getVertexFirst()
      * @uses Vertex::getGraph()
      */
     public function getGraph()
     {
-        return $this->getVertexSource()->getGraph();
+        return $this->getVertices()->getVertexFirst()->getGraph();
     }
 
     /**
@@ -194,9 +218,9 @@ class Walk extends Set
     {
         // create new graph clone with only edges of walk
         $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());
-        $vertices = $this->getVertices();
+        $vertices = $this->getVertices()->getMap();
         // get all vertices
-        foreach ($graph->getVertices() as $vid => $vertex) {
+        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
             if (!isset($vertices[$vid])) {
                 // remove those not present in the walk (isolated vertices, etc.)
                 $vertex->destroy();
@@ -207,102 +231,35 @@ class Walk extends Set
     }
 
     /**
-     * return array of all unique edges of walk
+     * return set of all Edges of walk (in sequence visited in walk, may contain duplicates)
      *
-     * @return Edge[]
+     * If you need to return set a of all unique Edges of walk, use
+     * `Walk::getEdges()->getEdgesDistinct()` instead.
+     *
+     * @return Edges
      */
     public function getEdges()
-    {
-        $edges = array();
-        foreach ($this->edges as $edge) {
-            // filter duplicate edges
-            if (!in_array($edge, $edges, true)) {
-                $edges []= $edge;
-            }
-        }
-
-        return $edges;
-    }
-
-    /**
-     * return array/list of all edges of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return Edge[]
-     */
-    public function getEdgesSequence()
     {
         return $this->edges;
     }
 
     /**
-     * return array of all unique vertices of walk
+     * return set of all Vertices of walk (in sequence visited in walk, may contain duplicates)
      *
-     * @return Vertex[]
+     * If you need to return set a of all unique Vertices of walk, use
+     * `Walk::getVertices()->getVerticesDistinct()` instead.
+     *
+     * If you need to return the source vertex (first vertex of walk), use
+     * `Walk::getVertices()->getVertexFirst()` instead.
+     *
+     * If you need to return the target/destination vertex (last vertex of walk), use
+     * `Walk::getVertices()->getVertexLast()` instead.
+     *
+     * @return Vertices
      */
     public function getVertices()
     {
-        $vertices = array();
-        foreach ($this->vertices as $vertex) {
-            $vertices[$vertex->getId()] = $vertex;
-        }
-
-        return $vertices;
-    }
-
-    /**
-     * return array/list of all vertices of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return Vertex[]
-     */
-    public function getVerticesSequence()
-    {
         return $this->vertices;
-    }
-
-    /**
-     * return array of all vertex ids of walk (in sequence visited in walk, may contain duplicates)
-     *
-     * @return string[]
-     * @uses Vertex::getId()
-     */
-    public function getVerticesSequenceId()
-    {
-        $ids = array();
-        foreach ($this->vertices as $vertex) {
-            $ids []= $vertex->getId();
-        }
-
-        return $ids;
-    }
-
-    /**
-     * get IDs of all vertices in the walk
-     *
-     * @return int[]
-     */
-    public function getVerticesId()
-    {
-        return array_keys($this->getVertices());
-    }
-
-    /**
-     * return source vertex (first vertex of walk)
-     *
-     * @return Vertex
-     */
-    public function getVertexSource()
-    {
-        return reset($this->vertices);
-    }
-
-    /**
-     * return target vertex (last vertex of walk)
-     *
-     * @return Vertex
-     */
-    public function getVertexTarget()
-    {
-        return end($this->vertices);
     }
 
     /**
@@ -312,57 +269,17 @@ class Walk extends Set
      */
     public function getAlternatingSequence()
     {
+        $edges    = $this->edges->getVector();
+        $vertices = $this->vertices->getVector();
+
         $ret = array();
         for ($i = 0, $l = count($this->edges); $i < $l; ++$i) {
-            $ret []= $this->vertices[$i];
-            $ret []= $this->edges[$i];
+            $ret []= $vertices[$i];
+            $ret []= $edges[$i];
         }
-        $ret[] = $this->vertices[$i];
+        $ret[] = $vertices[$i];
 
         return $ret;
-    }
-
-    /**
-     * checks whether ths given array contains duplicate identical entries
-     *
-     * @param  array $array
-     * @return bool
-     */
-    private function hasArrayDuplicates($array)
-    {
-        $compare = array();
-        foreach ($array as $element) {
-            // duplicate element found
-            if (in_array($element, $compare, true)) {
-                return true;
-            } else {
-                // add element to temporary array to check for duplicates
-                $compare [] = $element;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * checks whether the contents of array a equals those of array b (ignore keys and order but otherwise strict check)
-     *
-     * @param  array   $a
-     * @param  array   $b
-     * @return boolean
-     */
-    private function isArrayContentsEqual($a, $b)
-    {
-        foreach ($b as $one) {
-            $pos = array_search($one, $a, true);
-            if ($pos === false) {
-                return false;
-            } else {
-                unset($a[$pos]);
-            }
-        }
-
-        return $a ? false : true;
     }
 
     /**
@@ -375,16 +292,15 @@ class Walk extends Set
      */
     public function isValid()
     {
-        $vertices = $this->getGraph()->getVertices();
+        $vertices = $this->getGraph()->getVertices()->getMap();
         // check source graph contains all vertices
-        foreach ($this->vertices as $vertex) {
-            $vid = $vertex->getId();
+        foreach ($this->getVertices()->getMap() as $vid => $vertex) {
             // make sure vertex ID exists and has not been replaced
-            if (!isset($vertices[$vid]) || $vertices[$id] !== $vertex) {
+            if (!isset($vertices[$vid]) || $vertices[$vid] !== $vertex) {
                 return false;
             }
         }
-        $edges = $this->getGraph()->getEdges();
+        $edges = $this->getGraph()->getEdges()->getVector();
         // check source graph contains all edges
         foreach ($this->edges as $edge) {
             if (!in_array($edge, $edges, true)) {

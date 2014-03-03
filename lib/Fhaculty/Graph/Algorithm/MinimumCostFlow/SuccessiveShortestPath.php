@@ -3,15 +3,13 @@
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
 use Fhaculty\Graph\Exception\DomainException;
-
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\ShortestPath\MooreBellmanFord as SpMooreBellmanFord;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
@@ -19,12 +17,10 @@ use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
 class SuccessiveShortestPath extends Base
 {
     /**
-     * @uses Vertex::getFlow()
      * @uses Graph::createGraphClone()
-     * @uses AlgorithmResidualGraph::createGraph()
-     * @uses AlgorithmSpMooreBellmanFord::getEdgesTo(Vertex $targetVertex)
-     *
-     * @see AlgorithmMCF::createGraph()
+     * @uses ResidualGraph::createGraph()
+     * @uses SpMooreBellmanFord::getEdgesTo(Vertex $targetVertex)
+     * @see Base::createGraph()
      */
     public function createGraph()
     {
@@ -40,29 +36,29 @@ class SuccessiveShortestPath extends Base
         // initial flow of edges
         $edges = $resultGraph->getEdges();
         foreach ($edges as $edge) {
-            // 0 if weight of edge is positiv
+            if (!($edge instanceof EdgeDirected)) {
+                throw new UnexpectedValueException('Undirected edges are not supported for SuccessiveShortestPath');
+            }
+
+            // 0 if weight of edge is positive
             $flow = 0;
 
             // maximal flow if weight of edge is negative
             if ($edge->getWeight() < 0) {
                 $flow = $edge->getCapacity();
 
-                if ($edge instanceof EdgeDirected) {
-                    $startVertex = $edge->getVertexStart();
-                    $endVertex = $edge->getVertexEnd();
+                $startVertex = $edge->getVertexStart();
+                $endVertex = $edge->getVertexEnd();
 
-                    // add balance to start- and end-vertex
-                    $this->addBalance($startVertex, $flow);
-                    $this->addBalance($endVertex, - $flow);
-                } else {
-                    throw new UnexpectedValueException('Undirected Edges not suported');
-                }
+                // add balance to start- and end-vertex
+                $this->addBalance($startVertex, $flow);
+                $this->addBalance($endVertex, - $flow);
             }
 
             $edge->setFlow($flow);
         }
 
-        // return or Exception insite this while
+        // return or Exception inside this while
         while (true) {
             // create residual graph
             $algRG = new ResidualGraph($resultGraph);
@@ -71,17 +67,17 @@ class SuccessiveShortestPath extends Base
             // search for a source
             try {
                 $sourceVertex = $this->getVertexSource($residualGraph);
-            // if no source is found the minimum-cost flow is found
             } catch (UnderflowException $ignore) {
+                // no source is found => minimum-cost flow is found
                 break;
             }
 
-            // search for reachble sink from this source
+            // search for reachable target sink from this source
             try {
                 $targetVertex = $this->getVertexSink($sourceVertex);
-            // if no target is found the network has not enough capacity
-            } catch (UnderflowException $ignore) {
-                throw new UnexpectedValueException('The graph has not enough capacity for the minimum-cost flow');
+            } catch (UnderflowException $e) {
+                // no target found => network does not have enough capacity
+                throw new UnexpectedValueException('The graph has not enough capacity for the minimum-cost flow', 0, $e);
             }
 
             // calculate shortest path between source- and target-vertex
@@ -89,7 +85,7 @@ class SuccessiveShortestPath extends Base
             $edgesOnFlow = $algSP->getEdgesTo($targetVertex);
 
             // calculate the maximal possible flow
-                                                                                // new flow is the maximal possible flow for this path
+            // new flow is the maximal possible flow for this path
             $newflow    =    $this->graph->getVertex($sourceVertex->getId())->getBalance() - $sourceVertex->getBalance();
             $targetFlow = - ($this->graph->getVertex($targetVertex->getId())->getBalance() - $targetVertex->getBalance());
 
@@ -99,7 +95,7 @@ class SuccessiveShortestPath extends Base
             }
 
             // get minimum of capacity remaining on path
-            $minCapacity = Edge::getFirst($edgesOnFlow, Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
+            $minCapacity = $edgesOnFlow->getEdgeOrder(Edges::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
             if ($minCapacity < $newflow) {
                 $newflow = $minCapacity;
             }
@@ -107,7 +103,7 @@ class SuccessiveShortestPath extends Base
             // add the new flow to the path
             $this->addFlow($resultGraph, $edgesOnFlow, $newflow);
 
-            // add balance to source and remove for the sink
+            // add balance to source and remove for the target sink
             $oriSourceVertex = $resultGraph->getVertex($sourceVertex->getId());
             $oriTargetVertex = $resultGraph->getVertex($targetVertex->getId());
 
@@ -116,30 +112,6 @@ class SuccessiveShortestPath extends Base
         }
 
         return $resultGraph;
-    }
-
-    /**
-     * check if balance on each vertex of the given graph matches the original graph's
-     *
-     * @param  Graph     $graph
-     * @return boolean
-     * @throws Exception if given graph is not a clone of the original graph (each vertex has to be present in both graphs)
-     * @uses Graph::getNumberOfVertices()
-     * @uses Graph::getBalanace()
-     * @uses Graph::getVertex()
-     */
-    private function isBalanceReached(Graph $graph)
-    {
-        if ($graph->getNumberOfVertices() !== $this->graph->getNumberOfVertices()) {
-            throw new DomainException('Given graph does not appear to be a clone of input graph');
-        }
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
-            if ($vertex->getBalance() !== $graph->getVertex($vid)->getBalance()) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -152,7 +124,7 @@ class SuccessiveShortestPath extends Base
      */
     private function getVertexSource(Graph $graph)
     {
-        foreach ($graph->getVertices() as $vid => $vertex) {
+        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
             if ($this->graph->getVertex($vid)->getBalance() - $vertex->getBalance() > 0) {
                 return $vertex;
             }
@@ -174,7 +146,7 @@ class SuccessiveShortestPath extends Base
         // search for reachable Vertices
         $algBFS = new SearchBreadthFirst($source);
 
-        foreach ($algBFS->getVertices() as $vid => $vertex) {
+        foreach ($algBFS->getVertices()->getMap() as $vid => $vertex) {
             if ($this->graph->getVertex($vid)->getBalance() - $vertex->getBalance() < 0) {
                 return $vertex;
             }

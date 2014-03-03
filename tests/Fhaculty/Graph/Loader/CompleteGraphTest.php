@@ -1,5 +1,9 @@
 <?php
 
+use Fhaculty\Graph\Algorithm\Complete;
+
+use Fhaculty\Graph\Algorithm\Directed;
+
 use Fhaculty\Graph\Graph;
 
 use Fhaculty\Graph\Loader\CompleteGraph;
@@ -24,8 +28,8 @@ class CompleteGraphTest extends TestCase
         $loader = new CompleteGraph($n);
         $graph = $loader->createGraph();
 
-        $this->assertEquals($n, $graph->getNumberOfVertices());
-        $this->assertEquals($n*($n-1)/2, $graph->getNumberOfEdges());
+        $this->assertEquals($n, count($graph->getVertices()));
+        $this->assertEquals($n*($n-1)/2, count($graph->getEdges()));
     }
 
     public function testDirected()
@@ -36,9 +40,13 @@ class CompleteGraphTest extends TestCase
         $loader->setEnableDirectedEdges(true);
         $graph = $loader->createGraph();
 
-        $this->assertEquals($n, $graph->getNumberOfVertices());
-        $this->assertEquals($n*($n-1), $graph->getNumberOfEdges()); // n*(n-1) for directed graphs
-        $this->assertTrue($graph->isDirected());
-        $this->assertTrue($graph->isComplete());
+        $this->assertEquals($n, count($graph->getVertices()));
+        $this->assertEquals($n*($n-1), count($graph->getEdges())); // n*(n-1) for directed graphs
+
+        $alg = new Directed($graph);
+        $this->assertTrue($alg->hasDirected());
+
+        $alg = new Complete($graph);
+        $this->assertTrue($alg->isComplete());
     }
 }

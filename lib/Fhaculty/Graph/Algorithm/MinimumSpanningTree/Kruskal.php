@@ -8,6 +8,7 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Set\Edges;
 use \SplPriorityQueue;
 
 class Kruskal extends Base
@@ -23,12 +24,6 @@ class Kruskal extends Base
          $this->graph = $inputGraph;
     }
 
-    public function createGraph()
-    {
-        // Copy Graph
-        return $this->graph->createGraphCloneEdges($this->getEdges());
-    }
-
     protected function getGraph()
     {
         return $this->graph;
@@ -36,7 +31,7 @@ class Kruskal extends Base
 
     /**
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
@@ -45,26 +40,7 @@ class Kruskal extends Base
         $sortedEdges = new SplPriorityQueue();
 
         // For all edges
-        foreach ($this->graph->getEdges() as $edge) {
-            // ignore loops (a->a)
-            if (!$edge->isLoop()) {
-                if ($edge instanceof EdgeDirected) {
-                    throw new UnexpectedValueException('Kruskal for directed edges not supported');
-                }
-                $weight = $edge->getWeight();
-                if ($weight === NULL) {
-                    throw new UnexpectedValueException('Kruskal for edges with no weight not supported');
-                }
-                // Add edges with negativ Weight because of order in stl
-                $sortedEdges->insert($edge, - $weight);
-            }
-        }
-
-        if ($sortedEdges->isEmpty()) {
-            throw new RuntimeException('No edges found');
-        }
-
-        // $sortedEdges = $this->graph->getEdgesOrdered('weight');
+        $this->addEdgesSorted($this->graph->getEdges(), $sortedEdges);
 
         $returnEdges = array();
 
@@ -78,9 +54,10 @@ class Kruskal extends Base
         // Füge billigste Kanten zu neuen Graphen hinzu und verschmelze teilgragen wenn es nötig ist (keine Kreise)
         // solange ich mehr als einen Graphen habe mit weniger als n-1 kanten (bei n knoten im original)
         foreach ($sortedEdges as $edge) {
+            /* @var $edge EdgeDirected */
             // Gucke Kante an:
 
-            $vertices = $edge->getVerticesId();
+            $vertices = $edge->getVertices()->getIds();
 
             $aId = $vertices[0];
             $bId = $vertices[1];
@@ -148,10 +125,10 @@ class Kruskal extends Base
 
         // definition of spanning tree: number of edges = number of vertices - 1
         // above algorithm does not check isolated edges or may otherwise return multiple connected components => force check
-        if (count($returnEdges) !== ($this->graph->getNumberOfVertices() - 1)) {
+        if (count($returnEdges) !== (count($this->graph->getVertices()) - 1)) {
             throw new UnexpectedValueException('Graph is not connected');
         }
 
-        return $returnEdges;
+        return new Edges($returnEdges);
     }
 }

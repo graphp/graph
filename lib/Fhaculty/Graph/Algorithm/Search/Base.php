@@ -2,31 +2,19 @@
 
 namespace Fhaculty\Graph\Algorithm\Search;
 
-use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
-
+use Fhaculty\Graph\Algorithm\BaseVertex;
 use Fhaculty\Graph\Exception\DomainException;
-
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 
-abstract class Base extends AlgorithmBase
+abstract class Base extends BaseVertex
 {
-    /**
-     *
-     * @var Vertex
-     */
-    protected $startVertex;
-
     const DIRECTION_FORWARD = 0;
     const DIRECTION_REVERSE = 1;
     const DIRECTION_BOTH = 2;
 
     private $direction = self::DIRECTION_FORWARD;
-
-    public function __construct(Vertex $startVertex)
-    {
-        $this->startVertex = $startVertex;
-    }
 
     /**
      * set direction in which to follow adjacent vertices
@@ -60,31 +48,9 @@ abstract class Base extends AlgorithmBase
     }
 
     /**
-     * get total number of vertices the start vertex is connected to
+     * get set of all Vertices that can be reached from start vertex
      *
-     * @return int
-     * @uses AlgorithmSearch::getVertices()
-     */
-    public function getNumberOfVertices()
-    {
-        return count($this->getVertices());
-    }
-
-    /**
-     * get array of all vertices that can be reached from start vertex
-     *
-     * @return Vertex[]
+     * @return Vertices
      */
     abstract public function getVertices();
-
-    /**
-     * get array of all vertices' IDs that can be reached from start vertex
-     *
-     * @return int[]
-     * @uses AlgorithmSearch::getVertices()
-     */
-    public function getVerticesIds()
-    {
-        return array_keys($this->getVertices());
-    }
 }

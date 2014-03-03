@@ -2,34 +2,17 @@
 
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
+use Fhaculty\Graph\Algorithm\Weight as AlgorithmWeight;
+use Fhaculty\Graph\Algorithm\Flow as AlgorithmFlow;
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Edge\Base as Edge;
-
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 use Fhaculty\Graph\Graph;
 
-abstract class Base extends AlgorithmBase
+abstract class Base extends BaseGraph
 {
-    /**
-     * Origianl graph
-     *
-     * @var Graph
-     */
-    protected $graph;
-
-    /**
-     * The given graph where the algorithm should operate on
-     *
-     * @param  Graph     $graph
-     * @throws Exception if the given graph is not balanced
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * check if balance is okay and throw exception otherwise
      *
@@ -38,7 +21,9 @@ abstract class Base extends AlgorithmBase
      */
     protected function checkBalance()
     {
-        $balance = $this->graph->getBalance();
+        $alg = new AlgorithmFlow($this->graph);
+        $balance = $alg->getBalance();
+
         $tolerance = 0.000001;
         if ($balance >= $tolerance || $balance <= -$tolerance) {
             throw new UnexpectedValueException('The given graph is not balanced value is: ' . $balance);
@@ -51,14 +36,14 @@ abstract class Base extends AlgorithmBase
      * helper used to add $newFlow to original edges of $clonedEdges in graph $resultGraph
      *
      * @param Graph  $resultGraph graph to look for original edges
-     * @param Edge[] $clonedEdges array of cloned edges to be modified
+     * @param Edges  $clonedEdges set of cloned edges to be modified
      * @param number $newFlow     flow to add
      * @uses Graph::getEdgeClone()
      * @uses Graph::getEdgeCloneInverted()
      * @uses Edge::getFlow()
      * @uses Edge::setFlow()
      */
-    protected function addFlow(Graph $resultGraph, $clonedEdges, $newFlow)
+    protected function addFlow(Graph $resultGraph, Edges $clonedEdges, $newFlow)
     {
         foreach ($clonedEdges as $clonedEdge) {
             try {
@@ -79,12 +64,13 @@ abstract class Base extends AlgorithmBase
      * calculate total weight along minimum-cost flow
      *
      * @return float
-     * @uses AlgorithmMCF::createGraph()
-     * @uses Graph::getWeightFlow()
+     * @uses self::createGraph()
+     * @uses AlgorithmWeight::getWeightFlow()
      */
     public function getWeightFlow()
     {
-        return $this->createGraph()->getWeightFlow();
+        $alg = new AlgorithmWeight($this->createGraph());
+        return $alg->getWeightFlow();
     }
 
     /**

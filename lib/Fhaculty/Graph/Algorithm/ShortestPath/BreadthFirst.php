@@ -2,15 +2,24 @@
 
 namespace Fhaculty\Graph\Algorithm\ShortestPath;
 
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-
-use Fhaculty\Graph\Exception\OutOfBoundsException;
-
-use Fhaculty\Graph\Walk;
-
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Exception\OutOfBoundsException;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\Edges;
 use \Exception;
 
+/**
+ * Simple breadth-first shortest path algorithm
+ *
+ * This algorithm ignores edge weights and operates as a level-order algorithm
+ * on the number of hops. As such, it considers the path with the least number
+ * of hops to be shortest.
+ *
+ * This is particularly useful your Graph doesn't have Edge weights assigned to
+ * begin with or if you're merely interested in knowing which Vertices can be
+ * reached at all (path finding). This avoids running expensive operations to
+ * determine the actual weight (distance) of a path.
+ */
 class BreadthFirst extends Base
 {
     /**
@@ -36,7 +45,9 @@ class BreadthFirst extends Base
         $vertexQueue = array();
         $edges = array();
 
-        $vertexCurrent = $this->startVertex;
+        // $edges[$this->vertex->getId()] = array();
+
+        $vertexCurrent = $this->vertex;
         $edgesCurrent = array();
 
         do {
@@ -62,15 +73,14 @@ class BreadthFirst extends Base
 
     public function getEdgesTo(Vertex $endVertex)
     {
-        if ($endVertex->getGraph() !== $this->startVertex->getGraph()) {
-            throw new InvalidArgumentException('Given target vertex does not belong to the same graph instance');
-        }
-        $map = $this->getEdgesMap();
-        if (!isset($map[$endVertex->getId()])) {
-            throw new OutOfBoundsException('Given target vertex can not be reached from start vertex');
-        }
+        if ($endVertex->getGraph() === $this->vertex->getGraph()) {
+            $map = $this->getEdgesMap();
 
-        return $map[$endVertex->getId()];
+            if (isset($map[$endVertex->getId()])) {
+                return new Edges($map[$endVertex->getId()]);
+            }
+        }
+        throw new OutOfBoundsException('Given target vertex can not be reached from start vertex');
     }
 
     /**
@@ -90,37 +100,20 @@ class BreadthFirst extends Base
     }
 
     /**
-     * checks whether there's a path from this start vertex to given end vertex
-     *
-     * @param  Vertex  $endVertex
-     * @return boolean
-     * @uses AlgorithmSpBreadthFirst::getEdgesMap()
-     */
-    public function hasVertex(Vertex $endVertex)
-    {
-        if ($endVertex->getGraph() !== $this->startVertex->getGraph()) {
-            throw new InvalidArgumentException('Given target vertex does not belong to the same graph instance');
-        }
-        $map = $this->getEdgesMap();
-
-        return isset($map[$endVertex->getId()]);
-    }
-
-    /**
      * get array of all target vertices this vertex has a path to
      *
-     * @return Vertex[]
-     * @uses AlgorithmSpBreadthFirst::getDistanceMap()
+     * @return Vertices
+     * @uses self::getEdgesMap()
      */
     public function getVertices()
     {
         $ret = array();
-        $graph = $this->startVertex->getGraph();
+        $graph = $this->vertex->getGraph();
         foreach ($this->getEdgesMap() as $vid => $unusedEdges) {
             $ret[$vid] = $graph->getVertex($vid);
         }
 
-        return $ret;
+        return new Vertices($ret);
     }
 
     public function getEdges()
@@ -134,6 +127,6 @@ class BreadthFirst extends Base
             }
         }
 
-        return $ret;
+        return new Edges($ret);
     }
 }

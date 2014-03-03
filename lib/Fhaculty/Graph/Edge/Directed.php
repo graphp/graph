@@ -5,6 +5,8 @@ namespace Fhaculty\Graph\Edge;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\LogicException;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\Edges;
 
 class Directed extends Base
 {
@@ -23,7 +25,7 @@ class Directed extends Base
     private $to;
 
     /**
-     * creats a new Edge (MUST NOT BE CALLED MANUALLY!)
+     * create a new directed Edge from Vertex $from to Vertex $to
      *
      * @param Vertex $from start/source Vertex
      * @param Vertex $to   end/target Vertex
@@ -32,23 +34,31 @@ class Directed extends Base
      */
     public function __construct(Vertex $from, Vertex $to)
     {
+        if ($from->getGraph() !== $to->getGraph()) {
+            throw new InvalidArgumentException('Vertices have to be within the same graph');
+        }
+
         $this->from = $from;
         $this->to = $to;
+
+        $from->getGraph()->addEdge($this);
+        $from->addEdge($this);
+        $to->addEdge($this);
     }
 
     public function getVerticesTarget()
     {
-        return array($this->to);
+        return new Vertices(array($this->to));
     }
 
     public function getVerticesStart()
     {
-        return array($this->from);
+        return new Vertices(array($this->from));
     }
 
     public function getVertices()
     {
-        return array($this->from, $this->to);
+        return new Vertices(array($this->from, $this->to));
     }
 
     /**
@@ -107,38 +117,5 @@ class Directed extends Base
     public function hasVertexTarget(Vertex $targetVertex)
     {
         return ($this->to === $targetVertex);
-    }
-
-    public function hasEdgeParallel()
-    {
-        foreach ($this->from->getEdgesTo($this->to) as $edge) {
-            if ($edge !== $this) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * get all edges parallel to this edge (excluding self)
-     *
-     * @return Edge[]
-     * @throws LogicException
-     */
-    public function getEdgesParallel()
-    {
-        // get all edges between this edge's endpoints
-        $edges = $this->from->getEdgesTo($this->to);
-
-        $pos = array_search($this, $edges, true);
-        if ($pos === false) {
-            throw new LogicException('Internal error: Current edge not found');
-        }
-
-        // exclude current edge from parallel edges
-        unset($edges[$pos]);
-
-        return array_values($edges);
     }
 }

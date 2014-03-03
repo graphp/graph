@@ -2,8 +2,7 @@
 
 namespace Fhaculty\Graph\Exception;
 
-use Fhaculty\Graph\Cycle;
-
+use Fhaculty\Graph\Walk;
 use Fhaculty\Graph;
 
 class NegativeCycleException extends UnexpectedValueException implements Graph\Exception
@@ -11,11 +10,11 @@ class NegativeCycleException extends UnexpectedValueException implements Graph\E
     /**
      * instance of the cycle
      *
-     * @var Cycle
+     * @var Walk
      */
     private $cycle;
 
-    public function __construct($message, $code = NULL, $previous = NULL, Cycle $cycle)
+    public function __construct($message, $code = NULL, $previous = NULL, Walk $cycle)
     {
         parent::__construct($message, $code, $previous);
         $this->cycle = $cycle;
@@ -23,7 +22,7 @@ class NegativeCycleException extends UnexpectedValueException implements Graph\E
 
     /**
      *
-     * @return Cycle
+     * @return Walk
      */
     public function getCycle()
     {

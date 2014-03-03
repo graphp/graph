@@ -3,10 +3,9 @@
 namespace Fhaculty\Graph\Algorithm\MinimumCostFlow;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\MaxFlow\EdmondsKarp as MaxFlowEdmondsKarp;
 use Fhaculty\Graph\Algorithm\DetectNegativeCycle;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
@@ -27,17 +26,16 @@ class CycleCanceling extends Base
 
         // connect supersource s* and supersink t* with all "normal" sources and sinks
         foreach ($resultGraph->getVertices() as $vertex) {
-            // $vertex->getFlow();
-            $flow = $vertex->getBalance();
-            $b = abs($vertex->getBalance());
-            // source
-            if ($flow > 0) {
-                $superSource->createEdgeTo($vertex)->setCapacity($b);
+            $balance = $vertex->getBalance();
 
-                $sumBalance += $flow;
-            // sink
-            } elseif ($flow < 0) {
-                $vertex->createEdgeTo($superSink)->setCapacity($b);
+            if ($balance > 0) {
+                // positive balance => source capacity
+                $superSource->createEdgeTo($vertex)->setCapacity($balance);
+
+                $sumBalance += $balance;
+            } elseif ($balance < 0) {
+                // negative balance => sink capacity (positive)
+                $vertex->createEdgeTo($superSink)->setCapacity(-$balance);
             }
         }
 
@@ -60,13 +58,13 @@ class CycleCanceling extends Base
             $alg = new DetectNegativeCycle($residualGraph);
             try {
                 $clonedEdges = $alg->getCycleNegative()->getEdges();
-            // no negative cycle found => end algorithm
             } catch (UnderflowException $ignore) {
+                // no negative cycle found => end algorithm
                 break;
             }
 
             // calculate maximal possible flow = minimum capacity remaining for all edges
-            $newFlow = Edge::getFirst($clonedEdges, Edge::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
+            $newFlow = $clonedEdges->getEdgeOrder(Edges::ORDER_CAPACITY_REMAINING)->getCapacityRemaining();
 
             // set flow on original graph
             $this->addFlow($resultGraph, $clonedEdges, $newFlow);

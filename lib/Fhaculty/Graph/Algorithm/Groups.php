@@ -2,27 +2,12 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Set\Vertices;
 
-class Groups extends Base
+class Groups extends BaseGraph
 {
-    /**
-     * graph to operate on
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    /**
-     * instanciate algorithm on given graph
-     *
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * count total number of different groups assigned to vertices
      *
@@ -84,21 +69,21 @@ class Groups extends Base
     }
 
     /**
-     * get array of all vertices in the given group
+     * get set of all Vertices in the given group
      *
      * @param  int      $group
-     * @return Vertex[]
+     * @return Vertices
      * @uses Vertex::getGroup()
      */
     public function getVerticesGroup($group)
     {
         $vertices = array();
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             if ($vertex->getGroup() === $group) {
                 $vertices[$vid] = $vertex;
             }
         }
 
-        return $vertices;
+        return new Vertices($vertices);
     }
 }

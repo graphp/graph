@@ -3,43 +3,82 @@
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
 
-class EdgeBaseTest extends TestCase
+abstract class EdgeBaseTest extends TestCase
 {
+
+    protected $graph;
+    protected $v1;
+    protected $v2;
 
     /**
      *
      * @var Edge
      */
-    private $edge;
+    protected $edge;
+
+    abstract protected function createEdge();
 
     public function setUp()
     {
+        $this->graph = new Graph();
+        $this->v1 = $this->graph->createVertex(1);
+        $this->v2 = $this->graph->createVertex(2);
 
-        $graph = new Graph();
-        $graph->createVertex(1);
-        $graph->createVertex(2);
-
-        // 1 -> 2
-        $this->edge = $graph->getVertex(1)->createEdge($graph->getVertex(2));
+        $this->edge = $this->createEdge();
     }
 
-    public function testCanSetFlowAndCapacity()
+    public function testEdgeVertices()
     {
-        $this->edge->setCapacity(100);
-        $this->edge->setFlow(10);
+        $this->assertEquals(array($this->v1, $this->v2), $this->edge->getVertices()->getVector());
+        $this->assertEquals(array(1, 2), $this->edge->getVertices()->getIds());
+
+        $this->assertSame($this->graph, $this->edge->getGraph());
     }
 
-    public function testCanSetFlowBeforeCapacity()
+    public function testEdgeStartVertex()
     {
-        $this->edge->setFlow(20);
+        $this->assertTrue($this->edge->hasVertexStart($this->v1));
+        $this->assertTrue($this->edge->hasVertexTarget($this->v2));
+
+        $v3 = $this->graph->createVertex(3);
+
+        $this->assertFalse($this->edge->hasVertexStart($v3));
+        $this->assertFalse($this->edge->hasVertexTarget($v3));
     }
 
     /**
-     * @expectedException RangeException
+     * @expectedException InvalidArgumentException
      */
-    public function testFlowMustNotExceedCapacity()
+    public function testEdgeFromInvalid()
     {
-        $this->edge->setCapacity(20);
-        $this->edge->setFlow(100);
+        $v3 = $this->graph->createVertex(3);
+        $this->edge->getVertexFromTo($v3);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testEdgeToInvalid()
+    {
+        $v3 = $this->graph->createVertex(3);
+        $this->edge->getVertexToFrom($v3);
+    }
+
+    public function testClone()
+    {
+        $edge = $this->edge->createEdgeClone();
+
+        $this->assertEdgeEquals($this->edge, $edge);
+    }
+
+    public function testCloneDoubleInvertedIsOriginal()
+    {
+        $edgeInverted = $this->edge->createEdgeCloneInverted();
+
+        $this->assertInstanceOf(get_class($this->edge), $edgeInverted);
+
+        $edge = $edgeInverted->createEdgeCloneInverted();
+
+        $this->assertEdgeEquals($this->edge, $edge);
     }
 }

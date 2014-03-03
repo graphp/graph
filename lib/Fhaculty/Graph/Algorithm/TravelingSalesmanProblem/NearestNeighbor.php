@@ -6,6 +6,7 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use \SplPriorityQueue;
 
 class NearestNeighbor extends Base
@@ -33,13 +34,13 @@ class NearestNeighbor extends Base
 
     /**
      *
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
         $returnEdges = array();
 
-        $n = $this->vertex->getGraph()->getNumberOfVertices();
+        $n = count($this->vertex->getGraph()->getVertices());
 
         $vertex = $this->vertex;
         $visitedVertices = array($vertex->getId() => true);
@@ -85,8 +86,8 @@ class NearestNeighbor extends Base
         // check if there is a way from end edge to start edge
         // get first connecting edge
         // connect the last vertex with the start vertex
-        $returnEdges []= Edge::getFirst($vertex->getEdgesTo($this->vertex));
+        $returnEdges []= $vertex->getEdgesTo($this->vertex)->getEdgeFirst();
 
-        return $returnEdges;
+        return new Edges($returnEdges);
     }
 }

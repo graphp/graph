@@ -4,6 +4,7 @@ namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 
 class Undirected extends Base
 {
@@ -22,33 +23,39 @@ class Undirected extends Base
     private $b;
 
     /**
-     * create new undirected edge between given vertices (MUST NOT BE CALLED MANUALLY!)
+     * create a new undirected edge between given vertices
      *
      * @param Vertex $a
      * @param Vertex $b
-     * @deprecated obsoleted by UndirectedId
      * @see Vertex::createEdge() instead
-     * @see UndirectedId for current replacement implementation
      */
     public function __construct(Vertex $a, Vertex $b)
     {
+        if ($a->getGraph() !== $b->getGraph()) {
+            throw new InvalidArgumentException('Vertices have to be within the same graph');
+        }
+
         $this->a = $a;
         $this->b = $b;
+
+        $a->getGraph()->addEdge($this);
+        $a->addEdge($this);
+        $b->addEdge($this);
     }
 
     public function getVerticesTarget()
     {
-        return array($this->b, $this->a);
+        return new Vertices(array($this->b, $this->a));
     }
 
     public function getVerticesStart()
     {
-        return  array($this->a, $this->b);
+        return new Vertices(array($this->a, $this->b));
     }
 
     public function getVertices()
     {
-        return array($this->a, $this->b);
+        return new Vertices(array($this->a, $this->b));
     }
 
     public function isConnection(Vertex $from, Vertex $to)

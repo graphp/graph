@@ -8,6 +8,7 @@ use Fhaculty\Graph\Exception\UnderflowException;
 
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\TravelingSalesmanProblem\MinimumSpanningTree as AlgorithmTspMst;
 
 class Bruteforce extends Base
@@ -91,7 +92,8 @@ class Bruteforce extends Base
 
     protected function getVertexStart()
     {
-        return $this->graph->getVertexFirst();
+        // actual start doesn't really matter as we're only considering complete graphs here
+        return $this->graph->getVertices()->getVertexFirst();
     }
 
     protected function getGraph()
@@ -103,11 +105,11 @@ class Bruteforce extends Base
      * get resulting (first) best circle of edges connecting all vertices
      *
      * @throws Exception on error
-     * @return Edge[]
+     * @return Edges
      */
     public function getEdges()
     {
-        $this->numEdges = $this->graph->getNumberOfVertices();
+        $this->numEdges = count($this->graph->getVertices());
         if ($this->numEdges < 3) {
             throw new UnderflowException('Needs at least 3 vertices');
         }
@@ -115,8 +117,7 @@ class Bruteforce extends Base
         // numEdges 3-12 should work
 
         $this->bestWeight = $this->upperLimit;
-        // actual start doesn't really matter as we're only considering complete graphs here
-        $this->startVertex = $this->graph->getVertexFirst();
+        $this->startVertex = $this->getVertexStart();
 
         $result = $this->step($this->startVertex,
                               0,
@@ -128,7 +129,7 @@ class Bruteforce extends Base
             throw new UnexpectedValueException('No resulting solution for TSP found');
         }
 
-        return $result;
+        return new Edges($result);
     }
 
     /**

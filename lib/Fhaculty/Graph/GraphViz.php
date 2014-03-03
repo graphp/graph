@@ -2,7 +2,9 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Algorithm\Directed;
 use Fhaculty\Graph\Algorithm\Groups;
+use Fhaculty\Graph\Algorithm\Degree;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Edge\Base as Edge;
@@ -126,17 +128,19 @@ class GraphViz
         static $next = 0;
         if ($next > microtime(true)) {
             // wait some time between calling xdg-open because earlier calls will be ignored otherwise
-            echo '[delay flooding xdg-open]' . PHP_EOL;
+            //echo '[delay flooding xdg-open]' . PHP_EOL;
             sleep(self::DELAY_OPEN);
         }
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            echo "ausgabe\n";
+            //echo "ausgabe\n";
             exec($tmp . ' >NUL');
+        } elseif (strtoupper(PHP_OS) === 'DARWIN') {
+            // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
+            exec('open ' . escapeshellarg($tmp) . ' > /dev/null 2>&1 &');
         } else {
             // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
             exec('xdg-open ' . escapeshellarg($tmp) . ' > /dev/null 2>&1 &');
-
         }
 
         $next = microtime(true) + self::DELAY_OPEN;
@@ -249,7 +253,7 @@ class GraphViz
 
         $ret = file_put_contents($tmp, $script, LOCK_EX);
         if ($ret === false) {
-            throw new UnexpectedValuexception('Unable to write graphviz script to temporary file');
+            throw new UnexpectedValueException('Unable to write graphviz script to temporary file');
         }
 
         $ret = 0;
@@ -269,13 +273,14 @@ class GraphViz
      * create graphviz script representing this graph
      *
      * @return string
-     * @uses Graph::isDirected()
+     * @uses Directed::hasDirected()
      * @uses Graph::getVertices()
      * @uses Graph::getEdges()
      */
     public function createScript()
     {
-        $directed = $this->graph->isDirected();
+        $alg = new Directed($this->graph);
+        $directed = $alg->hasDirected();
 
         $script = ($directed ? 'di':'') . 'graph G {' . self::EOL;
 
@@ -317,12 +322,13 @@ class GraphViz
             }
         }
 
+        $degree = new Degree($this->graph);
         // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
         // other vertices wil be added automatically due to below edge definitions
         foreach ($this->graph->getVertices() as $vid => $vertex){
             $layout = $this->getLayoutVertex($vertex);
 
-            if($vertex->isIsolated() || $layout){
+            if($degree->isVertexIsolated($vertex) || $layout){
                 $script .= $this->formatIndent . $this->escapeId($vid);
                 if($layout){
                     $script .= ' ' . $this->escapeAttributes($layout);
@@ -335,7 +341,7 @@ class GraphViz
 
         // add all edges as directed edges
         foreach ($this->graph->getEdges() as $currentEdge) {
-            $both = $currentEdge->getVertices();
+            $both = $currentEdge->getVertices()->getVector();
             $currentStartVertex = $both[0];
             $currentTargetVertex = $both[1];
 

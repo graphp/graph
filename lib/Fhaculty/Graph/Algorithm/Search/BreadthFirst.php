@@ -4,18 +4,19 @@ namespace Fhaculty\Graph\Algorithm\Search;
 
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Set\Vertices;
 
 class BreadthFirst extends Base
 {
     /**
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     public function getVertices()
     {
-        $queue = array($this->startVertex);
+        $queue = array($this->vertex);
         // to not add vertices twice in array visited
-        $mark = array($this->startVertex->getId() => true);
+        $mark = array($this->vertex->getId() => true);
         // visited vertices
         $visited = array();
 
@@ -26,9 +27,8 @@ class BreadthFirst extends Base
             $visited[$t->getId()]= $t;
 
             // get next vertices
-            $vertices = $this->getVerticesAdjacent($t);
-            foreach ($vertices as $id => $vertex) {
-                // if not "toughed" before
+            foreach ($this->getVerticesAdjacent($t)->getMap() as $id => $vertex) {
+                // if not "touched" before
                 if (!isset($mark[$id])) {
                     // add to queue
                     $queue[] = $vertex;
@@ -40,6 +40,6 @@ class BreadthFirst extends Base
         // untill queue is empty
         } while ($queue);
 
-        return $visited;
+        return new Vertices($visited);
     }
 }

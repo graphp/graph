@@ -2,37 +2,29 @@
 
 namespace Fhaculty\Graph\Algorithm;
 
+use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchBreadthFirst;
-
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Exception\UnderflowException;
 
-class ConnectedComponents extends Base
+/**
+ * Algorithm for working with connected components
+ *
+ * @link http://en.wikipedia.org/wiki/Connected_component_%28graph_theory%29
+ * @link http://mathworld.wolfram.com/ConnectedGraph.html
+ * @link http://math.stackexchange.com/questions/50551/is-the-empty-graph-connected
+ */
+class ConnectedComponents extends BaseGraph
 {
-    /**
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    /**
-     *
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
-    {
-        $this->graph = $graph;
-    }
-
     /**
      * create subgraph with all vertices connected to given vertex (i.e. the connected component of ths given vertex)
      *
      * @param  Vertex                   $vertex
      * @return Graph
      * @throws InvalidArgumentException if given vertex is not from same graph
-     * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
+     * @uses AlgorithmSearchBreadthFirst::getVertices()
      * @uses Graph::createGraphCloneVertices()
      */
     public function createGraphComponentVertex(Vertex $vertex)
@@ -44,6 +36,11 @@ class ConnectedComponents extends Base
         return $this->graph->createGraphCloneVertices($this->createSearch($vertex)->getVertices());
     }
 
+    /**
+     *
+     * @param Vertex $vertex
+     * @return SearchBreadthFirst
+     */
     private function createSearch(Vertex $vertex)
     {
         $alg = new SearchBreadthFirst($vertex);
@@ -55,24 +52,43 @@ class ConnectedComponents extends Base
     /**
      * check whether this graph consists of only a single component
      *
-     * this is faster than calling getNumberOfComponents(), as it only has to
+     * If a Graph consists of only a single component, it is said to be a
+     * connected Graph, otherwise it's called a disconnected Graph.
+     *
+     * This method returns exactly the same result as checking
+     * <pre>($this->getNumberOfComponents() === 1)</pre>. However, using this
+     * method is faster than calling getNumberOfComponents(), as it only has to
      * count all vertices in one component to see if the graph consists of only
-     * a single component
+     * a single component.
+     *
+     * As such, a null Graph (a Graph with no vertices) is not considered
+     * connected here.
      *
      * @return boolean
-     * @uses AlgorithmSearchBreadthFirst::getNumberOfVertices()
+     * @see self::getNumberOfComponents()
      */
     public function isSingle()
     {
-        $alg = $this->createSearch($this->graph->getVertexFirst());
+        try {
+            $vertex = $this->graph->getVertices()->getVertexFirst();
+        }
+        catch (UnderflowException $e) {
+            // no first vertex => empty graph => has zero components
+            return false;
+        }
+        $alg = $this->createSearch($vertex);
 
-        return ($this->graph->getNumberOfVertices() === $alg->getNumberOfVertices());
+        return (count($this->graph->getVertices()) === count($alg->getVertices()));
     }
 
     /**
+     * count number of connected components
+     *
+     * A null Graph (a Graph with no vertices) will return 0 components.
+     *
      * @return int number of components
      * @uses Graph::getVertices()
-     * @uses AlgorithmSearchBreadthFirst::getVerticesIds()
+     * @uses AlgorithmSearchBreadthFirst::getVertices()
      */
     public function getNumberOfComponents()
     {
@@ -80,12 +96,12 @@ class ConnectedComponents extends Base
         $components = 0;
 
         // for each vertices
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             // did I visit this vertex before?
             if (!isset($visitedVertices[$vid])) {
 
                 // get all vertices of this component
-                $newVertices = $this->createSearch($vertex)->getVerticesIds();
+                $newVertices = $this->createSearch($vertex)->getVertices()->getIds();
 
                 ++$components;
 
@@ -113,7 +129,7 @@ class ConnectedComponents extends Base
         $graphs = array();
 
         // for each vertices
-        foreach ($this->graph->getVertices() as $vid => $vertex) {
+        foreach ($this->graph->getVertices()->getMap() as $vid => $vertex) {
             // did I visit this vertex before?
             if (!isset($visitedVertices[$vid])) {
 
@@ -122,7 +138,7 @@ class ConnectedComponents extends Base
                 $newVertices = $alg->getVertices();
 
                 // mark the vertices of this component as visited
-                foreach ($newVertices as $vid => $unusedVertex) {
+                foreach ($newVertices->getIds() as $vid) {
                     $visitedVertices[$vid] = true;
                 }
 

@@ -4,6 +4,9 @@ namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Layoutable;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Exception\LogicException;
 use Fhaculty\Graph\Exception\RangeException;
@@ -11,168 +14,8 @@ use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\BadMethodCallException;
 
-abstract class Base extends Layoutable
+abstract class Base extends Layoutable implements VerticesAggregate
 {
-    /**
-     * do not change order - FIFO : first in, first out
-     *
-     * @var int
-     */
-    const ORDER_FIFO = 0;
-
-    /**
-     * order by edge weight
-     *
-     * @var int
-     * @see Edge::getWeight()
-     */
-    const ORDER_WEIGHT = 1;
-
-    /**
-     * order by edge capacity
-     *
-     * @var int
-     * @see Edge::getCapacity()
-     */
-    const ORDER_CAPACITY = 2;
-
-    /**
-     * order by remaining capacity on edge (maximum capacity - current flow)
-     *
-     * @var int
-     * @see Edge::getCapacityRemaining()
-     */
-    const ORDER_CAPACITY_REMAINING = 3;
-
-    /**
-     * order by edge flow
-     *
-     * @var int
-     * @see Edge::getFlow()
-     */
-    const ORDER_FLOW = 4;
-
-    /**
-     * random/shuffled order
-     *
-     * @var int
-     */
-    const ORDER_RANDOM = 5;
-
-    /**
-     * get first edge (optionally ordered by given criterium $by) from given array of edges
-     *
-     * @param  Edge[]|Graph             $edges array of edges to scan for 'first' edge
-     * @param  int                      $by    criterium to sort by. see Edge::ORDER_WEIGHT, etc.
-     * @param  boolean                  $desc  whether to return biggest (true) instead of smallest (default:false)
-     * @return Edge
-     * @throws InvalidArgumentException if criterium is unknown
-     * @throws UnderflowException       if no edges exist
-     * @uses Edge::getWeight()
-     */
-    public static function getFirst($edges, $by = self::ORDER_FIFO, $desc = false)
-    {
-        if ($edges instanceof Graph) {
-            $edges = $edges->getEdges();
-        }
-        // random order and there are actually some edges to shuffle
-        if ($by === self::ORDER_RANDOM && $edges) {
-
-            // just return by random key (no need to check for DESC flag)
-            return $edges[array_rand($edges)];
-        }
-        $ret = NULL;
-        $best = NULL;
-        foreach ($edges as $edge) {
-            // do not sort - needs special handling
-            if ($by === self::ORDER_FIFO) {
-                // always remember edge from last iteration
-                if ($desc) {
-                    $ret = $edge;
-                    continue;
-                // just return first edge right away
-                } else {
-                    return $edge;
-                }
-            } elseif ($by === self::ORDER_WEIGHT) {
-                $now = $edge->getWeight();
-            } elseif ($by === self::ORDER_CAPACITY) {
-                $now = $edge->getCapacity();
-            } elseif ($by === self::ORDER_CAPACITY_REMAINING) {
-                $now = $edge->getCapacityRemaining();
-            } elseif ($by === self::ORDER_FLOW) {
-                $now = $edge->getFlow();
-            } else {
-                throw new InvalidArgumentException('Invalid order flag "' . $by . '"');
-            }
-            if ($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)) {
-                $ret = $edge;
-                $best = $now;
-            }
-        }
-        if ($ret === NULL) {
-            throw new UnderflowException('No edge found');
-        }
-
-        return $ret;
-    }
-
-    /**
-     * get all edges ordered by given criterium $by
-     *
-     * @param  Edge[]|Graph    $edges array of edges to sort
-     * @param  int             $by    criterium to sort by. see Edge::ORDER_WEIGHT, etc.
-     * @param  boolean         $desc  whether to return biggest (true) instead of smallest (default:false)
-     * @return array
-     * @throws DomainException if criterium is unknown
-     * @uses Edge::getWeight()
-     * @todo return Iterator and use SplPriorityQueue instead of temporary array
-     * @link http://matthewturland.com/2010/05/20/new-spl-features-in-php-5-3/
-     */
-    public static function getAll($edges, $by = self::ORDER_FIFO, $desc = false)
-    {
-        if ($edges instanceof Graph) {
-            $edges = $edges->getEdges();
-        }
-        if ($by === self::ORDER_RANDOM) {
-            shuffle($edges);
-
-            // create iterator for shuffled array (no need to check DESC flag)
-            return $edges;
-        }
-        if ($by === self::ORDER_FIFO) {
-            return $desc ? array_reverse($edges) : $edges;
-        }
-        // temporary indexed array to be sorted
-        $temp = array();
-        foreach ($edges as $eid => $edge) {
-            if ($by === self::ORDER_WEIGHT) {
-                $now = $edge->getWeight();
-            } elseif ($by === self::ORDER_CAPACITY) {
-                $now = $edge->getCapacity();
-            } elseif ($by === self::ORDER_CAPACITY_REMAINING) {
-                $now = $edge->getCapacityRemaining();
-            } elseif ($by === self::ORDER_FLOW) {
-                $now = $edge->getFlow();
-            } else {
-                throw new InvalidArgumentException('Invalid sort criterium');
-            }
-            $temp[$eid] = $now;
-        }
-        // actually sort array ASC/DESC
-        if ($desc) {
-            arsort($temp);
-        } else {
-            asort($temp);
-        }
-        // make sure resulting array is edigeId=>edge
-        foreach ($temp as $eid=>&$value) {
-            $value = $edges[$eid];
-        }
-
-        return $temp;
-    }
-
     /**
      * weight of this edge
      *
@@ -200,14 +43,14 @@ abstract class Base extends Layoutable
     /**
      * get Vertices that are a target of this edge
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     abstract public function getVerticesTarget();
 
     /**
      * get Vertices that are the start of this edge
      *
-     * @return Vertex[]
+     * @return Vertices
      */
     abstract public function getVerticesStart();
 
@@ -218,16 +61,7 @@ abstract class Base extends Layoutable
      * @return boolean
      * @uses Vertex::getVertexToFrom()
      */
-    public function hasVertexStart(Vertex $startVertex)
-    {
-        try {
-            $this->getVertexToFrom($startVertex);
-
-            return true;
-        } catch (InvalidArgumentException $ignore) { }
-
-        return false;
-    }
+    abstract public function hasVertexStart(Vertex $startVertex);
 
     /**
      * return true if this edge is an ingoing edge of the given vertex (i . e. the given vertex is a valid end vertex of this edge)
@@ -236,16 +70,7 @@ abstract class Base extends Layoutable
      * @return boolean
      * @uses Vertex::getVertexFromTo()
      */
-    public function hasVertexTarget(Vertex $targetVertex)
-    {
-        try {
-            $this->getVertexFromTo($targetVertex);
-
-            return true;
-        } catch (InvalidArgumentException $ignore) { }
-
-        return false;
-    }
+    abstract function hasVertexTarget(Vertex $targetVertex);
 
     abstract public function isConnection(Vertex $from, Vertex $to);
 
@@ -332,8 +157,8 @@ abstract class Base extends Layoutable
      *
      * @param  float|int|NULL           $capacity
      * @return Edge                     $this (chainable)
-     * @throws DomainException          if $capacity is invalid (not numeric or negative)
-     * @throws InvalidArgumentException if current flow exceeds new capacity
+     * @throws InvalidArgumentException if $capacity is invalid (not numeric or negative)
+     * @throws RangeException           if current flow exceeds new capacity
      */
     public function setCapacity($capacity)
     {
@@ -345,7 +170,7 @@ abstract class Base extends Layoutable
                 throw new InvalidArgumentException('Capacity must not be negative');
             }
             if ($this->flow !== NULL && $this->flow > $capacity) {
-                throw new InvalidArgumentException('Current flow of ' . $this->flow . ' exceeds new capacity');
+                throw new RangeException('Current flow of ' . $this->flow . ' exceeds new capacity');
             }
         }
         $this->capacity = $capacity;
@@ -366,9 +191,10 @@ abstract class Base extends Layoutable
     /**
      * set new total flow (capacity currently in use)
      *
-     * @param  float|int|NULL $flow
-     * @return Edge           $this (chainable)
-     * @throws Exception      if $flow is invalid or flow exceeds maximum capacity
+     * @param  float|int|NULL           $flow
+     * @return Edge                     $this (chainable)
+     * @throws InvalidArgumentException if $flow is invalid (not numeric or negative)
+     * @throws RangeException           if flow exceeds current maximum capacity
      */
     public function setFlow($flow)
     {
@@ -389,72 +215,11 @@ abstract class Base extends Layoutable
     }
 
     /**
-     * checks whether this edge has any parallel edges
+     * get set of all Vertices this edge connects
      *
-     * @return boolean
-     * @uses Edge::getEdgesParallel()
+     * @return Vertices
      */
-    public function hasEdgeParallel()
-    {
-        return !!$this->getEdgesParallel();
-    }
-
-    /**
-     * get all edges parallel to this edge (excluding self)
-     *
-     * @return Edge[]
-     * @throws LogicException
-     */
-    public function getEdgesParallel()
-    {
-        $ends = $this->getVertices();
-
-        // get all edges between this edge's endpoints
-        $edges = $ends[0]->getEdgesTo($ends[1]);
-        // edge points into both directions (undirected/bidirectional edge)
-        if ($this->isConnection($ends[1], $ends[0])) {
-            // also get all edges in other direction
-            $back = $ends[1]->getEdgesTo($ends[0]);
-            foreach ($back as $edge) {
-                if (!in_array($edge, $edges)) {
-                    $edges[] = $edge;
-                }
-            } // alternative implementation for array_unique(), because it requires casting edges to string
-        }
-
-        $pos = array_search($this, $edges, true);
-        if ($pos === false) {
-            throw new LogicException('Internal error: Current edge not found');
-        }
-
-        // exclude current edge from parallel edges
-        unset($edges[$pos]);
-
-        return array_values($edges);
-    }
-
-    /**
-     * get all vertices this edge connects
-     *
-     * @return Vertex[]
-     */
-    abstract public function getVertices();
-
-    /**
-     * get IDs of all vertices this edge connects
-     *
-     * @return int[]
-     * @see Edge::getVertices()
-     */
-    public function getVerticesId()
-    {
-        $ret = $this->getVertices();
-        foreach ($ret as &$v) {
-            $v = $v->getId();
-        }
-
-        return $ret;
-    }
+    //abstract public function getVertices();
 
     /**
      * get graph instance this edge is attached to
@@ -466,8 +231,14 @@ abstract class Base extends Layoutable
     {
         foreach ($this->getVertices() as $vertex) {
             return $vertex->getGraph();
+
+            // the following code can only be reached if this edge does not
+            // contain any vertices (invalid state), so ignore its coverage
+            // @codeCoverageIgnoreStart
         }
+
         throw new LogicException('Internal error: should not be reached');
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -514,6 +285,8 @@ abstract class Base extends Layoutable
      */
     private function __clone()
     {
+        // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
+        // @codeCoverageIgnoreEnd
     }
 }

@@ -2,9 +2,10 @@
 
 namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
-use Fhaculty\Graph\Cycle;
+use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\Base as AlgorithmBase;
 
 abstract class Base extends AlgorithmBase
@@ -40,14 +41,14 @@ abstract class Base extends AlgorithmBase
     /**
      * get (first) best circle connecting all vertices
      *
-     * @return Cycle
+     * @return Walk
      * @uses AlgorithmTsp::getEdges()
      * @uses AlgorithmTsp::getVertexStart()
-     * @uses Cycle::factoryFromEdges()
+     * @uses Walk::factoryCycleFromEdges()
      */
     public function getCycle()
     {
-        return Cycle::factoryFromEdges($this->getEdges(), $this->getVertexStart());
+        return Walk::factoryCycleFromEdges($this->getEdges(), $this->getVertexStart());
     }
 
     public function getWeight()
@@ -63,7 +64,7 @@ abstract class Base extends AlgorithmBase
     /**
      * get array of edges connecting all vertices in a circle
      *
-     * @return Edge[]
+     * @return Edges
      */
     abstract public function getEdges();
 }

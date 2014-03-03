@@ -17,6 +17,7 @@ use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\Base;
 use Fhaculty\Graph\Algorithm\ResidualGraph;
 use Fhaculty\Graph\Exception;
@@ -86,7 +87,7 @@ class EdmondsKarp extends Base
             // If path exists add the new flow to graph
             if ($pathFlow) {
                 // 2. get max flow from path
-                $maxFlowValue = Edge::getFirst($pathFlow->getEdges(), Edge::ORDER_CAPACITY)->getCapacity();
+                $maxFlowValue = $pathFlow->getEdges()->getEdgeOrder(Edges::ORDER_CAPACITY)->getCapacity();
 
                 // 3. add flow to path
                 foreach ($pathFlow->getEdges() as $edge) {
