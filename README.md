@@ -93,9 +93,15 @@ users should install from [GraphViz homepage](http://www.graphviz.org/Download.p
 
 ## Tests
 
-Make sure you have done a `$ composer install` once. This sets up the developer environment.
+This library uses phpunit for its extensive testsuite.
+You can either use a global installation or rely on the one composer installs
+when you first run `$ composer install`.
+This sets up the developer environment, so that you
+can now run it from the project root directory:
 
-Next run `$ php vendor/bin/phpunit` from the projects root directory.
+```bash
+$ php vendor/bin/phpunit`
+```
 
 ## Contributing
 
