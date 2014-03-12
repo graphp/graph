@@ -8,4 +8,4 @@ php:
 before_script:
   - composer install --dev --prefer-source --no-interaction
 script:
-  - phpunit --coverage-text
+  - php vendor/bin/phpunit --coverage-text
