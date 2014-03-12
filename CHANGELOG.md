@@ -10,6 +10,9 @@ you spot any mistakes.
     to a temporary file fails and remove its debugging output
     ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
 
+*   Fix: Improved GraphViz support for MS Windows
+    ([#99](https://github.com/clue/graph/issues/99))
+
 ## 0.7.0 (2013-09-11)
 
 *   Feature: Add new `Set\Vertices` and `Set\Edges` classes that handle common
