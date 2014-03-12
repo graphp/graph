@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## 0.8.0 (2013-xx-xx)
+## 0.8.0 (2014-xx-xx)
 
 *   Feature: The base `Graph`, `Vertex` and `EdgeBase` classes can now be
     extended in order to implement a custom behavior. As such, one can now also
@@ -39,10 +39,6 @@ you spot any mistakes.
     edges. This also fixes an issue where `Algorithm\DetectNegativeCycle` didn't work
     for unweighted edges. ([#81](https://github.com/clue/graph/issues/81)
 
-*   Fix: Throwing an `UnexpectedValueException` if writing GraphViz Dot script
-    to a temporary file fails and remove its debugging output
-    ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
-
 *   Fix: The `Algorithm\MinimumCostFlow` algorithms now work again. The reference
     to a non-existant class has been updated. Also fixed several issues with
     regards to special cases such as disconnected or undirected graphs.
@@ -57,6 +53,15 @@ you spot any mistakes.
     | `Graph::getVertexFirst()` | `Graph::getVertices()->getVertexFirst()` |
     | `Walk::getVertexSource()` | `Walk::getVertices()->getVertexFirst()` |
     | `Walk::getVertexTarget()` | `Walk::getVertices()->getVertexLast()` |
+
+## 0.7.1 (2014-03-12)
+
+*   Fix: Throwing an `UnexpectedValueException` if writing GraphViz Dot script
+    to a temporary file fails and remove its debugging output
+    ([#77](https://github.com/clue/graph/issues/77) and [#78](https://github.com/clue/graph/issues/78) @Metabor)
+
+*   Fix: Improved GraphViz support for MS Windows
+    ([#99](https://github.com/clue/graph/issues/99))
 
 ## 0.7.0 (2013-09-11)
 
