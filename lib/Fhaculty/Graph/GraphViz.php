@@ -133,8 +133,8 @@ class GraphViz
         }
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            //echo "ausgabe\n";
-            exec($tmp . ' >NUL');
+            // open image in untitled, temporary background shell
+            exec('start "" ' . escapeshellarg($tmp) . ' >NUL');
         } elseif (strtoupper(PHP_OS) === 'DARWIN') {
             // open image in background (redirect stdout to /dev/null, sterr to stdout and run in background)
             exec('open ' . escapeshellarg($tmp) . ' > /dev/null 2>&1 &');
@@ -259,7 +259,7 @@ class GraphViz
         $ret = 0;
 
         $executable = $this->getExecutable();
-        system($executable . ' -T ' . escapeshellarg($this->format) . ' ' . escapeshellarg($tmp) . ' -o ' . escapeshellarg($tmp . '.' . $this->format), $ret);
+        system(escapeshellarg($executable) . ' -T ' . escapeshellarg($this->format) . ' ' . escapeshellarg($tmp) . ' -o ' . escapeshellarg($tmp . '.' . $this->format), $ret);
         if ($ret !== 0) {
             throw new UnexpectedValueException('Unable to invoke "' . $executable .'" to create image file (code ' . $ret . ')');
         }
