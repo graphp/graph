@@ -113,6 +113,8 @@ Besides directly working with the code, any additional documentation, additions 
 
 Any feedback and/or contribution is welcome!
 
+Check out #graphp on irc.freenode.net.
+
 ## License
 
 Released under the terms of the permissive [MIT license](http://opensource.org/licenses/MIT).
