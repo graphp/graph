@@ -27,26 +27,26 @@ you spot any mistakes.
 
 *   BC break: `Walk::factoryCycleFromVertices()` no longer tries to auto-complete
     a cycle if the first vertex does not match the last one, but now throws an
-    `InvalidArgumentException` instead ([#87](https://github.com/clue/graph/issues/87)
+    `InvalidArgumentException` instead ([#87](https://github.com/clue/graph/issues/87))
 
 *   Feature: Support loop `Walk`s, i.e. a walk with only a single edge from
-    vertex A back to A ([#87](https://github.com/clue/graph/issues/87)
+    vertex A back to A ([#87](https://github.com/clue/graph/issues/87))
 
 *   Fix: Stricter checks for invalid cycles, such as one with an invalid
-    predecessor-map or no edges at all ([#87](https://github.com/clue/graph/issues/87)
+    predecessor-map or no edges at all ([#87](https://github.com/clue/graph/issues/87))
 
 *   Fix: The `Algorithm\ShortestPath\MooreBellmanFord` now also works for unweighted
     edges. This also fixes an issue where `Algorithm\DetectNegativeCycle` didn't work
-    for unweighted edges. ([#81](https://github.com/clue/graph/issues/81)
+    for unweighted edges. ([#81](https://github.com/clue/graph/issues/81))
 
 *   Fix: The `Algorithm\MinimumCostFlow` algorithms now work again. The reference
     to a non-existant class has been updated. Also fixed several issues with
     regards to special cases such as disconnected or undirected graphs.
-    ([#74](https://github.com/clue/graph/issues/74)
+    ([#74](https://github.com/clue/graph/issues/74))
 
 *   BC break: Remove unneeded alias definitions of `getVertexFirst()`,
     `getVertexSource()` and `getVertexTarget()`
-    [#76]https://github.com/clue/graph/issues/76)):
+    ([#76](https://github.com/clue/graph/issues/76)):
 
     | Old name | New name |
     |---|---|
