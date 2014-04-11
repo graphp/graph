@@ -497,7 +497,8 @@ class Graph implements DualAggregate
         return $this->getExporter()->getOutput($this);
     }
 
-    public function getLayout(){
+    public function getLayout()
+    {
         return array();
     }
 }
