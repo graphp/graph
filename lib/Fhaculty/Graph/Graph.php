@@ -21,8 +21,10 @@ use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Set\VerticesMap;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Set\DualAggregate;
+use Fhaculty\Graph\Attribute\AttributeAware;
+use Fhaculty\Graph\Attribute\AttributeBagReference;
 
-class Graph implements DualAggregate
+class Graph implements DualAggregate, AttributeAware
 {
     /**
      * @var ExporterInterface|null
@@ -35,6 +37,8 @@ class Graph implements DualAggregate
 
     protected $edgesStorage = array();
     protected $edges;
+
+    protected $attributes = array();
 
     public function __construct()
     {
@@ -100,7 +104,7 @@ class Graph implements DualAggregate
         }
         $newVertex = new Vertex($this, $id);
         // TODO: properly set attributes of vertex
-        $newVertex->setLayout($originalVertex->getLayout());
+        $newVertex->getAttributeBag()->setAttributes($originalVertex->getAttributeBag()->getAttributes());
         $newVertex->setBalance($originalVertex->getBalance());
         $newVertex->setGroup($originalVertex->getGroup());
 
@@ -117,7 +121,7 @@ class Graph implements DualAggregate
     public function createGraphCloneEdgeless()
     {
         $graph = new Graph();
-//         $graph->setLayout($this->getLayout());
+        $graph->getAttributeBag()->setAttributes($this->getAttributeBag()->getAttributes());
         // TODO: set additional graph attributes
         foreach ($this->getVertices() as $originalVertex) {
             $vertex = $graph->createVertexClone($originalVertex);
@@ -236,7 +240,7 @@ class Graph implements DualAggregate
             $newEdge = $a->createEdge($b);
         }
         // TODO: copy edge attributes
-        $newEdge->setLayout($originalEdge->getLayout());
+        $newEdge->getAttributeBag()->setAttributes($originalEdge->getAttributeBag()->getAttributes());
         $newEdge->setWeight($originalEdge->getWeight());
         $newEdge->setFlow($originalEdge->getFlow());
         $newEdge->setCapacity($originalEdge->getCapacity());
@@ -497,8 +501,18 @@ class Graph implements DualAggregate
         return $this->getExporter()->getOutput($this);
     }
 
-    public function getLayout()
+    public function getAttribute($name)
     {
-        return array();
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+    }
+
+    public function setAttribute($name, $value)
+    {
+        $this->attributes[$name] = $value;
+    }
+
+    public function getAttributeBag()
+    {
+        return new AttributeBagReference($this->attributes);
     }
 }

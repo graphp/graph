@@ -11,8 +11,10 @@ use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Attribute\AttributeAware;
+use Fhaculty\Graph\Attribute\AttributeBagReference;
 
-class Vertex extends Layoutable implements EdgesAggregate
+class Vertex implements EdgesAggregate, AttributeAware
 {
     private $id;
 
@@ -41,6 +43,8 @@ class Vertex extends Layoutable implements EdgesAggregate
      * @see Vertex::setGroup()
      */
     private $group = 0;
+
+    private $attributes = array();
 
     /**
      * Create a new Vertex
@@ -366,5 +370,20 @@ class Vertex extends Layoutable implements EdgesAggregate
         // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
         // @codeCoverageIgnoreEnd
+    }
+
+    public function getAttribute($name)
+    {
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+    }
+
+    public function setAttribute($name, $value)
+    {
+        $this->attributes[$name] = $value;
+    }
+
+    public function getAttributeBag()
+    {
+        return new AttributeBagReference($this->attributes);
     }
 }
