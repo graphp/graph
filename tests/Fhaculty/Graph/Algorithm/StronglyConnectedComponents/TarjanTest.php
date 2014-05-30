@@ -13,7 +13,7 @@ class TarjanTest extends TestCase
         $this->graph = new Graph();
     }
 
-    public function testAlgorithm()
+    public function testTwoCycles()
     {
         // Build a graph
         for ($k = 0; $k < 6; $k++) {
@@ -29,6 +29,7 @@ class TarjanTest extends TestCase
         }
 
         // Run the algorithm
+        // echo $this->graph->__toString(); die;
         $algorithm = new Tarjan($this->graph);
 
         $ret = $algorithm->getStronglyConnected();
@@ -53,6 +54,7 @@ class TarjanTest extends TestCase
         }
 
         // Run the algorithm
+        // echo $this->graph->__toString(); die;
         $algorithm = new Tarjan($this->graph);
 
         $ret = $algorithm->getStronglyConnected();
@@ -75,6 +77,7 @@ class TarjanTest extends TestCase
         $meth->createEdgeTo($param);
 
         // Run the algorithm
+        // echo $this->graph->__toString(); die;
         $algorithm = new Tarjan($this->graph);
 
         $ret = $algorithm->getStronglyConnected();

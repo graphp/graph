@@ -5,9 +5,11 @@ namespace Fhaculty\Graph\Algorithm\StronglyConnectedComponents;
 use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Algorithm\Directed;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\VerticeDataMap;
 
 /**
- * @see http://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
  * @see http://github.com/Trismegiste/Mondrian/blob/master/Graph/Tarjan.php
  */
 class Tarjan extends BaseGraph
@@ -15,6 +17,19 @@ class Tarjan extends BaseGraph
     private $stack;
     private $index;
     private $partition;
+
+    private $indexMap = array();
+    private $lowLinkMap = array();
+
+    /**
+     * @param Graph $graph
+     */
+    public function __construct(Graph $graph)
+    {
+        parent::__construct($graph);
+        $this->indexMap = new VerticeDataMap();
+        $this->lowLinkMap = new VerticeDataMap();
+    }
 
     /**
      * Get the strongly connected components of this digraph by
@@ -30,7 +45,7 @@ class Tarjan extends BaseGraph
      */
     public function getStronglyConnected()
     {
-        return array();
+
         // check is directed
         $directed = new Directed($this->graph);
         if($directed->hasUndirected()){
@@ -41,9 +56,9 @@ class Tarjan extends BaseGraph
         $this->index = 0;
         $this->partition = array();
 
-        foreach ($this->getVertexSet() as $v) {
-            if (!isset($v->index)) {
-                $this->recursivStrongConnect($v);
+        foreach ($this->graph->getVertices()->getList() as $vertex) {
+            if (! isset($this->indexMap[$vertex])) {
+                $this->recursivStrongConnect($vertex);
             }
         }
 
@@ -52,24 +67,24 @@ class Tarjan extends BaseGraph
 
     private function recursivStrongConnect(Vertex $v)
     {
-        $v->index = $this->index;
-        $v->lowLink = $this->index;
+        $this->indexMap[$v] = $this->index;
+        $this->lowLinkMap[$v] = $this->index;
         $this->index++;
         array_push($this->stack, $v);
 
         // Consider successors of v
-        foreach ($this->getSuccessor($v) as $w) {
-            if (!isset($w->index)) {
+        foreach ($v->getVerticesEdgeTo() as $w) {
+            if (! isset($this->indexMap[$w]) ) {
                 // Successor w has not yet been visited; recurse on it
                 $this->recursivStrongConnect($w);
-                $v->lowLink = min(array($v->lowLink, $w->lowLink));
+                $this->lowLinkMap[$v] = min(array($this->lowLinkMap[$v], $this->lowLinkMap[$w]));
             } elseif (in_array($w, $this->stack)) {
                 // Successor w is in stack S and hence in the current SCC
-                $v->lowLink = min(array($v->lowLink, $w->index));
+                $this->lowLinkMap[$v] = min(array($this->lowLinkMap[$v], $this->indexMap[$w]));
             }
         }
         // If v is a root node, pop the stack and generate an SCC
-        if ($v->lowLink === $v->index) {
+        if ($this->lowLinkMap[$v] === $this->indexMap[$v]) {
             $scc = array();
             do {
                 $w = array_pop($this->stack);
