@@ -6,6 +6,7 @@ use Fhaculty\Graph\Algorithm\BaseGraph;
 use Fhaculty\Graph\Algorithm\Directed;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\VerticeDataMap;
 
@@ -92,7 +93,7 @@ class Tarjan extends BaseGraph
             } while ($w !== $v);
 
             if (count($scc)) {
-                $this->partition[] = $scc;
+                $this->partition[] = new Vertices($scc);
             }
         }
     }

@@ -171,13 +171,17 @@ class Vertex extends Layoutable implements EdgesAggregate
      * @private
      * @see Edge::destroy() instead!
      */
-    public function removeEdge(Edge $edge)
+    public function removeEdge(Edge $edge, $throwException = true)
     {
         $id = array_search($edge, $this->edges, true);
         if ($id === false) {
-            throw new InvalidArgumentException('Given edge does NOT exist');
+            if($throwException){
+                throw new InvalidArgumentException('Given edge does NOT exist');
+            }
         }
-        unset($this->edges[$id]);
+        else{
+            unset($this->edges[$id]);
+        }
     }
 
     /**

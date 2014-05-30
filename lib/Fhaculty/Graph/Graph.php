@@ -362,14 +362,18 @@ class Graph implements DualAggregate
      * @private
      * @see Edge::destroy() instead!
      */
-    public function removeEdge(Edge $edge)
+    public function removeEdge(Edge $edge, $throwException = true)
     {
-        try {
-            unset($this->edgesStorage[$this->edges->getIndexEdge($edge)]);
+        $id = $this->edges->getIndexEdge($edge);
+        if ($id === false) {
+            if($throwException){
+                throw new InvalidArgumentException('Invalid Edge does not exist in this Graph');
+            }
         }
-        catch (OutOfBoundsException $e) {
-            throw new InvalidArgumentException('Invalid Edge does not exist in this Graph');
+        else{
+            unset($this->edgesStorage[$id]);
         }
+
     }
 
     /**
