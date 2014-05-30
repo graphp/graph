@@ -313,19 +313,6 @@ class GraphTest extends TestCase
         return $graph;
     }
 
-    /**
-     * @param Graph $graph
-     * @expectedException InvalidArgumentException
-     * @depends testRemoveEdge
-     */
-    public function testRemoveEdgeInvalid(Graph $graph)
-    {
-        $edge = $graph->getVertex(1)->createEdge($graph->getVertex(2));
-
-        $edge->destroy();
-        $edge->destroy();
-    }
-
     public function testRemoveVertex()
     {
         $graph = new Graph();
