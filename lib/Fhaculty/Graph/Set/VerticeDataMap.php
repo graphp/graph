@@ -40,4 +40,4 @@ class VerticeDataMap implements \ArrayAccess
         unset($this->dataMap[$offset->getId()]);
     }
 
-} 
+}

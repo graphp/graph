@@ -32,4 +32,4 @@ class CycleFinderTest extends TestCase
         $walk = Walk::factoryCycleFromVertices(array($A, $B, $A));
         $this->assertSame($walk->__toString(), $shortest->__toString());
     }
-} 
+}

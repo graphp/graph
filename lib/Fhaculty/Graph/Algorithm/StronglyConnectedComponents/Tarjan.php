@@ -97,4 +97,4 @@ class Tarjan extends BaseGraph
             }
         }
     }
-} 
+}

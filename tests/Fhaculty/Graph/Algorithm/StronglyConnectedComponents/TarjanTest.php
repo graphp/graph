@@ -54,7 +54,6 @@ class TarjanTest extends TestCase
         }
 
         // Run the algorithm
-        // echo $this->graph->__toString(); die;
         $algorithm = new Tarjan($this->graph);
 
         $ret = $algorithm->getStronglyConnected();
@@ -77,7 +76,6 @@ class TarjanTest extends TestCase
         $meth->createEdgeTo($param);
 
         // Run the algorithm
-        // echo $this->graph->__toString(); die;
         $algorithm = new Tarjan($this->graph);
 
         $ret = $algorithm->getStronglyConnected();
@@ -86,4 +84,4 @@ class TarjanTest extends TestCase
         $this->assertCount(1, $ret[0]);
         $this->assertCount(3, $ret[1]);
     }
-} 
+}

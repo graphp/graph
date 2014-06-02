@@ -170,7 +170,7 @@ class Graph implements DualAggregate
 
         $graph = $this->createGraphClone();
         foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
-            if (!$verticesKeep->hasVertexId($vid)) {
+            if (! $verticesKeep->hasVertexId($vid) ) {
                 $vertex->destroy();
             }
         }
