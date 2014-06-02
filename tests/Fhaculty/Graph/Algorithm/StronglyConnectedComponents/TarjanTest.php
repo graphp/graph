@@ -29,7 +29,6 @@ class TarjanTest extends TestCase
         }
 
         // Run the algorithm
-        // echo $this->graph->__toString(); die;
         $algorithm = new Tarjan($this->graph);
 
         $ret = $algorithm->getStronglyConnected();
