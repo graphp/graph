@@ -8,8 +8,9 @@ use Fhaculty\Graph\Walk;
 
 class CycleFinderTest extends TestCase
 {
-    public function testGraphHaSCycle()
+    public function testGraphHasCycle()
     {
+        // Graph is obviously strongly connected.
         $graph = new Graph();
 
         $A = $graph->createVertex("A");
@@ -20,11 +21,6 @@ class CycleFinderTest extends TestCase
         $B->createEdgeTo($C);
         $C->createEdgeTo($A);
         $B->createEdgeTo($A);
-
-        // $tarjan = new Tarjan($graph);
-        // $componentsVertices = $tarjan->getStronglyConnected();
-        // foreach($componentsVertices as $componentVertices){
-        // $component = $graph->createGraphCloneVertices($componentVertices);
 
         $find = new CycleFinder($graph);
         $shortest = $find->getShortestCycle();
