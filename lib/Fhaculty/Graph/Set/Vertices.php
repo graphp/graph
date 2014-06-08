@@ -228,7 +228,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     }
 
     /**
-     * checks whethere there's a Vertex that matches the given callback filter function
+     * checks whether there's a Vertex that matches the given callback filter function
      *
      * @param callback $callbackCheck
      * @return boolean
