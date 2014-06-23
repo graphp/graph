@@ -191,6 +191,38 @@ VIZ;
         $this->assertEquals($expected, $this->getDotScriptForGraph($graph));
     }
 
+    public function testSubgraph()
+    {
+        $graph = new Graph();
+        $graph->createVertex('n1')->setGroup("A");
+        $graph->createVertex('n2')->setGroup("B");
+        $graph->createVertex('n21')->setGroup("B:A");
+        $graph->createVertex('n22')->setGroup("B:A");
+
+        $expected = file_get_contents(__DIR__ . '/fixtures/graph-cluster.dot');
+
+        $this->assertEquals($expected, $this->getDotScriptForGraph($graph));
+
+    }
+
+    public function testSubgraphTree()
+    {
+        $graph = new Graph();
+        $graph->createVertex('n1')->setGroup('A');
+        $graph->createVertex('n21')->setGroup("B");
+        $graph->createVertex('n211')->setGroup('B:A');
+        $graph->createVertex('n212')->setGroup('B:A');
+        $graph->createVertex('n2111')->setGroup('B:A:A');
+        $graph->createVertex('n3');
+
+        $in_file = __DIR__ . '/fixtures/graph-cluster-tree.dot';
+        $out_file = __DIR__ . '/fixtures/out/graph-cluster-tree.dot';
+        $expected = file_get_contents($in_file);
+        file_put_contents($out_file, $this->getDotScriptForGraph($graph));
+
+        $this->assertEquals($expected, $this->getDotScriptForGraph($graph));
+
+    }
 
     private function getDotScriptForGraph(Graph $graph)
     {

@@ -37,10 +37,10 @@ class Vertex extends Layoutable implements EdgesAggregate
     /**
      * group number
      *
-     * @var int
+     * @var int|string
      * @see Vertex::setGroup()
      */
-    private $group = 0;
+    private $group = NULL;
 
     /**
      * Create a new Vertex
@@ -89,15 +89,11 @@ class Vertex extends Layoutable implements EdgesAggregate
     /**
      * set group number of this vertex
      *
-     * @param  int                      $group
+     * @param  int | string             $group
      * @return Vertex                   $this (chainable)
-     * @throws InvalidArgumentException if group is not numeric
      */
     public function setGroup($group)
     {
-        if (!is_int($group)) {
-            throw new InvalidArgumentException('Invalid group number');
-        }
         $this->group = $group;
 
         return $this;
@@ -106,7 +102,7 @@ class Vertex extends Layoutable implements EdgesAggregate
     /**
      * get group number
      *
-     * @return int
+     * @return int| string
      */
     public function getGroup()
     {

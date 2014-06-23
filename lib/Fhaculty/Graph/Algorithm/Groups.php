@@ -60,7 +60,9 @@ class Groups extends BaseGraph
     {
         $groups = array();
         foreach ($this->graph->getVertices() as $vertex) {
-            $groups[$vertex->getGroup()] = true;
+            $group = $vertex->getGroup();
+            $group = (is_null($group)? "_NULL_" : $group);
+            $groups[$group] = true;
         }
 
         return array_keys($groups);

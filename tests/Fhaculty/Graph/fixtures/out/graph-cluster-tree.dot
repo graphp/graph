@@ -1,0 +1,25 @@
+graph G {
+  subgraph cluster_A {
+    label = "A"
+    "n1"
+  }
+  subgraph cluster_B {
+    label = "B"
+    "n21"
+    subgraph cluster_B_A {
+      label = "B:A"
+      "n211"
+      "n212"
+      subgraph cluster_B_A_A {
+        label = "B:A:A"
+        "n2111"
+      }
+    }
+  }
+  "n1"
+  "n21"
+  "n211"
+  "n212"
+  "n2111"
+  "n3"
+}

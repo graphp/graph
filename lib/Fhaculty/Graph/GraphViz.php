@@ -304,35 +304,36 @@ class GraphViz
             $gid = 0;
             $indent = str_repeat($this->formatIndent, 2);
             // put each group of vertices in a separate subgraph cluster
-            foreach ($alg->getGroups() as $group) {
-                $script .= $this->formatIndent . 'subgraph cluster_' . $gid++ . ' {' . self::EOL .
-                           $indent . 'label = ' . $this->escape($group) . self::EOL;
-                foreach($alg->getVerticesGroup($group)->getMap() as $vid => $vertex) {
-                    $layout = $this->getLayoutVertex($vertex);
-
-                    $script .= $indent . $this->escapeId($vid);
-                    if($layout){
-                        $script .= ' ' . $this->escapeAttributes($layout);
-                    }
-                    $script .= self::EOL;
+            $groups = $alg->getGroups();
+            $tree = array();
+            foreach ($groups as $group) {
+              $fragments = explode(":", $group);
+              $pointer = &$tree;
+              while (count($fragments)) {
+                $key = array_shift($fragments);
+                if (!isset($pointer[$key])) {
+                  $pointer[$key] = array();
                 }
-                $script .= '  }' . self::EOL;
+                $pointer = &$pointer[$key];
+              }
             }
-        } else {
-            $alg = new Degree($this->graph);
+            foreach( $tree as $group => $subtree) {
+                $this->printCluster($group, $subtree, $alg, $script);
+            }
+        }
 
-            // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
-            // other vertices wil be added automatically due to below edge definitions
-            foreach ($this->graph->getVertices()->getMap() as $vid => $vertex){
-                $layout = $this->getLayoutVertex($vertex);
+        $degree = new Degree($this->graph);
+        // explicitly add all isolated vertices (vertices with no edges) and vertices with special layout set
+        // other vertices wil be added automatically due to below edge definitions
+        foreach ($this->graph->getVertices() as $vid => $vertex){
+            $layout = $this->getLayoutVertex($vertex);
 
-                if($layout || $alg->isVertexIsolated($vertex)){
-                    $script .= $this->formatIndent . $this->escapeId($vid);
-                    if($layout){
-                        $script .= ' ' . $this->escapeAttributes($layout);
-                    }
-                    $script .= self::EOL;
+            if($degree->isVertexIsolated($vertex) || $layout){
+                $script .= $this->formatIndent . $this->escapeId($vid);
+                if($layout){
+                    $script .= ' ' . $this->escapeAttributes($layout);
                 }
+                $script .= self::EOL;
             }
         }
 
@@ -361,6 +362,24 @@ class GraphViz
         $script .= '}' . self::EOL;
 
         return $script;
+    }
+
+    protected function printCluster($group, $tree, $alg, &$script, $depth = 1) {
+        if ($group == "_NULL_") {
+            return;
+        }
+        $script .= str_repeat($this->formatIndent, $depth) . 'subgraph cluster_' . str_replace(":", "_", $group) . ' {' . self::EOL;
+        $script .= str_repeat($this->formatIndent, $depth + 1) . 'label = ' . $this->escape($group) . self::EOL;
+        foreach($alg->getVerticesGroup($group) as $vid => $vertex) {
+            $script .= str_repeat($this->formatIndent, $depth + 1) . $this->escape($vid);
+            $script .= self::EOL;
+        }
+        if (!empty($tree)) {
+            foreach($tree as $sub_group => $sub_tree) {
+              $this->printCluster($group . ':' . $sub_group, $sub_tree, $alg, $script, $depth + 1);
+            }
+        }
+        $script .= str_repeat($this->formatIndent, $depth) . '}' . self::EOL;
     }
 
     /**
