@@ -35,11 +35,6 @@ class AttributeBagReference implements AttributeBag
         return $this;
     }
 
-    public function getNames()
-    {
-        return array_keys($this->attributes);
-    }
-
     public function getAttributeBag()
     {
         return $this;

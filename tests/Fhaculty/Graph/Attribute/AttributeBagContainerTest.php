@@ -10,7 +10,6 @@ class AttributeBagContainerTest extends TestCase
 
         $this->assertNull($bag->getAttribute('unknown'));
         $this->assertEquals(array(), $bag->getAttributes());
-        $this->assertEquals(array(), $bag->getNames());
 
         $this->assertSame($bag, $bag->getAttributeBag());
     }
@@ -24,7 +23,7 @@ class AttributeBagContainerTest extends TestCase
 
         $this->assertSame(true, $bag->getAttribute('true'));
         $this->assertSame(2, $bag->getAttribute('two'));
-        $this->assertEquals(array('true', 'two'), $bag->getNames());
+        $this->assertEquals(array('true' => true, 'two' => 2), $bag->getAttributes());
 
         $bag->setAttribute('float', '1.2');
         $bag->setAttributes(array('two' => 'two', 'three' => 3));

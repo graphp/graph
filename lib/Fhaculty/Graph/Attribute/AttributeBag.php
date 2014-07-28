@@ -24,11 +24,4 @@ interface AttributeBag extends AttributeAware
      * @return array
      */
     public function getAttributes();
-
-    /**
-     * get an array of the names of all existing attributes
-     *
-     * @return string[]
-     */
-    public function getNames();
 }

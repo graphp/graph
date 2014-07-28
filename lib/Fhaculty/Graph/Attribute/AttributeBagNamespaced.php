@@ -50,20 +50,6 @@ class AttributeBagNamespaced implements AttributeBag
         }
     }
 
-    public function getNames()
-    {
-        $names = array();
-        $len = strlen($this->prefix);
-
-        foreach ($this->bag->getAttributes() as $name => $value) {
-            if (strpos($name, $this->prefix) === 0) {
-                $names []= substr($name, $len);
-            }
-        }
-
-        return $names;
-    }
-
     public function getAttributeBag()
     {
         return $this;

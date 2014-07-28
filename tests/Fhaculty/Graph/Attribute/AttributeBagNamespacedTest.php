@@ -25,8 +25,7 @@ class AtributeBagNamespacedTest extends TestCase
 
         $bag->setAttributes(array('d' => 'd', 'e' => 'e'));
 
-        $this->assertEquals(array('d', 'e'), $bag->getNames());
-        $this->assertEquals(array('a.b', 'test.d', 'test.e'), $container->getNames());
+        $this->assertEquals(array('a.b' => 'c', 'test.d' => 'd', 'test.e' => 'e'), $container->getAttributes());
     }
 
     /**
@@ -48,7 +47,6 @@ class AtributeBagNamespacedTest extends TestCase
         $this->assertNull($bag->getAttribute('test.d'));
 
         $this->assertEquals(array('d' => 'e'), $bag->getAttributes());
-        $this->assertEquals(array('d'), $bag->getNames());
     }
 
     public function provideNamespacable()
