@@ -10,12 +10,13 @@ namespace Fhaculty\Graph\Attribute;
 interface AttributeAware
 {
     /**
-     * get a single attribute with the given $name
+     * get a single attribute with the given $name (or return $default if attribute was not found)
      *
      * @param string $name
-     * @return mixed|null
+     * @param mixed  $default to return if attribute was not found
+     * @return mixed
      */
-    public function getAttribute($name);
+    public function getAttribute($name, $default = null);
 
     /**
      * set a single attribute with the given $name to given $value

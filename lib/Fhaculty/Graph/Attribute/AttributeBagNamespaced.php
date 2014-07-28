@@ -19,9 +19,9 @@ class AttributeBagNamespaced implements AttributeBag
         $this->prefix = $prefix;
     }
 
-    public function getAttribute($name)
+    public function getAttribute($name, $default = null)
     {
-        return $this->bag->getAttribute($this->prefix . $name);
+        return $this->bag->getAttribute($this->prefix . $name, $default);
     }
 
     public function setAttribute($name, $value)

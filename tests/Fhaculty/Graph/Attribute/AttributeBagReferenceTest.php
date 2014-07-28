@@ -11,6 +11,8 @@ class AttributeBagReferenceTest extends TestCase
         $bag = new AttributeBagReference($attributes);
 
         $this->assertNull($bag->getAttribute('unknown'));
+        $this->assertEquals('default', $bag->getAttribute('unknown', 'default'));
+
         $this->assertEquals(array(), $bag->getAttributes());
 
         $this->assertSame($bag, $bag->getAttributeBag());

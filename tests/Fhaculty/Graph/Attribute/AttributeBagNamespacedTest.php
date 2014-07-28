@@ -18,6 +18,9 @@ class AtributeBagNamespacedTest extends TestCase
 
         $this->assertEquals('e', $bag->getAttribute('d'));
 
+        $this->assertNull($bag->getAttribute('unknown'));
+        $this->assertEquals('default', $bag->getAttribute('unknown', 'default'));
+
         $bag->setAttribute('d', 'test');
 
         $this->assertEquals('test', $bag->getAttribute('d'));

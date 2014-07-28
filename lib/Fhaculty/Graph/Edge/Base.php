@@ -293,9 +293,9 @@ abstract class Base implements VerticesAggregate, AttributeAware
         // @codeCoverageIgnoreEnd
     }
 
-    public function getAttribute($name)
+    public function getAttribute($name, $default = null)
     {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : $default;
     }
 
     public function setAttribute($name, $value)
