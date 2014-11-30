@@ -250,9 +250,9 @@ abstract class Base extends Layoutable implements VerticesAggregate
      */
     public function destroy()
     {
-        $this->getGraph()->removeEdge($this, false);
+        $this->getGraph()->removeEdge($this);
         foreach ($this->getVertices() as $vertex) {
-            $vertex->removeEdge($this, false);
+            $vertex->removeEdge($this);
         }
     }
 

@@ -122,6 +122,21 @@ class EdgesTest extends TestCase
      *
      * @param Edges $edges
      * @depends testTwo
+     * @expectedException OutOfBoundsException
+     */
+    public function testTwoDoesNotContainEdge3(Edges $edges)
+    {
+        $graph = new Graph();
+        $v3 = $graph->createVertex(3);
+        $e3 = $v3->createEdge($v3);
+
+        $edges->getIndexEdge($e3);
+    }
+
+    /**
+     *
+     * @param Edges $edges
+     * @depends testTwo
      */
     public function testTwoAsMap(Edges $edges)
     {
