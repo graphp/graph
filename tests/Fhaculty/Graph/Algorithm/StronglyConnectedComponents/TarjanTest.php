@@ -19,7 +19,7 @@ class TarjanTest extends TestCase
         for ($k = 0; $k < 6; $k++) {
             $this->graph->createVertex($k);
         }
-        $vertex = $this->graph->getVertices()->getList();
+        $vertex = $this->graph->getVertices()->getVector();
         for ($offset = 0; $offset < 6; $offset += 3) {
             for ($k = 0; $k < 3; $k++) {
                 $start = $vertex[$offset + $k];
@@ -44,8 +44,8 @@ class TarjanTest extends TestCase
         for ($k = 0; $k < $card; $k++) {
             $this->graph->createVertex($k);
         }
-        foreach ($this->graph->getVertices()->getList() as $src) {
-            foreach ($this->graph->getVertices()->getList() as $dst) {
+        foreach ($this->graph->getVertices()->getVector() as $src) {
+            foreach ($this->graph->getVertices()->getVector() as $dst) {
                 if ($src === $dst)
                     continue;
                 $src->createEdgeTo($dst);

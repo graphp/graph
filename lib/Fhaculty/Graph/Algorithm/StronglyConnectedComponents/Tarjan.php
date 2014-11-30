@@ -28,8 +28,8 @@ class Tarjan extends BaseGraph
     public function __construct(Graph $graph)
     {
         parent::__construct($graph);
-        $this->indexMap = new VerticeDataMap();
-        $this->lowLinkMap = new VerticeDataMap();
+        $this->indexMap = new \SplObjectStorage();
+        $this->lowLinkMap = new \SplObjectStorage();
     }
 
     /**
