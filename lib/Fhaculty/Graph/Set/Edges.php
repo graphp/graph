@@ -117,11 +117,16 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
      * get array index for given Edge
      *
      * @param Edge $edge
+     * @throws OutOfBoundsException
      * @return mixed
      */
     public function getIndexEdge(Edge $edge)
     {
-        return array_search($edge, $this->edges, true);
+        $id = array_search($edge, $this->edges, true);
+        if ($id === false) {
+            throw new OutOfBoundsException('Given edge does NOT exist');
+        }
+        return $id;
     }
 
     /**
