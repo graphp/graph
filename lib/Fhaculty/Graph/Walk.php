@@ -310,4 +310,25 @@ class Walk implements DualAggregate
 
         return true;
     }
+
+    /**
+     * @param Walk $walk
+     */
+    public function append(Walk $walk)
+    {
+        // first edge need to be starting at the same point.
+        if(
+            $this->getVertices()->getVertexFirst() !==
+            $walk->getVertices()->getVertexLast()
+        ) {
+            throw new InvalidArgumentException('First vertex of $walk shall be the same as the last one');
+        }
+
+        $vertices = array_merge(
+            $this->getVertices()->getVector(),
+            array_slice($walk->getVertices()->getVector(), 1)
+        );
+
+        return self::factoryCycleFromVertices($vertices);
+    }
 }
