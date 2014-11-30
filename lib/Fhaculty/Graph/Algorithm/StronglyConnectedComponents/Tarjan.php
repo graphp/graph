@@ -57,7 +57,7 @@ class Tarjan extends BaseGraph
         $this->index = 0;
         $this->partition = array();
 
-        foreach ($this->graph->getVertices()->getList() as $vertex) {
+        foreach ($this->graph->getVertices()->getVector() as $vertex) {
             if (! isset($this->indexMap[$vertex])) {
                 $this->recursivStrongConnect($vertex);
             }
