@@ -16,11 +16,6 @@ use Fhaculty\Graph\Set\Vertices;
  */
 class VerticesMap extends Vertices
 {
-    public function getList()
-    {
-        return array_values($this->getMap());
-    }
-
     public function getMap()
     {
         return $this->vertices;
