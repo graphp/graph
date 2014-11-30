@@ -170,7 +170,7 @@ class Graph implements DualAggregate
 
         $graph = $this->createGraphClone();
         foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
-            if (! $verticesKeep->hasVertexId($vid) ) {
+            if (!$verticesKeep->hasVertexId($vid)) {
                 $vertex->destroy();
             }
         }
@@ -362,18 +362,14 @@ class Graph implements DualAggregate
      * @private
      * @see Edge::destroy() instead!
      */
-    public function removeEdge(Edge $edge, $throwException = true)
+    public function removeEdge(Edge $edge)
     {
-        $id = $this->edges->getIndexEdge($edge);
-        if ($id === false) {
-            if($throwException){
-                throw new InvalidArgumentException('Invalid Edge does not exist in this Graph');
-            }
+        try {
+            unset($this->edgesStorage[$this->edges->getIndexEdge($edge)]);
         }
-        else{
-            unset($this->edgesStorage[$id]);
+        catch (OutOfBoundsException $e) {
+            throw new InvalidArgumentException('Invalid Edge does not exist in this Graph');
         }
-
     }
 
     /**
