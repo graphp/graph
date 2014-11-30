@@ -16,7 +16,7 @@ class CycleFinder extends BaseGraph
     public function getShortestCycle()
     {
         $walkMap = array();
-        $vertices = $this->graph->getVertices()->getList();
+        $vertices = $this->graph->getVertices()->getVector();
 
         // Compute distance map
         foreach($vertices as $u){
@@ -44,7 +44,7 @@ class CycleFinder extends BaseGraph
                 }
                 $walkU = $walkMap[$u->getId()][$v->getId()];
                 $walkV = $walkMap[$v->getId()][$u->getId()];
-                $length = $walkU->getLength() + $walkV->getLength();
+                $length = count($walkU->getEdges()) + count($walkV->getEdges());
                 if($length < $minimum){
                     $minimum = $length;
                     $walk = $walkU->append($walkV);
