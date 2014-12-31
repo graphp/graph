@@ -79,7 +79,7 @@ The recommended way to install this library is [through composer](http://getcomp
 ```JSON
 {
     "require": {
-        "clue/graph": "0.7.*"
+        "clue/graph": "~0.8.0"
     }
 }
 ```

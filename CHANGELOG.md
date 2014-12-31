@@ -4,7 +4,14 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## 0.8.0 (2014-xx-xx)
+## 0.8.0 (2014-12-31)
+
+*   Feature: Add general purpose Attributes.
+    ([#103](https://github.com/clue/graph/pull/103))
+
+*   BC break: Split off all GraphViz-related classes to a separate
+    [graphp/graphviz](https://github.com/graphp/graphviz) package.
+    ([#115](https://github.com/clue/graph/pull/115))
 
 *   Feature: The base `Graph`, `Vertex` and `EdgeBase` classes can now be
     extended in order to implement a custom behavior. As such, one can now also
