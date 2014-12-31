@@ -3,7 +3,7 @@
 namespace Fhaculty\Graph;
 
 use Fhaculty\Graph\Exporter\ExporterInterface;
-use Fhaculty\Graph\Exporter\Dot;
+use Fhaculty\Graph\Exporter\TrivialGraphFormat;
 use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
@@ -476,14 +476,14 @@ class Graph implements DualAggregate, AttributeAware
      * get current exporter to use to export graph to its output format
      *
      * If no other exporter has been set previously, this will lazy-load
-     * the (current default) Dot exporter.
+     * the (current default) TrivialGraphFormat exporter.
      *
      * @return ExporterInterface
      */
     public function getExporter()
     {
         if ($this->exporter === null) {
-            $this->exporter = new Dot();
+            $this->exporter = new TrivialGraphFormat();
         }
         return $this->exporter;
     }
