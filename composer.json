@@ -2,7 +2,7 @@
     "name": "clue/graph",
     "type": "library",
     "description": "A mathematical graph/network library written in PHP",
-    "keywords": ["graph", "network", "mathematical", "graphviz", "vertex", "edge", "shortest path", "dijkstra", "moore-bellman-ford", "minimum spanning tree", "kruskal", "prim"],
+    "keywords": ["graph", "network", "mathematical", "vertex", "edge", "shortest path", "dijkstra", "moore-bellman-ford", "minimum spanning tree", "kruskal", "prim"],
     "homepage": "https://github.com/clue/graph",
     "license": "MIT",
     "autoload": {
@@ -13,5 +13,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.* | ~4.0"
+    },
+    "suggest": {
+        "graphp/graphviz": "GraphViz graph drawing / DOT output"
     }
 }
