@@ -85,11 +85,11 @@ The recommended way to install this library is [through composer](http://getcomp
 ```
 
 Optional recommendation:
+
 In order to be able to use the [graph drawing feature](#graph-drawing) you'll have to
-install GraphViz (`dot` executable). Users of Debian/Ubuntu-based distributions may simply
-invoke `sudo apt-get install graphviz`, Windows users have to
-[download GraphViZ for Windows](http://www.graphviz.org/Download_windows.php) and remaining
-users should install from [GraphViz homepage](http://www.graphviz.org/Download.php).
+install the [graphp/graphviz](https://github.com/graphp/graphviz) package and GraphViz itself (`dot` executable).
+
+See [graphp/graphviz](https://github.com/graphp/graphviz) for details.
 
 ## Tests
 
