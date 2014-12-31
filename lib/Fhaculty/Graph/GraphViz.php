@@ -9,6 +9,7 @@ use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Edge\Base as Edge;
 use \stdClass;
+use Fhaculty\Graph\Attribute\AttributeBagNamespaced;
 
 class GraphViz
 {
@@ -25,9 +26,6 @@ class GraphViz
      * @see GraphViz::setFormat()
      */
     private $format = 'png';
-
-    private $layoutVertex = array();
-    private $layoutEdge = array();
 
     /**
      * Either the name of full path to GraphViz layout.
@@ -151,21 +149,6 @@ class GraphViz
     const LAYOUT_EDGE = 2;
     const LAYOUT_VERTEX = 3;
 
-    private function mergeLayout(&$old, $new)
-    {
-        if ($new === NULL) {
-            $old = array();
-        } else {
-            foreach ($new as $key => $value) {
-                if ($value === NULL) {
-                    unset($old[$key]);
-                } else {
-                    $old[$key] = $value;
-                }
-            }
-        }
-    }
-
     public function setLayout($where, $layout, $value = NULL)
     {
         if (!is_array($where)) {
@@ -174,13 +157,17 @@ class GraphViz
         if (func_num_args() > 2) {
             $layout = array($layout => $value);
         }
+
+        $map = array(
+            self::LAYOUT_GRAPH => 'graphviz.graph.',
+            self::LAYOUT_EDGE => 'graphviz.edge.',
+            self::LAYOUT_VERTEX => 'graphviz.node',
+        );
+
         foreach ($where as $where) {
-            if ($where === self::LAYOUT_GRAPH) {
-                $this->graph->setLayout($layout, $value);
-            } elseif ($where === self::LAYOUT_EDGE) {
-                $this->mergeLayout($this->layoutEdge, $layout);
-            } elseif ($where === self::LAYOUT_VERTEX) {
-                $this->mergeLayout($this->layoutVertex, $layout);
+            if (isset($map[$where])) {
+                $bag = new AttributeBagNamespaced($this->graph, $map[$where]);
+                $bag->setAttributes($layout);
             } else {
                 throw new InvalidArgumentException('Invalid layout identifier');
             }
@@ -285,15 +272,18 @@ class GraphViz
         $script = ($directed ? 'di':'') . 'graph G {' . self::EOL;
 
         // add global attributes
-        $layout = $this->graph->getLayout();
-        if ($layout) {
-            $script .= $this->formatIndent . 'graph ' . $this->escapeAttributes($layout) . self::EOL;
-        }
-        if ($this->layoutVertex) {
-            $script .= $this->formatIndent . 'node ' . $this->escapeAttributes($this->layoutVertex) . self::EOL;
-        }
-        if ($this->layoutEdge) {
-            $script .= $this->formatIndent . 'edge ' . $this->escapeAttributes($this->layoutEdge) . self::EOL;
+        $globals = array(
+            'graph' => 'graphviz.graph.',
+            'node'  => 'graphviz.node.',
+            'edge'  => 'graphviz.edge.',
+        );
+
+        foreach ($globals as $key => $prefix) {
+            $bag = new AttributeBagNamespaced($this->graph, $prefix);
+
+            if ($layout = $bag->getAttributes()) {
+                $script .= $this->formatIndent . $key . ' ' . $this->escapeAttributes($layout) . self::EOL;
+            }
         }
 
         $alg = new Groups($this->graph);
@@ -428,7 +418,8 @@ class GraphViz
 
     protected function getLayoutVertex(Vertex $vertex)
     {
-        $layout = $vertex->getLayout();
+        $bag = new AttributeBagNamespaced($vertex, 'graphviz.');
+        $layout = $bag->getAttributes();
 
         $balance = $vertex->getBalance();
         if($balance !== NULL){
@@ -446,7 +437,8 @@ class GraphViz
 
     protected function getLayoutEdge(Edge $edge)
     {
-        $layout = $edge->getLayout();
+        $bag = new AttributeBagNamespaced($edge, 'graphviz.');
+        $layout = $bag->getAttributes();
 
         // use flow/capacity/weight as edge label
         $label = NULL;

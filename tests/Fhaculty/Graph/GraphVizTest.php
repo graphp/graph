@@ -46,8 +46,8 @@ VIZ;
         $graph->createVertex('a');
         $graph->createVertex('b¹²³ is; ok\\ay, "right"?');
         $graph->createVertex(3);
-        $graph->createVertex(4)->setLayoutAttribute('label', 'normal');
-        $graph->createVertex(5)->setLayoutAttribute('label', GraphViz::raw('<raw>'));
+        $graph->createVertex(4)->setAttribute('graphviz.label', 'normal');
+        $graph->createVertex(5)->setAttribute('graphviz.label', GraphViz::raw('<raw>'));
 
 
         $expected = <<<VIZ
@@ -124,8 +124,8 @@ VIZ;
         $graph->createVertex('a')->setBalance(1);
         $graph->createVertex('b')->setBalance(0);
         $graph->createVertex('c')->setBalance(-1);
-        $graph->createVertex('d')->setLayoutAttribute('label', 'test');
-        $graph->createVertex('e')->setLayoutAttribute('label', 'unnamed')->setBalance(2);
+        $graph->createVertex('d')->setAttribute('graphviz.label', 'test');
+        $graph->createVertex('e')->setBalance(2)->setAttribute('graphviz.label', 'unnamed');
 
         $expected = <<<VIZ
 graph G {
@@ -145,10 +145,10 @@ VIZ;
     {
         $graph = new Graph();
         $graph->createVertex('1a')->createEdge($graph->createVertex('1b'));
-        $graph->createVertex('2a')->createEdge($graph->createVertex('2b'))->setLayoutAttribute('numeric', 20);
-        $graph->createVertex('3a')->createEdge($graph->createVertex('3b'))->setLayoutAttribute('textual', "forty");
-        $graph->createVertex('4a')->createEdge($graph->createVertex('4b'))->setLayoutAttribute(1, 1)->setLayoutAttribute(2, 2);
-        $graph->createVertex('5a')->createEdge($graph->createVertex('5b'))->setLayout(array('a' => 'b', 'c' => 'd'));
+        $graph->createVertex('2a')->createEdge($graph->createVertex('2b'))->setAttribute('graphviz.numeric', 20);
+        $graph->createVertex('3a')->createEdge($graph->createVertex('3b'))->setAttribute('graphviz.textual', "forty");
+        $graph->createVertex('4a')->createEdge($graph->createVertex('4b'))->getAttributeBag()->setAttributes(array('graphviz.1' => 1, 'graphviz.2' => 2));
+        $graph->createVertex('5a')->createEdge($graph->createVertex('5b'))->getAttributeBag()->setAttributes(array('graphviz.a' => 'b', 'graphviz.c' => 'd'));
 
         $expected = <<<VIZ
 graph G {
@@ -173,7 +173,7 @@ VIZ;
         $graph->createVertex('4a')->createEdge($graph->createVertex('4b'))->setFlow(40);
         $graph->createVertex('5a')->createEdge($graph->createVertex('5b'))->setFlow(50)->setCapacity(60);
         $graph->createVertex('6a')->createEdge($graph->createVertex('6b'))->setFlow(60)->setCapacity(70)->setWeight(80);
-        $graph->createVertex('7a')->createEdge($graph->createVertex('7b'))->setLayoutAttribute('label', 'prefixed')->setFlow(70);
+        $graph->createVertex('7a')->createEdge($graph->createVertex('7b'))->setFlow(70)->setAttribute('graphviz.label', 'prefixed');
 
         $expected = <<<VIZ
 graph G {

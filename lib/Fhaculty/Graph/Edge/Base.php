@@ -2,7 +2,6 @@
 
 namespace Fhaculty\Graph\Edge;
 
-use Fhaculty\Graph\Layoutable;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Set\Vertices;
@@ -13,8 +12,10 @@ use Fhaculty\Graph\Exception\RangeException;
 use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\BadMethodCallException;
+use Fhaculty\Graph\Attribute\AttributeAware;
+use Fhaculty\Graph\Attribute\AttributeBagReference;
 
-abstract class Base extends Layoutable implements VerticesAggregate
+abstract class Base implements VerticesAggregate, AttributeAware
 {
     /**
      * weight of this edge
@@ -39,6 +40,8 @@ abstract class Base extends Layoutable implements VerticesAggregate
      * @see Edge::getFlow()
      */
     protected $flow = NULL;
+
+    protected $attributes = array();
 
     /**
      * get Vertices that are a target of this edge
@@ -288,5 +291,20 @@ abstract class Base extends Layoutable implements VerticesAggregate
         // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
         // @codeCoverageIgnoreEnd
+    }
+
+    public function getAttribute($name, $default = null)
+    {
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : $default;
+    }
+
+    public function setAttribute($name, $value)
+    {
+        $this->attributes[$name] = $value;
+    }
+
+    public function getAttributeBag()
+    {
+        return new AttributeBagReference($this->attributes);
     }
 }
