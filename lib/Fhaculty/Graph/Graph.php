@@ -2,8 +2,6 @@
 
 namespace Fhaculty\Graph;
 
-use Fhaculty\Graph\Exporter\ExporterInterface;
-use Fhaculty\Graph\Exporter\TrivialGraphFormat;
 use Fhaculty\Graph\Exception\BadMethodCallException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
@@ -26,12 +24,6 @@ use Fhaculty\Graph\Attribute\AttributeBagReference;
 
 class Graph implements DualAggregate, AttributeAware
 {
-    /**
-     * @var ExporterInterface|null
-     * @see self::setExporter()
-     */
-    protected $exporter = null;
-
     protected $verticesStorage = array();
     protected $vertices;
 
@@ -458,47 +450,6 @@ class Graph implements DualAggregate, AttributeAware
         // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
         // @codeCoverageIgnoreEnd
-    }
-
-    /**
-     * set a new exporter to use when calling __toString()
-     *
-     * @param ExporterInterface $exporter
-     * @return \Fhaculty\Graph\Graph $this (chainable)
-     */
-    public function setExporter(ExporterInterface $exporter)
-    {
-        $this->exporter = $exporter;
-        return $this;
-    }
-
-    /**
-     * get current exporter to use to export graph to its output format
-     *
-     * If no other exporter has been set previously, this will lazy-load
-     * the (current default) TrivialGraphFormat exporter.
-     *
-     * @return ExporterInterface
-     */
-    public function getExporter()
-    {
-        if ($this->exporter === null) {
-            $this->exporter = new TrivialGraphFormat();
-        }
-        return $this->exporter;
-    }
-
-    /**
-     * export graph to its output format
-     *
-     * this is a magic method that will be called automatically when you
-     * call `echo $graph;`.
-     * @uses self::getExporter()
-     * @uses ExporterInterface::getOutput()
-     */
-    public function __toString()
-    {
-        return $this->getExporter()->getOutput($this);
     }
 
     public function getAttribute($name, $default = null)
