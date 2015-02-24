@@ -1,7 +1,6 @@
 <?php
 
 use Fhaculty\Graph\Exception\RuntimeException;
-use Fhaculty\Graph\Exporter\Image;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\OverflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
@@ -132,30 +131,6 @@ class GraphTest extends TestCase
         $v1again = $graph->createVertex(1, true);
 
         $this->assertSame($v1, $v1again);
-    }
-
-    public function testExporter()
-    {
-        $graph = new Graph();
-        $graph->createVertex(1)->createEdge($graph->createVertex(2));
-
-        $this->assertNotEquals('', (string)$graph);
-
-        $this->assertInstanceOf('\\Fhaculty\\Graph\\Exporter\\ExporterInterface', $graph->getExporter());
-    }
-
-    public function testExporterGetSet()
-    {
-        $graph = new Graph();
-
-        $exporter = $graph->getExporter();
-
-        $this->assertInstanceOf('Fhaculty\Graph\Exporter\ExporterInterface', $exporter);
-
-        // multiple calls should return the same exporter
-        $this->assertSame($exporter, $graph->getExporter());
-
-        $graph->setExporter($exporter);
     }
 
     public function testHasVertex()
