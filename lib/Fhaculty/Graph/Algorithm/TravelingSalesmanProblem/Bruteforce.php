@@ -3,22 +3,14 @@
 namespace Fhaculty\Graph\Algorithm\TravelingSalesmanProblem;
 
 use Fhaculty\Graph\Exception\UnexpectedValueException;
-
 use Fhaculty\Graph\Exception\UnderflowException;
-
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\TravelingSalesmanProblem\MinimumSpanningTree as AlgorithmTspMst;
 
-class Bruteforce extends Base
+class Bruteforce implements Base
 {
-    /**
-     *
-     * @var Graph
-     */
-    private $graph;
-
     /**
      * best weight so for (used for branch-and-bound)
      *
@@ -51,19 +43,13 @@ class Bruteforce extends Base
     /**
      * whether to use branch-and-bound
      *
-     * simply put, there's no valid reason why anybody would want to turn off this flag
-     *
      * @var boolean
      */
     private $branchAndBound = true;
 
-    /**
-     *
-     * @param Graph $graph
-     */
-    public function __construct(Graph $graph)
+    public function createResult(Vertex $startVertex)
     {
-        $this->graph = $graph;
+        return new ResultFromEdges($startVertex, $this->getEdges($startVertex));
     }
 
     /**
@@ -82,23 +68,31 @@ class Bruteforce extends Base
         return $this;
     }
 
-    public function setUpperLimitMst()
+    public function setUpperLimitMst(Graph $graph)
     {
-        $alg = new AlgorithmTspMst($this->graph);
-        $limit = $alg->createGraph()->getWeight();
+        $alg = new AlgorithmTspMst();
+        $limit = $alg->createResult($graph->getVertices()->getVertexFirst())->getWeight();
 
         return $this->setUpperLimit($limit);
     }
 
-    protected function getVertexStart()
+    /**
+     * turn branch and bound on or off
+     *
+     * Branch and bound vastly improves this bruteforce algorithm by skipping
+     * branches that exceed the best known result. So it's highly recommended
+     * to not turn this off. However, this does not work when dealing with
+     * negative edge weights, as negative weights might make an initially
+     * expensive branch much cheaper in following iterations.
+     *
+     * @param boolean $toggle
+     * @return self $this (chainable)
+     */
+    public function setBranchAndBound($toggle)
     {
-        // actual start doesn't really matter as we're only considering complete graphs here
-        return $this->graph->getVertices()->getVertexFirst();
-    }
+        $this->branchAndBound = !! $toggle;
 
-    protected function getGraph()
-    {
-        return $this->graph;
+        return $this;
     }
 
     /**
@@ -107,9 +101,9 @@ class Bruteforce extends Base
      * @throws Exception on error
      * @return Edges
      */
-    public function getEdges()
+    private function getEdges(Vertex $startVertex)
     {
-        $this->numEdges = count($this->graph->getVertices());
+        $this->numEdges = count($startVertex->getGraph()->getVertices());
         if ($this->numEdges < 3) {
             throw new UnderflowException('Needs at least 3 vertices');
         }
@@ -117,7 +111,7 @@ class Bruteforce extends Base
         // numEdges 3-12 should work
 
         $this->bestWeight = $this->upperLimit;
-        $this->startVertex = $this->getVertexStart();
+        $this->startVertex = $startVertex;
 
         $result = $this->step($this->startVertex,
                               0,
@@ -126,7 +120,7 @@ class Bruteforce extends Base
                   );
 
         if ($result === NULL) {
-            throw new UnexpectedValueException('No resulting solution for TSP found');
+            throw new UnderflowException('No resulting solution for TSP found, make sure the graph is complete');
         }
 
         return new Edges($result);
@@ -143,7 +137,7 @@ class Bruteforce extends Base
     private function step(Vertex $vertex, $totalWeight, array $visitedVertices, array $visitedEdges)
     {
         // stop recursion if best result is exceeded (branch and bound)
-        if ($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight >= $this->bestWeight) {
+        if ($this->branchAndBound && $this->bestWeight !== NULL && $totalWeight > $this->bestWeight) {
             return NULL;
         }
         // kreis geschlossen am Ende
@@ -168,7 +162,7 @@ class Bruteforce extends Base
             $target = $edge->getVertexToFrom($vertex);
 
             $weight = $edge->getWeight();
-            if ($weight < 0) {
+            if ($weight < 0 && $this->branchAndBound) {
                 throw new UnexpectedValueException('Edge with negative weight "' . $weight . '" not supported');
             }
 

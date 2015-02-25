@@ -7,41 +7,36 @@ use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Algorithm\MinimumSpanningTree\Kruskal as MstKruskal;
 use Fhaculty\Graph\Algorithm\Search\BreadthFirst as SearchDepthFirst;
+use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Exception\UnderflowException;
+use Fhaculty\Graph\Exception\UnexpectedValueException;
 
-class MinimumSpanningTree extends Base
+class MinimumSpanningTree implements Base
 {
-    /**
-     *
-     * @var Graph
-     */
-    private $graph;
-
-    public function __construct(Graph $inputGraph)
+    public function createResult(Vertex $startVertex)
     {
-        $this->graph = $inputGraph;
-    }
+        $edges = $this->getEdges($startVertex->getGraph());
+        $startVertex = $edges->getEdgeFirst()->getVertices()->getVertexFirst();
 
-    protected function getVertexStart()
-    {
-        return $this->graph->getVertices()->getVertexFirst();
-    }
-
-    protected function getGraph()
-    {
-        return $this->graph;
+        return new ResultFromEdges($startVertex, $edges);
     }
 
     /**
      *
      * @return Edges
      */
-    public function getEdges()
+    private function getEdges(Graph $inputGraph)
     {
         $returnEdges = array();
 
         // Create minimum spanning tree
-        $minimumSpanningTreeAlgorithm = new MstKruskal($this->graph);
-        $minimumSpanningTree = $minimumSpanningTreeAlgorithm->createGraph();
+        $minimumSpanningTreeAlgorithm = new MstKruskal($inputGraph);
+        try {
+            $minimumSpanningTree = $minimumSpanningTreeAlgorithm->createGraph();
+        }
+        catch (UnexpectedValueException $ex) {
+            throw new UnderflowException('Graph is not connected and therefor not complete', 0, $ex);
+        }
 
         $alg = new SearchDepthFirst($minimumSpanningTree->getVertices()->getVertexFirst());
         // Depth first search in minmum spanning tree (for the eulerian path)
@@ -53,7 +48,7 @@ class MinimumSpanningTree extends Base
         foreach ($alg->getVertices() as $vertex) {
 
             // get vertex from the original graph (not from the depth first search)
-            $vertex = $this->graph->getVertex($vertex->getId());
+            $vertex = $inputGraph->getVertex($vertex->getId());
                                                                                 // need to clone the edge from the original graph, therefore i need the original edge
             if ($startVertex === NULL) {
                 $startVertex = $vertex;
