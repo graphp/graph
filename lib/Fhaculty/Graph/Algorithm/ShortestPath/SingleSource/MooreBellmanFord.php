@@ -1,12 +1,13 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm\ShortestPath;
+namespace Fhaculty\Graph\Algorithm\ShortestPath\SingleSource;
 
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Exception\NegativeCycleException;
 use Fhaculty\Graph\Exception\UnderflowException;
+use Fhaculty\Graph\Vertex;
 
 /**
  * Moore-Bellman-Ford's shortest path algorithm
@@ -18,8 +19,35 @@ use Fhaculty\Graph\Exception\UnderflowException;
  *
  * @link http://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm
  */
-class MooreBellmanFord extends Base
+class MooreBellmanFord implements Base
 {
+    /**
+     * Calculate the Moore-Bellman-Ford-Algorithm and get all edges on shortest path for this vertex
+     *
+     * @return Result
+     * @throws NegativeCycleException if there is a negative cycle
+     */
+    public function createResult(Vertex $startVertex)
+    {
+        return new ResultFromVertexPredecessors($startVertex, $this->getPredecessorMap($startVertex));
+    }
+
+    /**
+     * get negative cycle
+     *
+     * @return Walk
+     * @throws UnderflowException if there's no negative cycle
+     */
+    public function getCycleNegative(Vertex $startVertex)
+    {
+        try {
+            $this->getPredecessorMap($startVertex);
+        } catch (NegativeCycleException $e) {
+            return $e->getCycle();
+        }
+        throw new UnderflowException('No cycle found');
+    }
+
     /**
      *
      *
@@ -34,8 +62,10 @@ class MooreBellmanFord extends Base
         $changed = NULL;
         // check for all edges
         foreach ($edges as $edge) {
-            // check for all "ends" of this edge (or for all targetes)
+            /* @var $edge Edge */
+            // check for all "ends" of this edge (or for all targets)
             foreach ($edge->getVerticesTarget() as $toVertex) {
+                /* @var $toVertex Vertex */
                 $fromVertex = $edge->getVertexFromTo($toVertex);
 
                 // If the fromVertex already has a path
@@ -62,25 +92,19 @@ class MooreBellmanFord extends Base
         return $changed;
     }
 
-    /**
-     * Calculate the Moore-Bellman-Ford-Algorithm and get all edges on shortest path for this vertex
-     *
-     * @return Edges
-     * @throws NegativeCycleException if there is a negative cycle
-     */
-    public function getEdges()
+    private function getPredecessorMap(Vertex $startVertex)
     {
         // start node distance, add placeholder weight
-        $totalCostOfCheapestPathTo  = array($this->vertex->getId() => INF);
+        $totalCostOfCheapestPathTo  = array($startVertex->getId() => INF);
 
         // predecessor
-        $predecessorVertexOfCheapestPathTo  = array($this->vertex->getId() => $this->vertex);
+        $predecessorVertexOfCheapestPathTo  = array($startVertex->getId() => $startVertex);
 
         // the usal algorithm says we repeat (n-1) times.
         // but because we also want to check for loop edges on the start vertex,
         // we have to add an additional step:
-        $numSteps = count($this->vertex->getGraph()->getVertices());
-        $edges = $this->vertex->getGraph()->getEdges();
+        $numSteps = count($startVertex->getGraph()->getVertices());
+        $edges = $startVertex->getGraph()->getEdges();
         $changed = true;
 
         for ($i = 0; $i < $numSteps && $changed; ++$i) {
@@ -88,12 +112,9 @@ class MooreBellmanFord extends Base
         }
 
         // no cheaper edge to start vertex found => remove placeholder weight
-        if ($totalCostOfCheapestPathTo[$this->vertex->getId()] === INF) {
-            unset($predecessorVertexOfCheapestPathTo[$this->vertex->getId()]);
+        if ($totalCostOfCheapestPathTo[$startVertex->getId()] === INF) {
+            unset($predecessorVertexOfCheapestPathTo[$startVertex->getId()]);
         }
-
-        // algorithm is done, build graph
-        $returnEdges = $this->getEdgesCheapestPredecesor($predecessorVertexOfCheapestPathTo);
 
         // Check for negative cycles (only if last step didn't already finish anyway)
         // something is still changing...
@@ -102,22 +123,6 @@ class MooreBellmanFord extends Base
             throw new NegativeCycleException('Negative cycle found', 0, NULL, $cycle);
         }
 
-        return $returnEdges;
-    }
-
-    /**
-     * get negative cycle
-     *
-     * @return Walk
-     * @throws UnderflowException if there's no negative cycle
-     */
-    public function getCycleNegative()
-    {
-        try {
-            $this->getEdges();
-        } catch (NegativeCycleException $e) {
-            return $e->getCycle();
-        }
-        throw new UnderflowException('No cycle found');
+        return $predecessorVertexOfCheapestPathTo;
     }
 }

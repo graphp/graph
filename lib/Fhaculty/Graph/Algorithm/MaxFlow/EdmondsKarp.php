@@ -4,7 +4,7 @@ namespace Fhaculty\Graph\Algorithm\MaxFlow;
 
 use Fhaculty\Graph\Exception\OutOfBoundsException;
 
-use Fhaculty\Graph\Algorithm\ShortestPath\BreadthFirst;
+use Fhaculty\Graph\Algorithm\ShortestPath\SingleSource\BreadthFirst;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 
@@ -71,15 +71,16 @@ class EdmondsKarp extends Base
         $idA = $this->startVertex->getId();
         $idB = $this->destinationVertex->getId();
 
+        $alg = new BreadthFirst();
+
         do {
             // Generate new residual graph and repeat
             $residualAlgorithm = new ResidualGraph($graphResult);
             $graphResidual = $residualAlgorithm->createGraph();
 
             // 1. Search _shortest_ (number of hops and cheapest) path from s -> t
-            $alg = new BreadthFirst($graphResidual->getVertex($idA));
             try {
-                $pathFlow = $alg->getWalkTo($graphResidual->getVertex($idB));
+                $pathFlow = $alg->createResult($graphResidual->getVertex($idA))->getWalkTo($graphResidual->getVertex($idB));
             } catch (OutOfBoundsException $e) {
                 $pathFlow = NULL;
             }

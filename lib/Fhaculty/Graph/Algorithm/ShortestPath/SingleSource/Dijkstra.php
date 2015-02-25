@@ -1,10 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Algorithm\ShortestPath;
+namespace Fhaculty\Graph\Algorithm\ShortestPath\SingleSource;
 
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use \SplPriorityQueue;
+use Fhaculty\Graph\Vertex;
 
 /**
  * Commonly used Dijkstra's shortest path algorithm
@@ -18,27 +19,32 @@ use \SplPriorityQueue;
  * @link http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
  * @see MooreBellmanFord
  */
-class Dijkstra extends Base
+class Dijkstra implements Base
 {
     /**
      * get all edges on shortest path for this vertex
      *
-     * @return Edges
+     * @return Result
      * @throws UnexpectedValueException when encountering an Edge with negative weight
      */
-    public function getEdges()
+    public function createResult(Vertex $startVertex)
+    {
+        return new ResultFromVertexPredecessors($startVertex, $this->getPredecessorMap($startVertex));
+    }
+
+    private function getPredecessorMap(Vertex $startVertex)
     {
         $totalCostOfCheapestPathTo  = Array();
         // start node distance
-        $totalCostOfCheapestPathTo[$this->vertex->getId()] = INF;
+        $totalCostOfCheapestPathTo[$startVertex->getId()] = INF;
 
         // just to get the cheapest vertex in the correct order
         $cheapestVertex = new SplPriorityQueue();
-        $cheapestVertex->insert($this->vertex, 0);
+        $cheapestVertex->insert($startVertex, 0);
 
         // predecessor
         $predecesVertexOfCheapestPathTo  = Array();
-        $predecesVertexOfCheapestPathTo[$this->vertex->getId()] = $this->vertex;
+        $predecesVertexOfCheapestPathTo[$startVertex->getId()] = $startVertex;
 
         // mark vertices when their cheapest path has been found
         $usedVertices  = Array();
@@ -46,7 +52,7 @@ class Dijkstra extends Base
         $isFirst = true;
 
         // Repeat until all vertices have been marked
-        $totalCountOfVertices = count($this->vertex->getGraph()->getVertices());
+        $totalCountOfVertices = count($startVertex->getGraph()->getVertices());
         for ($i = 0; $i < $totalCountOfVertices; ++$i) {
             $currentVertex = NULL;
             $currentVertexId = NULL;
@@ -111,11 +117,10 @@ class Dijkstra extends Base
             }
         }
 
-        if ($totalCostOfCheapestPathTo[$this->vertex->getId()] === INF) {
-            unset($predecesVertexOfCheapestPathTo[$this->vertex->getId()]);
+        if ($totalCostOfCheapestPathTo[$startVertex->getId()] === INF) {
+            unset($predecesVertexOfCheapestPathTo[$startVertex->getId()]);
         }
 
-        // algorithm is done, return resulting edges
-        return $this->getEdgesCheapestPredecesor($predecesVertexOfCheapestPathTo);
+        return $predecesVertexOfCheapestPathTo;
     }
 }
