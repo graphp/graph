@@ -100,7 +100,7 @@ This sets up the developer environment, so that you
 can now run it from the project root directory:
 
 ```bash
-$ php vendor/bin/phpunit`
+$ php vendor/bin/phpunit
 ```
 
 ## Contributing
