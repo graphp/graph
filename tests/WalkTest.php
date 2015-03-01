@@ -4,6 +4,7 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Algorithm\Property\WalkProperty;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Edges;
 
 class WalkTest extends TestCase
 {
@@ -215,5 +216,27 @@ class WalkTest extends TestCase
         $v1 = $graph->createVertex(1);
 
         Walk::factoryCycleFromPredecessorMap(array(), $v1);
+    }
+
+    public function testFactoryFromVertices()
+    {
+        // 1 -- 2
+        // \----/
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdge($v2)->setWeight(10);
+        $e2 = $v1->createEdge($v2)->setWeight(20);
+
+        // any edge in walk
+        $walk = Walk::factoryFromVertices(array($v1, $v2));
+
+        // edge with weight 10
+        $walk = Walk::factoryFromVertices(array($v1, $v2), Edges::ORDER_WEIGHT);
+        $this->assertSame($e1, $walk->getEdges()->getEdgeFirst());
+
+        // edge with weight 20
+        $walk = Walk::factoryFromVertices(array($v1, $v2), Edges::ORDER_WEIGHT, true);
+        $this->assertSame($e2, $walk->getEdges()->getEdgeFirst());
     }
 }
