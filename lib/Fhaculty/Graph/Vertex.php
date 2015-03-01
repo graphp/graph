@@ -361,15 +361,16 @@ class Vertex implements EdgesAggregate, AttributeAware
     }
 
     /**
-     * do NOT allow cloning of objects
+     * native php cloning magic function
      *
-     * @throws BadMethodCallException
+     * add reference to graph and clear any incident edges
      */
-    private function __clone()
+    public function __clone()
     {
-        // @codeCoverageIgnoreStart
-        throw new BadMethodCallException();
-        // @codeCoverageIgnoreEnd
+        $this->edges = array();
+        $this->id = null;
+
+        $this->id = $this->graph->addVertex($this);
     }
 
     public function getAttribute($name, $default = null)

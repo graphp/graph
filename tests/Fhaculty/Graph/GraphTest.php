@@ -389,4 +389,32 @@ class GraphTest extends TestCase
         $this->assertEquals(2, count($graphClone->getVertices()));
         $this->assertEquals(1, count($graphClone->getEdges()));
     }
+
+    public function testGraphCloneNative()
+    {
+        // 1 -- 2 -- 3
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $v3 = $graph->createVertex(3);
+        $e1 = $v1->createEdgeTo($v2);
+        $e2 = $v2->createEdgeTo($v3);
+
+        $clone = clone $graph;
+
+        $this->assertCount(3, $clone->getVertices());
+        $this->assertCount(2, $clone->getEdges());
+        $this->assertGraphEquals($graph, $clone);
+
+        // remove original vertex, remaining graph: 2 -- 3
+        $v1->destroy();
+
+        // make sure original object updates accordingly
+        $this->assertCount(2, $graph->getVertices());
+        $this->assertCount(1, $graph->getEdges());
+
+        // make sure this does not affect the clone
+        $this->assertCount(3, $clone->getVertices());
+        $this->assertCount(2, $clone->getEdges());
+    }
 }

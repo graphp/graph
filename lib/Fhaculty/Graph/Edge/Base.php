@@ -267,7 +267,7 @@ abstract class Base implements VerticesAggregate, AttributeAware
      */
     public function createEdgeClone()
     {
-        return $this->getGraph()->createEdgeClone($this);
+        return clone $this;
     }
 
     /**
@@ -282,15 +282,17 @@ abstract class Base implements VerticesAggregate, AttributeAware
     }
 
     /**
-     * do NOT allow cloning of objects
+     * native php cloning magic function
      *
-     * @throws Exception
+     * add reference to vertices and graph
      */
-    private function __clone()
+    public function __clone()
     {
-        // @codeCoverageIgnoreStart
-        throw new BadMethodCallException();
-        // @codeCoverageIgnoreEnd
+        $this->getGraph()->addEdge($this);
+
+        foreach ($this->getVertices() as $vertex) {
+            $vertex->addEdge($this);
+        }
     }
 
     public function getAttribute($name, $default = null)
