@@ -277,4 +277,44 @@ class EdgesTest extends TestCase
         $this->assertSame(508, $edges->getSumCallback($sumweights));
         $this->assertSame(508, $edgesOrdered->getSumCallback($sumweights));
     }
+
+    public function testIntersection()
+    {
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdge($v2);
+        $e2 = $v1->createEdge($v2);
+        $e3 = $v1->createEdge($v2);
+
+        $edges1 = $this->createEdges(array($e1, $e2));
+        $edges2 = $this->createEdges(array($e2, $e3));
+
+        $edges3 = $edges1->getEdgesIntersection($edges2);
+        $this->assertCount(1, $edges3);
+        $this->assertEquals($e2, $edges3->getEdgeFirst());
+    }
+
+    public function testIntersectionDuplicates()
+    {
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $v1->createEdge($v2);
+
+        $edges1 = $this->createEdges(array($e1, $e1, $e1));
+        $edges2 = $this->createEdges(array($e1, $e1));
+
+        $edges3 = $edges1->getEdgesIntersection($edges2);
+        $this->assertCount(2, $edges3);
+    }
+
+    public function testIntersectionEmpty()
+    {
+        $edges1 = new Edges();
+        $edges2 = new Edges();
+
+        $edges3 = $edges1->getEdgesIntersection($edges2);
+        $this->assertCount(0, $edges3);
+    }
 }

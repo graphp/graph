@@ -3,7 +3,7 @@
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
-class VertexTest extends TestCase
+class VertexTest extends AbstractAttributeAwareTest
 {
     public function setUp()
     {
@@ -66,6 +66,10 @@ class VertexTest extends TestCase
         $this->assertEquals(array(), $this->vertex->getEdgesFrom($v2)->getVector());
         $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3)->getVector());
         $this->assertEquals(array($e3), $this->vertex->getEdgesFrom($v4)->getVector());
+
+        $this->assertEquals(array($v2, $v3, $v4), $this->vertex->getVerticesEdge()->getVector());
+        $this->assertEquals(array($v2, $v3), $this->vertex->getVerticesEdgeTo()->getVector());
+        $this->assertEquals(array($v3, $v4), $this->vertex->getVerticesEdgeFrom()->getVector());
     }
 
     public function testBalance()
@@ -127,5 +131,10 @@ class VertexTest extends TestCase
         $edge = $v2->createEdge($v3);
 
         $this->vertex->removeEdge($edge);
+    }
+
+    protected function createAttributeAware()
+    {
+        return new Vertex(new Graph(), 1);
     }
 }

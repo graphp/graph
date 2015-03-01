@@ -3,7 +3,7 @@
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
 
-abstract class EdgeBaseTest extends TestCase
+abstract class EdgeBaseTest extends AbstractAttributeAwareTest
 {
 
     protected $graph;
@@ -17,6 +17,11 @@ abstract class EdgeBaseTest extends TestCase
     protected $edge;
 
     abstract protected function createEdge();
+
+    /**
+     * @return Edge
+     */
+    abstract protected function createEdgeLoop();
 
     public function setUp()
     {
@@ -80,5 +85,20 @@ abstract class EdgeBaseTest extends TestCase
         $edge = $edgeInverted->createEdgeCloneInverted();
 
         $this->assertEdgeEquals($this->edge, $edge);
+    }
+
+    public function testLoop()
+    {
+        $edge = $this->createEdgeLoop();
+
+        $this->assertTrue($edge->isLoop());
+        $this->assertEquals(array($this->v1, $this->v1), $edge->getVertices()->getVector());
+        $this->assertSame($this->v1, $edge->getVertexFromTo($this->v1));
+        $this->assertSame($this->v1, $edge->getVertexToFrom($this->v1));
+    }
+
+    protected function createAttributeAware()
+    {
+        return $this->createEdge();
     }
 }
