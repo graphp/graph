@@ -13,7 +13,6 @@ use IteratorIterator;
 use ArrayIterator;
 use Fhaculty\Graph\Set\VerticesAggregate;
 use Fhaculty\Graph\Set\VerticesMap;
-use Fhaculty\Graph\Algorithm\Degree;
 
 /**
  * A Set of Vertices
@@ -33,30 +32,6 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * @see Vertex::getId()
      */
     const ORDER_ID = 1;
-
-    /**
-     * order by vertex degree
-     *
-     * @var int
-     * @see Degree::getDegreeVertex()
-     */
-    const ORDER_DEGREE = 2;
-
-    /**
-     * order by indegree of vertex
-     *
-     * @var int
-     * @see Degree::getDegreeInVertex()
-     */
-    const ORDER_INDEGREE = 3;
-
-    /**
-     * order by outdegree of vertex
-     *
-     * @var int
-     * @see Degree::getDegreeOutVertex()
-     */
-    const ORDER_OUTDEGREE = 4;
 
     /**
      * random/shuffled order
@@ -545,9 +520,6 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 
         static $methods = array(
             self::ORDER_ID => 'getId',
-            self::ORDER_DEGREE => 'getDegreeVertex',
-            self::ORDER_INDEGREE => 'getDegreeInVertex',
-            self::ORDER_OUTDEGREE => 'getDegreeOutVertex',
             self::ORDER_GROUP => 'getGroup'
         );
 
@@ -557,20 +529,8 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
 
         $method = $methods[$callback];
 
-        if (in_array($callback, array(self::ORDER_DEGREE, self::ORDER_INDEGREE, self::ORDER_OUTDEGREE))) {
-            $degree = new Degree($this->getGraph());
-            return function (Vertex $vertex) use ($method, $degree) {
-                return $degree->$method($vertex);
-            };
-        }
-
         return function (Vertex $vertex) use ($method) {
             return $vertex->$method();
         };
-    }
-
-    private function getGraph()
-    {
-        return $this->getVertexFirst()->getGraph();
     }
 }
