@@ -18,6 +18,11 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
 
     abstract protected function createEdge();
 
+    /**
+     * @return Edge
+     */
+    abstract protected function createEdgeLoop();
+
     public function setUp()
     {
         $this->graph = new Graph();
@@ -80,6 +85,16 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $edge = $edgeInverted->createEdgeCloneInverted();
 
         $this->assertEdgeEquals($this->edge, $edge);
+    }
+
+    public function testLoop()
+    {
+        $edge = $this->createEdgeLoop();
+
+        $this->assertTrue($edge->isLoop());
+        $this->assertEquals(array($this->v1, $this->v1), $edge->getVertices()->getVector());
+        $this->assertSame($this->v1, $edge->getVertexFromTo($this->v1));
+        $this->assertSame($this->v1, $edge->getVertexToFrom($this->v1));
     }
 
     protected function createAttributeAware()
