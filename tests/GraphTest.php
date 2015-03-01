@@ -6,7 +6,7 @@ use Fhaculty\Graph\Exception\OverflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Graph;
 
-class GraphTest extends TestCase
+class GraphTest extends AbstractAttributeAwareTest
 {
     public function setup()
     {
@@ -388,5 +388,10 @@ class GraphTest extends TestCase
 
         $this->assertEquals(2, count($graphClone->getVertices()));
         $this->assertEquals(1, count($graphClone->getEdges()));
+    }
+
+    protected function createAttributeAware()
+    {
+        return new Graph();
     }
 }

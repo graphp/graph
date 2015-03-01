@@ -3,7 +3,7 @@
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
-class VertexTest extends TestCase
+class VertexTest extends AbstractAttributeAwareTest
 {
     public function setUp()
     {
@@ -127,5 +127,10 @@ class VertexTest extends TestCase
         $edge = $v2->createEdge($v3);
 
         $this->vertex->removeEdge($edge);
+    }
+
+    protected function createAttributeAware()
+    {
+        return new Vertex(new Graph(), 1);
     }
 }
