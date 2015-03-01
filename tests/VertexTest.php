@@ -66,6 +66,10 @@ class VertexTest extends AbstractAttributeAwareTest
         $this->assertEquals(array(), $this->vertex->getEdgesFrom($v2)->getVector());
         $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3)->getVector());
         $this->assertEquals(array($e3), $this->vertex->getEdgesFrom($v4)->getVector());
+
+        $this->assertEquals(array($v2, $v3, $v4), $this->vertex->getVerticesEdge()->getVector());
+        $this->assertEquals(array($v2, $v3), $this->vertex->getVerticesEdgeTo()->getVector());
+        $this->assertEquals(array($v3, $v4), $this->vertex->getVerticesEdgeFrom()->getVector());
     }
 
     public function testBalance()
