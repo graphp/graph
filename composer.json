@@ -6,7 +6,7 @@
     "homepage": "https://github.com/clue/graph",
     "license": "MIT",
     "autoload": {
-        "psr-0": {"Fhaculty": "lib/"}
+        "psr-4": {"Fhaculty\\Graph\\": "src/"}
     },
     "require": {
         "php": ">=5.3.0"
