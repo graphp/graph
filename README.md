@@ -2,8 +2,6 @@
 
 A mathematical graph/network library written in PHP
 
-> Note: While the APIs should be stable, this library is still considered *beta* software. Please see *Contributing* below for ways you can help out.
-
 ## Quickstart examples
 
 Once [installed](#install), let's initialize a sample graph:
@@ -42,13 +40,25 @@ This library is built around the concept of [mathematical graph theory](http://e
 
 Depending on how the edges are constructed, the whole graph can either be undirected, can be a [directed graph](http://en.wikipedia.org/wiki/Directed_graph) (aka digraph) or be a [mixed graph](http://en.wikipedia.org/wiki/Simple_graph#Mixed_graph). Edges are also allowed to form [loops](http://en.wikipedia.org/wiki/Loop_%28graph_theory%29) (i.e. an edge from vertex A pointing to vertex A again). Also, [multiple edges](http://en.wikipedia.org/wiki/Multiple_edges) from vertex A to vertex B  are supported as well (aka parallel edges), effectively forming a [multigraph](http://en.wikipedia.org/wiki/Multigraph) (aka pseudograph). And of course, any combination thereof is supported as well. While many authors try to differentiate between these core concepts, this library tries hard to not impose any artificial limitations or assumptions on your graphs.
 
+## Components
+
+This library provides the core data structures for working with graphs, its vertices, edges and attributes.
+
+There are several official components built on top of these structures to provide commonly needed functionality.
+This architecture allows these components to be used independently and on demand only.
+
+Following is a list of some highlighted components. A list of all official components can be found in the [graphp project](https://github.com/graphp).
+
 ### Graph drawing
 
-The library supports visualizing graph images, including them into webpages, opening up images from within CLI applications and exporting them as PNG, JPEG or SVG file formats (among many others). Because [graph drawing](http://en.wikipedia.org/wiki/Graph_drawing) is a complex area on its own, the actual layouting of the graph is left up to the excelent [GraphViz](http://www.graphviz.org/) "Graph Visualization Software" and we merely provide some convenient APIs to interface with GraphViz.
+This library is built to support visualizing graph images, including them into webpages, opening up images from within CLI applications and exporting them as PNG, JPEG or SVG file formats (among many others). Because [graph drawing](http://en.wikipedia.org/wiki/Graph_drawing) is a complex area on its own, the actual layouting of the graph is left up to the excelent [GraphViz](http://www.graphviz.org/) "Graph Visualization Software" and we merely provide some convenient APIs to interface with GraphViz.
+
+See [graphp/graphviz](https://github.com/graphp/graphviz) for more details.
 
 ### Common algorithms
 
-Besides graph drawing, one of the most common things to do with graphs is running algorithms to solve common graph problems. Therefor this library includes implementations for a number of commonly used graph algorithms:
+Besides graph drawing, one of the most common things to do with graphs is running algorithms to solve common graph problems.
+Therefor this library is being used as the basis for implementations for a number of commonly used graph algorithms:
 
 * Search
     * Deep first (DFS)
@@ -72,6 +82,8 @@ Besides graph drawing, one of the most common things to do with graphs is runnin
 * Maximum matching
     * Flow algorithm
 
+See [graphp/algorithms](https://github.com/graphp/algorithms) for more details.
+
 ## Install
 
 The recommended way to install this library is [through composer](http://getcomposer.org). [New to composer?](http://getcomposer.org/doc/00-intro.md)
@@ -84,12 +96,8 @@ The recommended way to install this library is [through composer](http://getcomp
 }
 ```
 
-Optional recommendation:
-
-In order to be able to use the [graph drawing feature](#graph-drawing) you'll have to
-install the [graphp/graphviz](https://github.com/graphp/graphviz) package and GraphViz itself (`dot` executable).
-
-See [graphp/graphviz](https://github.com/graphp/graphviz) for details.
+You may also want to install some of the [additional components](#components).
+A list of all official components can be found in the [graphp project](https://github.com/graphp).
 
 ## Tests
 
@@ -105,7 +113,9 @@ $ php vendor/bin/phpunit
 
 ## Contributing
 
-As stated above, this library is still considered beta software and requires some contributions. While constructing graphs, plotting them and running all algorithms on them has been tested with sample graphs, there's a fair chance that we're missing some special cases for *your* graphs - partly because of some implied assumptions and mostly because of a lack of basic unit tests.
+This library comes with an extensive testsuite and is regularly tested and used in the *real world*.
+Despite this, this library is still considered beta software and its API is subject to change.
+The [changelog](CHANGELOG.md) lists all relevant information for updates between releases.
 
 If you encounter any issues, please don't hesitate to drop us a line, file a bug report or even best provide us with a patch / pull request and/or unit test to reproduce your problem.
 
