@@ -4,6 +4,29 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## 0.9.0 (2015-03-07)
+
+*   BC break: Split off individual components in order to stabilize core graph lib.
+    ([#120](https://github.com/clue/graph/issues/120))
+
+    *   Split off `Algorithm` namespace into separate [graphp/algorithms](https://github.com/graphp/algorithms) package.
+        ([#119](https://github.com/clue/graph/issues/119))
+
+    *   Split off `Exporter\TrivialGraphFormat` into separate [graphp/trivial-graph-format](https://github.com/graphp/trivial-graph-format) package.
+        ([#121](https://github.com/clue/graph/issues/121))
+
+    *   Split off `Loader` namespace into separate [graphp/plaintext](https://github.com/graphp/plaintext) package.
+        ([#117](https://github.com/clue/graph/issues/117))
+
+*   BC break: Remove Exporter from `Graph` and `Graph::__toString()` (trivial graph format exporter has been split off).
+    ([#122](https://github.com/clue/graph/pull/122))
+
+*   BC break: Vertices can no longer be sorted by (in/out)degree (degree algorithm has been split off).
+    ([#128](https://github.com/clue/graph/pull/128))
+
+*   Apply PSR-4 layout under `src/` and add tests to achieve 100% test coverage.
+    ([#127](https://github.com/clue/graph/issues/127) & [#129](https://github.com/clue/graph/issues/129))
+
 ## 0.8.0 (2014-12-31)
 
 *   Feature: Add general purpose Attributes.
