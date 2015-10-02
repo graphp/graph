@@ -56,17 +56,6 @@ class AttributeBagReference implements AttributeBag
     }
 
     /**
-     * check if a single attribute with the given $name exists
-     *
-     * @param $name
-     * @return bool
-     */
-    public function hasAttribute($name)
-    {
-        return isset($this->attributes[$name]);
-    }
-
-    /**
      * remove a single attribute with the given $name
      *
      * @param $name
