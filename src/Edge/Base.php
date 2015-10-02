@@ -305,9 +305,7 @@ abstract class Base implements VerticesAggregate, AttributeAware
 
     public function removeAttribute($name)
     {
-        if (isset($this->attributes[$name]) === true) {
-            unset($this->attributes[$name]);
-        }
+        unset($this->attributes[$name]);
     }
 
     public function getAttributeBag()
