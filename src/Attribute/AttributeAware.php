@@ -30,12 +30,6 @@ interface AttributeAware
      * @param $name
      * @return mixed
      */
-    public function hasAttribute($name);
-
-    /**
-     * @param $name
-     * @return mixed
-     */
     public function removeAttribute($name);
 
     /**
