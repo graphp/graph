@@ -2,8 +2,13 @@
 
 use Fhaculty\Graph\Attribute\AttributeBagContainer;
 
-class AttributeBagContainerTest extends TestCase
+class AttributeBagContainerTest extends AbstractAttributeAwareTest
 {
+    protected function createAttributeAware()
+    {
+        return new AttributeBagContainer();
+    }
+
     public function testEmpty()
     {
         $bag = new AttributeBagContainer();

@@ -462,6 +462,11 @@ class Graph implements DualAggregate, AttributeAware
         $this->attributes[$name] = $value;
     }
 
+    public function removeAttribute($name)
+    {
+        unset($this->attributes[$name]);
+    }
+
     public function getAttributeBag()
     {
         return new AttributeBagReference($this->attributes);

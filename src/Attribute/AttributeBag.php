@@ -9,6 +9,7 @@ interface AttributeBag extends AttributeAware
 {
     // public function getAttribute($name, $default);
     // public function setAttribute($name, $value);
+    // public function removeAttribute();
     // public function getAttributeBag();
 
     /**
