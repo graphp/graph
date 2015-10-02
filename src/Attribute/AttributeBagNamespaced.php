@@ -69,6 +69,21 @@ class AttributeBagNamespaced implements AttributeBag
     }
 
     /**
+     * remove a single attribute with the given $name
+     *
+     * @param $name
+     * @return $this
+     */
+    public function removeAttribute($name)
+    {
+        if (isset($this->attributes[$name]) === true) {
+            unset($this->attributes[$name]);
+        }
+
+        return $this;
+    }
+
+    /**
      * get an array of all attributes
      *
      * The prefix will not be included in the returned attribute keys.
