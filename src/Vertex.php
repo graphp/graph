@@ -374,7 +374,7 @@ class Vertex implements EdgesAggregate, AttributeAware
 
     public function getAttribute($name, $default = null)
     {
-        return $this->hasAttribute($name) === true ? $this->attributes[$name] : $default;
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : $default;
     }
 
     public function setAttribute($name, $value)
@@ -382,14 +382,9 @@ class Vertex implements EdgesAggregate, AttributeAware
         $this->attributes[$name] = $value;
     }
 
-    public function hasAttribute($name)
-    {
-        return isset($this->attributes[$name]);
-    }
-
     public function removeAttribute($name)
     {
-        if ($this->hasAttribute($name) === true) {
+        if (isset($this->attributes[$name]) === true) {
             unset($this->attributes[$name]);
         }
     }

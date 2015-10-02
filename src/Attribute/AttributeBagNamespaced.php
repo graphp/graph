@@ -76,7 +76,7 @@ class AttributeBagNamespaced implements AttributeBag
      */
     public function removeAttribute($name)
     {
-        if ($this->hasAttribute($name) === true) {
+        if (isset($this->attributes[$name]) === true) {
             unset($this->attributes[$name]);
         }
 
