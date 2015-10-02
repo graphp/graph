@@ -24,7 +24,7 @@ class AttributeBagContainer implements AttributeBag
      */
     public function getAttribute($name, $default = null)
     {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : $default;
+        return $this->hasAttribute($name) === true ? $this->attributes[$name] : $default;
     }
 
     /**
@@ -37,6 +37,32 @@ class AttributeBagContainer implements AttributeBag
     public function setAttribute($name, $value)
     {
         $this->attributes[$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * check if a single attribute with the given $name exists
+     *
+     * @param $name
+     * @return bool
+     */
+    public function hasAttribute($name)
+    {
+        return isset($this->attributes[$name]);
+    }
+
+    /**
+     * remove a single attribute with the given $name
+     *
+     * @param $name
+     * @return $this
+     */
+    public function removeAttribute($name)
+    {
+        if ($this->hasAttribute($name) === true) {
+            unset($this->attributes[$name]);
+        }
 
         return $this;
     }
