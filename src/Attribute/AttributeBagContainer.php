@@ -24,7 +24,7 @@ class AttributeBagContainer implements AttributeBag
      */
     public function getAttribute($name, $default = null)
     {
-        return $this->hasAttribute($name) === true ? $this->attributes[$name] : $default;
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : $default;
     }
 
     /**
