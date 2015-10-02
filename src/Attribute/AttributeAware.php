@@ -27,6 +27,12 @@ interface AttributeAware
     public function setAttribute($name, $value);
 
     /**
+     * @param $name
+     * @return mixed
+     */
+    public function removeAttribute($name);
+
+    /**
      * get a container for all attributes
      *
      * @return AttributeBag

@@ -31,6 +31,19 @@ abstract class AbstractAttributeAwareTest extends TestCase
      * @depends testAttributeAwareInterface
      * @param AttributeAware $entity
      */
+    public function testAttributeSetRemoveGet(AttributeAware $entity)
+    {
+        $entity->setAttribute('test', 'value');
+        $this->assertEquals('value', $entity->getAttribute('test'));
+
+        $entity->removeAttribute('test');
+        $this->assertEquals(null, $entity->getAttribute('test'));
+    }
+
+    /**
+     * @depends testAttributeAwareInterface
+     * @param AttributeAware $entity
+     */
     public function testAttributeBag(AttributeAware $entity)
     {
         $bag = $entity->getAttributeBag();
