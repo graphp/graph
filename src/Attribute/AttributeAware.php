@@ -23,6 +23,8 @@ interface AttributeAware
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return $this
      */
     public function setAttribute($name, $value);
 
