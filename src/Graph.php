@@ -460,11 +460,15 @@ class Graph implements DualAggregate, AttributeAware
     public function setAttribute($name, $value)
     {
         $this->attributes[$name] = $value;
+
+        return $this;
     }
 
     public function removeAttribute($name)
     {
         unset($this->attributes[$name]);
+
+        return $this;
     }
 
     public function getAttributeBag()

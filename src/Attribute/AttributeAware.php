@@ -23,6 +23,8 @@ interface AttributeAware
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return @this
      */
     public function setAttribute($name, $value);
 
@@ -30,6 +32,8 @@ interface AttributeAware
      * Removes a single attribute with the given $name
      *
      * @param string $name
+     *
+     * @return @this
      */
     public function removeAttribute($name);
 
