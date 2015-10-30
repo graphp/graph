@@ -61,8 +61,8 @@ class Graph implements DualAggregate, AttributeAware
     /**
      * create a new Vertex in the Graph
      *
-     * @param  int|NULL                 $id              new vertex ID to use (defaults to NULL: use next free numeric ID)
-     * @param  boolean                  $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
+     * @param  int|NULL $id new vertex ID to use (defaults to NULL: use next free numeric ID)
+     * @param  boolean $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
      * @return Vertex                   (chainable)
      * @throws InvalidArgumentException if given vertex $id is invalid
      * @throws OverflowException        if given vertex $id already exists and $returnDuplicate is not set
@@ -78,23 +78,25 @@ class Graph implements DualAggregate, AttributeAware
             return $this->vertices->getVertexId($id);
         }
 
-        return new Vertex($this, $id);
+        return $this->factoryVertex($id);
     }
 
     /**
      * create a new Vertex in this Graph from the given input Vertex of another graph
      *
-     * @param  Vertex           $originalVertex
+     * @param  Vertex $originalVertex
      * @return Vertex           new vertex in this graph
      * @throws RuntimeException if vertex with this ID already exists
      */
-    public function createVertexClone(Vertex $originalVertex)
+    public function createVertexClone($originalVertex)
     {
+        assert($originalVertex instanceof Vertex);
+
         $id = $originalVertex->getId();
         if ($this->vertices->hasVertexId($id)) {
             throw new RuntimeException('Id of cloned vertex already exists');
         }
-        $newVertex = new Vertex($this, $id);
+        $newVertex = $this->factoryVertex($id);
         // TODO: properly set attributes of vertex
         $newVertex->getAttributeBag()->setAttributes($originalVertex->getAttributeBag()->getAttributes());
         $newVertex->setBalance($originalVertex->getBalance());
@@ -112,7 +114,8 @@ class Graph implements DualAggregate, AttributeAware
      */
     public function createGraphCloneEdgeless()
     {
-        $graph = new Graph();
+        $graph = $this->factoryGraph();
+
         $graph->getAttributeBag()->setAttributes($this->getAttributeBag()->getAttributes());
         // TODO: set additional graph attributes
         foreach ($this->getVertices() as $originalVertex) {
@@ -181,8 +184,10 @@ class Graph implements DualAggregate, AttributeAware
      * @return Edge new edge in this graph
      * @uses Graph::createEdgeCloneInternal()
      */
-    public function createEdgeClone(Edge $originalEdge)
+    public function createEdgeClone($originalEdge)
     {
+        assert($originalEdge instanceof Edge);
+
         return $this->createEdgeCloneInternal($originalEdge, 0, 1);
     }
 
@@ -193,8 +198,10 @@ class Graph implements DualAggregate, AttributeAware
      * @return Edge new edge in this graph
      * @uses Graph::createEdgeCloneInternal()
      */
-    public function createEdgeCloneInverted(Edge $originalEdge)
+    public function createEdgeCloneInverted($originalEdge)
     {
+        assert($originalEdge instanceof Edge);
+
         return $this->createEdgeCloneInternal($originalEdge, 1, 0);
     }
 
@@ -202,8 +209,8 @@ class Graph implements DualAggregate, AttributeAware
      * create new clone of the given edge between adjacent vertices
      *
      * @param  Edge $originalEdge original edge from old graph
-     * @param  int  $ia           index of start vertex
-     * @param  int  $ib           index of end vertex
+     * @param  int $ia index of start vertex
+     * @param  int $ib index of end vertex
      * @return Edge new edge in this graph
      * @uses Edge::getVertices()
      * @uses Graph::getVertex()
@@ -216,8 +223,10 @@ class Graph implements DualAggregate, AttributeAware
      * @uses Edge::getCapacity()
      * @uses Edge::setCapacity()
      */
-    private function createEdgeCloneInternal(Edge $originalEdge, $ia, $ib)
+    private function createEdgeCloneInternal($originalEdge, $ia, $ib)
     {
+        assert($originalEdge instanceof Edge);
+
         $ends = $originalEdge->getVertices()->getIds();
 
         // get start vertex from old start vertex id
@@ -252,7 +261,7 @@ class Graph implements DualAggregate, AttributeAware
         $vertices = array();
         if (is_int($n) && $n >= 0) {
             for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
-                $vertices[$id] = new Vertex($this, $id);
+                $vertices[$id] = $this->factoryVertex($id);
             }
         } elseif (is_array($n)) {
             // array given => check to make sure all given IDs are available (atomic operation)
@@ -271,13 +280,13 @@ class Graph implements DualAggregate, AttributeAware
 
             // actually create all requested vertices
             foreach ($n as $id) {
-                $vertices[$id] = new Vertex($this, $id);
+                $vertices[$id] = $this->factoryVertex($id);
             }
         } else {
             throw new InvalidArgumentException('Invalid number of vertices given. Must be non-negative integer or an array of Vertex IDs');
         }
 
-        return new Vertices($vertices);
+        return $this->factoryVertices($vertices);
     }
 
     /**
@@ -294,13 +303,13 @@ class Graph implements DualAggregate, AttributeAware
         }
 
         // auto ID
-        return max(array_keys($this->verticesStorage))+1;
+        return max(array_keys($this->verticesStorage)) + 1;
     }
 
     /**
      * returns the Vertex with identifier $id
      *
-     * @param  int|string           $id identifier of Vertex
+     * @param  int|string $id identifier of Vertex
      * @return Vertex
      * @throws OutOfBoundsException if given vertex ID does not exist
      */
@@ -330,6 +339,8 @@ class Graph implements DualAggregate, AttributeAware
      */
     public function addVertex(Vertex $vertex)
     {
+        assert($vertex instanceof Vertex);
+
         if (isset($this->verticesStorage[$vertex->getId()])) {
             throw new OverflowException('ID must be unique');
         }
@@ -344,26 +355,29 @@ class Graph implements DualAggregate, AttributeAware
      * @private
      * @see Vertex::createEdge() instead!
      */
-    public function addEdge(Edge $edge)
+    public function addEdge($edge)
     {
-        $this->edgesStorage []= $edge;
+        assert($edge instanceof Edge);
+
+        $this->edgesStorage [] = $edge;
     }
 
     /**
      * remove the given edge from list of connected edges (MUST NOT be called manually!)
      *
-     * @param  Edge                     $edge
+     * @param  Edge $edge
      * @return void
      * @throws InvalidArgumentException if given edge does not exist (should not ever happen)
      * @private
      * @see Edge::destroy() instead!
      */
-    public function removeEdge(Edge $edge)
+    public function removeEdge($edge)
     {
+        assert($edge instanceof Edge);
+
         try {
             unset($this->edgesStorage[$this->edges->getIndexEdge($edge)]);
-        }
-        catch (OutOfBoundsException $e) {
+        } catch (OutOfBoundsException $e) {
             throw new InvalidArgumentException('Invalid Edge does not exist in this Graph');
         }
     }
@@ -371,18 +385,19 @@ class Graph implements DualAggregate, AttributeAware
     /**
      * remove the given vertex from list of known vertices (MUST NOT be called manually!)
      *
-     * @param  Vertex                   $vertex
+     * @param  Vertex $vertex
      * @return void
      * @throws InvalidArgumentException if given vertex does not exist (should not ever happen)
      * @private
      * @see Vertex::destroy() instead!
      */
-    public function removeVertex(Vertex $vertex)
+    public function removeVertex($vertex)
     {
+        assert($vertex instanceof Vertex);
+
         try {
             unset($this->verticesStorage[$this->vertices->getIndexVertex($vertex)]);
-        }
-        catch (OutOfBoundsException $e) {
+        } catch (OutOfBoundsException $e) {
             throw new InvalidArgumentException('Invalid Vertex does not exist in this Graph');
         }
     }
@@ -390,13 +405,15 @@ class Graph implements DualAggregate, AttributeAware
     /**
      * Extracts edge from this graph
      *
-     * @param  Edge               $edge
+     * @param  Edge $edge
      * @return Edge
      * @throws UnderflowException if no edge was found
      * @throws OverflowException  if multiple edges match
      */
-    public function getEdgeClone(Edge $edge)
+    public function getEdgeClone($edge)
     {
+        assert($edge instanceof Edge);
+
         // Extract endpoints from edge
         $vertices = $edge->getVertices()->getVector();
 
@@ -406,21 +423,27 @@ class Graph implements DualAggregate, AttributeAware
     /**
      * Extracts inverted edge from this graph
      *
-     * @param  Edge               $edge
+     * @param  Edge $edge
      * @return Edge
      * @throws UnderflowException if no edge was found
      * @throws OverflowException  if multiple edges match
      */
-    public function getEdgeCloneInverted(Edge $edge)
+    public function getEdgeCloneInverted($edge)
     {
+        assert($edge instanceof Edge);
+
         // Extract endpoints from edge
         $vertices = $edge->getVertices()->getVector();
 
         return $this->getEdgeCloneInternal($edge, $vertices[1], $vertices[0]);
     }
 
-    private function getEdgeCloneInternal(Edge $edge, Vertex $startVertex, Vertex $targetVertex)
+    private function getEdgeCloneInternal($edge, $startVertex, $targetVertex)
     {
+        assert($edge instanceof Edge);
+        assert($startVertex instanceof Vertex);
+        assert($targetVertex instanceof Vertex);
+
         // Get original vertices from resultgraph
         $residualGraphEdgeStartVertex = $this->getVertex($startVertex->getId());
         $residualGraphEdgeTargetVertex = $this->getVertex($targetVertex->getId());
@@ -470,5 +493,32 @@ class Graph implements DualAggregate, AttributeAware
     public function getAttributeBag()
     {
         return new AttributeBagReference($this->attributes);
+    }
+
+    /**
+     * @param $id
+     * @return Vertex
+     */
+    protected function factoryVertex($id)
+    {
+        return new Vertex($this, $id);
+    }
+
+    protected function factoryGraph()
+    {
+        return new static;
+    }
+
+    /**
+     * @param Vertex[] $vertices
+     * @return Vertices
+     */
+    protected function factoryVertices(array $vertices = [])
+    {
+        foreach ($vertices as $vertex) {
+            assert($vertex instanceof \Fhaculty\Graph\Vertex);
+        }
+
+        return new Vertices($vertices);
     }
 }
