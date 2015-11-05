@@ -18,5 +18,6 @@
         "graphp/graphviz": "GraphViz graph drawing / DOT output",
         "graphp/algorithms": "Common graph algorithms, such as Dijkstra and Moore-Bellman-Ford (shortest path), minimum spanning tree (MST), Kruskal, Prim and many more.."
     },
-    "stability" : "dev"
+    "stability" : "dev",
+    "minimum-stability" : "dev"
 }
