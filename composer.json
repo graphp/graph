@@ -1,5 +1,5 @@
 {
-    "name": "clue/graph",
+    "name": "iipokypatop/graph",
     "type": "library",
     "description": "A mathematical graph/network library written in PHP",
     "keywords": ["graph", "network", "mathematical", "vertex", "edge"],
