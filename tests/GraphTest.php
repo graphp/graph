@@ -247,14 +247,16 @@ class GraphTest extends AbstractAttributeAwareTest
         try {
             $graph->createVertices(array(9, 19, 20));
             $this->fail('Should be unable to create vertices because of duplicate IDs');
-        } catch (OverflowException $ignoreExpected) {
+        }
+        catch (OverflowException $ignoreExpected) {
             $this->assertEquals(10, count($graph->getVertices()));
         }
 
         try {
             $graph->createVertices(array(20, 21, 21));
             $this->fail('Should be unable to create vertices because of duplicate IDs');
-        } catch (InvalidArgumentException $ignoreExpected) {
+        }
+        catch (InvalidArgumentException $ignoreExpected) {
             $this->assertEquals(10, count($graph->getVertices()));
         }
     }
