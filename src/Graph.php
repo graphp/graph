@@ -513,7 +513,7 @@ class Graph implements DualAggregate, AttributeAware
      * @param Vertex[] $vertices
      * @return Vertices
      */
-    protected function factoryVertices(array $vertices = [])
+    protected function factoryVertices(array $vertices = array())
     {
         foreach ($vertices as $vertex) {
             assert($vertex instanceof \Fhaculty\Graph\Vertex);
