@@ -364,7 +364,7 @@ class Graph implements DualAggregate, AttributeAware
     /**
      * remove the given edge from list of connected edges (MUST NOT be called manually!)
      *
-     * @param  Edge $edge
+     * @param  Edge                     $edge
      * @return void
      * @throws InvalidArgumentException if given edge does not exist (should not ever happen)
      * @private
@@ -384,7 +384,7 @@ class Graph implements DualAggregate, AttributeAware
     /**
      * remove the given vertex from list of known vertices (MUST NOT be called manually!)
      *
-     * @param  Vertex $vertex
+     * @param  Vertex                   $vertex
      * @return void
      * @throws InvalidArgumentException if given vertex does not exist (should not ever happen)
      * @private
