@@ -354,7 +354,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function destroy()
     {
-        foreach ($this->edges as $edge) {
+        foreach ($this->getEdges()->getEdgesDistinct() as $edge) {
             $edge->destroy();
         }
         $this->graph->removeVertex($this);
