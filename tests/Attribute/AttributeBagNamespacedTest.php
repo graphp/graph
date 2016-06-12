@@ -1,5 +1,7 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Attribute;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Attribute\AttributeBagNamespaced;
 use Fhaculty\Graph\Attribute\AttributeAware;

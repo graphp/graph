@@ -1,6 +1,9 @@
 <?php
 
+namespace Fhaculty\Graph\Tests;
+
 use Fhaculty\Graph\Exception\RuntimeException;
+use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\OverflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;

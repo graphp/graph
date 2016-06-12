@@ -1,11 +1,13 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Edge;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 abstract class EdgeBaseTest extends AbstractAttributeAwareTest
 {
-
     protected $graph;
     protected $v1;
     protected $v2;
