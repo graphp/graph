@@ -1,5 +1,7 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Attribute;
+
 use Fhaculty\Graph\Attribute\AttributeBagContainer;
 
 class AttributeBagContainerTest extends AbstractAttributeAwareTest

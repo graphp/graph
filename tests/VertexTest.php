@@ -1,6 +1,9 @@
 <?php
 
+namespace Fhaculty\Graph\Tests;
+
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 use Fhaculty\Graph\Vertex;
 
 class VertexTest extends AbstractAttributeAwareTest

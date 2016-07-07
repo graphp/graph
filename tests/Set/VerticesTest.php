@@ -1,5 +1,7 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Set;
+
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Exception\InvalidArgumentException;

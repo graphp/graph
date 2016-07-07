@@ -1,5 +1,7 @@
 <?php
 
+namespace Fhaculty\Graph\Tests;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Algorithm\Property\WalkProperty;

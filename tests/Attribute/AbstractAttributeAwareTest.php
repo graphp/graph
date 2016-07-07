@@ -1,6 +1,10 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Attribute;
+
 use Fhaculty\Graph\Attribute\AttributeAware;
+use Fhaculty\Graph\Tests\TestCase;
+
 abstract class AbstractAttributeAwareTest extends TestCase
 {
     abstract protected function createAttributeAware();
