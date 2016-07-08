@@ -23,8 +23,9 @@ abstract class AbstractAttributeAwareTest extends TestCase
      */
     public function testAttributeSetGetDefault(AttributeAware $entity)
     {
-        $entity->setAttribute('test', 'value');
+        $returnValue = $entity->setAttribute('test', 'value');
         $this->assertEquals('value', $entity->getAttribute('test'));
+        $this->assertEquals($entity, $returnValue);
 
         $this->assertEquals(null, $entity->getAttribute('unknown'));
 
@@ -37,11 +38,13 @@ abstract class AbstractAttributeAwareTest extends TestCase
      */
     public function testAttributeSetRemoveGet(AttributeAware $entity)
     {
-        $entity->setAttribute('test', 'value');
+        $returnValue = $entity->setAttribute('test', 'value');
         $this->assertEquals('value', $entity->getAttribute('test'));
+        $this->assertEquals($entity, $returnValue);
 
-        $entity->removeAttribute('test');
+        $returnValue = $entity->removeAttribute('test');
         $this->assertEquals(null, $entity->getAttribute('test'));
+        $this->assertEquals($entity, $returnValue);
     }
 
     /**
