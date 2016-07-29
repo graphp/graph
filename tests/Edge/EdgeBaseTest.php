@@ -99,6 +99,18 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $this->assertSame($this->v1, $edge->getVertexToFrom($this->v1));
     }
 
+    public function testRemoveWithLoop()
+    {
+        $edge = $this->createEdgeLoop();
+
+        $this->assertEquals(array($this->edge, $edge), $this->graph->getEdges()->getVector());
+
+        $edge->destroy();
+
+        $this->assertEquals(array($this->edge), $this->graph->getEdges()->getVector());
+        $this->assertEquals(array($this->v1, $this->v2), $this->graph->getVertices()->getVector());
+    }
+
     protected function createAttributeAware()
     {
         return $this->createEdge();
