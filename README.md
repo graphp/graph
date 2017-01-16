@@ -36,9 +36,9 @@ foreach ($rome->getVerticesEdgeFrom() as $vertex) {
 
 ## Features
 
-This library is built around the concept of [mathematical graph theory](http://en.wikipedia.org/wiki/Graph_%28mathematics%29) (i.e. it is **not** a [charting](http://en.wikipedia.org/wiki/Chart) library for drawing a [graph of a function](http://en.wikipedia.org/wiki/Graph_of_a_function)). In essence, a graph is a set of *nodes* with any number of *connections* inbetween. In graph theory, [vertices](http://en.wikipedia.org/wiki/Vertex_%28graph_theory%29) (plural of vertex) are an abstract representation of these *nodes*, while *connections* are represented as *edges*. Edges may be either undirected ("two-way") or directed ("one-way", aka di-edges, arcs).
+This library is built around the concept of [mathematical graph theory](https://en.wikipedia.org/wiki/Graph_theory) (i.e. it is **not** a [charting](http://en.wikipedia.org/wiki/Chart) library for drawing a [graph of a function](http://en.wikipedia.org/wiki/Graph_of_a_function)). In essence, a graph is a set of *nodes* with any number of *connections* in between. In graph theory, [vertices](http://en.wikipedia.org/wiki/Vertex_%28graph_theory%29) (plural of vertex) are an abstract representation of these *nodes*, while *connections* are represented as *edges*. Edges may be either undirected ("two-way") or directed ("one-way", aka di-edges, arcs).
 
-Depending on how the edges are constructed, the whole graph can either be undirected, can be a [directed graph](http://en.wikipedia.org/wiki/Directed_graph) (aka digraph) or be a [mixed graph](http://en.wikipedia.org/wiki/Simple_graph#Mixed_graph). Edges are also allowed to form [loops](http://en.wikipedia.org/wiki/Loop_%28graph_theory%29) (i.e. an edge from vertex A pointing to vertex A again). Also, [multiple edges](http://en.wikipedia.org/wiki/Multiple_edges) from vertex A to vertex B  are supported as well (aka parallel edges), effectively forming a [multigraph](http://en.wikipedia.org/wiki/Multigraph) (aka pseudograph). And of course, any combination thereof is supported as well. While many authors try to differentiate between these core concepts, this library tries hard to not impose any artificial limitations or assumptions on your graphs.
+Depending on how the edges are constructed, the whole graph can either be undirected, can be a [directed graph](http://en.wikipedia.org/wiki/Directed_graph) (aka digraph) or be a [mixed graph](https://en.wikipedia.org/wiki/Mixed_graph). Edges are also allowed to form [loops](http://en.wikipedia.org/wiki/Loop_%28graph_theory%29) (i.e. an edge from vertex A pointing to vertex A again). Also, [multiple edges](http://en.wikipedia.org/wiki/Multiple_edges) from vertex A to vertex B  are supported as well (aka parallel edges), effectively forming a [multigraph](http://en.wikipedia.org/wiki/Multigraph) (aka pseudograph). And of course, any combination thereof is supported as well. While many authors try to differentiate between these core concepts, this library tries hard to not impose any artificial limitations or assumptions on your graphs.
 
 ## Components
 
@@ -51,31 +51,31 @@ Following is a list of some highlighted components. A list of all official compo
 
 ### Graph drawing
 
-This library is built to support visualizing graph images, including them into webpages, opening up images from within CLI applications and exporting them as PNG, JPEG or SVG file formats (among many others). Because [graph drawing](http://en.wikipedia.org/wiki/Graph_drawing) is a complex area on its own, the actual layouting of the graph is left up to the excelent [GraphViz](http://www.graphviz.org/) "Graph Visualization Software" and we merely provide some convenient APIs to interface with GraphViz.
+This library is built to support visualizing graph images, including them into webpages, opening up images from within CLI applications and exporting them as PNG, JPEG or SVG file formats (among many others). Because [graph drawing](http://en.wikipedia.org/wiki/Graph_drawing) is a complex area on its own, the actual layouting of the graph is left up to the excellent [GraphViz](http://www.graphviz.org/) "Graph Visualization Software" and we merely provide some convenient APIs to interface with GraphViz.
 
 See [graphp/graphviz](https://github.com/graphp/graphviz) for more details.
 
 ### Common algorithms
 
 Besides graph drawing, one of the most common things to do with graphs is running algorithms to solve common graph problems.
-Therefor this library is being used as the basis for implementations for a number of commonly used graph algorithms:
+Therefore this library is being used as the basis for implementations for a number of commonly used graph algorithms:
 
 * Search
     * Deep first (DFS)
     * Breadth first search (BFS)
 * Shortest path
-    * Dijkstra
+    * [Dijkstra](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
     * Moore-Bellman-Ford (MBF)
     * Counting number of hops (simple BFS)
-* Minimum spanning tree (MST)
+* [Minimum spanning tree (MST)](https://en.wikipedia.org/wiki/Minimum_spanning_tree)
     * Kruskal
     * Prim
-* Traveling salesman problem (TSP)
+* [Traveling salesman problem (TSP)](https://en.wikipedia.org/wiki/Travelling_salesman_problem)
     * Bruteforce algorithm
     * Minimum spanning tree heuristic (TSP MST heuristic)
     * Nearest neighbor heuristic (NN heuristic)
 * Maximum flow
-    * Edmonds-Karp
+    * [Edmonds-Karp](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm)
 * Minimum cost flow (MCF)
     * Cycle canceling
     * Successive shortest path
@@ -101,7 +101,7 @@ A list of all official components can be found in the [graphp project](https://g
 
 ## Tests
 
-This library uses phpunit for its extensive testsuite.
+This library uses PHPUnit for its extensive test suite.
 You can either use a global installation or rely on the one composer installs
 when you first run `$ composer install`.
 This sets up the developer environment, so that you
@@ -113,7 +113,7 @@ $ php vendor/bin/phpunit
 
 ## Contributing
 
-This library comes with an extensive testsuite and is regularly tested and used in the *real world*.
+This library comes with an extensive test suite and is regularly tested and used in the *real world*.
 Despite this, this library is still considered beta software and its API is subject to change.
 The [changelog](CHANGELOG.md) lists all relevant information for updates between releases.
 
