@@ -380,6 +380,7 @@ class Vertex implements EdgesAggregate, AttributeAware
     public function setAttribute($name, $value)
     {
         $this->attributes[$name] = $value;
+        return $this;
     }
 
     public function removeAttribute($name)
