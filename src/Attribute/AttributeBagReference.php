@@ -59,10 +59,13 @@ class AttributeBagReference implements AttributeBag
      * Removes a single attribute with the given $name
      *
      * @param string $name
+     * @return self  For a fluid interface.
      */
     public function removeAttribute($name)
     {
         unset($this->attributes[$name]);
+
+        return $this;
     }
 
     /**

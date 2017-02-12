@@ -49,6 +49,8 @@ class AttributeBagContainer implements AttributeBag
     public function removeAttribute($name)
     {
         unset($this->attributes[$name]);
+
+        return $this;
     }
 
     /**
