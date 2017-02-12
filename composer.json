@@ -1,5 +1,5 @@
 {
-    "name": "clue/graph",
+    "name": "iipokypatop/graph",
     "type": "library",
     "description": "A mathematical graph/network library written in PHP",
     "keywords": [
@@ -30,5 +30,7 @@
     "suggest": {
         "graphp/graphviz": "GraphViz graph drawing / DOT output",
         "graphp/algorithms": "Common graph algorithms, such as Dijkstra and Moore-Bellman-Ford (shortest path), minimum spanning tree (MST), Kruskal, Prim and many more.."
-    }
+    },
+    "stability" : "dev",
+    "minimum-stability" : "dev"
 }
