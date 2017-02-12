@@ -505,7 +505,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      *
      * @param callable|int $callback
      * @throws InvalidArgumentException
-     * @return Closure
+     * @return \Closure
      */
     private function getCallback($callback)
     {
