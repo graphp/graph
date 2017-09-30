@@ -76,14 +76,14 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
      * - an existing Set of Edges which will be returned as-is
      *
      * @param array|Edges|EdgesAggregate $edges
-     * @return Edges
+     * @return static
      */
     public static function factory($edges)
     {
         if ($edges instanceof EdgesAggregate) {
             return $edges->getEdges();
         }
-        return new self($edges);
+        return new static($edges);
     }
 
     /**
@@ -94,7 +94,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
      * array, it will automatically be included in this Set.
      *
      * @param array $edgesArray
-     * @return Edges
+     * @return static
      */
     public static function factoryArrayReference(array &$edgesArray)
     {
@@ -221,7 +221,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
      * Edge index positions will be left unchanged.
      *
      * @param callable $callbackCheck
-     * @return Edges a new Edges instance
+     * @return static a new Edges instance
      * @see self::getEdgeMatch()
      */
     public function getEdgesMatch($callbackCheck)
@@ -236,7 +236,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
      *
      * @param  int                      $orderBy  criterium to sort by. see self::ORDER_WEIGHT, etc.
      * @param  boolean                  $desc     whether to return biggest first (true) instead of smallest first (default:false)
-     * @return Edges                    a new Edges set ordered by the given $orderBy criterium
+     * @return static                   a new Edges set ordered by the given $orderBy criterium
      * @throws InvalidArgumentException if criterium is unknown
      */
     public function getEdgesOrder($orderBy, $desc = false)
@@ -314,7 +314,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     /**
      * return self reference to Set of Edges
      *
-     * @return Edges
+     * @return static
      * @see self::factory()
      */
     public function getEdges()
@@ -325,7 +325,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     /**
      * get a new set of Edges where each Edge is distinct/unique
      *
-     * @return Edges a new Edges instance
+     * @return static a new Edges instance
      */
     public function getEdgesDistinct()
     {
@@ -337,7 +337,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
             }
         }
 
-        return new Edges($edges);
+        return new static($edges);
     }
 
     /**
@@ -352,7 +352,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
      * Edge instances is also found in $otherEdges.
      *
      * @param Edges|Edge[] $otherEdges
-     * @return Edges a new Edges set
+     * @return static a new Edges set
      */
     public function getEdgesIntersection($otherEdges)
     {

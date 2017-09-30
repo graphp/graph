@@ -61,14 +61,14 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * - an existing Set of Vertices which will be returned as-is
      *
      * @param array|Vertices|VerticesAggregate $vertices
-     * @return Vertices
+     * @return static
      */
     public static function factory($vertices)
     {
         if ($vertices instanceof VerticesAggregate) {
             return $vertices->getVertices();
         }
-        return new self($vertices);
+        return new static($vertices);
     }
 
     /**
@@ -79,7 +79,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * the array, it will automatically be included in this Set.
      *
      * @param array $verticesArray
-     * @return Vertices
+     * @return static
      */
     public static function factoryArrayReference(array &$verticesArray)
     {
@@ -225,7 +225,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * on a VerticesMap, it will also return a VerticesMap.
      *
      * @param callable $callbackCheck
-     * @return Vertices a new Vertices instance
+     * @return static a new Vertices instance
      * @see self::getVertexMatch()
      */
     public function getVerticesMatch($callbackCheck)
@@ -241,7 +241,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      *
      * @param  int                      $orderBy  criterium to sort by. see Vertex::ORDER_ID, etc.
      * @param  boolean                  $desc     whether to return biggest first (true) instead of smallest first (default:false)
-     * @return Vertices                 a new Vertices set ordered by the given $orderBy criterium
+     * @return static                   a new Vertices set ordered by the given $orderBy criterium
      * @throws InvalidArgumentException if criterium is unknown
      * @see self::getVertexOrder()
      */
@@ -293,7 +293,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * Vertex instances is also found in $otherVertices.
      *
      * @param Vertices|Vertex[] $otherVertices
-     * @return Vertices a new Vertices set
+     * @return static a new Vertices set
      */
     public function getVerticesIntersection($otherVertices)
     {
@@ -354,7 +354,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     /**
      * return self reference to Set of Vertices
      *
-     * @return Vertices
+     * @return static
      * @see self::factory()
      */
     public function getVertices()
