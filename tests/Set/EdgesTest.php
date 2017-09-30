@@ -31,9 +31,6 @@ class EdgesTest extends TestCase
         $edgesFromArray = $this->createEdges(array($e1));
         $this->assertInstanceOf('Fhaculty\Graph\Set\Edges', $edgesFromArray);
         $this->assertSame($e1, $edgesFromArray->getEdgeFirst());
-
-        $edgesFromEdges = Edges::factory($edgesFromArray);
-        $this->assertSame($edgesFromArray, $edgesFromEdges);
     }
 
     public function testEmpty()

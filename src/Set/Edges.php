@@ -81,7 +81,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     public static function factory($edges)
     {
         if ($edges instanceof EdgesAggregate) {
-            return $edges->getEdges();
+            $edges = $edges->getEdges()->getVector();
         }
         return new static($edges);
     }

@@ -66,7 +66,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     public static function factory($vertices)
     {
         if ($vertices instanceof VerticesAggregate) {
-            return $vertices->getVertices();
+            $vertices = $vertices->getVertices()->getVector();
         }
         return new static($vertices);
     }

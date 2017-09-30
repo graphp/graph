@@ -25,9 +25,6 @@ abstract class BaseVerticesTest extends TestCase
         $verticesFromArray = $this->createVertices(array($vertex));
         $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $verticesFromArray);
         $this->assertSame($vertex, $verticesFromArray->getVertexFirst());
-
-        $verticesFromVertices = Vertices::factory($verticesFromArray);
-        $this->assertSame($verticesFromArray, $verticesFromVertices);
     }
 
     public function testEmpty()
