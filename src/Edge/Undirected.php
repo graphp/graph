@@ -27,9 +27,11 @@ class Undirected extends Base
      *
      * @param Vertex $a
      * @param Vertex $b
+     * @param int|float $weight weight of this edge
      * @see Vertex::createEdge() instead
+     * @throws DomainException
      */
-    public function __construct(Vertex $a, Vertex $b)
+    public function __construct(Vertex $a, Vertex $b, $weight = NULL)
     {
         if ($a->getGraph() !== $b->getGraph()) {
             throw new InvalidArgumentException('Vertices have to be within the same graph');
@@ -37,6 +39,10 @@ class Undirected extends Base
 
         $this->a = $a;
         $this->b = $b;
+
+        if (! is_null($weight)) {
+            $this->setWeight($weight);
+        }
 
         $a->getGraph()->addEdge($this);
         $a->addEdge($this);

@@ -28,11 +28,13 @@ class Directed extends Base
      * create a new directed Edge from Vertex $from to Vertex $to
      *
      * @param Vertex $from start/source Vertex
-     * @param Vertex $to   end/target Vertex
+     * @param Vertex $to end/target Vertex
+     * @param int|float $weight weight of this edge
+     * @throws DomainException
      * @see Vertex::createEdgeTo() to create directed edges
      * @see Vertex::createEdge() to create undirected edges
      */
-    public function __construct(Vertex $from, Vertex $to)
+    public function __construct(Vertex $from, Vertex $to, $weight = NULL)
     {
         if ($from->getGraph() !== $to->getGraph()) {
             throw new InvalidArgumentException('Vertices have to be within the same graph');
@@ -40,6 +42,10 @@ class Directed extends Base
 
         $this->from = $from;
         $this->to = $to;
+
+        if (! is_null($weight)) {
+            $this->setWeight($weight);
+        }
 
         $from->getGraph()->addEdge($this);
         $from->addEdge($this);
