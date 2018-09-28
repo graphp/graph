@@ -96,6 +96,11 @@ The recommended way to install this library is [through composer](http://getcomp
 }
 ```
 
+This project aims to run on any platform and thus does not require any PHP
+extensions and supports running on legacy PHP 5.3 through current PHP 7+ and
+HHVM.
+It's *highly recommended to use PHP 7+* for this project.
+
 You may also want to install some of the [additional components](#components).
 A list of all official components can be found in the [graphp project](https://github.com/graphp).
 
