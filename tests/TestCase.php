@@ -6,10 +6,9 @@ use Fhaculty\Graph\Edge\Directed;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Set\Vertices;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
-class TestCase extends PHPUnit_Framework_TestCase
+class TestCase extends BaseTestCase
 {
     protected function assertGraphEquals(Graph $expected, Graph $actual)
     {
@@ -29,11 +28,8 @@ class TestCase extends PHPUnit_Framework_TestCase
         // do not use assertVertexEquals() in order to not increase assertion counter
 
         foreach ($expected->getVertices()->getMap() as $vid => $vertex) {
-            try {
-                $other = $actual->getVertex($vid);
-            } catch (Exception $e) {
-                $this->fail();
-            }
+            $other = $actual->getVertex($vid);
+
             if ($this->getVertexDump($vertex) !== $this->getVertexDump($vertex)) {
                 $this->fail();
             }

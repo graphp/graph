@@ -203,7 +203,7 @@ class GraphTest extends AbstractAttributeAwareTest
     /**
      * expect to fail for invalid number of vertices
      * @expectedException InvalidArgumentException
-     * @dataProvider testCreateVerticesFailProvider
+     * @dataProvider createVerticesFailProvider
      */
     public function testCreateVerticesFail($number)
     {
@@ -211,7 +211,7 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph->createVertices($number);
     }
 
-    public static function testCreateVerticesFailProvider()
+    public static function createVerticesFailProvider()
     {
         return array(
             array(-1),
