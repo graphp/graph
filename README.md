@@ -102,10 +102,14 @@ A list of all official components can be found in the [graphp project](https://g
 ## Tests
 
 This library uses PHPUnit for its extensive test suite.
-You can either use a global installation or rely on the one composer installs
-when you first run `$ composer install`.
-This sets up the developer environment, so that you
-can now run it from the project root directory:
+To run the test suite, you first need to clone this repo and then install all
+dependencies [through Composer](https://getcomposer.org):
+
+```bash
+$ composer install
+```
+
+To run the test suite, go to the project root and run:
 
 ```bash
 $ php vendor/bin/phpunit
