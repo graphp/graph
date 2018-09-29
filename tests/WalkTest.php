@@ -3,10 +3,9 @@
 namespace Fhaculty\Graph\Tests;
 
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Walk;
-use Fhaculty\Graph\Algorithm\Property\WalkProperty;
-use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Walk;
 
 class WalkTest extends TestCase
 {

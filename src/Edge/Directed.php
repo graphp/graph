@@ -3,10 +3,8 @@
 namespace Fhaculty\Graph\Edge;
 
 use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Exception\LogicException;
-use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Vertex;
 
 class Directed extends Base
 {

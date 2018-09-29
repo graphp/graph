@@ -2,17 +2,16 @@
 
 namespace Fhaculty\Graph;
 
+use Fhaculty\Graph\Attribute\AttributeAware;
+use Fhaculty\Graph\Attribute\AttributeBagReference;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Edge\Directed as EdgeDirected;
 use Fhaculty\Graph\Edge\Undirected as EdgeUndirected;
+use Fhaculty\Graph\Exception\BadMethodCallException;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Set\Edges;
 use Fhaculty\Graph\Set\EdgesAggregate;
 use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Exception\BadMethodCallException;
-use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Attribute\AttributeAware;
-use Fhaculty\Graph\Attribute\AttributeBagReference;
 
 class Vertex implements EdgesAggregate, AttributeAware
 {
@@ -31,7 +30,7 @@ class Vertex implements EdgesAggregate, AttributeAware
     /**
      * vertex balance
      *
-     * @var float|NULL
+     * @var int|float|NULL
      * @see Vertex::setBalance()
      */
     private $balance;

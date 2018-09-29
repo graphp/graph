@@ -2,25 +2,20 @@
 
 namespace Fhaculty\Graph;
 
-use Fhaculty\Graph\Exception\BadMethodCallException;
-use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Exception\OverflowException;
-use Fhaculty\Graph\Exception\UnderflowException;
-use Fhaculty\Graph\Exception\RuntimeException;
-use Fhaculty\Graph\Exception\OutOfBoundsException;
-use Fhaculty\Graph\Algorithm\ConnectedComponents as AlgorithmConnectedComponents;
-use Fhaculty\Graph\Algorithm\Bipartit as AlgorithmBipartit;
-use Fhaculty\Graph\Algorithm\Eulerian as AlgorithmEulerian;
-use Fhaculty\Graph\Algorithm\Groups as AlgorithmGroups;
-use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Edge\Directed as EdgeDirected;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Set\VerticesMap;
-use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Set\DualAggregate;
 use Fhaculty\Graph\Attribute\AttributeAware;
 use Fhaculty\Graph\Attribute\AttributeBagReference;
+use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Edge\Directed as EdgeDirected;
+use Fhaculty\Graph\Exception\BadMethodCallException;
+use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Exception\OutOfBoundsException;
+use Fhaculty\Graph\Exception\OverflowException;
+use Fhaculty\Graph\Exception\RuntimeException;
+use Fhaculty\Graph\Exception\UnderflowException;
+use Fhaculty\Graph\Set\DualAggregate;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesMap;
 
 class Graph implements DualAggregate, AttributeAware
 {
