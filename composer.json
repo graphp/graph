@@ -1,7 +1,7 @@
 {
     "name": "clue/graph",
     "type": "library",
-    "description": "A mathematical graph/network library written in PHP",
+    "description": "GraPHP is the mathematical graph/network library written in PHP.",
     "keywords": [
         "graph",
         "network",
@@ -9,7 +9,7 @@
         "vertex",
         "edge"
     ],
-    "homepage": "https://github.com/clue/graph",
+    "homepage": "https://github.com/graphp/graph",
     "license": "MIT",
     "autoload": {
         "psr-4": {

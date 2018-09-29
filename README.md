@@ -1,6 +1,6 @@
-# clue/graph [![Build Status](https://travis-ci.org/clue/graph.png?branch=master)](https://travis-ci.org/clue/graph)
+# graphp/graph [![Build Status](https://travis-ci.org/graphp/graph.png?branch=master)](https://travis-ci.org/graphp/graph)
 
-A mathematical graph/network library written in PHP
+GraPHP is the mathematical graph/network library written in PHP.
 
 ## Quickstart examples
 
