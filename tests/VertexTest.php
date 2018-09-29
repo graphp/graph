@@ -123,44 +123,6 @@ class VertexTest extends EntityTest
         $this->graph->createEdgeDirected($this->vertex, $graphOther->createVertex());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testRemoveInvalidEdge()
-    {
-        // 2 -- 3
-        $v2 = $this->graph->createVertex();
-        $v3 = $this->graph->createVertex();
-        $edge = $this->graph->createEdgeUndirected($v2, $v3);
-
-        $this->vertex->removeEdge($edge);
-    }
-
-    public function testRemoveWithEdgeLoopUndirected()
-    {
-        // 1 -- 1
-        $this->graph->createEdgeUndirected($this->vertex, $this->vertex);
-
-        $this->assertEquals(array($this->vertex), $this->graph->getVertices()->getVector());
-
-        $this->vertex->destroy();
-
-        $this->assertEquals(array(), $this->graph->getVertices()->getVector());
-        $this->assertEquals(array(), $this->graph->getEdges()->getVector());
-    }
-
-    public function testRemoveWithEdgeLoopDirected()
-    {
-        // 1 --> 1
-        $this->graph->createEdgeDirected($this->vertex, $this->vertex);
-
-        $this->assertEquals(array($this->vertex), $this->graph->getVertices()->getVector());
-
-        $this->vertex->destroy();
-
-        $this->assertEquals(array(), $this->graph->getVertices()->getVector());
-        $this->assertEquals(array(), $this->graph->getEdges()->getVector());
-    }
 
     protected function createEntity()
     {

@@ -3,7 +3,6 @@
 namespace Graphp\Graph;
 
 use Graphp\Graph\Exception\BadMethodCallException;
-use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\EdgesAggregate;
 use Graphp\Graph\Set\Vertices;
@@ -56,24 +55,6 @@ class Vertex extends Entity implements EdgesAggregate
     public function addEdge(Edge $edge)
     {
         $this->edges[] = $edge;
-    }
-
-    /**
-     * remove the given edge from list of connected edges (MUST NOT be called manually)
-     *
-     * @param  Edge                     $edge
-     * @return void
-     * @throws InvalidArgumentException if given edge does not exist
-     * @internal
-     * @see Edge::destroy() instead!
-     */
-    public function removeEdge(Edge $edge)
-    {
-        $id = \array_search($edge, $this->edges, true);
-        if ($id === false) {
-            throw new InvalidArgumentException('Given edge does NOT exist');
-        }
-        unset($this->edges[$id]);
     }
 
     /**
@@ -254,20 +235,6 @@ class Vertex extends Entity implements EdgesAggregate
         }
 
         return new Vertices($ret);
-    }
-
-    /**
-     * destroy vertex and all edges connected to it and remove reference from graph
-     *
-     * @uses Edge::destroy()
-     * @uses Graph::removeVertex()
-     */
-    public function destroy()
-    {
-        foreach ($this->getEdges()->getEdgesDistinct() as $edge) {
-            $edge->destroy();
-        }
-        $this->graph->removeVertex($this);
     }
 
     /**

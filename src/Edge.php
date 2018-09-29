@@ -107,21 +107,6 @@ abstract class Edge extends Entity implements VerticesAggregate
     }
 
     /**
-     * destroy edge and remove reference from vertices and graph
-     *
-     * @uses Graph::removeEdge()
-     * @uses Vertex::removeEdge()
-     * @return void
-     */
-    public function destroy()
-    {
-        $this->getGraph()->removeEdge($this);
-        foreach ($this->getVertices() as $vertex) {
-            $vertex->removeEdge($this);
-        }
-    }
-
-    /**
      * do NOT allow cloning of objects
      *
      * @throws BadMethodCallException

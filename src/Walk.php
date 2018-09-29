@@ -200,33 +200,4 @@ class Walk implements DualAggregate
 
         return $ret;
     }
-
-    /**
-     * check to make sure this walk is still valid (i.e. source graph still contains all vertices and edges)
-     *
-     * @return bool
-     * @uses Walk::getGraph()
-     * @uses Graph::getVertices()
-     * @uses Graph::getEdges()
-     */
-    public function isValid()
-    {
-        $vertices = \iterator_to_array($this->getGraph()->getVertices(), false);
-
-        // check source graph contains all vertices
-        foreach ($this->getVertices() as $vertex) {
-            if (!\in_array($vertex, $vertices, true)) {
-                return false;
-            }
-        }
-        $edges = $this->getGraph()->getEdges()->getVector();
-        // check source graph contains all edges
-        foreach ($this->edges as $edge) {
-            if (!\in_array($edge, $edges, true)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }
