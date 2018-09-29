@@ -3,16 +3,9 @@
 namespace Fhaculty\Graph\Set;
 
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Exception\UnderflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
-use Fhaculty\Graph\Exception\UnexpectedValueException;
-use Countable;
-use IteratorAggregate;
-use IteratorIterator;
-use ArrayIterator;
-use Fhaculty\Graph\Set\VerticesAggregate;
-use Fhaculty\Graph\Set\VerticesMap;
+use Fhaculty\Graph\Exception\UnderflowException;
 
 /**
  * A Set of Vertices
@@ -23,7 +16,7 @@ use Fhaculty\Graph\Set\VerticesMap;
  * instances or to get a new Set of Vertices. This way it's safe to pass around
  * the original Set of Vertices, because it will never be modified.
  */
-class Vertices implements Countable, IteratorAggregate, VerticesAggregate
+class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
 {
     /**
      * order by vertex ID
@@ -187,7 +180,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     /**
      * return first Vertex that matches the given callback filter function
      *
-     * @param callback $callbackCheck
+     * @param callable $callbackCheck
      * @return Vertex
      * @throws UnderflowException if no Vertex matches the given callback filter function
      * @uses self::getVertexMatchOrNull()
@@ -205,7 +198,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
     /**
      * checks whether there's a Vertex that matches the given callback filter function
      *
-     * @param callback $callbackCheck
+     * @param callable $callbackCheck
      * @return boolean
      * @see self::getVertexMatch() to return the Vertex instance that matches the given callback filter function
      * @uses self::getVertexMatchOrNull()
@@ -453,11 +446,11 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      * This method implements the IteratorAggregate interface and allows this
      * Set of Vertices to be used in foreach loops.
      *
-     * @return IteratorIterator
+     * @return \IteratorIterator
      */
     public function getIterator()
     {
-        return new IteratorIterator(new ArrayIterator($this->vertices));
+        return new \IteratorIterator(new \ArrayIterator($this->vertices));
     }
 
     /**
@@ -505,7 +498,7 @@ class Vertices implements Countable, IteratorAggregate, VerticesAggregate
      *
      * @param callable|int $callback
      * @throws InvalidArgumentException
-     * @return Closure
+     * @return callable
      */
     private function getCallback($callback)
     {

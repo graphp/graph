@@ -2,9 +2,8 @@
 
 namespace Fhaculty\Graph\Tests\Exception;
 
-use Fhaculty\Graph\Tests\TestCase;
-use Fhaculty\Graph\Walk;
 use Fhaculty\Graph\Exception\NegativeCycleException;
+use Fhaculty\Graph\Tests\TestCase;
 
 class NegativeCycleExceptionTest extends TestCase
 {

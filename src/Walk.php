@@ -53,14 +53,12 @@ class Walk implements DualAggregate
     public static function factoryFromVertices($vertices, $by = null, $desc = false)
     {
         $edges = array();
-        $first = NULL;
         $last = NULL;
         foreach ($vertices as $vertex) {
             // skip first vertex as last is unknown
-            if ($first === NULL) {
-                $first = $vertex;
-            } else {
+            if ($last !== NULL) {
                 // pick edge between last vertex and this vertex
+                /* @var $last Vertex */
                 if ($by === null) {
                     $edges []= $last->getEdgesTo($vertex)->getEdgeFirst();
                 } else {
