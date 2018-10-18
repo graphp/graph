@@ -1,10 +1,11 @@
 <?php
 
-use Fhaculty\Graph\Exception\OutOfBoundsException;
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Vertex;
+namespace Fhaculty\Graph\Tests\Set;
+
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Tests\TestCase;
 
 class EdgesTest extends TestCase
 {

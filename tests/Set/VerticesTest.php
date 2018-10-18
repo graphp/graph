@@ -1,8 +1,9 @@
 <?php
 
-use Fhaculty\Graph\Set\Vertices;
+namespace Fhaculty\Graph\Tests\Set;
+
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
+use Fhaculty\Graph\Set\Vertices;
 
 class VerticesTest extends BaseVerticesTest
 {

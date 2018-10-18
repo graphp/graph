@@ -1,11 +1,13 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Edge;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Tests\TestCase;
 
 class EdgeAttributesTest extends TestCase
 {
-
     /**
      *
      * @var Edge

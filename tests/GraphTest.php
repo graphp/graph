@@ -1,10 +1,11 @@
 <?php
 
-use Fhaculty\Graph\Exception\RuntimeException;
-use Fhaculty\Graph\Vertex;
+namespace Fhaculty\Graph\Tests;
+
 use Fhaculty\Graph\Exception\OverflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 class GraphTest extends AbstractAttributeAwareTest
 {
@@ -200,7 +201,7 @@ class GraphTest extends AbstractAttributeAwareTest
     /**
      * expect to fail for invalid number of vertices
      * @expectedException InvalidArgumentException
-     * @dataProvider testCreateVerticesFailProvider
+     * @dataProvider createVerticesFailProvider
      */
     public function testCreateVerticesFail($number)
     {
@@ -208,7 +209,7 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph->createVertices($number);
     }
 
-    public static function testCreateVerticesFailProvider()
+    public static function createVerticesFailProvider()
     {
         return array(
             array(-1),

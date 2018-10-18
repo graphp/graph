@@ -1,9 +1,18 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Attribute;
+
 use Fhaculty\Graph\Attribute\AttributeBagReference;
 
-class AttributeBagReferenceTest extends TestCase
+class AttributeBagReferenceTest extends AbstractAttributeAwareTest
 {
+    protected function createAttributeAware()
+    {
+        $attributes = array();
+
+        return new AttributeBagReference($attributes);
+    }
+
     public function testEmpty()
     {
         $attributes = array();

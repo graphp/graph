@@ -1,5 +1,7 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Edge;
+
 class EdgeUndirectedTest extends EdgeBaseTest
 {
     protected function createEdge()
