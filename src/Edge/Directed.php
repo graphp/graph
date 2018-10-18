@@ -94,7 +94,7 @@ class Directed extends Base
     public function getVertexToFrom(Vertex $startVertex)
     {
         if ($this->from !== $startVertex) {
-            throw new InvalidArgumentException('Invalid start vertex');
+            return null;
         }
 
         return $this->to;
@@ -103,7 +103,7 @@ class Directed extends Base
     public function getVertexFromTo(Vertex $endVertex)
     {
         if ($this->to !== $endVertex) {
-            throw new InvalidArgumentException('Invalid end vertex');
+            return null;
         }
 
         return $this->from;

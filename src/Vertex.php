@@ -293,9 +293,17 @@ class Vertex implements EdgesAggregate, AttributeAware
         $ret = array();
         foreach ($this->edges as $edge) {
             if ($edge->hasVertexStart($this)) {
-                $ret []= $edge->getVertexToFrom($this);
+                $vertex = $edge->getVertexToFrom($this);
+                if(null === $vertex) {
+                    throw new InvalidArgumentException('Invalid start vertex');
+                }
+                $ret[] = $vertex;
             } else {
-                $ret []= $edge->getVertexFromTo($this);
+                $vertex = $edge->getVertexFromTo($this);
+                if(null === $vertex) {
+                    throw new InvalidArgumentException('Invalid end vertex');
+                }
+                $ret[] = $vertex;
             }
         }
 

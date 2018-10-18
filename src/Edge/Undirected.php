@@ -76,7 +76,7 @@ class Undirected extends Base
         } elseif ($this->b === $startVertex) {
             return $this->a;
         } else {
-            throw new InvalidArgumentException('Invalid start vertex');
+            return null;
         }
     }
 
@@ -87,7 +87,7 @@ class Undirected extends Base
         } elseif ($this->b === $endVertex) {
             return $this->a;
         } else {
-            throw new InvalidArgumentException('Invalid end vertex');
+            return null;
         }
     }
 

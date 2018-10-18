@@ -34,6 +34,9 @@ class Walk implements DualAggregate
         $vertexCurrent = $startVertex;
         foreach ($edges as $edge) {
             $vertexCurrent = $edge->getVertexToFrom($vertexCurrent);
+            if(null === $vertexCurrent) {
+                throw new InvalidArgumentException('Invalid start vertex');
+            }
             $vertices []= $vertexCurrent;
         }
 
