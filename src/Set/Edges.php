@@ -8,6 +8,7 @@ use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
 use Fhaculty\Graph\Exception\UnexpectedValueException;
 use Countable;
+use Fhaculty\Graph\Vertex;
 use IteratorAggregate;
 use IteratorIterator;
 use ArrayIterator;
@@ -64,6 +65,21 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     const ORDER_RANDOM = 5;
 
     protected $edges = array();
+
+    /**
+     * @var Edges
+     */
+    protected $edgesTo;
+
+    /**
+     * @var Edges
+     */
+    protected $edgesOut;
+
+    /**
+     * @var Edges
+     */
+    protected $edgesIn;
 
     /**
      * create new Edges instance
@@ -227,6 +243,66 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     public function getEdgesMatch($callbackCheck)
     {
         return new static(array_filter($this->edges, $callbackCheck));
+    }
+
+    /**
+     * @param Vertex $in
+     * @return mixed
+     */
+    public function getEdgesIn(Vertex $in)
+    {
+        if(!isset($this->edgesIn[$in->getId()])) {
+            $edges = [];
+            foreach ($this->edges as $index => $edge) {
+                /** @var Edge $edge*/
+                if(!$edge->hasVertexTarget($in)) {
+                    continue;
+                }
+                $edges[] = $edge;
+            }
+            $this->edgesIn[$in->getId()] = new static($edges);
+        }
+        return $this->edgesIn[$in->getId()];
+    }
+
+    /**
+     * @param Vertex $from
+     * @return mixed
+     */
+    public function getEdgesOut(Vertex $from)
+    {
+        if(!isset($this->edgesOut[$from->getId()])) {
+            $edges = [];
+            foreach ($this->edges as $index => $edge) {
+                /** @var Edge $edge*/
+                if(!$edge->hasVertexStart($from)) {
+                    continue;
+                }
+                $edges[] = $edge;
+            }
+            $this->edgesOut[$from->getId()] = new static($edges);
+        }
+        return $this->edgesOut[$from->getId()];
+    }
+
+    /**
+     * @param Vertex $to
+     * @return mixed
+     */
+    public function getEdgesTo(Vertex $to)
+    {
+        if(!isset($this->edgesTo[$to->getId()])) {
+            $edges = [];
+            foreach ($this->edges as $index => $edge) {
+                /** @var Edge $edge*/
+                if(!$edge->hasVertexTarget($to)) {
+                    continue;
+                }
+                $edges[] = $edge;
+            }
+            $this->edgesTo[$to->getId()] = new static($edges);
+        }
+        return $this->edgesTo[$to->getId()];
     }
 
     /**

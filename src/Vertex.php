@@ -24,6 +24,11 @@ class Vertex implements EdgesAggregate, AttributeAware
     private $edges = array();
 
     /**
+     * @var null|Edges
+     */
+    private $edgesCacheObject;
+
+    /**
      * @var Graph
      */
     private $graph;
@@ -163,6 +168,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function addEdge(Edge $edge)
     {
+        $this->edgesCacheObject = null;
         $this->edges[] = $edge;
     }
 
@@ -181,6 +187,7 @@ class Vertex implements EdgesAggregate, AttributeAware
         if ($id === false) {
             throw new InvalidArgumentException('Given edge does NOT exist');
         }
+        $this->edgesCacheObject = null;
         unset($this->edges[$id]);
     }
 
@@ -219,7 +226,10 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function getEdges()
     {
-        return new Edges($this->edges);
+        if(!isset($this->edgesCacheObject)) {
+            $this->edgesCacheObject = new Edges($this->edges);
+        }
+        return $this->edgesCacheObject;
     }
 
     /**
@@ -229,11 +239,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function getEdgesOut()
     {
-        $that = $this;
-
-        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that) {
-            return $edge->hasVertexStart($that);
-        });
+        return $this->getEdges()->getEdgesOut($this);
     }
 
     /**
@@ -243,11 +249,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function getEdgesIn()
     {
-        $that = $this;
-
-        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that) {
-            return $edge->hasVertexTarget($that);
-        });
+        return $this->getEdges()->getEdgesTo($this);
     }
 
     /**
@@ -259,11 +261,8 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function getEdgesTo(Vertex $vertex)
     {
-        $that = $this;
 
-        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that, $vertex) {
-            return $edge->isConnection($that, $vertex);
-        });
+        return $this->getEdges()->getEdgesTo($vertex);
     }
 
     /**
