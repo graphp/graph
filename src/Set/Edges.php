@@ -74,12 +74,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     /**
      * @var Edges
      */
-    protected $edgesOut;
-
-    /**
-     * @var Edges
-     */
-    protected $edgesIn;
+    protected $edgesFrom;
 
     /**
      * create new Edges instance
@@ -246,32 +241,12 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     }
 
     /**
-     * @param Vertex $in
-     * @return mixed
-     */
-    public function getEdgesIn(Vertex $in)
-    {
-        if(!isset($this->edgesIn[$in->getId()])) {
-            $edges = array();
-            foreach ($this->edges as $index => $edge) {
-                /** @var Edge $edge*/
-                if(!$edge->hasVertexTarget($in)) {
-                    continue;
-                }
-                $edges[] = $edge;
-            }
-            $this->edgesIn[$in->getId()] = new static($edges);
-        }
-        return $this->edgesIn[$in->getId()];
-    }
-
-    /**
      * @param Vertex $from
      * @return mixed
      */
-    public function getEdgesOut(Vertex $from)
+    public function getEdgesFrom(Vertex $from)
     {
-        if(!isset($this->edgesOut[$from->getId()])) {
+        if(!isset($this->edgesFrom[$from->getId()])) {
             $edges = array();
             foreach ($this->edges as $index => $edge) {
                 /** @var Edge $edge*/
@@ -280,9 +255,9 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
                 }
                 $edges[] = $edge;
             }
-            $this->edgesOut[$from->getId()] = new static($edges);
+            $this->edgesFrom[$from->getId()] = new static($edges);
         }
-        return $this->edgesOut[$from->getId()];
+        return $this->edgesFrom[$from->getId()];
     }
 
     /**

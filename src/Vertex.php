@@ -239,7 +239,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function getEdgesOut()
     {
-        return $this->getEdges()->getEdgesOut($this);
+        return $this->getEdges()->getEdgesFrom($this);
     }
 
     /**
@@ -249,7 +249,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function getEdgesIn()
     {
-        return $this->getEdges()->getEdgesIn($this);
+        return $this->getEdges()->getEdgesTo($this);
     }
 
     /**
@@ -261,6 +261,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function getEdgesTo(Vertex $vertex)
     {
+        //Normally we should check something like ->getEdgesFromTo($this, $vertex) here, but all $this->edges are already connected to $this.
         return $this->getEdges()->getEdgesTo($vertex);
     }
 
