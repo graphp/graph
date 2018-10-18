@@ -51,22 +51,18 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $this->assertFalse($this->edge->hasVertexTarget($v3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testEdgeFromInvalid()
     {
         $v3 = $this->graph->createVertex(3);
-        $this->edge->getVertexFromTo($v3);
+        $result = $this->edge->getVertexFromTo($v3);
+        $this->assertNull($result);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testEdgeToInvalid()
     {
         $v3 = $this->graph->createVertex(3);
-        $this->edge->getVertexToFrom($v3);
+        $result = $this->edge->getVertexToFrom($v3);
+        $this->assertNull($result);
     }
 
     public function testClone()
