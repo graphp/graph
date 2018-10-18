@@ -252,7 +252,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     public function getEdgesIn(Vertex $in)
     {
         if(!isset($this->edgesIn[$in->getId()])) {
-            $edges = [];
+            $edges = array();
             foreach ($this->edges as $index => $edge) {
                 /** @var Edge $edge*/
                 if(!$edge->hasVertexTarget($in)) {
@@ -272,7 +272,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     public function getEdgesOut(Vertex $from)
     {
         if(!isset($this->edgesOut[$from->getId()])) {
-            $edges = [];
+            $edges = array();
             foreach ($this->edges as $index => $edge) {
                 /** @var Edge $edge*/
                 if(!$edge->hasVertexStart($from)) {
@@ -292,7 +292,7 @@ class Edges implements Countable, IteratorAggregate, EdgesAggregate
     public function getEdgesTo(Vertex $to)
     {
         if(!isset($this->edgesTo[$to->getId()])) {
-            $edges = [];
+            $edges = array();
             foreach ($this->edges as $index => $edge) {
                 /** @var Edge $edge*/
                 if(!$edge->hasVertexTarget($to)) {

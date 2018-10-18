@@ -249,7 +249,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function getEdgesIn()
     {
-        return $this->getEdges()->getEdgesTo($this);
+        return $this->getEdges()->getEdgesIn($this);
     }
 
     /**
@@ -261,7 +261,6 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function getEdgesTo(Vertex $vertex)
     {
-
         return $this->getEdges()->getEdgesTo($vertex);
     }
 
