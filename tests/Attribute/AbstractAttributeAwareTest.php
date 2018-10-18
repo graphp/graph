@@ -1,6 +1,10 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Attribute;
+
 use Fhaculty\Graph\Attribute\AttributeAware;
+use Fhaculty\Graph\Tests\TestCase;
+
 abstract class AbstractAttributeAwareTest extends TestCase
 {
     abstract protected function createAttributeAware();
@@ -25,6 +29,19 @@ abstract class AbstractAttributeAwareTest extends TestCase
         $this->assertEquals(null, $entity->getAttribute('unknown'));
 
         $this->assertEquals('default', $entity->getAttribute('unknown', 'default'));
+    }
+
+    /**
+     * @depends testAttributeAwareInterface
+     * @param AttributeAware $entity
+     */
+    public function testAttributeSetRemoveGet(AttributeAware $entity)
+    {
+        $entity->setAttribute('test', 'value');
+        $this->assertEquals('value', $entity->getAttribute('test'));
+
+        $entity->removeAttribute('test');
+        $this->assertEquals(null, $entity->getAttribute('test'));
     }
 
     /**

@@ -2,9 +2,6 @@
 
 namespace Fhaculty\Graph\Set;
 
-use Fhaculty\Graph\Set\VerticesAggregate;
-use Fhaculty\Graph\Set\EdgesAggregate;
-
 /**
  * DualAggregate provides access to both its Vertices and its Edges
  *

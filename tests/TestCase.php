@@ -1,14 +1,14 @@
 <?php
 
+namespace Fhaculty\Graph\Tests;
+
 use Fhaculty\Graph\Edge\Directed;
 use Fhaculty\Graph\Edge\Base as Edge;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Set\Vertices;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
-(include_once __DIR__ . '/../vendor/autoload.php') OR die(PHP_EOL . 'ERROR: composer autoloader not found, run "composer install" or see README for instructions' . PHP_EOL);
-
-class TestCase extends PHPUnit_Framework_TestCase
+class TestCase extends BaseTestCase
 {
     protected function assertGraphEquals(Graph $expected, Graph $actual)
     {
@@ -28,11 +28,8 @@ class TestCase extends PHPUnit_Framework_TestCase
         // do not use assertVertexEquals() in order to not increase assertion counter
 
         foreach ($expected->getVertices()->getMap() as $vid => $vertex) {
-            try {
-                $other = $actual->getVertex($vid);
-            } catch (Exception $e) {
-                $this->fail();
-            }
+            $other = $actual->getVertex($vid);
+
             if ($this->getVertexDump($vertex) !== $this->getVertexDump($vertex)) {
                 $this->fail();
             }

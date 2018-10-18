@@ -2,10 +2,8 @@
 
 namespace Fhaculty\Graph\Set;
 
-use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Vertex;
 
 /**
  * A set of Vertices that are already stored in a vertex ID => Vertex instance mapping array

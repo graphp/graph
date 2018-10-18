@@ -1,12 +1,19 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Attribute;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Attribute\AttributeBagNamespaced;
 use Fhaculty\Graph\Attribute\AttributeAware;
 use Fhaculty\Graph\Attribute\AttributeBagContainer;
 
-class AtributeBagNamespacedTest extends TestCase
+class AtributeBagNamespacedTest extends AbstractAttributeAwareTest
 {
+    protected function createAttributeAware()
+    {
+        return new AttributeBagNamespaced(new AttributeBagContainer(), 'test.');
+    }
+
     public function testBagContainer()
     {
         $container = new AttributeBagContainer();

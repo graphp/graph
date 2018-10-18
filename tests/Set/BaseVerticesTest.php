@@ -1,9 +1,11 @@
 <?php
 
-use Fhaculty\Graph\Exception\OutOfBoundsException;
+namespace Fhaculty\Graph\Tests\Set;
+
 use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Tests\TestCase;
+use Fhaculty\Graph\Vertex;
 
 abstract class BaseVerticesTest extends TestCase
 {

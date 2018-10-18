@@ -1,11 +1,13 @@
 <?php
 
+namespace Fhaculty\Graph\Tests\Edge;
+
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Edge\Base as Edge;
+use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 abstract class EdgeBaseTest extends AbstractAttributeAwareTest
 {
-
     protected $graph;
     protected $v1;
     protected $v2;
@@ -95,6 +97,18 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $this->assertEquals(array($this->v1, $this->v1), $edge->getVertices()->getVector());
         $this->assertSame($this->v1, $edge->getVertexFromTo($this->v1));
         $this->assertSame($this->v1, $edge->getVertexToFrom($this->v1));
+    }
+
+    public function testRemoveWithLoop()
+    {
+        $edge = $this->createEdgeLoop();
+
+        $this->assertEquals(array($this->edge, $edge), $this->graph->getEdges()->getVector());
+
+        $edge->destroy();
+
+        $this->assertEquals(array($this->edge), $this->graph->getEdges()->getVector());
+        $this->assertEquals(array($this->v1, $this->v2), $this->graph->getVertices()->getVector());
     }
 
     protected function createAttributeAware()
