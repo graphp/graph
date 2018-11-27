@@ -1,5 +1,5 @@
 {
-    "name": "clue/graph",
+    "name": "graphp/graph",
     "type": "library",
     "description": "GraPHP is the mathematical graph/network library written in PHP.",
     "keywords": [
@@ -13,12 +13,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Fhaculty\\Graph\\": "src/"
+            "Graphp\\Graph\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Fhaculty\\Graph\\Tests\\": "tests/"
+            "Graphp\\Graph\\Tests\\": "tests/"
         }
     },
     "require": {

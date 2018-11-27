@@ -1,9 +1,9 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Set;
+namespace Graphp\Graph\Tests\Set;
 
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Set\Vertices;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Set\Vertices;
 
 class VerticesTest extends BaseVerticesTest
 {
@@ -16,7 +16,7 @@ class VerticesTest extends BaseVerticesTest
     {
         $vertices = Vertices::factory(array());
 
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $vertices);
+        $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $vertices);
         $this->assertTrue($vertices->isEmpty());
     }
 
@@ -50,13 +50,13 @@ class VerticesTest extends BaseVerticesTest
 
         $vertices = $this->createVertices(array($v1, $v1, $v1));
 
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $vertices);
+        $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $vertices);
         $this->assertCount(3, $vertices);
         $this->assertTrue($vertices->hasDuplicates());
 
         $verticesDistinct = $vertices->getVerticesDistinct();
 
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $verticesDistinct);
+        $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $verticesDistinct);
         $this->assertCount(1, $verticesDistinct);
         $this->assertFalse($verticesDistinct->hasDuplicates());
 

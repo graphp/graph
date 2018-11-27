@@ -1,8 +1,8 @@
 <?php
 
-namespace Fhaculty\Graph\Exception;
+namespace Graphp\Graph\Exception;
 
-use Fhaculty\Graph;
+use Graphp\Graph;
 
 class OutOfBoundsException extends \OutOfBoundsException implements Graph\Exception
 {

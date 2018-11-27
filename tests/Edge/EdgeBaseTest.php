@@ -1,10 +1,10 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Edge;
+namespace Graphp\Graph\Tests\Edge;
 
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 abstract class EdgeBaseTest extends AbstractAttributeAwareTest
 {

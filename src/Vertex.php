@@ -1,17 +1,17 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Graphp\Graph;
 
-use Fhaculty\Graph\Attribute\AttributeAware;
-use Fhaculty\Graph\Attribute\AttributeBagReference;
-use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Edge\Directed as EdgeDirected;
-use Fhaculty\Graph\Edge\Undirected as EdgeUndirected;
-use Fhaculty\Graph\Exception\BadMethodCallException;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Set\EdgesAggregate;
-use Fhaculty\Graph\Set\Vertices;
+use Graphp\Graph\Attribute\AttributeAware;
+use Graphp\Graph\Attribute\AttributeBagReference;
+use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Edge\Directed as EdgeDirected;
+use Graphp\Graph\Edge\Undirected as EdgeUndirected;
+use Graphp\Graph\Exception\BadMethodCallException;
+use Graphp\Graph\Exception\InvalidArgumentException;
+use Graphp\Graph\Set\Edges;
+use Graphp\Graph\Set\EdgesAggregate;
+use Graphp\Graph\Set\Vertices;
 
 class Vertex implements EdgesAggregate, AttributeAware
 {

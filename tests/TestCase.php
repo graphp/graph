@@ -1,11 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Tests;
+namespace Graphp\Graph\Tests;
 
-use Fhaculty\Graph\Edge\Directed;
-use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Vertex;
+use Graphp\Graph\Edge\Directed;
+use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Vertex;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase

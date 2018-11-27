@@ -1,11 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Set;
+namespace Graphp\Graph\Tests\Set;
 
-use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Tests\TestCase;
+use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Set\Edges;
+use Graphp\Graph\Tests\TestCase;
 
 class EdgesTest extends TestCase
 {
@@ -27,7 +27,7 @@ class EdgesTest extends TestCase
         $e1 = $v1->createEdgeTo($v1);
 
         $edgesFromArray = $this->createEdges(array($e1));
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Edges', $edgesFromArray);
+        $this->assertInstanceOf('Graphp\Graph\Set\Edges', $edgesFromArray);
         $this->assertSame($e1, $edgesFromArray->getEdgeFirst());
 
         $edgesFromEdges = Edges::factory($edgesFromArray);
@@ -143,7 +143,7 @@ class EdgesTest extends TestCase
     {
         $distinct = $edges->getEdgesDistinct();
 
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Edges', $distinct);
+        $this->assertInstanceOf('Graphp\Graph\Set\Edges', $distinct);
         $this->assertEquals(2, count($distinct));
     }
 
@@ -156,12 +156,12 @@ class EdgesTest extends TestCase
     {
         $edgeRandom = $edges->getEdgeOrder(Edges::ORDER_RANDOM);
 
-        $this->assertInstanceOf('Fhaculty\Graph\Edge\Base', $edgeRandom);
+        $this->assertInstanceOf('Graphp\Graph\Edge\Base', $edgeRandom);
         $edges->getEdgeIndex($edges->getIndexEdge($edgeRandom));
 
         $edgesRandom = $edges->getEdgesOrder(Edges::ORDER_RANDOM);
 
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Edges', $edgesRandom);
+        $this->assertInstanceOf('Graphp\Graph\Set\Edges', $edgesRandom);
         $this->assertEquals(2, count($edgesRandom));
     }
 
@@ -265,7 +265,7 @@ class EdgesTest extends TestCase
         $edges = $graph->getEdges();
         $edgesOrdered = $edges->getEdgesOrder(Edges::ORDER_WEIGHT);
 
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Edges', $edgesOrdered);
+        $this->assertInstanceOf('Graphp\Graph\Set\Edges', $edgesOrdered);
         $this->assertEquals(1, $edgesOrdered->getEdgeFirst()->getWeight());
         $this->assertEquals(200, $edgesOrdered->getEdgeLast()->getWeight());
 

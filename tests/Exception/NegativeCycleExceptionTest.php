@@ -1,15 +1,15 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Exception;
+namespace Graphp\Graph\Tests\Exception;
 
-use Fhaculty\Graph\Exception\NegativeCycleException;
-use Fhaculty\Graph\Tests\TestCase;
+use Graphp\Graph\Exception\NegativeCycleException;
+use Graphp\Graph\Tests\TestCase;
 
 class NegativeCycleExceptionTest extends TestCase
 {
     public function testConstructor()
     {
-        $cycle = $this->getMockBuilder('Fhaculty\Graph\Walk')
+        $cycle = $this->getMockBuilder('Graphp\Graph\Walk')
                       ->disableOriginalConstructor()
                       ->getMock();
 

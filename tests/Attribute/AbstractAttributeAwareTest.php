@@ -1,9 +1,9 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Attribute;
+namespace Graphp\Graph\Tests\Attribute;
 
-use Fhaculty\Graph\Attribute\AttributeAware;
-use Fhaculty\Graph\Tests\TestCase;
+use Graphp\Graph\Attribute\AttributeAware;
+use Graphp\Graph\Tests\TestCase;
 
 abstract class AbstractAttributeAwareTest extends TestCase
 {
@@ -12,7 +12,7 @@ abstract class AbstractAttributeAwareTest extends TestCase
     public function testAttributeAwareInterface()
     {
         $entity = $this->createAttributeAware();
-        $this->assertInstanceOf('Fhaculty\Graph\Attribute\AttributeAware', $entity);
+        $this->assertInstanceOf('Graphp\Graph\Attribute\AttributeAware', $entity);
 
         return $entity;
     }
@@ -51,6 +51,6 @@ abstract class AbstractAttributeAwareTest extends TestCase
     public function testAttributeBag(AttributeAware $entity)
     {
         $bag = $entity->getAttributeBag();
-        $this->assertInstanceOf('Fhaculty\Graph\Attribute\AttributeBag', $bag);
+        $this->assertInstanceOf('Graphp\Graph\Attribute\AttributeBag', $bag);
     }
 }

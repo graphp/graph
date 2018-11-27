@@ -1,11 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Set;
+namespace Graphp\Graph\Tests\Set;
 
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Tests\TestCase;
-use Fhaculty\Graph\Vertex;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Set\Vertices;
+use Graphp\Graph\Tests\TestCase;
+use Graphp\Graph\Vertex;
 
 abstract class BaseVerticesTest extends TestCase
 {
@@ -22,7 +22,7 @@ abstract class BaseVerticesTest extends TestCase
         $vertex = $graph->createVertex();
 
         $verticesFromArray = $this->createVertices(array($vertex));
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $verticesFromArray);
+        $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $verticesFromArray);
         $this->assertSame($vertex, $verticesFromArray->getVertexFirst());
 
         $verticesFromVertices = Vertices::factory($verticesFromArray);
@@ -140,7 +140,7 @@ abstract class BaseVerticesTest extends TestCase
     {
         $distinct = $vertices->getVerticesDistinct();
 
-        $this->assertInstanceOf('Fhaculty\Graph\Set\VerticesMap', $distinct);
+        $this->assertInstanceOf('Graphp\Graph\Set\VerticesMap', $distinct);
         $this->assertEquals(2, count($distinct));
         $this->assertEquals(array(1, 2), $distinct->getIds());
     }
@@ -154,12 +154,12 @@ abstract class BaseVerticesTest extends TestCase
     {
         $vertexRandom = $vertices->getVertexOrder(Vertices::ORDER_RANDOM);
 
-        $this->assertInstanceOf('Fhaculty\Graph\Vertex', $vertexRandom);
+        $this->assertInstanceOf('Graphp\Graph\Vertex', $vertexRandom);
         $this->assertTrue($vertices->hasVertexId($vertexRandom->getId()));
 
         $verticesRandom = $vertices->getVerticesOrder(Vertices::ORDER_RANDOM);
 
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $verticesRandom);
+        $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $verticesRandom);
         $this->assertEquals(2, count($verticesRandom));
     }
 
@@ -209,7 +209,7 @@ abstract class BaseVerticesTest extends TestCase
         $vertices = $graph->getVertices();
         $verticesOrdered = $vertices->getVerticesOrder(Vertices::ORDER_GROUP);
 
-        $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $verticesOrdered);
+        $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $verticesOrdered);
         $this->assertEquals(1, $verticesOrdered->getVertexFirst()->getGroup());
         $this->assertEquals(200, $verticesOrdered->getVertexLast()->getGroup());
 

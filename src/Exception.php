@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Graphp\Graph;
 
 interface Exception
 {

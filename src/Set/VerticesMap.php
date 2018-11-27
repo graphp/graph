@@ -1,9 +1,9 @@
 <?php
 
-namespace Fhaculty\Graph\Set;
+namespace Graphp\Graph\Set;
 
-use Fhaculty\Graph\Exception\OutOfBoundsException;
-use Fhaculty\Graph\Vertex;
+use Graphp\Graph\Exception\OutOfBoundsException;
+use Graphp\Graph\Vertex;
 
 /**
  * A set of Vertices that are already stored in a vertex ID => Vertex instance mapping array

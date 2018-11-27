@@ -1,17 +1,17 @@
 <?php
 
-namespace Fhaculty\Graph\Edge;
+namespace Graphp\Graph\Edge;
 
-use Fhaculty\Graph\Attribute\AttributeAware;
-use Fhaculty\Graph\Attribute\AttributeBagReference;
-use Fhaculty\Graph\Exception\BadMethodCallException;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Exception\LogicException;
-use Fhaculty\Graph\Exception\RangeException;
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Set\VerticesAggregate;
-use Fhaculty\Graph\Vertex;
+use Graphp\Graph\Attribute\AttributeAware;
+use Graphp\Graph\Attribute\AttributeBagReference;
+use Graphp\Graph\Exception\BadMethodCallException;
+use Graphp\Graph\Exception\InvalidArgumentException;
+use Graphp\Graph\Exception\LogicException;
+use Graphp\Graph\Exception\RangeException;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Set\Vertices;
+use Graphp\Graph\Set\VerticesAggregate;
+use Graphp\Graph\Vertex;
 
 abstract class Base implements VerticesAggregate, AttributeAware
 {

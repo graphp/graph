@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Attribute;
+namespace Graphp\Graph\Attribute;
 
 /**
  * An attribute bag that automatically prefixes a given namespace.

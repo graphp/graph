@@ -1,8 +1,8 @@
 <?php
 
-namespace Fhaculty\Graph\Exporter;
+namespace Graphp\Graph\Exporter;
 
-use Fhaculty\Graph\Graph;
+use Graphp\Graph\Graph;
 
 interface ExporterInterface
 {

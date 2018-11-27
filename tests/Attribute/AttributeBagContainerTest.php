@@ -1,8 +1,8 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Attribute;
+namespace Graphp\Graph\Tests\Attribute;
 
-use Fhaculty\Graph\Attribute\AttributeBagContainer;
+use Graphp\Graph\Attribute\AttributeBagContainer;
 
 class AttributeBagContainerTest extends AbstractAttributeAwareTest
 {

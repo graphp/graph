@@ -1,11 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Set;
+namespace Graphp\Graph\Set;
 
-use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Exception\OutOfBoundsException;
-use Fhaculty\Graph\Exception\UnderflowException;
+use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Exception\InvalidArgumentException;
+use Graphp\Graph\Exception\OutOfBoundsException;
+use Graphp\Graph\Exception\UnderflowException;
 
 /**
  * A Set of Edges

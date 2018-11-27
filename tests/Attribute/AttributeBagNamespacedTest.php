@@ -1,11 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Attribute;
+namespace Graphp\Graph\Tests\Attribute;
 
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Attribute\AttributeBagNamespaced;
-use Fhaculty\Graph\Attribute\AttributeAware;
-use Fhaculty\Graph\Attribute\AttributeBagContainer;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Attribute\AttributeBagNamespaced;
+use Graphp\Graph\Attribute\AttributeAware;
+use Graphp\Graph\Attribute\AttributeBagContainer;
 
 class AtributeBagNamespacedTest extends AbstractAttributeAwareTest
 {

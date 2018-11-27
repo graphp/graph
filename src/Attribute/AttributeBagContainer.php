@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Attribute;
+namespace Graphp\Graph\Attribute;
 
 /**
  * A fairly standard AttributeBag container.

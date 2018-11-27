@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Attribute;
+namespace Graphp\Graph\Attribute;
 
 /**
  * Interface to container that represents multiple attributes

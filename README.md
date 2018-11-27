@@ -10,7 +10,7 @@ Once [installed](#install), let's initialize a sample graph:
 <?php
 require_once 'vendor/autoload.php';
 
-use \Fhaculty\Graph\Graph as Graph;
+use \Graphp\Graph\Graph as Graph;
 
 $graph = new Graph();
 

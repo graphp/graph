@@ -1,8 +1,8 @@
 <?php
 
-namespace Fhaculty\Graph\Exception;
+namespace Graphp\Graph\Exception;
 
-use Fhaculty\Graph;
+use Graphp\Graph;
 
 class RuntimeException extends \RuntimeException implements Graph\Exception
 {

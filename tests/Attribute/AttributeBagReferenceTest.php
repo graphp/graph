@@ -1,8 +1,8 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Attribute;
+namespace Graphp\Graph\Tests\Attribute;
 
-use Fhaculty\Graph\Attribute\AttributeBagReference;
+use Graphp\Graph\Attribute\AttributeBagReference;
 
 class AttributeBagReferenceTest extends AbstractAttributeAwareTest
 {
