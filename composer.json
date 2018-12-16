@@ -25,10 +25,25 @@
         "php": "^7.0 || ^5.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
+        "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35",
+        "friendsofphp/php-cs-fixer": "^2.13",
+        "infection/infection": "^0.11.2",
+        "jakub-onderka/php-parallel-lint": "^1.0",
+        "maglnet/composer-require-checker": "^1.1",
+        "php-http/guzzle6-adapter": "^1.1",
+        "phpmd/phpmd": "^2.6",
+        "phpro/grumphp": "^0.14.0",
+        "phpstan/phpstan": "^0.10",
+        "roave/security-advisories": "dev-master",
+        "sensiolabs/security-checker": "^4.1",
+        "squizlabs/php_codesniffer": "^3"
     },
     "suggest": {
         "graphp/graphviz": "GraphViz graph drawing / DOT output",
         "graphp/algorithms": "Common graph algorithms, such as Dijkstra and Moore-Bellman-Ford (shortest path), minimum spanning tree (MST), Kruskal, Prim and many more.."
+    },
+    "scripts": {
+        "grumphp": "./vendor/bin/grumphp run",
+        "infection": "./vendor/bin/infection run -j 10"
     }
 }
