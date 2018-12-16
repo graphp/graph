@@ -1,0 +1,71 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude('tests')
+    ->in(__DIR__);
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+        '@PSR2' => TRUE,
+        'array_syntax' => ['syntax' => 'long'],
+        'blank_line_after_opening_tag' => TRUE,
+        'blank_line_before_statement' => [
+            'statements' => ['break', 'continue', 'declare', 'return', 'throw', 'try'],
+        ],
+        'class_attributes_separation' => TRUE,
+        'class_definition' => [
+            'single_line' => TRUE,
+        ],
+        'declare_equal_normalize' => [
+          'space' => 'single',
+        ],
+        'declare_strict_types' => FALSE,
+        'include' => TRUE,
+        'is_null' => TRUE,
+        'linebreak_after_opening_tag' => TRUE,
+        'logical_operators' => TRUE,
+        'lowercase_cast' => TRUE,
+        'lowercase_constants' => FALSE,
+        'lowercase_static_reference' => TRUE,
+        'magic_method_casing' => TRUE,
+        'native_function_invocation' => TRUE,
+        'no_blank_lines_after_class_opening' => TRUE,
+        'no_blank_lines_after_phpdoc' => FALSE,
+        'no_closing_tag' => TRUE,
+        'no_empty_comment' => TRUE,
+        'no_empty_phpdoc' => TRUE,
+        'no_empty_statement' => TRUE,
+        'no_extra_blank_lines' => [
+          'tokens' => [
+            'extra',
+            'curly_brace_block',
+            'parenthesis_brace_block',
+            'square_brace_block',
+            'return',
+            'throw',
+            'use',
+            'use_trait',
+            ],
+        ],
+        'no_trailing_whitespace_in_comment' => TRUE,
+        'no_unneeded_control_parentheses' => [
+            'statements' => [
+                'break',
+                'clone',
+                'continue',
+                'echo_print',
+                'return',
+                'switch_case',
+                'yield',
+            ]
+        ],
+        'no_unused_imports' => TRUE,
+        'single_blank_line_at_eof' => TRUE,
+        'single_quote' => TRUE,
+        'strict_comparison' => FALSE,
+        'strict_param' => true,
+        'trailing_comma_in_multiline_array' => TRUE,
+        'yoda_style' => TRUE,
+    ])
+    ->setFinder($finder);

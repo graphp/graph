@@ -1,0 +1,34 @@
+parameters:
+  git_dir: .
+  bin_dir: vendor/bin
+  process_timeout: 180
+  tasks:
+    phplint: ~
+    composer: ~
+    phpstan:
+      autoload_file: ~
+      configuration: ~
+      level: 7
+      force_patterns: []
+      ignore_patterns: ['/tests/']
+      triggered_by: ['php']
+    phpcsfixer2: ~
+    phpcs:
+      standard: PSR2
+      ignore_patterns:
+        - vendor/
+        - tests/
+      triggered_by:
+        - php
+    phpunit: ~
+    securitychecker:
+      lockfile: ./composer.lock
+      format: ~
+      end_point: ~
+      timeout: ~
+      run_always: false
+    infection:
+      threads: 10
+      min_msi: 80
+      min_covered_msi: 80
+
