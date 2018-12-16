@@ -61,12 +61,12 @@ class Undirected extends Base
     public function isConnection(Vertex $from, Vertex $to)
     {
         // one way                or                        other way
-        return (($this->a === $from && $this->b === $to) || ($this->b === $from && $this->a === $to));
+        return ($this->a === $from && $this->b === $to) || ($this->b === $from && $this->a === $to);
     }
 
     public function isLoop()
     {
-        return ($this->a === $this->b);
+        return $this->a === $this->b;
     }
 
     public function getVertexToFrom(Vertex $startVertex)
@@ -93,7 +93,7 @@ class Undirected extends Base
 
     public function hasVertexStart(Vertex $startVertex)
     {
-        return ($this->a === $startVertex || $this->b === $startVertex);
+        return $this->a === $startVertex || $this->b === $startVertex;
     }
 
     public function hasVertexTarget(Vertex $targetVertex)

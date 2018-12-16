@@ -61,6 +61,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         if ($vertices instanceof VerticesAggregate) {
             return $vertices->getVertices();
         }
+
         return new self($vertices);
     }
 
@@ -72,12 +73,14 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * the array, it will automatically be included in this Set.
      *
      * @param array $verticesArray
+     *
      * @return Vertices
      */
     public static function factoryArrayReference(array &$verticesArray)
     {
         $vertices = new static();
         $vertices->vertices =& $verticesArray;
+
         return $vertices;
     }
 
@@ -103,8 +106,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     {
         try {
             return $this->getVertexMatch($this->getCallbackId($id));
-        }
-        catch (UnderflowException $e) {
+        } catch (UnderflowException $e) {
             throw new OutOfBoundsException('Vertex ' . $id . ' does not exist', 0, $e);
         }
     }
@@ -133,10 +135,11 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function getIndexVertex(Vertex $vertex)
     {
-        $id = array_search($vertex, $this->vertices, true);
-        if ($id === false) {
+        $id = \array_search($vertex, $this->vertices, true);
+        if (false === $id) {
             throw new OutOfBoundsException('Given vertex does NOT exist');
         }
+
         return $id;
     }
 
@@ -156,9 +159,9 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         if (!$this->vertices) {
             throw new UnderflowException('Does not contain any vertices');
         }
-        reset($this->vertices);
+        \reset($this->vertices);
 
-        return current($this->vertices);
+        return \current($this->vertices);
     }
 
     /**
@@ -172,9 +175,9 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         if (!$this->vertices) {
             throw new UnderflowException('Does not contain any vertices');
         }
-        end($this->vertices);
+        \end($this->vertices);
 
-        return current($this->vertices);
+        return \current($this->vertices);
     }
 
     /**
@@ -189,9 +192,10 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     public function getVertexMatch($callbackCheck)
     {
         $ret = $this->getVertexMatchOrNull($callbackCheck);
-        if ($ret === null) {
+        if (null === $ret) {
             throw new UnderflowException('No vertex found');
         }
+
         return $ret;
     }
 
@@ -205,7 +209,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function hasVertexMatch($callbackCheck)
     {
-        return ($this->getVertexMatchOrNull($callbackCheck) !== null);
+        return null !== $this->getVertexMatchOrNull($callbackCheck);
     }
 
     /**
@@ -223,27 +227,34 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function getVerticesMatch($callbackCheck)
     {
-        return new static(array_filter($this->vertices, $callbackCheck));
+        return new static(\array_filter($this->vertices, $callbackCheck));
     }
 
     /**
-     * get new Set of Vertices ordered by given criterium $orderBy
+     * Get new Set of Vertices ordered by given criterium $orderBy.
      *
      * Vertex index positions will be left unchanged, so if you call this method
      * on a VerticesMap, it will also return a VerticesMap.
      *
-     * @param  int                      $orderBy  criterium to sort by. see Vertex::ORDER_ID, etc.
-     * @param  boolean                  $desc     whether to return biggest first (true) instead of smallest first (default:false)
-     * @return Vertices                 a new Vertices set ordered by the given $orderBy criterium
+     * @param  int  $orderBy
+     *   Criterium to sort by. see Vertex::ORDER_ID, etc.
+     * @param  bool $desc
+     *   Whether to return biggest first (true) instead of smallest first
+     *   (default:false)
+     *
+     * @return Vertices
+     *   A new Vertices set ordered by the given $orderBy criterium.
+     *
      * @throws InvalidArgumentException if criterium is unknown
+     *
      * @see self::getVertexOrder()
      */
     public function getVerticesOrder($orderBy, $desc = false)
     {
-        if ($orderBy === self::ORDER_RANDOM) {
+        if (self::ORDER_RANDOM === $orderBy) {
             // shuffle the vertex positions
-            $keys = array_keys($this->vertices);
-            shuffle($keys);
+            $keys = \array_keys($this->vertices);
+            \shuffle($keys);
 
             // re-order according to shuffled vertex positions
             $vertices = array();
@@ -258,7 +269,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         $callback = $this->getCallback($orderBy);
         $array    = $this->vertices;
 
-        uasort($array, function (Vertex $va, Vertex $vb) use ($callback, $desc) {
+        \uasort($array, function (Vertex $va, Vertex $vb) use ($callback, $desc) {
             $ra = $callback($desc ? $vb : $va);
             $rb = $callback($desc ? $va : $vb);
 
@@ -294,9 +305,9 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
 
         $vertices = array();
         foreach ($this->vertices as $vid => $vertex) {
-            $i = array_search($vertex, $otherArray, true);
+            $i = \array_search($vertex, $otherArray, true);
 
-            if ($i !== false) {
+            if (false !== $i) {
                 // remove from other array in order to check for duplicate matches
                 unset($otherArray[$i]);
 
@@ -317,25 +328,25 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * @throws UnderflowException       if no vertices exist
      * @see self::getVerticesOrder()
      */
-    public function getVertexOrder($orderBy, $desc=false)
+    public function getVertexOrder($orderBy, $desc = false)
     {
         if (!$this->vertices) {
             throw new UnderflowException('No vertex found');
         }
         // random order
-        if ($orderBy === self::ORDER_RANDOM) {
+        if (self::ORDER_RANDOM === $orderBy) {
             // just return by random key (no need to check for DESC flag)
-            return $this->vertices[array_rand($this->vertices)];
+            return $this->vertices[\array_rand($this->vertices)];
         }
 
         $callback = $this->getCallback($orderBy);
 
-        $ret = NULL;
-        $best = NULL;
+        $ret = null;
+        $best = null;
         foreach ($this->vertices as $vertex) {
             $now = $callback($vertex);
 
-            if ($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)) {
+            if (null === $ret || ($desc && $now > $best) || (!$desc && $now < $best)) {
                 $ret = $vertex;
                 $best = $now;
             }
@@ -378,6 +389,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         foreach ($this->vertices as $vertex) {
             $vertices[$vertex->getId()] = $vertex;
         }
+
         return $vertices;
     }
 
@@ -392,6 +404,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         foreach ($this->vertices as $vertex) {
             $ids []= $vertex->getId();
         }
+
         return $ids;
     }
 
@@ -402,7 +415,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function getVector()
     {
-        return array_values($this->vertices);
+        return \array_values($this->vertices);
     }
 
     /**
@@ -413,7 +426,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function count()
     {
-        return count($this->vertices);
+        return \count($this->vertices);
     }
 
     /**
@@ -437,7 +450,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function hasDuplicates()
     {
-        return (count($this->vertices) !== count($this->getMap()));
+        return \count($this->vertices) !== \count($this->getMap());
     }
 
     /**
@@ -471,13 +484,14 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         foreach ($this->vertices as $vertex) {
             $sum += $callback($vertex);
         }
+
         return $sum;
     }
 
     private function getCallbackId($id)
     {
         return function (Vertex $vertex) use ($id) {
-            return ($vertex->getId() == $id);
+            return $vertex->getId() == $id;
         };
     }
 
@@ -490,6 +504,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
                 return $vertex;
             }
         }
+
         return null;
     }
 
@@ -502,21 +517,22 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     private function getCallback($callback)
     {
-        if (is_callable($callback)) {
-            if (is_array($callback)) {
+        if (\is_callable($callback)) {
+            if (\is_array($callback)) {
                 $callback = function (Vertex $vertex) use ($callback) {
-                    return call_user_func($callback, $vertex);
+                    return \call_user_func($callback, $vertex);
                 };
             }
+
             return $callback;
         }
 
         static $methods = array(
             self::ORDER_ID => 'getId',
-            self::ORDER_GROUP => 'getGroup'
+            self::ORDER_GROUP => 'getGroup',
         );
 
-        if (!is_int($callback) || !isset($methods[$callback])) {
+        if (!\is_int($callback) || !isset($methods[$callback])) {
             throw new InvalidArgumentException('Invalid callback given');
         }
 

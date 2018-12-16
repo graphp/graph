@@ -81,12 +81,12 @@ class Directed extends Base
 
     public function isConnection(Vertex $from, Vertex $to)
     {
-        return ($this->to === $to && $this->from === $from);
+        return $this->to === $to && $this->from === $from;
     }
 
     public function isLoop()
     {
-        return ($this->to === $this->from);
+        return $this->to === $this->from;
     }
 
     public function getVertexToFrom(Vertex $startVertex)
@@ -109,11 +109,11 @@ class Directed extends Base
 
     public function hasVertexStart(Vertex $startVertex)
     {
-        return ($this->from === $startVertex);
+        return $this->from === $startVertex;
     }
 
     public function hasVertexTarget(Vertex $targetVertex)
     {
-        return ($this->to === $targetVertex);
+        return $this->to === $targetVertex;
     }
 }

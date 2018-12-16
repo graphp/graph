@@ -21,7 +21,7 @@ abstract class Base implements VerticesAggregate, AttributeAware
      * @var float|int|NULL
      * @see self::getWeight()
      */
-    protected $weight = NULL;
+    protected $weight = null;
 
     /**
      * maximum capacity (maximum flow)
@@ -29,7 +29,7 @@ abstract class Base implements VerticesAggregate, AttributeAware
      * @var float|int|NULL
      * @see self::getCapacity()
      */
-    protected $capacity = NULL;
+    protected $capacity = null;
 
     /**
      * flow (capacity currently in use)
@@ -37,7 +37,7 @@ abstract class Base implements VerticesAggregate, AttributeAware
      * @var float|int|NULL
      * @see self::getFlow()
      */
-    protected $flow = NULL;
+    protected $flow = null;
 
     protected $attributes = array();
 
@@ -49,14 +49,15 @@ abstract class Base implements VerticesAggregate, AttributeAware
     abstract public function getVerticesTarget();
 
     /**
-     * get Vertices that are the start of this edge
+     * Get Vertices that are the start of this edge
      *
      * @return Vertices
      */
     abstract public function getVerticesStart();
 
     /**
-     * return true if this edge is an outgoing edge of the given vertex (i.e. the given vertex is a valid start vertex of this edge)
+     * Return true if this edge is an outgoing edge of the given vertex.
+     * (i.e. the given vertex is a valid start vertex of this edge)
      *
      * @param  Vertex  $startVertex
      * @return boolean
@@ -65,13 +66,14 @@ abstract class Base implements VerticesAggregate, AttributeAware
     abstract public function hasVertexStart(Vertex $startVertex);
 
     /**
-     * return true if this edge is an ingoing edge of the given vertex (i . e. the given vertex is a valid end vertex of this edge)
+     * Return true if this edge is an ingoing edge of the given vertex
+     * (i . e. the given vertex is a valid end vertex of this edge)
      *
      * @param  Vertex  $targetVertex
      * @return boolean
      * @uses Vertex::getVertexFromTo()
      */
-    abstract function hasVertexTarget(Vertex $targetVertex);
+    abstract public function hasVertexTarget(Vertex $targetVertex);
 
     abstract public function isConnection(Vertex $from, Vertex $to);
 
@@ -121,7 +123,7 @@ abstract class Base implements VerticesAggregate, AttributeAware
      */
     public function setWeight($weight)
     {
-        if ($weight !== NULL && !is_float($weight) && !is_int($weight)) {
+        if (null !== $weight && !\is_float($weight) && !\is_int($weight)) {
             throw new InvalidArgumentException('Invalid weight given - must be numeric or NULL');
         }
         $this->weight = $weight;
@@ -146,8 +148,8 @@ abstract class Base implements VerticesAggregate, AttributeAware
      */
     public function getCapacityRemaining()
     {
-        if ($this->capacity === NULL) {
-            return NULL;
+        if (null === $this->capacity) {
+            return null;
         }
 
         return $this->capacity - $this->flow;
@@ -163,14 +165,14 @@ abstract class Base implements VerticesAggregate, AttributeAware
      */
     public function setCapacity($capacity)
     {
-        if ($capacity !== NULL) {
-            if (!is_float($capacity) && !is_int($capacity)) {
+        if (null !== $capacity) {
+            if (!\is_float($capacity) && !\is_int($capacity)) {
                 throw new InvalidArgumentException('Invalid capacity given - must be numeric');
             }
             if ($capacity < 0) {
                 throw new InvalidArgumentException('Capacity must not be negative');
             }
-            if ($this->flow !== NULL && $this->flow > $capacity) {
+            if (null !== $this->flow && $this->flow > $capacity) {
                 throw new RangeException('Current flow of ' . $this->flow . ' exceeds new capacity');
             }
         }
@@ -199,14 +201,14 @@ abstract class Base implements VerticesAggregate, AttributeAware
      */
     public function setFlow($flow)
     {
-        if ($flow !== NULL) {
-            if (!is_float($flow) && !is_int($flow)) {
+        if (null !== $flow) {
+            if (!\is_float($flow) && !\is_int($flow)) {
                 throw new InvalidArgumentException('Invalid flow given - must be numeric');
             }
             if ($flow < 0) {
                 throw new InvalidArgumentException('Flow must not be negative');
             }
-            if ($this->capacity !== NULL && $flow > $this->capacity) {
+            if (null !== $this->capacity && $flow > $this->capacity) {
                 throw new RangeException('New flow exceeds maximum capacity');
             }
         }
@@ -232,7 +234,6 @@ abstract class Base implements VerticesAggregate, AttributeAware
     {
         foreach ($this->getVertices() as $vertex) {
             return $vertex->getGraph();
-
             // the following code can only be reached if this edge does not
             // contain any vertices (invalid state), so ignore its coverage
             // @codeCoverageIgnoreStart

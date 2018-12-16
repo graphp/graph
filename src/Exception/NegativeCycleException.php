@@ -8,21 +8,30 @@ use Fhaculty\Graph;
 class NegativeCycleException extends UnexpectedValueException implements Graph\Exception
 {
     /**
-     * instance of the cycle
+     * Instance of the cycle
      *
-     * @var Walk
+     * @var Walk|null
      */
     private $cycle;
 
-    public function __construct($message, $code = NULL, $previous = NULL, Walk $cycle)
+    /**
+     * NegativeCycleException constructor.
+     *
+     * @param string $message
+     * @param int $code
+     * @param null $previous
+     * @param \Fhaculty\Graph\Walk|NULL $cycle
+     */
+    public function __construct($message, $code = 0, $previous = null, Walk $cycle = null)
     {
         parent::__construct($message, $code, $previous);
         $this->cycle = $cycle;
     }
 
     /**
+     * Get the cycle.
      *
-     * @return Walk
+     * @return Walk|null
      */
     public function getCycle()
     {

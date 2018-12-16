@@ -88,11 +88,11 @@ class AttributeBagNamespaced implements AttributeBag
     public function getAttributes()
     {
         $attributes = array();
-        $len = strlen($this->prefix);
+        $len = \strlen($this->prefix);
 
         foreach ($this->bag->getAttributes() as $name => $value) {
-            if (strpos($name, $this->prefix) === 0) {
-                $attributes[substr($name, $len)] = $value;
+            if (0 === \strpos($name, $this->prefix)) {
+                $attributes[\substr($name, $len)] = $value;
             }
         }
 

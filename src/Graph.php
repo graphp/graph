@@ -19,14 +19,34 @@ use Fhaculty\Graph\Set\VerticesMap;
 
 class Graph implements DualAggregate, AttributeAware
 {
+    /**
+     * @var array
+     */
     protected $verticesStorage = array();
+
+    /**
+     * @var Vertices
+     */
     protected $vertices;
 
+    /**
+     * @var array
+     */
     protected $edgesStorage = array();
+
+    /**
+     * @var Edges
+     */
     protected $edges;
 
+    /**
+     * @var array
+     */
     protected $attributes = array();
 
+    /**
+     * Graph constructor.
+     */
     public function __construct()
     {
         $this->vertices = VerticesMap::factoryArrayReference($this->verticesStorage);
@@ -34,7 +54,7 @@ class Graph implements DualAggregate, AttributeAware
     }
 
     /**
-     * return set of Vertices added to this graph
+     * Return set of Vertices added to this graph.
      *
      * @return Vertices
      */
@@ -44,7 +64,7 @@ class Graph implements DualAggregate, AttributeAware
     }
 
     /**
-     * return set of ALL Edges added to this graph
+     * Return set of ALL Edges added to this graph.
      *
      * @return Edges
      */
@@ -54,21 +74,27 @@ class Graph implements DualAggregate, AttributeAware
     }
 
     /**
-     * create a new Vertex in the Graph
+     * Create a new Vertex in the Graph.
      *
-     * @param  int|NULL                 $id              new vertex ID to use (defaults to NULL: use next free numeric ID)
-     * @param  boolean                  $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
-     * @return Vertex                   (chainable)
+     * @param  int|NULL $id
+     *   New vertex ID to use (defaults to NULL: use next free numeric ID)
+     * @param  bool $returnDuplicate
+     *   Normal operation is to throw an exception if given id already exists.
+     *   Pass true to return original vertex instead
+     * @return Vertex (chainable)
+     *
      * @throws InvalidArgumentException if given vertex $id is invalid
      * @throws OverflowException        if given vertex $id already exists and $returnDuplicate is not set
+     *
      * @uses Vertex::getId()
      */
-    public function createVertex($id = NULL, $returnDuplicate = false)
+    public function createVertex($id = null, $returnDuplicate = false)
     {
         // no ID given
-        if ($id === NULL) {
+        if (null === $id) {
             $id = $this->getNextId();
         }
+
         if ($returnDuplicate && $this->vertices->hasVertexId($id)) {
             return $this->vertices->getVertexId($id);
         }
@@ -236,28 +262,37 @@ class Graph implements DualAggregate, AttributeAware
     }
 
     /**
-     * create the given number of vertices or given array of Vertex IDs
+     * Create the given number of vertices or given array of Vertex IDs.
      *
-     * @param  int|array $n number of vertices to create or array of Vertex IDs to create
-     * @return Vertices set of Vertices created
+     * @param  int|array $n
+     *   Number of vertices to create or array of Vertex IDs to create.
+     *
+     * @return Vertices
+     *   Set of Vertices created.
+     *
      * @uses Graph::getNextId()
      */
     public function createVertices($n)
     {
         $vertices = array();
-        if (is_int($n) && $n >= 0) {
+        if (\is_int($n) && $n >= 0) {
             for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
                 $vertices[$id] = new Vertex($this, $id);
             }
-        } elseif (is_array($n)) {
-            // array given => check to make sure all given IDs are available (atomic operation)
+        } elseif (\is_array($n)) {
+            // Array given => check to make sure all given IDs are available
+            // (atomic operation)
             foreach ($n as $id) {
-                if (!is_int($id) && !is_string($id)) {
+                if (!\is_int($id) && !\is_string($id)) {
                     throw new InvalidArgumentException('All Vertex IDs have to be of type integer or string');
                 } elseif ($this->vertices->hasVertexId($id)) {
-                    throw new OverflowException('Given array of Vertex IDs contains an ID that already exists. Given IDs must be unique');
+                    throw new OverflowException(
+                        'Given array of Vertex IDs contains an ID that already exists. Given IDs must be unique'
+                    );
                 } elseif (isset($vertices[$id])) {
-                    throw new InvalidArgumentException('Given array of Vertex IDs contain duplicate IDs. Given IDs must be unique');
+                    throw new InvalidArgumentException(
+                        'Given array of Vertex IDs contain duplicate IDs. Given IDs must be unique'
+                    );
                 }
 
                 // temporary marker to check for duplicate IDs in the array
@@ -269,7 +304,9 @@ class Graph implements DualAggregate, AttributeAware
                 $vertices[$id] = new Vertex($this, $id);
             }
         } else {
-            throw new InvalidArgumentException('Invalid number of vertices given. Must be non-negative integer or an array of Vertex IDs');
+            throw new InvalidArgumentException(
+                'Invalid number of vertices given. Must be non-negative integer or an array of Vertex IDs'
+            );
         }
 
         return new Vertices($vertices);
@@ -289,7 +326,7 @@ class Graph implements DualAggregate, AttributeAware
         }
 
         // auto ID
-        return max(array_keys($this->verticesStorage))+1;
+        return \max(\array_keys($this->verticesStorage))+1;
     }
 
     /**
@@ -357,8 +394,7 @@ class Graph implements DualAggregate, AttributeAware
     {
         try {
             unset($this->edgesStorage[$this->edges->getIndexEdge($edge)]);
-        }
-        catch (OutOfBoundsException $e) {
+        } catch (OutOfBoundsException $e) {
             throw new InvalidArgumentException('Invalid Edge does not exist in this Graph');
         }
     }
@@ -376,8 +412,7 @@ class Graph implements DualAggregate, AttributeAware
     {
         try {
             unset($this->verticesStorage[$this->vertices->getIndexVertex($vertex)]);
-        }
-        catch (OutOfBoundsException $e) {
+        } catch (OutOfBoundsException $e) {
             throw new InvalidArgumentException('Invalid Vertex does not exist in this Graph');
         }
     }
@@ -427,7 +462,7 @@ class Graph implements DualAggregate, AttributeAware
         // Check for parallel edges
         if (!$residualEdgeArray) {
             throw new UnderflowException('No original edges for given cloned edge found');
-        } elseif (count($residualEdgeArray) !== 1) {
+        } elseif (1 !== \count($residualEdgeArray)) {
             throw new OverflowException('More than one cloned edge? Parallel edges (multigraph) not supported');
         }
 

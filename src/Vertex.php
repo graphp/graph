@@ -54,7 +54,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function __construct(Graph $graph, $id)
     {
-        if (!is_int($id) && !is_string($id)) {
+        if (!\is_int($id) && !\is_string($id)) {
             throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
         }
 
@@ -81,7 +81,7 @@ class Vertex implements EdgesAggregate, AttributeAware
 
     public function setBalance($balance)
     {
-        if ($balance !== NULL && !is_float($balance) && !is_int($balance)) {
+        if (null !== $balance && !\is_float($balance) && !\is_int($balance)) {
             throw new InvalidArgumentException('Invalid balance given - must be numeric');
         }
         $this->balance = $balance;
@@ -98,7 +98,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function setGroup($group)
     {
-        if (!is_int($group)) {
+        if (!\is_int($group)) {
             throw new InvalidArgumentException('Invalid group number');
         }
         $this->group = $group;
@@ -176,8 +176,8 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function removeEdge(Edge $edge)
     {
-        $id = array_search($edge, $this->edges, true);
-        if ($id === false) {
+        $id = \array_search($edge, $this->edges, true);
+        if (false === $id) {
             throw new InvalidArgumentException('Given edge does NOT exist');
         }
         unset($this->edges[$id]);

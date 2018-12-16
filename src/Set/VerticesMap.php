@@ -24,6 +24,7 @@ class VerticesMap extends Vertices
         if (!isset($this->vertices[$id])) {
             throw new OutOfBoundsException('Invalid vertex ID');
         }
+
         return $this->vertices[$id];
     }
 
@@ -39,7 +40,7 @@ class VerticesMap extends Vertices
 
     public function getIds()
     {
-        return array_keys($this->vertices);
+        return \array_keys($this->vertices);
     }
 
     public function getIndexVertex(Vertex $vertex)
@@ -48,6 +49,7 @@ class VerticesMap extends Vertices
         if (!isset($this->vertices[$id]) || $this->vertices[$id] !== $vertex) {
             throw new OutOfBoundsException();
         }
+
         return $id;
     }
 
