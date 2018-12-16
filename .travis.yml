@@ -1,5 +1,13 @@
 language: php
 
+git:
+  depth: 1
+
+cache:
+  directories:
+  - "$HOME/.cache/composer"
+  - "$HOME/.composer/cache"
+
 php:
 # - 5.3 # requires old distro, see below
   - 5.4
@@ -23,7 +31,7 @@ matrix:
 sudo: false
 
 install:
-  - composer install --no-interaction
+- composer install --no-interaction
 
 script:
-  - vendor/bin/phpunit --coverage-text
+- composer grumphp
