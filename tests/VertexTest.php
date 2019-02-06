@@ -8,6 +8,16 @@ use Fhaculty\Graph\Vertex;
 
 class VertexTest extends AbstractAttributeAwareTest
 {
+    /**
+     * @var Graph
+     */
+    private $graph;
+
+    /**
+     * @var Vertex
+     */
+    private $vertex;
+
     public function setUp()
     {
         $this->graph = new Graph();
@@ -91,16 +101,8 @@ class VertexTest extends AbstractAttributeAwareTest
 
     public function testGroup()
     {
-        $this->vertex->setGroup(2);
-        $this->assertEquals(2, $this->vertex->getGroup());
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testGroupInvalid()
-    {
-        $this->vertex->setGroup("3");
+        $this->vertex->setGroup($this->graph->createGroup(2));
+        $this->assertEquals(2, $this->vertex->getGroup()->getId());
     }
 
     /**

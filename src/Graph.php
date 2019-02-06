@@ -27,6 +27,11 @@ class Graph implements DualAggregate, AttributeAware
 
     protected $attributes = array();
 
+    /**
+     * @var Group[]
+     */
+    protected $groups = array();
+
     public function __construct()
     {
         $this->vertices = VerticesMap::factoryArrayReference($this->verticesStorage);
@@ -465,5 +470,34 @@ class Graph implements DualAggregate, AttributeAware
     public function getAttributeBag()
     {
         return new AttributeBagReference($this->attributes);
+    }
+
+    /**
+     * @param int|string $groupId
+     * @param bool $returnDuplicate
+     * @return Group
+     */
+    public function createGroup($groupId, $returnDuplicate = false)
+    {
+        if ($returnDuplicate && isset($this->groups[$groupId])) {
+            return $this->groups[$groupId];
+        }
+
+        if (isset($this->groups[$groupId])) {
+            throw new OverflowException('Group already exists: ' . $groupId);
+        }
+
+        $group = new Group($this, $groupId);
+        $this->groups[$groupId] = $group;
+
+        return $group;
+    }
+
+    /**
+     * @return array|Group[]
+     */
+    public function getGroups()
+    {
+        return array_values($this->groups);
     }
 }

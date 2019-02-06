@@ -2,9 +2,11 @@
 
 namespace Fhaculty\Graph\Tests;
 
+use Fhaculty\Graph\Exception\OutOfBoundsException;
 use Fhaculty\Graph\Exception\OverflowException;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Group;
 use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 class GraphTest extends AbstractAttributeAwareTest
@@ -17,7 +19,7 @@ class GraphTest extends AbstractAttributeAwareTest
     public function testVertexClone()
     {
         $graph = new Graph();
-        $vertex = $graph->createVertex(123)->setBalance(10)->setGroup(4);
+        $vertex = $graph->createVertex(123)->setBalance(10)->setGroup($graph->createGroup(4));
 
         $newgraph = new Graph();
         $newvertex = $newgraph->createVertexClone($vertex);
@@ -56,7 +58,7 @@ class GraphTest extends AbstractAttributeAwareTest
     public function testGraphClone()
     {
         $graph = new Graph();
-        $graph->createVertex(123)->setBalance(10)->setGroup(4);
+        $graph->createVertex(123)->setBalance(10)->setGroup($graph->createGroup(4));
 
         $newgraph = $graph->createGraphClone();
 
@@ -389,6 +391,42 @@ class GraphTest extends AbstractAttributeAwareTest
 
         $this->assertEquals(2, count($graphClone->getVertices()));
         $this->assertEquals(1, count($graphClone->getEdges()));
+    }
+
+    public function testGetGroups()
+    {
+        $graph = new Graph();
+        $graph->createGroup(1);
+        $graph->createGroup(2);
+
+        $this->assertEquals(
+            array(
+                new Group($graph, 1),
+                new Group($graph, 2)
+            ),
+            $graph->getGroups()
+        );
+    }
+
+    public function testCreateGroupReturnDuplicate()
+    {
+        $graph = new Graph();
+        $alreadyCreated = $graph->createGroup(1);
+
+        $this->assertSame(
+            $alreadyCreated,
+            $graph->createGroup(1, true)
+        );
+    }
+
+    /**
+     * @expectedException OverflowException
+     */
+    public function testCreateGroupAlreadyExists()
+    {
+        $graph = new Graph();
+        $graph->createGroup(1);
+        $graph->createGroup(1);
     }
 
     protected function createAttributeAware()

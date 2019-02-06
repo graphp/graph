@@ -198,26 +198,26 @@ abstract class BaseVerticesTest extends TestCase
     public function testOrderByGroup()
     {
         $graph = new Graph();
-        $graph->createVertex()->setGroup(1);
-        $graph->createVertex()->setGroup(100);
-        $graph->createVertex()->setGroup(5);
-        $graph->createVertex()->setGroup(100);
-        $graph->createVertex()->setGroup(100);
-        $graph->createVertex()->setGroup(2);
-        $biggest = $graph->createVertex()->setGroup(200);
+        $graph->createVertex()->setGroup($graph->createGroup(1));
+        $graph->createVertex()->setGroup($graph->createGroup(100));
+        $graph->createVertex()->setGroup($graph->createGroup(5));
+        $graph->createVertex()->setGroup($graph->createGroup(100, true));
+        $graph->createVertex()->setGroup($graph->createGroup(100, true));
+        $graph->createVertex()->setGroup($graph->createGroup(2));
+        $biggest = $graph->createVertex()->setGroup($graph->createGroup(200));
 
         $vertices = $graph->getVertices();
         $verticesOrdered = $vertices->getVerticesOrder(Vertices::ORDER_GROUP);
 
         $this->assertInstanceOf('Fhaculty\Graph\Set\Vertices', $verticesOrdered);
-        $this->assertEquals(1, $verticesOrdered->getVertexFirst()->getGroup());
-        $this->assertEquals(200, $verticesOrdered->getVertexLast()->getGroup());
+        $this->assertEquals(1, $verticesOrdered->getVertexFirst()->getGroup()->getId());
+        $this->assertEquals(200, $verticesOrdered->getVertexLast()->getGroup()->getId());
 
         $this->assertSame($biggest, $verticesOrdered->getVertexLast());
         $this->assertSame($biggest, $vertices->getVertexOrder(Vertices::ORDER_GROUP, true));
 
         $sumgroups = function(Vertex $vertex) {
-            return $vertex->getGroup();
+            return $vertex->getGroup()->getId();
         };
         $this->assertSame(508, $vertices->getSumCallback($sumgroups));
         $this->assertSame(508, $verticesOrdered->getSumCallback($sumgroups));

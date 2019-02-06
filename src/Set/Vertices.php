@@ -2,6 +2,7 @@
 
 namespace Fhaculty\Graph\Set;
 
+use Fhaculty\Graph\Group;
 use Fhaculty\Graph\Vertex;
 use Fhaculty\Graph\Exception\InvalidArgumentException;
 use Fhaculty\Graph\Exception\OutOfBoundsException;
@@ -511,19 +512,16 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
             return $callback;
         }
 
-        static $methods = array(
-            self::ORDER_ID => 'getId',
-            self::ORDER_GROUP => 'getGroup'
-        );
-
-        if (!is_int($callback) || !isset($methods[$callback])) {
-            throw new InvalidArgumentException('Invalid callback given');
+        if ($callback === self::ORDER_ID) {
+            return function (Vertex $vertex) {
+                return $vertex->getId();
+            };
+        } elseif ($callback === self::ORDER_GROUP) {
+            return function (Vertex $vertex) {
+                return $vertex->getGroup() instanceof Group ? $vertex->getGroup()->getId() : null;
+            };
         }
 
-        $method = $methods[$callback];
-
-        return function (Vertex $vertex) use ($method) {
-            return $vertex->$method();
-        };
+        throw new InvalidArgumentException('Invalid callback given');
     }
 }

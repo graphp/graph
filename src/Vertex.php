@@ -36,12 +36,13 @@ class Vertex implements EdgesAggregate, AttributeAware
     private $balance;
 
     /**
-     * group number
+     * group
      *
-     * @var int
+     * @var Group|null
      * @see Vertex::setGroup()
+     * @see Vertex::getGroup()
      */
-    private $group = 0;
+    private $group;
 
     private $attributes = array();
 
@@ -90,26 +91,23 @@ class Vertex implements EdgesAggregate, AttributeAware
     }
 
     /**
-     * set group number of this vertex
+     * set group of this vertex
      *
-     * @param  int                      $group
+     * @param  Group|null               $group
      * @return Vertex                   $this (chainable)
      * @throws InvalidArgumentException if group is not numeric
      */
-    public function setGroup($group)
+    public function setGroup(Group $group = null)
     {
-        if (!is_int($group)) {
-            throw new InvalidArgumentException('Invalid group number');
-        }
         $this->group = $group;
 
         return $this;
     }
 
     /**
-     * get group number
+     * get group
      *
-     * @return int
+     * @return Group|null
      */
     public function getGroup()
     {
