@@ -67,6 +67,8 @@ Therefore this library is being used as the basis for implementations for a numb
     * [Dijkstra](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
     * Moore-Bellman-Ford (MBF)
     * Counting number of hops (simple BFS)
+    * A* (through a [third party extension](https://github.com/Stratadox/GraphpFinder))
+    * Floyd-Warshall (through a [third party extension](https://github.com/Stratadox/GraphpFinder))
 * [Minimum spanning tree (MST)](https://en.wikipedia.org/wiki/Minimum_spanning_tree)
     * Kruskal
     * Prim
