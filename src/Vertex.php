@@ -2,7 +2,6 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Exception\BadMethodCallException;
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\EdgesAggregate;
 use Graphp\Graph\Set\Vertices;
@@ -240,12 +239,11 @@ class Vertex extends Entity implements EdgesAggregate
     /**
      * do NOT allow cloning of objects
      *
-     * @throws BadMethodCallException
+     * @throws \BadMethodCallException
+     * @codeCoverageIgnore
      */
     private function __clone()
     {
-        // @codeCoverageIgnoreStart
-        throw new BadMethodCallException();
-        // @codeCoverageIgnoreEnd
+        throw new \BadMethodCallException();
     }
 }

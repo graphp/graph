@@ -3,8 +3,6 @@
 namespace Graphp\Graph\Set;
 
 use Graphp\Graph\Vertex;
-use Graphp\Graph\Exception\OutOfBoundsException;
-use Graphp\Graph\Exception\UnderflowException;
 
 /**
  * A Set of Vertices
@@ -36,14 +34,14 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * Vertex ID do not necessarily have to match.
      *
      * @param Vertex $vertex
-     * @throws OutOfBoundsException
+     * @throws \OutOfBoundsException
      * @return mixed
      */
     public function getIndexVertex(Vertex $vertex)
     {
         $id = \array_search($vertex, $this->vertices, true);
         if ($id === false) {
-            throw new OutOfBoundsException('Given vertex does NOT exist');
+            throw new \OutOfBoundsException('Given vertex does NOT exist');
         }
         return $id;
     }
@@ -55,14 +53,14 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * starting point. this is a convenience function to just pick the first
      * vertex from the list of known vertices.
      *
-     * @return Vertex             first Vertex in this set of Vertices
-     * @throws UnderflowException if set is empty
+     * @return Vertex              first Vertex in this set of Vertices
+     * @throws \UnderflowException if set is empty
      * @see self::getVertexOrder() if you need to apply ordering first
      */
     public function getVertexFirst()
     {
         if (!$this->vertices) {
-            throw new UnderflowException('Does not contain any vertices');
+            throw new \UnderflowException('Does not contain any vertices');
         }
         \reset($this->vertices);
 
@@ -72,13 +70,13 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     /**
      * return last Vertex in this set of Vertices
      *
-     * @return Vertex             last Vertex in this set of Vertices
-     * @throws UnderflowException if set is empty
+     * @return Vertex              last Vertex in this set of Vertices
+     * @throws \UnderflowException if set is empty
      */
     public function getVertexLast()
     {
         if (!$this->vertices) {
-            throw new UnderflowException('Does not contain any vertices');
+            throw new \UnderflowException('Does not contain any vertices');
         }
         \end($this->vertices);
 
@@ -88,14 +86,14 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     /**
      * returns random Vertex in this set of Vertices
      *
-     * @return Vertex             random Vertex in this set of Vertices
-     * @throws UnderflowException if set is empty
+     * @return Vertex              random Vertex in this set of Vertices
+     * @throws \UnderflowException if set is empty
      * @see self::getVerticesShuffled()
      */
     public function getVertexRandom()
     {
         if (!$this->vertices) {
-            throw new UnderflowException('Does not contain any vertices');
+            throw new \UnderflowException('Does not contain any vertices');
         }
 
         return $this->vertices[\array_rand($this->vertices)];
@@ -106,7 +104,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      *
      * @param callable $callbackCheck
      * @return Vertex
-     * @throws UnderflowException if no Vertex matches the given callback filter function
+     * @throws \UnderflowException if no Vertex matches the given callback filter function
      * @uses self::getVertexMatchOrNull()
      * @see self::getVerticesMatch() if you want to return *all* Vertices that match
      */
@@ -114,7 +112,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     {
         $ret = $this->getVertexMatchOrNull($callbackCheck);
         if ($ret === null) {
-            throw new UnderflowException('No vertex found');
+            throw new \UnderflowException('No vertex found');
         }
         return $ret;
     }
@@ -246,13 +244,13 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * @param  string|callable(Vertex):number $orderBy criterium to sort by. see vertex attribute names custom callback
      * @param  bool                           $desc    whether to return biggest (true) instead of smallest (default:false)
      * @return Vertex
-     * @throws UnderflowException if no vertices exist
+     * @throws \UnderflowException if no vertices exist
      * @see self::getVerticesOrder()
      */
     public function getVertexOrder($orderBy, $desc=false)
     {
         if (!$this->vertices) {
-            throw new UnderflowException('No vertex found');
+            throw new \UnderflowException('No vertex found');
         }
 
         $callback = $this->getCallback($orderBy);

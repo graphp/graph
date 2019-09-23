@@ -3,8 +3,6 @@
 namespace Graphp\Graph\Set;
 
 use Graphp\Graph\Edge;
-use Graphp\Graph\Exception\OutOfBoundsException;
-use Graphp\Graph\Exception\UnderflowException;
 
 /**
  * A Set of Edges
@@ -33,14 +31,14 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * get array index for given Edge
      *
      * @param Edge $edge
-     * @throws OutOfBoundsException
+     * @throws \OutOfBoundsException
      * @return mixed
      */
     public function getIndexEdge(Edge $edge)
     {
         $id = \array_search($edge, $this->edges, true);
         if ($id === false) {
-            throw new OutOfBoundsException('Given edge does NOT exist');
+            throw new \OutOfBoundsException('Given edge does NOT exist');
         }
         return $id;
     }
@@ -52,14 +50,14 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * starting point. this is a convenience function to just pick the first
      * edge from the list of known edges.
      *
-     * @return Edge               first Edge in this set of Edges
-     * @throws UnderflowException if set is empty
-     * @see self::getEdgeOrder()  if you need to apply ordering first
+     * @return Edge                first Edge in this set of Edges
+     * @throws \UnderflowException if set is empty
+     * @see self::getEdgeOrder()   if you need to apply ordering first
      */
     public function getEdgeFirst()
     {
         if (!$this->edges) {
-            throw new UnderflowException('Does not contain any edges');
+            throw new \UnderflowException('Does not contain any edges');
         }
         \reset($this->edges);
 
@@ -69,13 +67,13 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     /**
      * return last Edge in this set of Edges
      *
-     * @return Edge               last Edge in this set of Edges
-     * @throws UnderflowException if set is empty
+     * @return Edge                last Edge in this set of Edges
+     * @throws \UnderflowException if set is empty
      */
     public function getEdgeLast()
     {
         if (!$this->edges) {
-            throw new UnderflowException('Does not contain any edges');
+            throw new \UnderflowException('Does not contain any edges');
         }
         \end($this->edges);
 
@@ -85,14 +83,14 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     /**
      * return random Edge in this set of Edges
      *
-     * @return Edge               random Edge in this set of Edges
-     * @throws UnderflowException if set is empty
+     * @return Edge                random Edge in this set of Edges
+     * @throws \UnderflowException if set is empty
      * @see self::getEdgesShuffled()
      */
     public function getEdgeRandom()
     {
         if (!$this->edges) {
-            throw new UnderflowException('Does not contain any edges');
+            throw new \UnderflowException('Does not contain any edges');
         }
 
         return $this->edges[\array_rand($this->edges)];
@@ -102,13 +100,13 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * return Edge at given array index
      *
      * @param mixed $index
-     * @throws OutOfBoundsException if the given index does not exist
+     * @throws \OutOfBoundsException if the given index does not exist
      * @return Edge
      */
     public function getEdgeIndex($index)
     {
         if (!isset($this->edges[$index])) {
-            throw new OutOfBoundsException('Invalid edge index');
+            throw new \OutOfBoundsException('Invalid edge index');
         }
         return $this->edges[$index];
     }
@@ -118,7 +116,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      *
      * @param callable $callbackCheck
      * @return Edge
-     * @throws UnderflowException if no Edge matches the given callback filter function
+     * @throws \UnderflowException if no Edge matches the given callback filter function
      * @uses self::getEdgeMatchOrNull()
      * @see self::getEdgesMatch() if you want to return *all* Edges that match
      */
@@ -126,7 +124,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     {
         $ret = $this->getEdgeMatchOrNull($callbackCheck);
         if ($ret === null) {
-            throw new UnderflowException('No edge found');
+            throw new \UnderflowException('No edge found');
         }
         return $ret;
     }
@@ -222,12 +220,12 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * @param  string|callable(Edge):number $orderBy criterium to sort by. see edge attribute names or custom callable
      * @param  bool                         $desc    whether to return biggest (true) instead of smallest (default:false)
      * @return Edge
-     * @throws UnderflowException           if no edges exist
+     * @throws \UnderflowException          if no edges exist
      */
     public function getEdgeOrder($orderBy, $desc=false)
     {
         if (!$this->edges) {
-            throw new UnderflowException('No edge found');
+            throw new \UnderflowException('No edge found');
         }
 
         $callback = $this->getCallback($orderBy);
