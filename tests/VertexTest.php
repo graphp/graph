@@ -75,6 +75,32 @@ class VertexTest extends AbstractAttributeAwareTest
         $this->assertEquals(array($v3, $v4), $this->vertex->getVerticesEdgeFrom()->getVector());
     }
 
+    public function testUndirectedLoopEdgeReturnsEdgeTwiceInAndOut()
+    {
+        $edge = $this->vertex->createEdge($this->vertex);
+
+        $this->assertEquals(array($edge, $edge), $this->vertex->getEdges()->getVector());
+        $this->assertEquals(array($edge, $edge), $this->vertex->getEdgesIn()->getVector());
+        $this->assertEquals(array($edge, $edge), $this->vertex->getEdgesOut()->getVector());
+
+        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdge()->getVector());
+        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdgeTo()->getVector());
+        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdgeFrom()->getVector());
+    }
+
+    public function testDirectedLoopEdgeReturnsEdgeTwiceUndirectedAndOnceEachInAndOut()
+    {
+        $edge = $this->vertex->createEdgeTo($this->vertex);
+
+        $this->assertEquals(array($edge, $edge), $this->vertex->getEdges()->getVector());
+        $this->assertEquals(array($edge), $this->vertex->getEdgesIn()->getVector());
+        $this->assertEquals(array($edge), $this->vertex->getEdgesOut()->getVector());
+
+        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdge()->getVector());
+        $this->assertEquals(array($this->vertex), $this->vertex->getVerticesEdgeTo()->getVector());
+        $this->assertEquals(array($this->vertex), $this->vertex->getVerticesEdgeFrom()->getVector());
+    }
+
     public function testBalance()
     {
         $this->vertex->setBalance(10);

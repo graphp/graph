@@ -229,9 +229,18 @@ class Vertex implements EdgesAggregate, AttributeAware
     public function getEdgesOut()
     {
         $that = $this;
+        $prev = null;
 
-        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that) {
-            return $edge->hasVertexStart($that);
+        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that, &$prev) {
+            $ret = $edge->hasVertexStart($that);
+
+            // skip duplicate directed loop edges
+            if ($edge === $prev && $edge instanceof EdgeDirected) {
+                $ret = false;
+            }
+            $prev = $edge;
+
+            return $ret;
         });
     }
 
@@ -243,9 +252,18 @@ class Vertex implements EdgesAggregate, AttributeAware
     public function getEdgesIn()
     {
         $that = $this;
+        $prev = null;
 
-        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that) {
-            return $edge->hasVertexTarget($that);
+        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that, &$prev) {
+            $ret = $edge->hasVertexTarget($that);
+
+            // skip duplicate directed loop edges
+            if ($edge === $prev && $edge instanceof EdgeDirected) {
+                $ret = false;
+            }
+            $prev = $edge;
+
+            return $ret;
         });
     }
 
