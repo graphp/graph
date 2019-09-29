@@ -42,16 +42,6 @@ class AttributeBagContainer implements AttributeBag
     }
 
     /**
-     * Removes a single attribute with the given $name
-     *
-     * @param string $name
-     */
-    public function removeAttribute($name)
-    {
-        unset($this->attributes[$name]);
-    }
-
-    /**
      * get an array of all attributes
      *
      * @return array
