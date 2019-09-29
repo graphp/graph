@@ -27,13 +27,6 @@ interface AttributeAware
     public function setAttribute($name, $value);
 
     /**
-     * Removes a single attribute with the given $name
-     *
-     * @param string $name
-     */
-    public function removeAttribute($name);
-
-    /**
      * get a container for all attributes
      *
      * @return AttributeBag
