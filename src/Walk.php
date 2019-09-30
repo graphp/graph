@@ -45,7 +45,7 @@ class Walk implements DualAggregate
      *
      * @param  Vertices|Vertex[]  $vertices
      * @param  int|null           $by
-     * @param  boolean            $desc
+     * @param  bool               $desc
      * @return Walk
      * @throws UnderflowException if no vertices were given
      * @see Edges::getEdgeOrder() for parameters $by and $desc
@@ -80,7 +80,7 @@ class Walk implements DualAggregate
      * @param  Vertex[]           $predecessors map of vid => predecessor vertex instance
      * @param  Vertex             $vertex       start vertex to search predecessors from
      * @param  int|null           $by
-     * @param  boolean            $desc
+     * @param  bool               $desc
      * @return Walk
      * @throws UnderflowException
      * @see Edges::getEdgeOrder() for parameters $by and $desc
@@ -130,7 +130,7 @@ class Walk implements DualAggregate
      *
      * @param  Vertex[]|Vertices  $vertices
      * @param  int|null           $by
-     * @param  boolean            $desc
+     * @param  bool               $desc
      * @return Walk
      * @throws UnderflowException if no vertices were given
      * @see Edges::getEdgeOrder() for parameters $by and $desc
@@ -283,7 +283,7 @@ class Walk implements DualAggregate
     /**
      * check to make sure this walk is still valid (i.e. source graph still contains all vertices and edges)
      *
-     * @return boolean
+     * @return bool
      * @uses Walk::getGraph()
      * @uses Graph::getVertices()
      * @uses Graph::getEdges()

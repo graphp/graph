@@ -3,7 +3,7 @@
 namespace Fhaculty\Graph\Set;
 
 /**
- * Basic interface for every class that provides access to its Set of Edges
+ * A basic interface for every class that provides access to its Set of Edges
  */
 interface EdgesAggregate
 {

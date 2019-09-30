@@ -59,7 +59,7 @@ abstract class Base implements VerticesAggregate, AttributeAware
      * return true if this edge is an outgoing edge of the given vertex (i.e. the given vertex is a valid start vertex of this edge)
      *
      * @param  Vertex  $startVertex
-     * @return boolean
+     * @return bool
      * @uses Vertex::getVertexToFrom()
      */
     abstract public function hasVertexStart(Vertex $startVertex);
@@ -68,7 +68,7 @@ abstract class Base implements VerticesAggregate, AttributeAware
      * return true if this edge is an ingoing edge of the given vertex (i . e. the given vertex is a valid end vertex of this edge)
      *
      * @param  Vertex  $targetVertex
-     * @return boolean
+     * @return bool
      * @uses Vertex::getVertexFromTo()
      */
     abstract function hasVertexTarget(Vertex $targetVertex);
@@ -78,7 +78,7 @@ abstract class Base implements VerticesAggregate, AttributeAware
     /**
      * returns whether this edge is actually a loop
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function isLoop();
 
