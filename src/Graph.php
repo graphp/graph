@@ -57,7 +57,7 @@ class Graph implements DualAggregate, AttributeAware
      * create a new Vertex in the Graph
      *
      * @param  int|NULL                 $id              new vertex ID to use (defaults to NULL: use next free numeric ID)
-     * @param  boolean                  $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
+     * @param  bool                     $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
      * @return Vertex                   (chainable)
      * @throws InvalidArgumentException if given vertex $id is invalid
      * @throws OverflowException        if given vertex $id already exists and $returnDuplicate is not set
@@ -308,7 +308,7 @@ class Graph implements DualAggregate, AttributeAware
      * checks whether given vertex ID exists in this graph
      *
      * @param int|string $id identifier of Vertex
-     * @return boolean
+     * @return bool
      */
     public function hasVertex($id)
     {
@@ -320,7 +320,7 @@ class Graph implements DualAggregate, AttributeAware
      *
      * @param  Vertex $vertex instance of the new Vertex
      * @return void
-     * @private
+     * @internal
      * @see self::createVertex() instead!
      */
     public function addVertex(Vertex $vertex)
@@ -336,7 +336,7 @@ class Graph implements DualAggregate, AttributeAware
      *
      * @param  Edge $edge instance of the new Edge
      * @return void
-     * @private
+     * @internal
      * @see Vertex::createEdge() instead!
      */
     public function addEdge(Edge $edge)
@@ -350,7 +350,7 @@ class Graph implements DualAggregate, AttributeAware
      * @param  Edge                     $edge
      * @return void
      * @throws InvalidArgumentException if given edge does not exist (should not ever happen)
-     * @private
+     * @internal
      * @see Edge::destroy() instead!
      */
     public function removeEdge(Edge $edge)
@@ -369,7 +369,7 @@ class Graph implements DualAggregate, AttributeAware
      * @param  Vertex                   $vertex
      * @return void
      * @throws InvalidArgumentException if given vertex does not exist (should not ever happen)
-     * @private
+     * @internal
      * @see Vertex::destroy() instead!
      */
     public function removeVertex(Vertex $vertex)

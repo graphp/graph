@@ -2,15 +2,28 @@
 
 GraPHP is the mathematical graph/network library written in PHP.
 
+**Table of contents**
+
+* [Quickstart examples](#quickstart-examples)
+* [Features](#features)
+* [Components](#components)
+    * [Graph drawing](#graph-drawing)
+    * [Common algorithms](#common-algorithms)
+* [Install](#install)
+* [Tests](#tests)
+* [Contributing](#contributing)
+* [License](#license)
+
 ## Quickstart examples
 
 Once [installed](#install), let's initialize a sample graph:
 
-````php
+```php
 <?php
-require_once 'vendor/autoload.php';
 
 use \Fhaculty\Graph\Graph as Graph;
+
+require_once 'vendor/autoload.php';
 
 $graph = new Graph();
 
@@ -24,15 +37,16 @@ $cologne->createEdgeTo($madrid);
 $madrid->createEdgeTo($rome);
 // create loop
 $rome->createEdgeTo($rome);
-````
+```
 
-Let's see which city (Vertex) has road (i.e. an edge pointing) to Rome
-````php
+Let's see which city (Vertex) has a road (i.e. an edge pointing) to Rome:
+
+```php
 foreach ($rome->getVerticesEdgeFrom() as $vertex) {
     echo $vertex->getId().' leads to rome'.PHP_EOL;
     // result: Madrid and Rome itself
 }
-````
+```
 
 ## Features
 

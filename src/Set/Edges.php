@@ -197,7 +197,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * checks whethere there's an Edge that matches the given callback filter function
      *
      * @param callable $callbackCheck
-     * @return boolean
+     * @return bool
      * @see self::getEdgeMatch() to return the Edge instance that matches the given callback filter function
      * @uses self::getEdgeMatchOrNull()
      */
@@ -209,7 +209,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     /**
      * get a new set of Edges that match the given callback filter function
      *
-     * This only keeps Edge elements if the $callbackCheck returns a boolean
+     * This only keeps Edge elements if the $callbackCheck returns a bool
      * true and filters out everything else.
      *
      * Edge index positions will be left unchanged.
@@ -229,7 +229,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * Edge index positions will be left unchanged.
      *
      * @param  int                      $orderBy  criterium to sort by. see self::ORDER_WEIGHT, etc.
-     * @param  boolean                  $desc     whether to return biggest first (true) instead of smallest first (default:false)
+     * @param  bool                     $desc     whether to return biggest first (true) instead of smallest first (default:false)
      * @return Edges                    a new Edges set ordered by the given $orderBy criterium
      * @throws InvalidArgumentException if criterium is unknown
      */
@@ -273,7 +273,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * get first edge ordered by given criterium $orderBy
      *
      * @param  int                      $orderBy  criterium to sort by. see self::ORDER_WEIGHT, etc.
-     * @param  boolean                  $desc     whether to return biggest (true) instead of smallest (default:false)
+     * @param  bool                     $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Edge
      * @throws InvalidArgumentException if criterium is unknown
      * @throws UnderflowException       if no edges exist
@@ -394,7 +394,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * A Set if empty if no single Edge instance is added. This is faster
      * than calling `count() === 0`.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {

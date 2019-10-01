@@ -157,7 +157,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      *
      * @param  Edge                     $edge
      * @return void
-     * @private
+     * @internal
      * @see self::createEdge() instead!
      */
     public function addEdge(Edge $edge)
@@ -171,7 +171,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      * @param  Edge                     $edge
      * @return void
      * @throws InvalidArgumentException if given edge does not exist
-     * @private
+     * @internal
      * @see Edge::destroy() instead!
      */
     public function removeEdge(Edge $edge)
@@ -187,7 +187,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      * check whether this vertex has a direct edge to given $vertex
      *
      * @param  Vertex  $vertex
-     * @return boolean
+     * @return bool
      * @uses Edge::hasVertexTarget()
      */
     public function hasEdgeTo(Vertex $vertex)
@@ -203,7 +203,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      * check whether the given vertex has a direct edge to THIS vertex
      *
      * @param  Vertex  $vertex
-     * @return boolean
+     * @return bool
      * @uses Vertex::hasEdgeTo()
      */
     public function hasEdgeFrom(Vertex $vertex)
