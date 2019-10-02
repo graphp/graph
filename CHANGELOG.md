@@ -1,8 +1,24 @@
-# CHANGELOG
+# Changelog
 
-This file is a manually maintained list of changes for each release. Feel free
-to add your changes here when sending pull requests. Also send corrections if
-you spot any mistakes.
+## 0.9.1 (2019-10-02)
+
+*   Fix: Deleting vertex with loop edge no longer fails.
+    (#149 by @tomzx)
+
+*   Fix: Fix returning directed loop edges and adjacent vertices from vertex twice.
+    (#170 by @clue)
+
+*   Minor documentation updates and fixes.
+    (#153 by @marclaporte and #163, #164 and #172 by @clue)
+
+*   Improve test suite to move tests to `Fhaculty\Graph\Tests` namespace,
+    update test suite to support PHPUnit 6 and PHPUnit 5 and
+    support running on legacy PHP 5.3 through PHP 7.2 and HHVM.
+    (#148 by @tomzx and #150 and #162 by @clue)
+
+*   Originally planned to add a new `AttributeAware::removeAttribute()` method,
+    but reverted due to BC break. Change will be reconsidered for next major release.
+    (#138 and #171 by @johnathanmdell and @clue)
 
 ## 0.9.0 (2015-03-07)
 
