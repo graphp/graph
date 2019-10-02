@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Set;
+namespace Graphp\Graph\Set;
 
 /**
  * A DualAggregate provides access to both its Vertices and its Edges

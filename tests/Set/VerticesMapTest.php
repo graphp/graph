@@ -1,8 +1,8 @@
 <?php
 
-namespace Fhaculty\Graph\Tests\Set;
+namespace Graphp\Graph\Tests\Set;
 
-use Fhaculty\Graph\Set\VerticesMap;
+use Graphp\Graph\Set\VerticesMap;
 
 class VerticesMapTest extends BaseVerticesTest
 {

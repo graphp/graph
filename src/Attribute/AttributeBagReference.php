@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Attribute;
+namespace Graphp\Graph\Attribute;
 
 /**
  * The basic attribute bag, but using a reference to the base attribute array.

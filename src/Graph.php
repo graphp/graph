@@ -1,21 +1,21 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Graphp\Graph;
 
-use Fhaculty\Graph\Attribute\AttributeAware;
-use Fhaculty\Graph\Attribute\AttributeBagReference;
-use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Edge\Directed as EdgeDirected;
-use Fhaculty\Graph\Exception\BadMethodCallException;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Exception\OutOfBoundsException;
-use Fhaculty\Graph\Exception\OverflowException;
-use Fhaculty\Graph\Exception\RuntimeException;
-use Fhaculty\Graph\Exception\UnderflowException;
-use Fhaculty\Graph\Set\DualAggregate;
-use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Set\VerticesMap;
+use Graphp\Graph\Attribute\AttributeAware;
+use Graphp\Graph\Attribute\AttributeBagReference;
+use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Edge\Directed as EdgeDirected;
+use Graphp\Graph\Exception\BadMethodCallException;
+use Graphp\Graph\Exception\InvalidArgumentException;
+use Graphp\Graph\Exception\OutOfBoundsException;
+use Graphp\Graph\Exception\OverflowException;
+use Graphp\Graph\Exception\RuntimeException;
+use Graphp\Graph\Exception\UnderflowException;
+use Graphp\Graph\Set\DualAggregate;
+use Graphp\Graph\Set\Edges;
+use Graphp\Graph\Set\Vertices;
+use Graphp\Graph\Set\VerticesMap;
 
 class Graph implements DualAggregate, AttributeAware
 {

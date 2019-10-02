@@ -1,13 +1,13 @@
 <?php
 
-namespace Fhaculty\Graph;
+namespace Graphp\Graph;
 
-use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Edge\Base as Edge;
-use Fhaculty\Graph\Exception\UnderflowException;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Set\DualAggregate;
+use Graphp\Graph\Set\Edges;
+use Graphp\Graph\Set\Vertices;
+use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Exception\UnderflowException;
+use Graphp\Graph\Exception\InvalidArgumentException;
+use Graphp\Graph\Set\DualAggregate;
 
 /**
  * Base Walk class
@@ -17,7 +17,7 @@ use Fhaculty\Graph\Set\DualAggregate;
  *
  * @link http://en.wikipedia.org/wiki/Path_%28graph_theory%29
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
- * @see Fhaculty\Graph\Algorithm\Property\WalkProperty for checking special cases, such as cycles, loops, closed trails, etc.
+ * @see Graphp\Graph\Algorithm\Property\WalkProperty for checking special cases, such as cycles, loops, closed trails, etc.
  */
 class Walk implements DualAggregate
 {

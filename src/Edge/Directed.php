@@ -1,10 +1,10 @@
 <?php
 
-namespace Fhaculty\Graph\Edge;
+namespace Graphp\Graph\Edge;
 
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Vertex;
+use Graphp\Graph\Exception\InvalidArgumentException;
+use Graphp\Graph\Set\Vertices;
+use Graphp\Graph\Vertex;
 
 class Directed extends Base
 {

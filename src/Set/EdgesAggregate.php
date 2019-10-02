@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Set;
+namespace Graphp\Graph\Set;
 
 /**
  * A basic interface for every class that provides access to its Set of Edges

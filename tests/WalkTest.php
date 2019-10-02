@@ -1,11 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Tests;
+namespace Graphp\Graph\Tests;
 
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Set\Edges;
-use Fhaculty\Graph\Vertex;
-use Fhaculty\Graph\Walk;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Set\Edges;
+use Graphp\Graph\Vertex;
+use Graphp\Graph\Walk;
 
 class WalkTest extends TestCase
 {

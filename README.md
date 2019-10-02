@@ -21,7 +21,7 @@ Once [installed](#install), let's initialize a sample graph:
 ```php
 <?php
 
-use \Fhaculty\Graph\Graph as Graph;
+use \Graphp\Graph\Graph as Graph;
 
 require_once 'vendor/autoload.php';
 

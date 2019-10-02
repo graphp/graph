@@ -1,6 +1,6 @@
 <?php
 
-namespace Fhaculty\Graph\Attribute;
+namespace Graphp\Graph\Attribute;
 
 /**
  * Implemented by any entity that is aware of additional attributes

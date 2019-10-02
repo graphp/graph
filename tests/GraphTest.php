@@ -1,11 +1,11 @@
 <?php
 
-namespace Fhaculty\Graph\Tests;
+namespace Graphp\Graph\Tests;
 
-use Fhaculty\Graph\Exception\OverflowException;
-use Fhaculty\Graph\Exception\InvalidArgumentException;
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
+use Graphp\Graph\Exception\OverflowException;
+use Graphp\Graph\Exception\InvalidArgumentException;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 class GraphTest extends AbstractAttributeAwareTest
 {
@@ -90,7 +90,7 @@ class GraphTest extends AbstractAttributeAwareTest
     {
         $graph = new Graph();
         $vertex = $graph->createVertex();
-        $this->assertInstanceOf('\Fhaculty\Graph\Vertex', $vertex);
+        $this->assertInstanceOf('\Graphp\Graph\Vertex', $vertex);
     }
 
     /**
@@ -100,7 +100,7 @@ class GraphTest extends AbstractAttributeAwareTest
     {
         $graph = new Graph();
         $vertex = $graph->createVertex(11);
-        $this->assertInstanceOf('\Fhaculty\Graph\Vertex', $vertex);
+        $this->assertInstanceOf('\Graphp\Graph\Vertex', $vertex);
         $this->assertEquals(11, $vertex->getId());
     }
 

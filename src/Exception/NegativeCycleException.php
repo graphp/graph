@@ -1,9 +1,9 @@
 <?php
 
-namespace Fhaculty\Graph\Exception;
+namespace Graphp\Graph\Exception;
 
-use Fhaculty\Graph\Walk;
-use Fhaculty\Graph;
+use Graphp\Graph\Walk;
+use Graphp\Graph;
 
 class NegativeCycleException extends UnexpectedValueException implements Graph\Exception
 {
