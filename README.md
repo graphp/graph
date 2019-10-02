@@ -2,6 +2,9 @@
 
 GraPHP is the mathematical graph/network library written in PHP.
 
+>   You're viewing the contents of the `v0.9.x` release branch, note that active
+    development continues on another branch, see `master` branch for more details.
+
 **Table of contents**
 
 * [Quickstart examples](#quickstart-examples)
