@@ -61,21 +61,26 @@ class AttributeBagNamespaced implements AttributeBag
      *
      * @param  string $name
      * @param  mixed  $value
-     * @return void
+     * @return $this chainable
      */
     public function setAttribute($name, $value)
     {
         $this->bag->setAttribute($this->prefix . $name, $value);
+
+        return $this;
     }
 
     /**
      * Removes a single attribute with the given $name
      *
-     * @param string $name
+     * @param  string $name
+     * @return $this chainable
      */
     public function removeAttribute($name)
     {
         $this->bag->removeAttribute($this->prefix . $name);
+
+        return $this;
     }
 
     /**
@@ -105,13 +110,15 @@ class AttributeBagNamespaced implements AttributeBag
      * Each attribute is prefixed before setting in the base bag.
      *
      * @param  array $attributes
-     * @return void
+     * @return $this chainable
      */
     public function setAttributes(array $attributes)
     {
         foreach ($attributes as $name => $value) {
             $this->bag->setAttribute($this->prefix . $name, $value);
         }
+
+        return $this;
     }
 
     /**

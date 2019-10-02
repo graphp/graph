@@ -16,6 +16,7 @@ interface AttributeBag extends AttributeAware
      * set an array of additional attributes
      *
      * @param array $attributes
+     * @return $this chainable
      */
     public function setAttributes(array $attributes);
 

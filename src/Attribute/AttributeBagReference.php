@@ -46,7 +46,7 @@ class AttributeBagReference implements AttributeBag
      *
      * @param  string $name
      * @param  mixed  $value
-     * @return self   For a fluid interface.
+     * @return $this chainable
      */
     public function setAttribute($name, $value)
     {
@@ -58,11 +58,14 @@ class AttributeBagReference implements AttributeBag
     /**
      * Removes a single attribute with the given $name
      *
-     * @param string $name
+     * @param  string $name
+     * @return $this chainable
      */
     public function removeAttribute($name)
     {
         unset($this->attributes[$name]);
+
+        return $this;
     }
 
     /**
@@ -79,7 +82,7 @@ class AttributeBagReference implements AttributeBag
      * set an array of additional attributes
      *
      * @param  array $attributes
-     * @return self  For a fluid interface.
+     * @return $this chainable
      */
     public function setAttributes(array $attributes)
     {

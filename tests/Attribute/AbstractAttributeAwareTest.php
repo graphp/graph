@@ -21,13 +21,39 @@ abstract class AbstractAttributeAwareTest extends TestCase
      * @depends testAttributeAwareInterface
      * @param AttributeAware $entity
      */
-    public function testAttributeSetGetDefault(AttributeAware $entity)
+    public function testSetAttributeReturnsSelf(AttributeAware $entity)
+    {
+        $this->assertSame($entity, $entity->setAttribute('test', 'value'));
+
+        return $entity;
+    }
+
+    /**
+     * @depends testAttributeAwareInterface
+     * @param AttributeAware $entity
+     */
+    public function testGetAttributeReturnsValueIfItExists(AttributeAware $entity)
     {
         $entity->setAttribute('test', 'value');
+
         $this->assertEquals('value', $entity->getAttribute('test'));
+    }
 
+    /**
+     * @depends testAttributeAwareInterface
+     * @param AttributeAware $entity
+     */
+    public function testGetAttributeReturnsNullIfItDoesNotExist(AttributeAware $entity)
+    {
         $this->assertEquals(null, $entity->getAttribute('unknown'));
+    }
 
+    /**
+     * @depends testAttributeAwareInterface
+     * @param AttributeAware $entity
+     */
+    public function testGetAttributeReturnsExpicitDefaultIfItDoesNotExist(AttributeAware $entity)
+    {
         $this->assertEquals('default', $entity->getAttribute('unknown', 'default'));
     }
 
@@ -35,12 +61,21 @@ abstract class AbstractAttributeAwareTest extends TestCase
      * @depends testAttributeAwareInterface
      * @param AttributeAware $entity
      */
-    public function testAttributeSetRemoveGet(AttributeAware $entity)
+    public function testRemoveAttributeReturnsSelfIfItDoesNotExist(AttributeAware $entity)
+    {
+        $this->assertSame($entity, $entity->removeAttribute('unknown'));
+    }
+
+    /**
+     * @depends testAttributeAwareInterface
+     * @param AttributeAware $entity
+     */
+    public function testRemoveAttributeReturnsSelfAndGetAttributeThenReturnsNull(AttributeAware $entity)
     {
         $entity->setAttribute('test', 'value');
-        $this->assertEquals('value', $entity->getAttribute('test'));
 
-        $entity->removeAttribute('test');
+        $this->assertSame($entity, $entity->removeAttribute('test'));
+
         $this->assertEquals(null, $entity->getAttribute('test'));
     }
 
