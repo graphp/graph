@@ -204,31 +204,6 @@ class Walk implements DualAggregate
     }
 
     /**
-     * create new graph clone with only vertices and edges actually in the walk
-     *
-     * do not add duplicate vertices and edges for loops and intersections, etc.
-     *
-     * @return Graph
-     * @uses Walk::getEdges()
-     * @uses Graph::createGraphCloneEdges()
-     */
-    public function createGraph()
-    {
-        // create new graph clone with only edges of walk
-        $graph = $this->getGraph()->createGraphCloneEdges($this->getEdges());
-        $vertices = $this->getVertices()->getMap();
-        // get all vertices
-        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
-            if (!isset($vertices[$vid])) {
-                // remove those not present in the walk (isolated vertices, etc.)
-                $vertex->destroy();
-            }
-        }
-
-        return $graph;
-    }
-
-    /**
      * return set of all Edges of walk (in sequence visited in walk, may contain duplicates)
      *
      * If you need to return set a of all unique Edges of walk, use

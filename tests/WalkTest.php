@@ -36,9 +36,6 @@ class WalkTest extends TestCase
         $this->assertSame(array($v1, $e1, $v2, $e2, $v3), $walk->getAlternatingSequence());
         $this->assertTrue($walk->isValid());
 
-        $graphClone = $walk->createGraph();
-        $this->assertGraphEquals($graph, $graphClone);
-
         return $walk;
     }
 
@@ -74,18 +71,11 @@ class WalkTest extends TestCase
         $this->assertSame(array($v1, $e1, $v2), $walk->getAlternatingSequence());
         $this->assertTrue($walk->isValid());
 
-        $graphExpected = new Graph();
-        $graphExpected->createEdgeDirected($graphExpected->createVertex(1), $graphExpected->createVertex(2));
-
-        $this->assertGraphEquals($graphExpected, $walk->createGraph());
-
         // construct same partial walk "1 -- 2"
         $walkVertices = Walk::factoryFromVertices(array($v1, $v2));
 
         $this->assertEquals(2, count($walkVertices->getVertices()));
         $this->assertEquals(1, count($walkVertices->getEdges()));
-
-        $this->assertGraphEquals($graphExpected, $walkVertices->createGraph());
 
         return $walk;
     }
@@ -169,7 +159,7 @@ class WalkTest extends TestCase
         Walk::factoryCycleFromEdges(array($e1), $v1);
     }
 
-    public function testLoopCycle()
+    public function testFactoryCycleFromEdgesWithLoopCycle()
     {
         // 1 --\
         // ^   |
@@ -179,31 +169,59 @@ class WalkTest extends TestCase
         $e1 = $graph->createEdgeDirected($v1, $v1);
 
         $cycle = Walk::factoryCycleFromEdges(array($e1), $v1);
-        $this->assertGraphEquals($graph, $cycle->createGraph());
-
-        $cycle = Walk::factoryCycleFromPredecessorMap(array(1 => $v1), $v1);
-        $this->assertGraphEquals($graph, $cycle->createGraph());
-
-        $cycle = Walk::factoryCycleFromVertices(array($v1, $v1));
-        $this->assertGraphEquals($graph, $cycle->createGraph());
 
         $this->assertCount(2, $cycle->getVertices());
         $this->assertCount(1, $cycle->getEdges());
         $this->assertSame($v1, $cycle->getVertices()->getVertexFirst());
         $this->assertSame($v1, $cycle->getVertices()->getVertexLast());
         $this->assertTrue($cycle->isValid());
-
-        return $v1;
     }
 
+    public function testFactoryCycleFromPredecessorMapWithLoopCycle()
+    {
+        // 1 --\
+        // ^   |
+        // \---/
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $graph->createEdgeDirected($v1, $v1);
+
+        $cycle = Walk::factoryCycleFromPredecessorMap(array(1 => $v1), $v1);
+
+        $this->assertCount(2, $cycle->getVertices());
+        $this->assertCount(1, $cycle->getEdges());
+        $this->assertSame($v1, $cycle->getVertices()->getVertexFirst());
+        $this->assertSame($v1, $cycle->getVertices()->getVertexLast());
+        $this->assertTrue($cycle->isValid());
+    }
+
+    public function testFactoryCycleFromVerticesWithLoopCycle()
+    {
+        // 1 --\
+        // ^   |
+        // \---/
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $graph->createEdgeDirected($v1, $v1);
+
+        $cycle = Walk::factoryCycleFromVertices(array($v1, $v1));
+
+        $this->assertCount(2, $cycle->getVertices());
+        $this->assertCount(1, $cycle->getEdges());
+        $this->assertSame($v1, $cycle->getVertices()->getVertexFirst());
+        $this->assertSame($v1, $cycle->getVertices()->getVertexLast());
+        $this->assertTrue($cycle->isValid());
+    }
+
+
     /**
-     *
-     * @param Vertex $v1
-     * @depends testLoopCycle
      * @expectedException InvalidArgumentException
      */
-    public function testFactoryCycleFromVerticesIncomplete(Vertex $v1)
+    public function testFactoryCycleFromVerticesThrowsWhenCycleIsIncomplete()
     {
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+
         // should actually be [v1, v1]
         Walk::factoryCycleFromVertices(array($v1));
     }
@@ -211,7 +229,7 @@ class WalkTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testInvalidPredecessors()
+    public function testFactoryCycleFromPredecessorMapThrowsForInvalidPredecessors()
     {
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
@@ -222,6 +240,7 @@ class WalkTest extends TestCase
     public function testFactoryFromVertices()
     {
         // 1 -- 2
+        // |    |
         // \----/
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
