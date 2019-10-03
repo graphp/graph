@@ -3,6 +3,7 @@
 namespace Graphp\Graph\Edge;
 
 use Graphp\Graph\Exception\InvalidArgumentException;
+use Graphp\Graph\Graph;
 use Graphp\Graph\Vertex;
 use Graphp\Graph\Set\Vertices;
 
@@ -23,11 +24,13 @@ class Undirected extends Base
     private $b;
 
     /**
-     * create a new undirected edge between given vertices
+     * [Internal] Create a new undirected edge between given vertices
      *
      * @param Vertex $a
      * @param Vertex $b
-     * @see Vertex::createEdge() instead
+     * @see Graph::createEdgeUndirected() to create undirected edges
+     * @see Graph::createEdgeDirected() to create directed edges
+     * @internal
      */
     public function __construct(Vertex $a, Vertex $b)
     {

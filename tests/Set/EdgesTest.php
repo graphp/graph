@@ -24,7 +24,7 @@ class EdgesTest extends TestCase
         // 1 -> 1
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
-        $e1 = $v1->createEdgeTo($v1);
+        $e1 = $graph->createEdgeDirected($v1, $v1);
 
         $edgesFromArray = $this->createEdges(array($e1));
         $this->assertInstanceOf('Graphp\Graph\Set\Edges', $edgesFromArray);
@@ -90,8 +90,8 @@ class EdgesTest extends TestCase
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
         $v3 = $graph->createVertex(3);
-        $e1 = $v1->createEdge($v2);
-        $e2 = $v2->createEdge($v3);
+        $e1 = $graph->createEdgeUndirected($v1, $v2);
+        $e2 = $graph->createEdgeUndirected($v2, $v3);
 
         $edges = $this->createEdges(array($e1, $e2));
 
@@ -129,7 +129,7 @@ class EdgesTest extends TestCase
     {
         $graph = new Graph();
         $v3 = $graph->createVertex(3);
-        $e3 = $v3->createEdge($v3);
+        $e3 = $graph->createEdgeUndirected($v3, $v3);
 
         $edges->getIndexEdge($e3);
     }
@@ -232,7 +232,7 @@ class EdgesTest extends TestCase
         // 1 -> 1
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
-        $v1->createEdgeTo($v1);
+        $graph->createEdgeDirected($v1, $v1);
 
         $edges = $graph->getEdges();
 
@@ -254,13 +254,13 @@ class EdgesTest extends TestCase
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $v1->createEdge($v2)->setWeight(1);
-        $v1->createEdge($v2)->setWeight(100);
-        $v1->createEdge($v2)->setWeight(5);
-        $v1->createEdge($v2)->setWeight(100);
-        $v1->createEdge($v2)->setWeight(100);
-        $v1->createEdge($v2)->setWeight(2);
-        $biggest = $v1->createEdge($v2)->setWeight(200);
+        $graph->createEdgeUndirected($v1, $v2)->setWeight(1);
+        $graph->createEdgeUndirected($v1, $v2)->setWeight(100);
+        $graph->createEdgeUndirected($v1, $v2)->setWeight(5);
+        $graph->createEdgeUndirected($v1, $v2)->setWeight(100);
+        $graph->createEdgeUndirected($v1, $v2)->setWeight(100);
+        $graph->createEdgeUndirected($v1, $v2)->setWeight(2);
+        $biggest = $graph->createEdgeUndirected($v1, $v2)->setWeight(200);
 
         $edges = $graph->getEdges();
         $edgesOrdered = $edges->getEdgesOrder(Edges::ORDER_WEIGHT);
@@ -284,9 +284,9 @@ class EdgesTest extends TestCase
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $e1 = $v1->createEdge($v2);
-        $e2 = $v1->createEdge($v2);
-        $e3 = $v1->createEdge($v2);
+        $e1 = $graph->createEdgeUndirected($v1, $v2);
+        $e2 = $graph->createEdgeUndirected($v1, $v2);
+        $e3 = $graph->createEdgeUndirected($v1, $v2);
 
         $edges1 = $this->createEdges(array($e1, $e2));
         $edges2 = $this->createEdges(array($e2, $e3));
@@ -301,7 +301,7 @@ class EdgesTest extends TestCase
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $e1 = $v1->createEdge($v2);
+        $e1 = $graph->createEdgeUndirected($v1, $v2);
 
         $edges1 = $this->createEdges(array($e1, $e1, $e1));
         $edges2 = $this->createEdges(array($e1, $e1));

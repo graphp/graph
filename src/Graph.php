@@ -6,6 +6,7 @@ use Graphp\Graph\Attribute\AttributeAware;
 use Graphp\Graph\Attribute\AttributeBagReference;
 use Graphp\Graph\Edge\Base as Edge;
 use Graphp\Graph\Edge\Directed as EdgeDirected;
+use Graphp\Graph\Edge\Undirected as EdgeUndirected;
 use Graphp\Graph\Exception\BadMethodCallException;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Exception\OutOfBoundsException;
@@ -111,7 +112,7 @@ class Graph implements DualAggregate, AttributeAware
         $graph->getAttributeBag()->setAttributes($this->getAttributeBag()->getAttributes());
         // TODO: set additional graph attributes
         foreach ($this->getVertices() as $originalVertex) {
-            $vertex = $graph->createVertexClone($originalVertex);
+            $graph->createVertexClone($originalVertex);
             // $graph->vertices[$vid] = $vertex;
         }
 
@@ -170,6 +171,40 @@ class Graph implements DualAggregate, AttributeAware
     }
 
     /**
+     * Creates a new undirected (bidirectional) edge between the given two vertices.
+     *
+     * @param  Vertex                   $a
+     * @param  Vertex                   $b
+     * @return EdgeUndirected
+     * @throws InvalidArgumentException
+     */
+    public function createEdgeUndirected(Vertex $a, Vertex $b)
+    {
+        if ($a->getGraph() !== $this) {
+            throw new InvalidArgumentException('Vertices have to be within this graph');
+        }
+
+        return new EdgeUndirected($a, $b);
+    }
+
+    /**
+     * Creates a new directed edge from the given start vertex to given target vertex
+     *
+     * @param  Vertex                   $source source vertex
+     * @param  Vertex                   $target target vertex
+     * @return EdgeDirected
+     * @throws InvalidArgumentException
+     */
+    public function createEdgeDirected(Vertex $source, Vertex $target)
+    {
+        if ($source->getGraph() !== $this) {
+            throw new InvalidArgumentException('Vertices have to be within this graph');
+        }
+
+        return new EdgeDirected($source, $target);
+    }
+
+    /**
      * create new clone of the given edge between adjacent vertices
      *
      * @param  Edge $originalEdge original edge (not neccessarily from this graph)
@@ -202,8 +237,8 @@ class Graph implements DualAggregate, AttributeAware
      * @return Edge new edge in this graph
      * @uses Edge::getVertices()
      * @uses Graph::getVertex()
-     * @uses Vertex::createEdge() to create a new undirected edge if given edge was undrected
-     * @uses Vertex::createEdgeTo() to create a new directed edge if given edge was directed
+     * @uses Vertex::createEdgeUndirected() to create a new undirected edge if given edge was undrected
+     * @uses Vertex::createEdgeDirected() to create a new directed edge if given edge was directed
      * @uses Edge::getWeight()
      * @uses Edge::setWeight()
      * @uses Edge::getFlow()
@@ -221,10 +256,10 @@ class Graph implements DualAggregate, AttributeAware
         $b = $this->getVertex($ends[$ib]);
 
         if ($originalEdge instanceof EdgeDirected) {
-            $newEdge = $a->createEdgeTo($b);
+            $newEdge = $this->createEdgeDirected($a, $b);
         } else {
             // create new edge between new a and b
-            $newEdge = $a->createEdge($b);
+            $newEdge = $this->createEdgeUndirected($a, $b);
         }
         // TODO: copy edge attributes
         $newEdge->getAttributeBag()->setAttributes($originalEdge->getAttributeBag()->getAttributes());
@@ -337,7 +372,7 @@ class Graph implements DualAggregate, AttributeAware
      * @param  Edge $edge instance of the new Edge
      * @return void
      * @internal
-     * @see Vertex::createEdge() instead!
+     * @see Graph::createEdgeUndirected() instead!
      */
     public function addEdge(Edge $edge)
     {
