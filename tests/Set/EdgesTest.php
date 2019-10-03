@@ -78,6 +78,17 @@ class EdgesTest extends TestCase
      * @depends testEmpty
      * @expectedException UnderflowException
      */
+    public function testEmptyDoesNotHaveRandom(Edges $edges)
+    {
+        $edges->getEdgeRandom();
+    }
+
+    /**
+     *
+     * @param Edges $edges
+     * @depends testEmpty
+     * @expectedException UnderflowException
+     */
     public function testEmptyDoesNotHaveOrdered(Edges $edges)
     {
         $edges->getEdgeOrder(Edges::ORDER_WEIGHT);
@@ -154,12 +165,20 @@ class EdgesTest extends TestCase
      */
     public function testTwoRandom(Edges $edges)
     {
-        $edgeRandom = $edges->getEdgeOrder(Edges::ORDER_RANDOM);
+        $edgeRandom = $edges->getEdgeRandom();
 
         $this->assertInstanceOf('Graphp\Graph\Edge', $edgeRandom);
         $edges->getEdgeIndex($edges->getIndexEdge($edgeRandom));
+    }
 
-        $edgesRandom = $edges->getEdgesOrder(Edges::ORDER_RANDOM);
+    /**
+     *
+     * @param Edges $edges
+     * @depends testTwo
+     */
+    public function testTwoShuffled(Edges $edges)
+    {
+        $edgesRandom = $edges->getEdgesShuffled();
 
         $this->assertInstanceOf('Graphp\Graph\Set\Edges', $edgesRandom);
         $this->assertEquals(2, count($edgesRandom));

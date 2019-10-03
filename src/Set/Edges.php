@@ -50,13 +50,6 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      */
     const ORDER_FLOW = 4;
 
-    /**
-     * random/shuffled order
-     *
-     * @var int
-     */
-    const ORDER_RANDOM = 5;
-
     protected $edges = array();
 
     /**
@@ -161,6 +154,22 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     }
 
     /**
+     * return random Edge in this set of Edges
+     *
+     * @return Edge               random Edge in this set of Edges
+     * @throws UnderflowException if set is empty
+     * @see self::getEdgesShuffled()
+     */
+    public function getEdgeRandom()
+    {
+        if (!$this->edges) {
+            throw new UnderflowException('Does not contain any edges');
+        }
+
+        return $this->edges[array_rand($this->edges)];
+    }
+
+    /**
      * return Edge at given array index
      *
      * @param mixed $index
@@ -235,21 +244,6 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      */
     public function getEdgesOrder($orderBy, $desc = false)
     {
-        if ($orderBy === self::ORDER_RANDOM) {
-            // shuffle the edge positions
-            $keys = array_keys($this->edges);
-            shuffle($keys);
-
-            // re-order according to shuffled edge positions
-            $edges = array();
-            foreach ($keys as $key) {
-                $edges[$key] = $this->edges[$key];
-            }
-
-            // create iterator for shuffled array (no need to check DESC flag)
-            return new static($edges);
-        }
-
         $callback = $this->getCallback($orderBy);
         $array    = $this->edges;
 
@@ -269,6 +263,31 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
         return new static($array);
     }
 
+
+    /**
+     * get new Set of Edges shuffled by random order
+     *
+     * Edge index positions will be left unchanged.
+     *
+     * @return Edges a new Edges set shuffled by random order
+     * @see self::getEdgesOrder()
+     * @see self::getEdgeRandom()
+     */
+    public function getEdgesShuffled()
+    {
+        // shuffle the edge positions
+        $keys = array_keys($this->edges);
+        shuffle($keys);
+
+        // re-order according to shuffled edge positions
+        $edges = array();
+        foreach ($keys as $key) {
+            $edges[$key] = $this->edges[$key];
+        }
+
+        return new static($edges);
+    }
+
     /**
      * get first edge ordered by given criterium $orderBy
      *
@@ -282,11 +301,6 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     {
         if (!$this->edges) {
             throw new UnderflowException('No edge found');
-        }
-        // random order
-        if ($orderBy === self::ORDER_RANDOM) {
-            // just return by random key (no need to check for DESC flag)
-            return $this->edges[array_rand($this->edges)];
         }
 
         $callback = $this->getCallback($orderBy);

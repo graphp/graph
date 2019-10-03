@@ -76,6 +76,17 @@ abstract class BaseVerticesTest extends TestCase
      * @depends testEmpty
      * @expectedException UnderflowException
      */
+    public function testEmptyDoesNotHaveRandom(Vertices $vertices)
+    {
+        $vertices->getVertexRandom();
+    }
+
+    /**
+     *
+     * @param Vertices $vertices
+     * @depends testEmpty
+     * @expectedException UnderflowException
+     */
     public function testEmptyDoesNotHaveOrdered(Vertices $vertices)
     {
         $vertices->getVertexOrder(Vertices::ORDER_ID);
@@ -152,12 +163,20 @@ abstract class BaseVerticesTest extends TestCase
      */
     public function testTwoRandom(Vertices $vertices)
     {
-        $vertexRandom = $vertices->getVertexOrder(Vertices::ORDER_RANDOM);
+        $vertexRandom = $vertices->getVertexRandom();
 
         $this->assertInstanceOf('Graphp\Graph\Vertex', $vertexRandom);
         $this->assertTrue($vertices->hasVertexId($vertexRandom->getId()));
+    }
 
-        $verticesRandom = $vertices->getVerticesOrder(Vertices::ORDER_RANDOM);
+    /**
+     *
+     * @param Vertices $vertices
+     * @depends testTwo
+     */
+    public function testTwoShuffled(Vertices $vertices)
+    {
+        $verticesRandom = $vertices->getVerticesShuffled();
 
         $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $verticesRandom);
         $this->assertEquals(2, count($verticesRandom));
