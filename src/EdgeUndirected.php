@@ -1,13 +1,11 @@
 <?php
 
-namespace Graphp\Graph\Edge;
+namespace Graphp\Graph;
 
 use Graphp\Graph\Exception\InvalidArgumentException;
-use Graphp\Graph\Graph;
-use Graphp\Graph\Vertex;
 use Graphp\Graph\Set\Vertices;
 
-class Undirected extends Base
+class EdgeUndirected extends Edge
 {
     /**
      * vertex a

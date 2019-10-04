@@ -1,6 +1,6 @@
 <?php
 
-namespace Graphp\Graph\Edge;
+namespace Graphp\Graph;
 
 use Graphp\Graph\Attribute\AttributeAware;
 use Graphp\Graph\Attribute\AttributeBagReference;
@@ -8,12 +8,16 @@ use Graphp\Graph\Exception\BadMethodCallException;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Exception\LogicException;
 use Graphp\Graph\Exception\RangeException;
-use Graphp\Graph\Graph;
 use Graphp\Graph\Set\Vertices;
 use Graphp\Graph\Set\VerticesAggregate;
-use Graphp\Graph\Vertex;
 
-abstract class Base implements VerticesAggregate, AttributeAware
+/**
+ * Abstract base for `EdgeUndirected` and `EdgeDirected` containing common interfaces and behavior for all edges.
+ *
+ * @see EdgeUndirected
+ * @see EdgeDirected
+ */
+abstract class Edge implements VerticesAggregate, AttributeAware
 {
     /**
      * weight of this edge

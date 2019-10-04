@@ -4,9 +4,6 @@ namespace Graphp\Graph;
 
 use Graphp\Graph\Attribute\AttributeAware;
 use Graphp\Graph\Attribute\AttributeBagReference;
-use Graphp\Graph\Edge\Base as Edge;
-use Graphp\Graph\Edge\Directed as EdgeDirected;
-use Graphp\Graph\Edge\Undirected as EdgeUndirected;
 use Graphp\Graph\Exception\BadMethodCallException;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Exception\OutOfBoundsException;

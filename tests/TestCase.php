@@ -2,8 +2,8 @@
 
 namespace Graphp\Graph\Tests;
 
-use Graphp\Graph\Edge\Directed;
-use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Edge;
+use Graphp\Graph\EdgeDirected;
 use Graphp\Graph\Graph;
 use Graphp\Graph\Vertex;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -81,7 +81,7 @@ class TestCase extends BaseTestCase
     private function getEdgeDump(Edge $edge)
     {
         $ret = get_class($edge) . ' ';
-        if ($edge instanceof Directed) {
+        if ($edge instanceof EdgeDirected) {
             $ret .= $edge->getVertexStart()->getId() . ' -> ' . $edge->getVertexEnd()->getId();
         } else {
             $vertices = $edge->getVertices()->getIds();
