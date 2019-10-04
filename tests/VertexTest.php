@@ -8,6 +8,9 @@ use Graphp\Graph\Vertex;
 
 class VertexTest extends AbstractAttributeAwareTest
 {
+    private $graph;
+    private $vertex;
+
     public function setUp()
     {
         $this->graph = new Graph();
@@ -37,7 +40,7 @@ class VertexTest extends AbstractAttributeAwareTest
      */
     public function testCanNotConstructDuplicateVertex()
     {
-        $v2 = new Vertex($this->graph, 1);
+        new Vertex($this->graph, 1);
     }
 
     public function testEdges()
@@ -46,9 +49,9 @@ class VertexTest extends AbstractAttributeAwareTest
         $v2 = $this->graph->createVertex(2);
         $v3 = $this->graph->createVertex(3);
         $v4 = $this->graph->createVertex(4);
-        $e1 = $this->vertex->createEdgeTo($v2);
-        $e2 = $this->vertex->createEdge($v3);
-        $e3 = $v4->createEdgeTo($this->vertex);
+        $e1 = $this->graph->createEdgeDirected($this->vertex, $v2);
+        $e2 = $this->graph->createEdgeUndirected($this->vertex, $v3);
+        $e3 = $this->graph->createEdgeDirected($v4, $this->vertex);
 
         $this->assertEquals(array($e1, $e2, $e3), $this->vertex->getEdges()->getVector());
         $this->assertEquals(array($e2, $e3), $this->vertex->getEdgesIn()->getVector());
@@ -77,7 +80,7 @@ class VertexTest extends AbstractAttributeAwareTest
 
     public function testUndirectedLoopEdgeReturnsEdgeTwiceInAndOut()
     {
-        $edge = $this->vertex->createEdge($this->vertex);
+        $edge = $this->graph->createEdgeUndirected($this->vertex, $this->vertex);
 
         $this->assertEquals(array($edge, $edge), $this->vertex->getEdges()->getVector());
         $this->assertEquals(array($edge, $edge), $this->vertex->getEdgesIn()->getVector());
@@ -90,7 +93,7 @@ class VertexTest extends AbstractAttributeAwareTest
 
     public function testDirectedLoopEdgeReturnsEdgeTwiceUndirectedAndOnceEachInAndOut()
     {
-        $edge = $this->vertex->createEdgeTo($this->vertex);
+        $edge = $this->graph->createEdgeDirected($this->vertex, $this->vertex);
 
         $this->assertEquals(array($edge, $edge), $this->vertex->getEdges()->getVector());
         $this->assertEquals(array($edge), $this->vertex->getEdgesIn()->getVector());
@@ -136,17 +139,17 @@ class VertexTest extends AbstractAttributeAwareTest
     {
         $graphOther = new Graph();
 
-        $this->vertex->createEdge($graphOther->createVertex(2));
+        $this->graph->createEdgeUndirected($this->vertex, $graphOther->createVertex(2));
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testCreateEdgeToOtherGraphFails()
+    public function testcreateEdgeDirectedOtherGraphFails()
     {
         $graphOther = new Graph();
 
-        $this->vertex->createEdgeTo($graphOther->createVertex(2));
+        $this->graph->createEdgeDirected($this->vertex, $graphOther->createVertex(2));
     }
 
     /**
@@ -157,7 +160,7 @@ class VertexTest extends AbstractAttributeAwareTest
         // 2 -- 3
         $v2 = $this->graph->createVertex(2);
         $v3 = $this->graph->createVertex(3);
-        $edge = $v2->createEdge($v3);
+        $edge = $this->graph->createEdgeUndirected($v2, $v3);
 
         $this->vertex->removeEdge($edge);
     }
@@ -165,7 +168,7 @@ class VertexTest extends AbstractAttributeAwareTest
     public function testRemoveWithEdgeLoopUndirected()
     {
         // 1 -- 1
-        $edge = $this->vertex->createEdge($this->vertex);
+        $this->graph->createEdgeUndirected($this->vertex, $this->vertex);
 
         $this->assertEquals(array(1 => $this->vertex), $this->graph->getVertices()->getMap());
 
@@ -178,7 +181,7 @@ class VertexTest extends AbstractAttributeAwareTest
     public function testRemoveWithEdgeLoopDirected()
     {
         // 1 --> 1
-        $edge = $this->vertex->createEdgeTo($this->vertex);
+        $this->graph->createEdgeDirected($this->vertex, $this->vertex);
 
         $this->assertEquals(array(1 => $this->vertex), $this->graph->getVertices()->getMap());
 

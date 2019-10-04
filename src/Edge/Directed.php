@@ -3,6 +3,7 @@
 namespace Graphp\Graph\Edge;
 
 use Graphp\Graph\Exception\InvalidArgumentException;
+use Graphp\Graph\Graph;
 use Graphp\Graph\Set\Vertices;
 use Graphp\Graph\Vertex;
 
@@ -23,12 +24,13 @@ class Directed extends Base
     private $to;
 
     /**
-     * create a new directed Edge from Vertex $from to Vertex $to
+     * [Internal] Create a new directed Edge from Vertex $from to Vertex $to
      *
      * @param Vertex $from start/source Vertex
      * @param Vertex $to   end/target Vertex
-     * @see Vertex::createEdgeTo() to create directed edges
-     * @see Vertex::createEdge() to create undirected edges
+     * @see Graph::createEdgeDirected() to create directed edges
+     * @see Graph::createEdgeUndirected() to create undirected edges
+     * @internal
      */
     public function __construct(Vertex $from, Vertex $to)
     {

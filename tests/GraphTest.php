@@ -70,8 +70,8 @@ class GraphTest extends AbstractAttributeAwareTest
     public function testGraphCloneEdgeless()
     {
         $graph = new Graph();
-        $graph->createVertex(1)->createEdgeTo($graph->createVertex(2));
-        $graph->createVertex(3)->createEdge($graph->getVertex(2));
+        $graph->createEdgeDirected($graph->createVertex(1), $graph->createVertex(2));
+        $graph->createEdgeUndirected($graph->createVertex(3), $graph->getVertex(2));
 
         $graphEdgeless = $graph->createGraphCloneEdgeless();
 
@@ -118,7 +118,7 @@ class GraphTest extends AbstractAttributeAwareTest
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testCreateInvalidId()
+    public function testCreateVertexWithInvalidIdThrows()
     {
         $graph = new Graph();
         $graph->createVertex(array('invalid'));
@@ -132,6 +132,34 @@ class GraphTest extends AbstractAttributeAwareTest
         $v1again = $graph->createVertex(1, true);
 
         $this->assertSame($v1, $v1again);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testCreateEdgeUndirectedWithVerticesFromOtherGraphThrows()
+    {
+        // 1, 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+
+        $graph2 = new Graph();
+        $graph2->createEdgeUndirected($v1, $v2);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testCreateEdgeDirectedWithVerticesFromOtherGraphThrows()
+    {
+        // 1, 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+
+        $graph2 = new Graph();
+        $graph2->createEdgeDirected($v1, $v2);
     }
 
     public function testHasVertex()
@@ -157,9 +185,8 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-
-        $e1 = $v1->createEdge($v2);
-        $e2 = $v1->createEdge($v2);
+        $graph->createEdgeUndirected($v1, $v2);
+        $graph->createEdgeUndirected($v1, $v2);
 
         $this->assertEquals(2, count($graph->getEdges()));
         $this->assertEquals(2, count($v1->getEdges()));
@@ -175,8 +202,8 @@ class GraphTest extends AbstractAttributeAwareTest
         $v2 = $graph->createVertex(2);
         $v3 = $graph->createVertex(3);
 
-        $v1->createEdge($v2);
-        $v2->createEdgeTo($v3);
+        $graph->createEdgeUndirected($v1, $v2);
+        $graph->createEdgeDirected($v2, $v3);
 
         $this->assertEquals(2, count($graph->getEdges()));
 
@@ -277,7 +304,7 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $edge = $v1->createEdge($v2);
+        $edge = $graph->createEdgeUndirected($v1, $v2);
 
         $this->assertEquals(array($edge), $graph->getEdges()->getVector());
 
@@ -296,7 +323,7 @@ class GraphTest extends AbstractAttributeAwareTest
      */
     public function testRemoveEdgeInvalid(Graph $graph)
     {
-        $edge = $graph->getVertex(1)->createEdge($graph->getVertex(2));
+        $edge = $graph->createEdgeUndirected($graph->getVertex(1), $graph->getVertex(2));
 
         $edge->destroy();
         $edge->destroy();
@@ -332,8 +359,8 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $e1 = $v1->createEdgeTo($v2);
-        $e2 = $v2->createEdgeTo($v1);
+        $e1 = $graph->createEdgeDirected($v1, $v2);
+        $e2 = $graph->createEdgeDirected($v2, $v1);
 
         $graphClone = $graph->createGraphClone();
 
@@ -350,8 +377,8 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $e1 = $v1->createEdgeTo($v2);
-        $e2 = $v1->createEdgeTo($v2);
+        $e1 = $graph->createEdgeDirected($v1, $v2);
+        $graph->createEdgeDirected($v1, $v2);
 
         // which one to return? e1? e2?
         $graph->getEdgeClone($e1);
@@ -366,8 +393,8 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $e1 = $v1->createEdgeTo($v2);
-        $e2 = $v1->createEdgeTo($v2);
+        $e1 = $graph->createEdgeDirected($v1, $v2);
+        $graph->createEdgeDirected($v1, $v2);
 
         $graphCloneEdgeless = $graph->createGraphCloneEdgeless();
 
@@ -382,8 +409,8 @@ class GraphTest extends AbstractAttributeAwareTest
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
         $v3 = $graph->createVertex(3);
-        $e1 = $v1->createEdgeTo($v2);
-        $e2 = $v2->createEdgeTo($v3);
+        $graph->createEdgeDirected($v1, $v2);
+        $graph->createEdgeDirected($v2, $v3);
 
         $graphClone = $graph->createGraphCloneVertices(array(1 => $v1, 2 => $v2));
 

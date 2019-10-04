@@ -38,10 +38,10 @@ $madrid = $graph->createVertex('Madrid');
 $cologne = $graph->createVertex('Cologne');
 
 // build some roads
-$cologne->createEdgeTo($madrid);
-$madrid->createEdgeTo($rome);
+$graph->createEdgeDirected($cologne, $madrid);
+$graph->createEdgeDirected($madrid, $rome);
 // create loop
-$rome->createEdgeTo($rome);
+$graph->createEdgeDirected($rome, $rome);
 ```
 
 Let's see which city (Vertex) has a road (i.e. an edge pointing) to Rome:

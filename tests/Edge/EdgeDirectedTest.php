@@ -4,10 +4,10 @@ namespace Graphp\Graph\Tests\Edge;
 
 class EdgeDirectedTest extends EdgeBaseTest
 {
-    protected function createEdge()
+    protected function createEdgeUndirected()
     {
         // 1 -> 2
-        return $this->v1->createEdgeTo($this->v2);
+        return $this->graph->createEdgeDirected($this->v1, $this->v2);
     }
 
     protected function createEdgeLoop()
@@ -15,7 +15,7 @@ class EdgeDirectedTest extends EdgeBaseTest
         // 1 --\
         // ^   |
         // \---/
-        return $this->v1->createEdgeTo($this->v1);
+        return $this->graph->createEdgeDirected($this->v1, $this->v1);
     }
 
     public function testVerticesEnds()

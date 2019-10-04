@@ -22,7 +22,7 @@ class EdgeAttributesTest extends TestCase
         $graph->createVertex(2);
 
         // 1 -> 2
-        $this->edge = $graph->getVertex(1)->createEdge($graph->getVertex(2));
+        $this->edge = $graph->createEdgeUndirected($graph->getVertex(1), $graph->getVertex(2));
     }
 
     public function testCanSetFlowAndCapacity()

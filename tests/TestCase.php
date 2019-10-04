@@ -28,7 +28,7 @@ class TestCase extends BaseTestCase
         // do not use assertVertexEquals() in order to not increase assertion counter
 
         foreach ($expected->getVertices()->getMap() as $vid => $vertex) {
-            $other = $actual->getVertex($vid);
+            $actual->getVertex($vid);
 
             if ($this->getVertexDump($vertex) !== $this->getVertexDump($vertex)) {
                 $this->fail();

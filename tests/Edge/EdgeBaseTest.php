@@ -18,7 +18,7 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
      */
     protected $edge;
 
-    abstract protected function createEdge();
+    abstract protected function createEdgeUndirected();
 
     /**
      * @return Edge
@@ -31,7 +31,7 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $this->v1 = $this->graph->createVertex(1);
         $this->v2 = $this->graph->createVertex(2);
 
-        $this->edge = $this->createEdge();
+        $this->edge = $this->createEdgeUndirected();
     }
 
     public function testEdgeVertices()
@@ -113,6 +113,6 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
 
     protected function createAttributeAware()
     {
-        return $this->createEdge();
+        return $this->createEdgeUndirected();
     }
 }

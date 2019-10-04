@@ -24,8 +24,8 @@ class WalkTest extends TestCase
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
         $v3 = $graph->createVertex(3);
-        $e1 = $v1->createEdgeTo($v2);
-        $e2 = $v2->createEdgeTo($v3);
+        $e1 = $graph->createEdgeDirected($v1, $v2);
+        $e2 = $graph->createEdgeDirected($v2, $v3);
 
         $walk = Walk::factoryFromEdges(array($e1, $e2), $v1);
 
@@ -61,8 +61,8 @@ class WalkTest extends TestCase
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
         $v3 = $graph->createVertex(3);
-        $e1 = $v1->createEdgeTo($v2);
-        $e2 = $v2->createEdgeTo($v3);
+        $e1 = $graph->createEdgeDirected($v1, $v2);
+        $graph->createEdgeDirected($v2, $v3);
 
         // construct partial walk "1 -- 2"
         $walk = Walk::factoryFromEdges(array($e1), $v1);
@@ -75,7 +75,7 @@ class WalkTest extends TestCase
         $this->assertTrue($walk->isValid());
 
         $graphExpected = new Graph();
-        $graphExpected->createVertex(1)->createEdgeTo($graphExpected->createVertex(2));
+        $graphExpected->createEdgeDirected($graphExpected->createVertex(1), $graphExpected->createVertex(2));
 
         $this->assertGraphEquals($graphExpected, $walk->createGraph());
 
@@ -95,7 +95,7 @@ class WalkTest extends TestCase
         // 1 -- 1
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
-        $e1 = $v1->createEdge($v1);
+        $e1 = $graph->createEdgeUndirected($v1, $v1);
 
         $walk = Walk::factoryFromEdges(array($e1), $v1);
 
@@ -128,7 +128,7 @@ class WalkTest extends TestCase
         // 1 -- 1
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
-        $e1 = $v1->createEdge($v1);
+        $e1 = $graph->createEdgeUndirected($v1, $v1);
 
         $walk = Walk::factoryCycleFromEdges(array($e1), $v1);
 
@@ -148,8 +148,8 @@ class WalkTest extends TestCase
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $e1 = $v1->createEdge($v2);
-        $e2 = $v2->createEdge($v1);
+        $graph->createEdgeUndirected($v1, $v2);
+        $graph->createEdgeUndirected($v2, $v1);
 
         // should actually be [v1, v2, v1]
         Walk::factoryCycleFromVertices(array($v1, $v2));
@@ -164,7 +164,7 @@ class WalkTest extends TestCase
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $e1 = $v1->createEdge($v2);
+        $e1 = $graph->createEdgeUndirected($v1, $v2);
 
         Walk::factoryCycleFromEdges(array($e1), $v1);
     }
@@ -176,7 +176,7 @@ class WalkTest extends TestCase
         // \---/
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
-        $e1 = $v1->createEdgeTo($v1);
+        $e1 = $graph->createEdgeDirected($v1, $v1);
 
         $cycle = Walk::factoryCycleFromEdges(array($e1), $v1);
         $this->assertGraphEquals($graph, $cycle->createGraph());
@@ -226,8 +226,8 @@ class WalkTest extends TestCase
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $e1 = $v1->createEdge($v2)->setWeight(10);
-        $e2 = $v1->createEdge($v2)->setWeight(20);
+        $e1 = $graph->createEdgeUndirected($v1, $v2)->setWeight(10);
+        $e2 = $graph->createEdgeUndirected($v1, $v2)->setWeight(20);
 
         // any edge in walk
         $walk = Walk::factoryFromVertices(array($v1, $v2));

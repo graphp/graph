@@ -6,7 +6,6 @@ use Graphp\Graph\Attribute\AttributeAware;
 use Graphp\Graph\Attribute\AttributeBagReference;
 use Graphp\Graph\Edge\Base as Edge;
 use Graphp\Graph\Edge\Directed as EdgeDirected;
-use Graphp\Graph\Edge\Undirected as EdgeUndirected;
 use Graphp\Graph\Exception\BadMethodCallException;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Set\Edges;
@@ -127,38 +126,12 @@ class Vertex implements EdgesAggregate, AttributeAware
     }
 
     /**
-     * create new directed edge from this start vertex to given target vertex
-     *
-     * @param  Vertex                   $vertex target vertex
-     * @return EdgeDirected
-     * @throws InvalidArgumentException
-     * @uses Graph::addEdge()
-     */
-    public function createEdgeTo(Vertex $vertex)
-    {
-        return new EdgeDirected($this, $vertex);
-    }
-
-    /**
-     * add new undirected (bidirectional) edge between this vertex and given vertex
-     *
-     * @param  Vertex                   $vertex
-     * @return EdgeUndirected
-     * @throws InvalidArgumentException
-     * @uses Graph::addEdge()
-     */
-    public function createEdge(Vertex $vertex)
-    {
-        return new EdgeUndirected($this, $vertex);
-    }
-
-    /**
      * add the given edge to list of connected edges (MUST NOT be called manually)
      *
      * @param  Edge                     $edge
      * @return void
      * @internal
-     * @see self::createEdge() instead!
+     * @see Graph::createEdgeUndirected() instead!
      */
     public function addEdge(Edge $edge)
     {
