@@ -1,6 +1,6 @@
 <?php
 
-namespace Graphp\Graph\Tests\Edge;
+namespace Graphp\Graph\Tests;
 
 class EdgeDirectedTest extends EdgeBaseTest
 {

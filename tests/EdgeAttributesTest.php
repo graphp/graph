@@ -1,15 +1,13 @@
 <?php
 
-namespace Graphp\Graph\Tests\Edge;
+namespace Graphp\Graph\Tests;
 
 use Graphp\Graph\Graph;
-use Graphp\Graph\Edge\Base as Edge;
-use Graphp\Graph\Tests\TestCase;
+use Graphp\Graph\Edge;
 
 class EdgeAttributesTest extends TestCase
 {
     /**
-     *
      * @var Edge
      */
     private $edge;

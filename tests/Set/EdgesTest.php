@@ -2,7 +2,7 @@
 
 namespace Graphp\Graph\Tests\Set;
 
-use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Edge;
 use Graphp\Graph\Graph;
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Tests\TestCase;
@@ -156,7 +156,7 @@ class EdgesTest extends TestCase
     {
         $edgeRandom = $edges->getEdgeOrder(Edges::ORDER_RANDOM);
 
-        $this->assertInstanceOf('Graphp\Graph\Edge\Base', $edgeRandom);
+        $this->assertInstanceOf('Graphp\Graph\Edge', $edgeRandom);
         $edges->getEdgeIndex($edges->getIndexEdge($edgeRandom));
 
         $edgesRandom = $edges->getEdgesOrder(Edges::ORDER_RANDOM);

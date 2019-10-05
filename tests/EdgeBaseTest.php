@@ -1,9 +1,9 @@
 <?php
 
-namespace Graphp\Graph\Tests\Edge;
+namespace Graphp\Graph\Tests;
 
 use Graphp\Graph\Graph;
-use Graphp\Graph\Edge\Base as Edge;
+use Graphp\Graph\Edge;
 use Graphp\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 abstract class EdgeBaseTest extends AbstractAttributeAwareTest
@@ -13,7 +13,6 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
     protected $v2;
 
     /**
-     *
      * @var Edge
      */
     protected $edge;

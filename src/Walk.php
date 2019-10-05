@@ -4,7 +4,6 @@ namespace Graphp\Graph;
 
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\Vertices;
-use Graphp\Graph\Edge\Base as Edge;
 use Graphp\Graph\Exception\UnderflowException;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Set\DualAggregate;
