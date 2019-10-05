@@ -298,6 +298,38 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph->createVertices(array(1, 2, array(), 3));
     }
 
+    public function testCloneInvertedUndirectedIsAlmostOriginal()
+    {
+        // 1 -- 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $edge = $graph->createEdgeUndirected($v1, $v2);
+
+        $edgeInverted = $graph->createEdgeCloneInverted($edge);
+
+        $this->assertInstanceOf(get_class($edge), $edgeInverted);
+
+        $this->assertEquals($edge->getVertices()->getVector(), array_reverse($edgeInverted->getVertices()->getVector()));
+    }
+
+    public function testCloneDoubleInvertedDirectedEdgeIsOriginal()
+    {
+        // 1 -> 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $edge = $graph->createEdgeDirected($v1, $v2);
+
+        $edgeInverted = $graph->createEdgeCloneInverted($edge);
+
+        $this->assertInstanceOf(get_class($edge), $edgeInverted);
+
+        $edgeInvertedAgain = $graph->createEdgeCloneInverted($edgeInverted);
+
+        $this->assertEdgeEquals($edge, $edgeInvertedAgain);
+    }
+
     public function testRemoveEdge()
     {
         // 1 -- 2

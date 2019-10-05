@@ -71,24 +71,6 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $this->edge->getVertexToFrom($v3);
     }
 
-    public function testClone()
-    {
-        $edge = $this->edge->createEdgeClone();
-
-        $this->assertEdgeEquals($this->edge, $edge);
-    }
-
-    public function testCloneDoubleInvertedIsOriginal()
-    {
-        $edgeInverted = $this->edge->createEdgeCloneInverted();
-
-        $this->assertInstanceOf(get_class($this->edge), $edgeInverted);
-
-        $edge = $edgeInverted->createEdgeCloneInverted();
-
-        $this->assertEdgeEquals($this->edge, $edge);
-    }
-
     public function testLoop()
     {
         $edge = $this->createEdgeLoop();

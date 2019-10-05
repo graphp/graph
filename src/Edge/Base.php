@@ -258,28 +258,6 @@ abstract class Base implements VerticesAggregate, AttributeAware
     }
 
     /**
-     * create new clone of this edge between adjacent vertices
-     *
-     * @return self new edge
-     * @uses Graph::createEdgeClone()
-     */
-    public function createEdgeClone()
-    {
-        return $this->getGraph()->createEdgeClone($this);
-    }
-
-    /**
-     * create new clone of this edge inverted (in opposite direction) between adjacent vertices
-     *
-     * @return self new edge
-     * @uses Graph::createEdgeCloneInverted()
-     */
-    public function createEdgeCloneInverted()
-    {
-        return $this->getGraph()->createEdgeCloneInverted($this);
-    }
-
-    /**
      * do NOT allow cloning of objects
      *
      * @throws BadMethodCallException
