@@ -30,7 +30,7 @@ class VerticesTest extends BaseVerticesTest
 
         $vertices = $graph->getVertices();
 
-        $vertices->getVertexOrder('not a valid callback');
+        $vertices->getVertexOrder(-1);
     }
 
     /**
@@ -40,7 +40,7 @@ class VerticesTest extends BaseVerticesTest
     {
         $vertices = $this->createVertices(array());
 
-        $vertices->getVerticesOrder('not a valid callback');
+        $vertices->getVerticesOrder(-1);
     }
 
     public function testDuplicates()

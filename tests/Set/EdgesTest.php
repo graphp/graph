@@ -44,6 +44,7 @@ class EdgesTest extends TestCase
         $this->assertTrue($edges->isEmpty());
         $this->assertTrue($edges->getEdges()->isEmpty());
         $this->assertTrue($edges->getEdgesOrder(Edges::ORDER_WEIGHT)->isEmpty());
+        $this->assertTrue($edges->getEdgesOrder('weight')->isEmpty());
         $this->assertTrue($edges->getEdgesDistinct()->isEmpty());
         $this->assertTrue($edges->getEdgesMatch(function() { })->isEmpty());
 
@@ -255,7 +256,7 @@ class EdgesTest extends TestCase
 
         $edges = $graph->getEdges();
 
-        $edges->getEdgeOrder('not a valid callback');
+        $edges->getEdgeOrder(-2);
     }
 
     /**
@@ -265,7 +266,7 @@ class EdgesTest extends TestCase
     {
         $edges = $this->createEdges(array());
 
-        $edges->getEdgesOrder('not a valid callback');
+        $edges->getEdgesOrder(-2);
     }
 
     public function testOrderByGroup()
@@ -296,6 +297,23 @@ class EdgesTest extends TestCase
         };
         $this->assertSame(508, $edges->getSumCallback($sumweights));
         $this->assertSame(508, $edgesOrdered->getSumCallback($sumweights));
+    }
+
+    public function testOrderByAttribute()
+    {
+        $graph = new Graph();
+        $v1 = $graph->createVertex(1);
+        $v2 = $graph->createVertex(2);
+        $e1 = $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 20);
+        $e2 = $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 10);
+
+        $edges = $graph->getEdges()->getEdgesOrder('weight');
+
+        $this->assertInstanceOf('Graphp\Graph\Set\Edges', $edges);
+        $this->assertSame($e2, $edges->getEdgeFirst());
+        $this->assertSame($e1, $edges->getEdgeLast());
+
+        $this->assertSame($e1, $edges->getEdgeOrder('weight', true));
     }
 
     public function testIntersection()

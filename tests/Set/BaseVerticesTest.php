@@ -41,6 +41,7 @@ abstract class BaseVerticesTest extends TestCase
         $this->assertTrue($vertices->isEmpty());
         $this->assertTrue($vertices->getVertices()->isEmpty());
         $this->assertTrue($vertices->getVerticesOrder(Vertices::ORDER_ID)->isEmpty());
+        $this->assertTrue($vertices->getVerticesOrder('id')->isEmpty());
         $this->assertTrue($vertices->getVerticesDistinct()->isEmpty());
         $this->assertTrue($vertices->getVerticesMatch(function() { })->isEmpty());
         $this->assertFalse($vertices->hasDuplicates());
@@ -240,6 +241,21 @@ abstract class BaseVerticesTest extends TestCase
         };
         $this->assertSame(508, $vertices->getSumCallback($sumgroups));
         $this->assertSame(508, $verticesOrdered->getSumCallback($sumgroups));
+    }
+
+    public function testOrderByAttribute()
+    {
+        $graph = new Graph();
+        $v1 = $graph->createVertex()->setAttribute('votes', 20);
+        $v2 = $graph->createVertex()->setAttribute('votes', 10);
+
+        $vertices = $graph->getVertices()->getVerticesOrder('votes');
+
+        $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $vertices);
+        $this->assertSame($v2, $vertices->getVertexFirst());
+        $this->assertSame($v1, $vertices->getVertexLast());
+
+        $this->assertSame($v1, $vertices->getVertexOrder('votes', true));
     }
 
     /**

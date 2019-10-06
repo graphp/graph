@@ -237,7 +237,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      *
      * Edge index positions will be left unchanged.
      *
-     * @param  int                      $orderBy  criterium to sort by. see self::ORDER_WEIGHT, etc.
+     * @param  string|int               $orderBy  criterium to sort by. see edge attribute names or self::ORDER_WEIGHT, etc.
      * @param  bool                     $desc     whether to return biggest first (true) instead of smallest first (default:false)
      * @return Edges                    a new Edges set ordered by the given $orderBy criterium
      * @throws InvalidArgumentException if criterium is unknown
@@ -291,7 +291,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     /**
      * get first edge ordered by given criterium $orderBy
      *
-     * @param  int                      $orderBy  criterium to sort by. see self::ORDER_WEIGHT, etc.
+     * @param  string|int               $orderBy  criterium to sort by. see edge attribute names or self::ORDER_WEIGHT, etc.
      * @param  bool                     $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Edge
      * @throws InvalidArgumentException if criterium is unknown
@@ -464,7 +464,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     /**
      * get callback/Closure to be called on Edge instances for given callback identifier
      *
-     * @param callable|int $callback
+     * @param callable|string|int $callback
      * @throws InvalidArgumentException
      * @return callable
      */
@@ -477,6 +477,12 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
                 };
             }
             return $callback;
+        }
+
+        if (is_string($callback)) {
+            return function (Edge $edge) use ($callback) {
+                return $edge->getAttribute($callback);
+            };
         }
 
         static $methods = array(
