@@ -27,13 +27,6 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     const ORDER_ID = 1;
 
     /**
-     * random/shuffled order
-     *
-     * @var int
-     */
-    const ORDER_RANDOM = 5;
-
-    /**
      * order by vertex group
      *
      * @var int
@@ -178,6 +171,22 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     }
 
     /**
+     * returns random Vertex in this set of Vertices
+     *
+     * @return Vertex             random Vertex in this set of Vertices
+     * @throws UnderflowException if set is empty
+     * @see self::getVerticesShuffled()
+     */
+    public function getVertexRandom()
+    {
+        if (!$this->vertices) {
+            throw new UnderflowException('Does not contain any vertices');
+        }
+
+        return $this->vertices[array_rand($this->vertices)];
+    }
+
+    /**
      * return first Vertex that matches the given callback filter function
      *
      * @param callable $callbackCheck
@@ -240,21 +249,6 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function getVerticesOrder($orderBy, $desc = false)
     {
-        if ($orderBy === self::ORDER_RANDOM) {
-            // shuffle the vertex positions
-            $keys = array_keys($this->vertices);
-            shuffle($keys);
-
-            // re-order according to shuffled vertex positions
-            $vertices = array();
-            foreach ($keys as $key) {
-                $vertices[$key] = $this->vertices[$key];
-            }
-
-            // create iterator for shuffled array (no need to check DESC flag)
-            return new static($vertices);
-        }
-
         $callback = $this->getCallback($orderBy);
         $array    = $this->vertices;
 
@@ -272,6 +266,31 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         });
 
         return new static($array);
+    }
+
+    /**
+     * get new Set of Vertices shuffled by random order
+     *
+     * Vertex index positions will be left unchanged, so if you call this method
+     * on a VerticesMap, it will also return a VerticesMap.
+     *
+     * @return Vertices a new Vertices set shuffled by random order
+     * @see self::getVerticesOrder()
+     * @see self::getVertexRandom()
+     */
+    public function getVerticesShuffled()
+    {
+        // shuffle the vertex positions
+        $keys = array_keys($this->vertices);
+        shuffle($keys);
+
+        // re-order according to shuffled vertex positions
+        $vertices = array();
+        foreach ($keys as $key) {
+            $vertices[$key] = $this->vertices[$key];
+        }
+
+        return new static($vertices);
     }
 
     /**
@@ -321,11 +340,6 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     {
         if (!$this->vertices) {
             throw new UnderflowException('No vertex found');
-        }
-        // random order
-        if ($orderBy === self::ORDER_RANDOM) {
-            // just return by random key (no need to check for DESC flag)
-            return $this->vertices[array_rand($this->vertices)];
         }
 
         $callback = $this->getCallback($orderBy);
