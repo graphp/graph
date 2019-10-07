@@ -20,29 +20,6 @@ class VerticesTest extends BaseVerticesTest
         $this->assertTrue($vertices->isEmpty());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testGetVertexOrderInvalidSortBy()
-    {
-        $graph = new Graph();
-        $graph->createVertex(1);
-
-        $vertices = $graph->getVertices();
-
-        $vertices->getVertexOrder(-1);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testGetVicesOrderInvalidSortBy()
-    {
-        $vertices = $this->createVertices(array());
-
-        $vertices->getVerticesOrder(-1);
-    }
-
     public function testDuplicates()
     {
         $graph = new Graph();
