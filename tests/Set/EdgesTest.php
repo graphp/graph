@@ -12,7 +12,7 @@ class EdgesTest extends TestCase
     /**
      *
      * @param array $edges
-     * @return Edges;
+     * @return Edges
      */
     protected function createEdges(array $edges)
     {
@@ -43,7 +43,9 @@ class EdgesTest extends TestCase
         $this->assertEquals(array(), $edges->getVector());
         $this->assertTrue($edges->isEmpty());
         $this->assertTrue($edges->getEdges()->isEmpty());
-        $this->assertTrue($edges->getEdgesOrder(Edges::ORDER_WEIGHT)->isEmpty());
+        $this->assertTrue($edges->getEdgesOrder(function (Edge $edge) {
+            return $edge->getWeight();
+        })->isEmpty());
         $this->assertTrue($edges->getEdgesOrder('weight')->isEmpty());
         $this->assertTrue($edges->getEdgesDistinct()->isEmpty());
         $this->assertTrue($edges->getEdgesMatch(function() { })->isEmpty());
@@ -92,7 +94,7 @@ class EdgesTest extends TestCase
      */
     public function testEmptyDoesNotHaveOrdered(Edges $edges)
     {
-        $edges->getEdgeOrder(Edges::ORDER_WEIGHT);
+        $edges->getEdgeOrder('weight');
     }
 
     public function testTwo()
@@ -244,31 +246,6 @@ class EdgesTest extends TestCase
         return false;
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testGetEdgeOrderInvalidSortBy()
-    {
-        // 1 -> 1
-        $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $graph->createEdgeDirected($v1, $v1);
-
-        $edges = $graph->getEdges();
-
-        $edges->getEdgeOrder(-2);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testGetEdgesOrderInvalidSortBy()
-    {
-        $edges = $this->createEdges(array());
-
-        $edges->getEdgesOrder(-2);
-    }
-
     public function testOrderByGroup()
     {
         $graph = new Graph();
@@ -283,14 +260,18 @@ class EdgesTest extends TestCase
         $biggest = $graph->createEdgeUndirected($v1, $v2)->setWeight(200);
 
         $edges = $graph->getEdges();
-        $edgesOrdered = $edges->getEdgesOrder(Edges::ORDER_WEIGHT);
+        $edgesOrdered = $edges->getEdgesOrder(function (Edge $edge) {
+            return $edge->getWeight();
+        });
 
         $this->assertInstanceOf('Graphp\Graph\Set\Edges', $edgesOrdered);
         $this->assertEquals(1, $edgesOrdered->getEdgeFirst()->getWeight());
         $this->assertEquals(200, $edgesOrdered->getEdgeLast()->getWeight());
 
         $this->assertSame($biggest, $edgesOrdered->getEdgeLast());
-        $this->assertSame($biggest, $edges->getEdgeOrder(Edges::ORDER_WEIGHT, true));
+        $this->assertSame($biggest, $edges->getEdgeOrder(function (Edge $edge) {
+            return $edge->getWeight();
+        }, true));
 
         $sumweights = function(Edge $edge) {
             return $edge->getWeight();

@@ -3,8 +3,7 @@
 namespace Graphp\Graph\Tests;
 
 use Graphp\Graph\Graph;
-use Graphp\Graph\Set\Edges;
-use Graphp\Graph\Vertex;
+use Graphp\Graph\Edge;
 use Graphp\Graph\Walk;
 
 class WalkTest extends TestCase
@@ -252,7 +251,9 @@ class WalkTest extends TestCase
         $walk = Walk::factoryFromVertices(array($v1, $v2));
 
         // edge with weight 10
-        $walk = Walk::factoryFromVertices(array($v1, $v2), Edges::ORDER_WEIGHT);
+        $walk = Walk::factoryFromVertices(array($v1, $v2), function (Edge $edge) {
+            return $edge->getWeight();
+        });
         $this->assertSame($e1, $walk->getEdges()->getEdgeFirst());
 
         // edge with weight 10
@@ -260,7 +261,9 @@ class WalkTest extends TestCase
         $this->assertSame($e1, $walk->getEdges()->getEdgeFirst());
 
         // edge with weight 20
-        $walk = Walk::factoryFromVertices(array($v1, $v2), Edges::ORDER_WEIGHT, true);
+        $walk = Walk::factoryFromVertices(array($v1, $v2), function (Edge $edge) {
+            return $edge->getWeight();
+        }, true);
         $this->assertSame($e2, $walk->getEdges()->getEdgeFirst());
 
         // edge with weight 20

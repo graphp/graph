@@ -3,7 +3,6 @@
 namespace Graphp\Graph\Set;
 
 use Graphp\Graph\Edge;
-use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Exception\OutOfBoundsException;
 use Graphp\Graph\Exception\UnderflowException;
 
@@ -18,38 +17,6 @@ use Graphp\Graph\Exception\UnderflowException;
  */
 class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
 {
-    /**
-     * order by edge weight
-     *
-     * @var int
-     * @see Edge::getWeight()
-     */
-    const ORDER_WEIGHT = 1;
-
-    /**
-     * order by edge capacity
-     *
-     * @var int
-     * @see Edge::getCapacity()
-     */
-    const ORDER_CAPACITY = 2;
-
-    /**
-     * order by remaining capacity on edge (maximum capacity - current flow)
-     *
-     * @var int
-     * @see Edge::getCapacityRemaining()
-     */
-    const ORDER_CAPACITY_REMAINING = 3;
-
-    /**
-     * order by edge flow
-     *
-     * @var int
-     * @see Edge::getFlow()
-     */
-    const ORDER_FLOW = 4;
-
     protected $edges = array();
 
     /**
@@ -237,10 +204,9 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      *
      * Edge index positions will be left unchanged.
      *
-     * @param  string|int               $orderBy  criterium to sort by. see edge attribute names or self::ORDER_WEIGHT, etc.
-     * @param  bool                     $desc     whether to return biggest first (true) instead of smallest first (default:false)
-     * @return Edges                    a new Edges set ordered by the given $orderBy criterium
-     * @throws InvalidArgumentException if criterium is unknown
+     * @param  string|callable(Edge):number $orderBy criterium to sort by. see edge attribute names or custom callable
+     * @param  bool                         $desc    whether to return biggest first (true) instead of smallest first (default:false)
+     * @return Edges                        a new Edges set ordered by the given $orderBy criterium
      */
     public function getEdgesOrder($orderBy, $desc = false)
     {
@@ -291,11 +257,10 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     /**
      * get first edge ordered by given criterium $orderBy
      *
-     * @param  string|int               $orderBy  criterium to sort by. see edge attribute names or self::ORDER_WEIGHT, etc.
-     * @param  bool                     $desc     whether to return biggest (true) instead of smallest (default:false)
+     * @param  string|callable(Edge):number $orderBy criterium to sort by. see edge attribute names or custom callable
+     * @param  bool                         $desc    whether to return biggest (true) instead of smallest (default:false)
      * @return Edge
-     * @throws InvalidArgumentException if criterium is unknown
-     * @throws UnderflowException       if no edges exist
+     * @throws UnderflowException           if no edges exist
      */
     public function getEdgeOrder($orderBy, $desc=false)
     {
@@ -431,16 +396,13 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     /**
      * call given $callback on each Edge and sum their results
      *
-     * @param callable $callback
+     * @param string|callable(Edge):number $callback callback to sum by. See edge attribute names or custom callback
      * @return number
-     * @throws InvalidArgumentException for invalid callbacks
      * @uses self::getCallback()
      */
     public function getSumCallback($callback)
     {
         $callback = $this->getCallback($callback);
-
-        // return array_sum(array_map($callback, $this->edges));
 
         $sum = 0;
         foreach ($this->edges as $edge) {
@@ -464,9 +426,8 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     /**
      * get callback/Closure to be called on Edge instances for given callback identifier
      *
-     * @param callable|string|int $callback
-     * @throws InvalidArgumentException
-     * @return callable
+     * @param string|callable(Edge):number $callback
+     * @return callable(Edge):number
      */
     private function getCallback($callback)
     {
@@ -479,27 +440,9 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
             return $callback;
         }
 
-        if (is_string($callback)) {
-            return function (Edge $edge) use ($callback) {
-                return $edge->getAttribute($callback);
-            };
-        }
-
-        static $methods = array(
-            self::ORDER_WEIGHT => 'getWeight',
-            self::ORDER_CAPACITY => 'getCapacity',
-            self::ORDER_CAPACITY_REMAINING => 'getCapacityRemaining',
-            self::ORDER_FLOW => 'getFlow'
-        );
-
-        if (!is_int($callback) || !isset($methods[$callback])) {
-            throw new InvalidArgumentException('Invalid callback given');
-        }
-
-        $method = $methods[$callback];
-
-        return function (Edge $edge) use ($method) {
-            return $edge->$method();
+        return function (Edge $edge) use ($callback) {
+            return $edge->getAttribute($callback);
         };
+
     }
 }

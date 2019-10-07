@@ -40,7 +40,9 @@ abstract class BaseVerticesTest extends TestCase
         $this->assertEquals(array(), $vertices->getVector());
         $this->assertTrue($vertices->isEmpty());
         $this->assertTrue($vertices->getVertices()->isEmpty());
-        $this->assertTrue($vertices->getVerticesOrder(Vertices::ORDER_ID)->isEmpty());
+        $this->assertTrue($vertices->getVerticesOrder(function (Vertex $vertex) {
+            return $vertex->getId();
+        })->isEmpty());
         $this->assertTrue($vertices->getVerticesOrder('id')->isEmpty());
         $this->assertTrue($vertices->getVerticesDistinct()->isEmpty());
         $this->assertTrue($vertices->getVerticesMatch(function() { })->isEmpty());
@@ -90,7 +92,7 @@ abstract class BaseVerticesTest extends TestCase
      */
     public function testEmptyDoesNotHaveOrdered(Vertices $vertices)
     {
-        $vertices->getVertexOrder(Vertices::ORDER_ID);
+        $vertices->getVertexOrder('group');
     }
 
     public function testTwo()
@@ -227,14 +229,18 @@ abstract class BaseVerticesTest extends TestCase
         $biggest = $graph->createVertex()->setGroup(200);
 
         $vertices = $graph->getVertices();
-        $verticesOrdered = $vertices->getVerticesOrder(Vertices::ORDER_GROUP);
+        $verticesOrdered = $vertices->getVerticesOrder(function (Vertex $vertex) {
+            return $vertex->getGroup();
+        });
 
         $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $verticesOrdered);
         $this->assertEquals(1, $verticesOrdered->getVertexFirst()->getGroup());
         $this->assertEquals(200, $verticesOrdered->getVertexLast()->getGroup());
 
         $this->assertSame($biggest, $verticesOrdered->getVertexLast());
-        $this->assertSame($biggest, $vertices->getVertexOrder(Vertices::ORDER_GROUP, true));
+        $this->assertSame($biggest, $vertices->getVertexOrder(function (Vertex $vertex) {
+            return $vertex->getGroup();
+        }, true));
 
         $sumgroups = function(Vertex $vertex) {
             return $vertex->getGroup();
