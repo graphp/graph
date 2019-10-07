@@ -241,7 +241,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * Vertex index positions will be left unchanged, so if you call this method
      * on a VerticesMap, it will also return a VerticesMap.
      *
-     * @param  int                      $orderBy  criterium to sort by. see Vertex::ORDER_ID, etc.
+     * @param  string|int               $orderBy  criterium to sort by. see vertex attribute names or Vertex::ORDER_ID, etc.
      * @param  bool                     $desc     whether to return biggest first (true) instead of smallest first (default:false)
      * @return Vertices                 a new Vertices set ordered by the given $orderBy criterium
      * @throws InvalidArgumentException if criterium is unknown
@@ -329,7 +329,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     /**
      * get first vertex (optionally ordered by given criterium $by) from given array of vertices
      *
-     * @param  int                      $orderBy  criterium to sort by. see Vertex::ORDER_ID, etc.
+     * @param  string|int               $orderBy  criterium to sort by. see vertex attribute names or Vertex::ORDER_ID, etc.
      * @param  bool                     $desc     whether to return biggest (true) instead of smallest (default:false)
      * @return Vertex
      * @throws InvalidArgumentException if criterium is unknown
@@ -510,7 +510,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     /**
      * get callback/Closure to be called on Vertex instances for given callback identifier
      *
-     * @param callable|int $callback
+     * @param callable|string|int $callback
      * @throws InvalidArgumentException
      * @return callable
      */
@@ -523,6 +523,12 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
                 };
             }
             return $callback;
+        }
+
+        if (is_string($callback)) {
+            return function (Vertex $vertex) use ($callback) {
+                return $vertex->getAttribute($callback);
+            };
         }
 
         static $methods = array(

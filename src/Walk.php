@@ -43,13 +43,13 @@ class Walk implements DualAggregate
      * create new walk instance between given set of Vertices / array of Vertex instances
      *
      * @param  Vertices|Vertex[]  $vertices
-     * @param  int|null           $by
+     * @param  null|string|null   $orderBy
      * @param  bool               $desc
      * @return Walk
      * @throws UnderflowException if no vertices were given
      * @see Edges::getEdgeOrder() for parameters $by and $desc
      */
-    public static function factoryFromVertices($vertices, $by = null, $desc = false)
+    public static function factoryFromVertices($vertices, $orderBy = null, $desc = false)
     {
         $edges = array();
         $last = NULL;
@@ -58,10 +58,10 @@ class Walk implements DualAggregate
             if ($last !== NULL) {
                 // pick edge between last vertex and this vertex
                 /* @var $last Vertex */
-                if ($by === null) {
+                if ($orderBy === null) {
                     $edges []= $last->getEdgesTo($vertex)->getEdgeFirst();
                 } else {
-                    $edges []= $last->getEdgesTo($vertex)->getEdgeOrder($by, $desc);
+                    $edges []= $last->getEdgesTo($vertex)->getEdgeOrder($orderBy, $desc);
                 }
             }
             $last = $vertex;
@@ -78,14 +78,14 @@ class Walk implements DualAggregate
      *
      * @param  Vertex[]           $predecessors map of vid => predecessor vertex instance
      * @param  Vertex             $vertex       start vertex to search predecessors from
-     * @param  int|null           $by
+     * @param  null|string|int    $orderBy
      * @param  bool               $desc
      * @return Walk
      * @throws UnderflowException
      * @see Edges::getEdgeOrder() for parameters $by and $desc
      * @uses self::factoryFromVertices()
      */
-    public static function factoryCycleFromPredecessorMap(array $predecessors, Vertex $vertex, $by = null, $desc = false)
+    public static function factoryCycleFromPredecessorMap(array $predecessors, Vertex $vertex, $orderBy = null, $desc = false)
     {
         // find a vertex in the cycle
         $vid = $vertex->getId();
@@ -121,23 +121,23 @@ class Walk implements DualAggregate
         // additional edge from last vertex to first vertex
         $vertices[] = reset($vertices);
 
-        return self::factoryCycleFromVertices($vertices, $by, $desc);
+        return self::factoryCycleFromVertices($vertices, $orderBy, $desc);
     }
 
     /**
      * create new cycle instance with edges between given vertices
      *
      * @param  Vertex[]|Vertices  $vertices
-     * @param  int|null           $by
+     * @param  null|string|int    $orderBy
      * @param  bool               $desc
      * @return Walk
      * @throws UnderflowException if no vertices were given
      * @see Edges::getEdgeOrder() for parameters $by and $desc
      * @uses self::factoryFromVertices()
      */
-    public static function factoryCycleFromVertices($vertices, $by = null, $desc = false)
+    public static function factoryCycleFromVertices($vertices, $orderBy = null, $desc = false)
     {
-        $cycle = self::factoryFromVertices($vertices, $by, $desc);
+        $cycle = self::factoryFromVertices($vertices, $orderBy, $desc);
 
         if ($cycle->getEdges()->isEmpty()) {
             throw new InvalidArgumentException('Cycle with no edges can not exist');
