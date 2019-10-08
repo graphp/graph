@@ -87,11 +87,9 @@ class Graph implements DualAggregate, AttributeAware
         if ($this->vertices->hasVertexId($id)) {
             throw new RuntimeException('Id of cloned vertex already exists');
         }
+
         $newVertex = new Vertex($this, $id);
-        // TODO: properly set attributes of vertex
         $newVertex->getAttributeBag()->setAttributes($originalVertex->getAttributeBag()->getAttributes());
-        $newVertex->setBalance($originalVertex->getBalance());
-        $newVertex->setGroup($originalVertex->getGroup());
 
         return $newVertex;
     }
@@ -106,11 +104,10 @@ class Graph implements DualAggregate, AttributeAware
     public function createGraphCloneEdgeless()
     {
         $graph = new Graph();
-        $graph->getAttributeBag()->setAttributes($this->getAttributeBag()->getAttributes());
-        // TODO: set additional graph attributes
+        $graph->attributes = $this->attributes;
+
         foreach ($this->getVertices() as $originalVertex) {
             $graph->createVertexClone($originalVertex);
-            // $graph->vertices[$vid] = $vertex;
         }
 
         return $graph;
@@ -258,11 +255,8 @@ class Graph implements DualAggregate, AttributeAware
             // create new edge between new a and b
             $newEdge = $this->createEdgeUndirected($a, $b);
         }
-        // TODO: copy edge attributes
+
         $newEdge->getAttributeBag()->setAttributes($originalEdge->getAttributeBag()->getAttributes());
-        $newEdge->setWeight($originalEdge->getWeight());
-        $newEdge->setFlow($originalEdge->getFlow());
-        $newEdge->setCapacity($originalEdge->getCapacity());
 
         return $newEdge;
     }

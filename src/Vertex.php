@@ -24,22 +24,6 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     private $graph;
 
-    /**
-     * vertex balance
-     *
-     * @var int|float|NULL
-     * @see Vertex::setBalance()
-     */
-    private $balance;
-
-    /**
-     * group number
-     *
-     * @var int
-     * @see Vertex::setGroup()
-     */
-    private $group = 0;
-
     private $attributes = array();
 
     /**
@@ -69,48 +53,6 @@ class Vertex implements EdgesAggregate, AttributeAware
     public function getGraph()
     {
         return $this->graph;
-    }
-
-    public function getBalance()
-    {
-        return $this->balance;
-    }
-
-    public function setBalance($balance)
-    {
-        if ($balance !== NULL && !is_float($balance) && !is_int($balance)) {
-            throw new InvalidArgumentException('Invalid balance given - must be numeric');
-        }
-        $this->balance = $balance;
-
-        return $this;
-    }
-
-    /**
-     * set group number of this vertex
-     *
-     * @param  int                      $group
-     * @return Vertex                   $this (chainable)
-     * @throws InvalidArgumentException if group is not numeric
-     */
-    public function setGroup($group)
-    {
-        if (!is_int($group)) {
-            throw new InvalidArgumentException('Invalid group number');
-        }
-        $this->group = $group;
-
-        return $this;
-    }
-
-    /**
-     * get group number
-     *
-     * @return int
-     */
-    public function getGroup()
-    {
-        return $this->group;
     }
 
     /**

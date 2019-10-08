@@ -104,34 +104,6 @@ class VertexTest extends AbstractAttributeAwareTest
         $this->assertEquals(array($this->vertex), $this->vertex->getVerticesEdgeFrom()->getVector());
     }
 
-    public function testBalance()
-    {
-        $this->vertex->setBalance(10);
-        $this->assertEquals(10, $this->vertex->getBalance());
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testBalanceInvalid()
-    {
-        $this->vertex->setBalance("10");
-    }
-
-    public function testGroup()
-    {
-        $this->vertex->setGroup(2);
-        $this->assertEquals(2, $this->vertex->getGroup());
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testGroupInvalid()
-    {
-        $this->vertex->setGroup("3");
-    }
-
     /**
      * @expectedException InvalidArgumentException
      */

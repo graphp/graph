@@ -10,7 +10,6 @@ use Graphp\Graph\Tests\TestCase;
 class EdgesTest extends TestCase
 {
     /**
-     *
      * @param array $edges
      * @return Edges
      */
@@ -44,7 +43,7 @@ class EdgesTest extends TestCase
         $this->assertTrue($edges->isEmpty());
         $this->assertTrue($edges->getEdges()->isEmpty());
         $this->assertTrue($edges->getEdgesOrder(function (Edge $edge) {
-            return $edge->getWeight();
+            return $edge->getAttribute('weight');
         })->isEmpty());
         $this->assertTrue($edges->getEdgesOrder('weight')->isEmpty());
         $this->assertTrue($edges->getEdgesDistinct()->isEmpty());
@@ -251,30 +250,30 @@ class EdgesTest extends TestCase
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $graph->createEdgeUndirected($v1, $v2)->setWeight(1);
-        $graph->createEdgeUndirected($v1, $v2)->setWeight(100);
-        $graph->createEdgeUndirected($v1, $v2)->setWeight(5);
-        $graph->createEdgeUndirected($v1, $v2)->setWeight(100);
-        $graph->createEdgeUndirected($v1, $v2)->setWeight(100);
-        $graph->createEdgeUndirected($v1, $v2)->setWeight(2);
-        $biggest = $graph->createEdgeUndirected($v1, $v2)->setWeight(200);
+        $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 1);
+        $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 100);
+        $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 5);
+        $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 100);
+        $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 100);
+        $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 2);
+        $biggest = $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 200);
 
         $edges = $graph->getEdges();
         $edgesOrdered = $edges->getEdgesOrder(function (Edge $edge) {
-            return $edge->getWeight();
+            return $edge->getAttribute('weight');
         });
 
         $this->assertInstanceOf('Graphp\Graph\Set\Edges', $edgesOrdered);
-        $this->assertEquals(1, $edgesOrdered->getEdgeFirst()->getWeight());
-        $this->assertEquals(200, $edgesOrdered->getEdgeLast()->getWeight());
+        $this->assertEquals(1, $edgesOrdered->getEdgeFirst()->getAttribute('weight'));
+        $this->assertEquals(200, $edgesOrdered->getEdgeLast()->getAttribute('weight'));
 
         $this->assertSame($biggest, $edgesOrdered->getEdgeLast());
         $this->assertSame($biggest, $edges->getEdgeOrder(function (Edge $edge) {
-            return $edge->getWeight();
+            return $edge->getAttribute('weight');
         }, true));
 
         $sumweights = function(Edge $edge) {
-            return $edge->getWeight();
+            return $edge->getAttribute('weight');
         };
         $this->assertSame(508, $edges->getSumCallback($sumweights));
         $this->assertSame(508, $edgesOrdered->getSumCallback($sumweights));
@@ -295,6 +294,9 @@ class EdgesTest extends TestCase
         $this->assertSame($e1, $edges->getEdgeLast());
 
         $this->assertSame($e1, $edges->getEdgeOrder('weight', true));
+
+        $this->assertSame(30, $graph->getEdges()->getSumCallback('weight'));
+        $this->assertSame(30, $edges->getSumCallback('weight'));
     }
 
     public function testIntersection()
