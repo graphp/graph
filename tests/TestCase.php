@@ -14,6 +14,7 @@ class TestCase extends BaseTestCase
     {
         $f = function(Graph $graph){
             $ret = get_class($graph);
+            $ret .= PHP_EOL . 'attributes: ' . json_encode($graph->getAttributeBag()->getAttributes());
             $ret .= PHP_EOL . 'vertices: ' . count($graph->getVertices());
             $ret .= PHP_EOL . 'edges: ' . count($graph->getEdges());
 
@@ -72,8 +73,6 @@ class TestCase extends BaseTestCase
 
         $ret .= PHP_EOL . 'id: ' . $vertex->getId();
         $ret .= PHP_EOL . 'attributes: ' . json_encode($vertex->getAttributeBag()->getAttributes());
-        $ret .= PHP_EOL . 'balance: ' . $vertex->getBalance();
-        $ret .= PHP_EOL . 'group: ' . $vertex->getGroup();
 
         return $ret;
     }
@@ -87,9 +86,6 @@ class TestCase extends BaseTestCase
             $vertices = $edge->getVertices()->getIds();
             $ret .= $vertices[0] . ' -- ' . $vertices[1];
         }
-        $ret .= PHP_EOL . 'flow: ' . $edge->getFlow();
-        $ret .= PHP_EOL . 'capacity: ' . $edge->getCapacity();
-        $ret .= PHP_EOL . 'weight: ' . $edge->getWeight();
         $ret .= PHP_EOL . 'attributes: ' . json_encode($edge->getAttributeBag()->getAttributes());
 
         return $ret;

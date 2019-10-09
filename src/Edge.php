@@ -7,7 +7,6 @@ use Graphp\Graph\Attribute\AttributeBagReference;
 use Graphp\Graph\Exception\BadMethodCallException;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Exception\LogicException;
-use Graphp\Graph\Exception\RangeException;
 use Graphp\Graph\Set\Vertices;
 use Graphp\Graph\Set\VerticesAggregate;
 
@@ -19,30 +18,6 @@ use Graphp\Graph\Set\VerticesAggregate;
  */
 abstract class Edge implements VerticesAggregate, AttributeAware
 {
-    /**
-     * weight of this edge
-     *
-     * @var float|int|NULL
-     * @see self::getWeight()
-     */
-    protected $weight = NULL;
-
-    /**
-     * maximum capacity (maximum flow)
-     *
-     * @var float|int|NULL
-     * @see self::getCapacity()
-     */
-    protected $capacity = NULL;
-
-    /**
-     * flow (capacity currently in use)
-     *
-     * @var float|int|NULL
-     * @see self::getFlow()
-     */
-    protected $flow = NULL;
-
     protected $attributes = array();
 
     /**
@@ -105,119 +80,6 @@ abstract class Edge implements VerticesAggregate, AttributeAware
      * @see self::hasEdgeFrom() to check if given start is valid
      */
     abstract public function getVertexFromTo(Vertex $endVertex);
-
-    /**
-     * return weight of edge
-     *
-     * @return float|int|NULL numeric weight of edge or NULL=not set
-     */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
-
-    /**
-     * set new weight for edge
-     *
-     * @param  float|int|NULL           $weight new numeric weight of edge or NULL=unset weight
-     * @return self                     $this (chainable)
-     * @throws InvalidArgumentException if given weight is not numeric
-     */
-    public function setWeight($weight)
-    {
-        if ($weight !== NULL && !is_float($weight) && !is_int($weight)) {
-            throw new InvalidArgumentException('Invalid weight given - must be numeric or NULL');
-        }
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    /**
-     * get total capacity of this edge
-     *
-     * @return float|int|NULL numeric capacity or NULL=not set
-     */
-    public function getCapacity()
-    {
-        return $this->capacity;
-    }
-
-    /**
-     * get the capacity remaining (total capacity - current flow)
-     *
-     * @return float|int|NULL numeric capacity remaining or NULL=no upper capacity set
-     */
-    public function getCapacityRemaining()
-    {
-        if ($this->capacity === NULL) {
-            return NULL;
-        }
-
-        return $this->capacity - $this->flow;
-    }
-
-    /**
-     * set new total capacity of this edge
-     *
-     * @param  float|int|NULL           $capacity
-     * @return self                     $this (chainable)
-     * @throws InvalidArgumentException if $capacity is invalid (not numeric or negative)
-     * @throws RangeException           if current flow exceeds new capacity
-     */
-    public function setCapacity($capacity)
-    {
-        if ($capacity !== NULL) {
-            if (!is_float($capacity) && !is_int($capacity)) {
-                throw new InvalidArgumentException('Invalid capacity given - must be numeric');
-            }
-            if ($capacity < 0) {
-                throw new InvalidArgumentException('Capacity must not be negative');
-            }
-            if ($this->flow !== NULL && $this->flow > $capacity) {
-                throw new RangeException('Current flow of ' . $this->flow . ' exceeds new capacity');
-            }
-        }
-        $this->capacity = $capacity;
-
-        return $this;
-    }
-
-    /**
-     * get current flow (capacity currently in use)
-     *
-     * @return float|int|NULL numeric flow or NULL=not set
-     */
-    public function getFlow()
-    {
-        return $this->flow;
-    }
-
-    /**
-     * set new total flow (capacity currently in use)
-     *
-     * @param  float|int|NULL           $flow
-     * @return self                     $this (chainable)
-     * @throws InvalidArgumentException if $flow is invalid (not numeric or negative)
-     * @throws RangeException           if flow exceeds current maximum capacity
-     */
-    public function setFlow($flow)
-    {
-        if ($flow !== NULL) {
-            if (!is_float($flow) && !is_int($flow)) {
-                throw new InvalidArgumentException('Invalid flow given - must be numeric');
-            }
-            if ($flow < 0) {
-                throw new InvalidArgumentException('Flow must not be negative');
-            }
-            if ($this->capacity !== NULL && $flow > $this->capacity) {
-                throw new RangeException('New flow exceeds maximum capacity');
-            }
-        }
-        $this->flow = $flow;
-
-        return $this;
-    }
 
     /**
      * get set of all Vertices this edge connects

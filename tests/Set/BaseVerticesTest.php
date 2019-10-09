@@ -220,30 +220,29 @@ abstract class BaseVerticesTest extends TestCase
     public function testOrderByGroup()
     {
         $graph = new Graph();
-        $graph->createVertex()->setGroup(1);
-        $graph->createVertex()->setGroup(100);
-        $graph->createVertex()->setGroup(5);
-        $graph->createVertex()->setGroup(100);
-        $graph->createVertex()->setGroup(100);
-        $graph->createVertex()->setGroup(2);
-        $biggest = $graph->createVertex()->setGroup(200);
+        $graph->createVertex()->setAttribute('group', 1);
+        $graph->createVertex()->setAttribute('group', 100);
+        $graph->createVertex()->setAttribute('group', 5);
+        $graph->createVertex()->setAttribute('group', 100);
+        $graph->createVertex()->setAttribute('group', 100);
+        $graph->createVertex()->setAttribute('group', 2);
+        $biggest = $graph->createVertex()->setAttribute('group', 200);
 
         $vertices = $graph->getVertices();
-        $verticesOrdered = $vertices->getVerticesOrder(function (Vertex $vertex) {
-            return $vertex->getGroup();
-        });
+        $verticesOrdered = $vertices->getVerticesOrder('group');
 
         $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $verticesOrdered);
-        $this->assertEquals(1, $verticesOrdered->getVertexFirst()->getGroup());
-        $this->assertEquals(200, $verticesOrdered->getVertexLast()->getGroup());
+        $this->assertEquals(1, $verticesOrdered->getVertexFirst()->getAttribute('group'));
+        $this->assertEquals(200, $verticesOrdered->getVertexLast()->getAttribute('group'));
 
         $this->assertSame($biggest, $verticesOrdered->getVertexLast());
         $this->assertSame($biggest, $vertices->getVertexOrder(function (Vertex $vertex) {
-            return $vertex->getGroup();
+            return $vertex->getAttribute('group');
         }, true));
+        $this->assertSame($biggest, $vertices->getVertexOrder('group', true));
 
         $sumgroups = function(Vertex $vertex) {
-            return $vertex->getGroup();
+            return $vertex->getAttribute('group');
         };
         $this->assertSame(508, $vertices->getSumCallback($sumgroups));
         $this->assertSame(508, $verticesOrdered->getSumCallback($sumgroups));

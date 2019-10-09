@@ -244,15 +244,15 @@ class WalkTest extends TestCase
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
-        $e1 = $graph->createEdgeUndirected($v1, $v2)->setWeight(10)->setAttribute('weight', 10);
-        $e2 = $graph->createEdgeUndirected($v1, $v2)->setWeight(20)->setAttribute('weight', 20);
+        $e1 = $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 10);
+        $e2 = $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 20);
 
         // any edge in walk
         $walk = Walk::factoryFromVertices(array($v1, $v2));
 
         // edge with weight 10
         $walk = Walk::factoryFromVertices(array($v1, $v2), function (Edge $edge) {
-            return $edge->getWeight();
+            return $edge->getAttribute('weight');
         });
         $this->assertSame($e1, $walk->getEdges()->getEdgeFirst());
 
@@ -262,7 +262,7 @@ class WalkTest extends TestCase
 
         // edge with weight 20
         $walk = Walk::factoryFromVertices(array($v1, $v2), function (Edge $edge) {
-            return $edge->getWeight();
+            return $edge->getAttribute('weight');
         }, true);
         $this->assertSame($e2, $walk->getEdges()->getEdgeFirst());
 
