@@ -39,13 +39,6 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph->createVertexClone($vertex);
     }
 
-    public function testGraphCloneEmpty()
-    {
-        $graph = new Graph();
-        $newgraph = $graph->createGraphClone();
-        $this->assertGraphEquals($graph, $newgraph);
-    }
-
     /**
      * @expectedException OutOfBoundsException
      */
@@ -55,38 +48,23 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph->getVertex('non-existant');
     }
 
-    public function testGraphClone()
+    public function testGraphCloneNative()
     {
         $graph = new Graph();
-        $graph->setAttribute('title', 'graph');
+        $graph->setAttribute('color', 'grey');
+        $v = $graph->createVertex(123)->setAttribute('color', 'blue');
+        $graph->createEdgeDirected($v, $v)->setAttribute('color', 'red');
 
-        $vertex = $graph->createVertex(123);
-        $vertex->setAttribute('balanace', 10);
-        $vertex->setAttribute('group', 4);
-
-        $newgraph = $graph->createGraphClone();
+        $newgraph = clone $graph;
 
         $this->assertGraphEquals($graph, $newgraph);
 
-        $graphClonedTwice = $newgraph->createGraphClone();
+        $graphClonedTwice = clone $newgraph;
 
         $this->assertGraphEquals($graph, $graphClonedTwice);
-    }
 
-    public function testGraphCloneEdgeless()
-    {
-        $graph = new Graph();
-        $graph->createEdgeDirected($graph->createVertex(1), $graph->createVertex(2));
-        $graph->createEdgeUndirected($graph->createVertex(3), $graph->getVertex(2));
-
-        $graphEdgeless = $graph->createGraphCloneEdgeless();
-
-        $graphExpected = new Graph();
-        $graphExpected->createVertex(1);
-        $graphExpected->createVertex(2);
-        $graphExpected->createVertex(3);
-
-        $this->assertGraphEquals($graphExpected, $graphEdgeless);
+        $this->assertNotSame($graph->getEdges(), $newgraph->getEdges());
+        $this->assertNotSame($graph->getVertices(), $newgraph->getVertices());
     }
 
     /**
@@ -400,7 +378,7 @@ class GraphTest extends AbstractAttributeAwareTest
         $e1 = $graph->createEdgeDirected($v1, $v2);
         $e2 = $graph->createEdgeDirected($v2, $v1);
 
-        $graphClone = $graph->createGraphClone();
+        $graphClone = clone $graph;
 
         $this->assertEdgeEquals($e1, $graphClone->getEdgeClone($e1));
         $this->assertEdgeEquals($e2, $graphClone->getEdgeCloneInverted($e1));
@@ -432,28 +410,14 @@ class GraphTest extends AbstractAttributeAwareTest
         $v1 = $graph->createVertex(1);
         $v2 = $graph->createVertex(2);
         $e1 = $graph->createEdgeDirected($v1, $v2);
-        $graph->createEdgeDirected($v1, $v2);
 
-        $graphCloneEdgeless = $graph->createGraphCloneEdgeless();
+        $graphCloneEdgeless = clone $graph;
+        foreach ($graphCloneEdgeless->getEdges() as $edge) {
+            $edge->destroy();
+        }
 
         // nothing to return
         $graphCloneEdgeless->getEdgeClone($e1);
-    }
-
-    public function testCreateGraphCloneVertices()
-    {
-        // 1 -- 2 -- 3
-        $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
-        $v3 = $graph->createVertex(3);
-        $graph->createEdgeDirected($v1, $v2);
-        $graph->createEdgeDirected($v2, $v3);
-
-        $graphClone = $graph->createGraphCloneVertices(array(1 => $v1, 2 => $v2));
-
-        $this->assertEquals(2, count($graphClone->getVertices()));
-        $this->assertEquals(1, count($graphClone->getEdges()));
     }
 
     protected function createAttributeAware()

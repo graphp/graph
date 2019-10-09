@@ -4,7 +4,6 @@ namespace Graphp\Graph;
 
 use Graphp\Graph\Attribute\AttributeAware;
 use Graphp\Graph\Attribute\AttributeBagReference;
-use Graphp\Graph\Exception\BadMethodCallException;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Exception\OutOfBoundsException;
 use Graphp\Graph\Exception\OverflowException;
@@ -92,76 +91,6 @@ class Graph implements DualAggregate, AttributeAware
         $newVertex->getAttributeBag()->setAttributes($originalVertex->getAttributeBag()->getAttributes());
 
         return $newVertex;
-    }
-
-    /**
-     * create new clone/copy of this graph - copy all attributes and vertices, but do NOT copy edges
-     *
-     * using this method is faster than creating a new graph and calling createEdgeClone() yourself
-     *
-     * @return Graph
-     */
-    public function createGraphCloneEdgeless()
-    {
-        $graph = new Graph();
-        $graph->attributes = $this->attributes;
-
-        foreach ($this->getVertices() as $originalVertex) {
-            $graph->createVertexClone($originalVertex);
-        }
-
-        return $graph;
-    }
-
-    /**
-     * create new clone/copy of this graph - copy all attributes and vertices. but only copy all given edges
-     *
-     * @param  Edges|Edge[] $edges set or array of edges to be cloned
-     * @return Graph
-     * @uses Graph::createGraphCloneEdgeless()
-     * @uses Graph::createEdgeClone() for each edge to be cloned
-     */
-    public function createGraphCloneEdges($edges)
-    {
-        $graph = $this->createGraphCloneEdgeless();
-        foreach ($edges as $edge) {
-            $graph->createEdgeClone($edge);
-        }
-
-        return $graph;
-    }
-
-    /**
-     * create new clone/copy of this graph - copy all attributes, vertices and edges
-     *
-     * @return Graph
-     * @uses Graph::createGraphCloneEdges() to clone graph with current edges
-     */
-    public function createGraphClone()
-    {
-        return $this->createGraphCloneEdges($this->edges);
-    }
-
-    /**
-     * create a new clone/copy of this graph - copy all attributes and given vertices and its edges
-     *
-     * @param  Vertices $vertices set of vertices to keep
-     * @return Graph
-     * @uses Graph::createGraphClone() to create a complete clone
-     * @uses Vertex::destroy() to remove unneeded vertices again
-     */
-    public function createGraphCloneVertices($vertices)
-    {
-        $verticesKeep = Vertices::factory($vertices);
-
-        $graph = $this->createGraphClone();
-        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
-            if (!$verticesKeep->hasVertexId($vid)) {
-                $vertex->destroy();
-            }
-        }
-
-        return $graph;
     }
 
     /**
@@ -461,16 +390,24 @@ class Graph implements DualAggregate, AttributeAware
     }
 
     /**
-     * do NOT allow cloning of objects (MUST NOT be called!)
-     *
-     * @throws BadMethodCallException
-     * @see Graph::createGraphClone() instead
+     * create new clone/copy of this graph - copy all attributes, vertices and edges
      */
-    private function __clone()
+    public function __clone()
     {
-        // @codeCoverageIgnoreStart
-        throw new BadMethodCallException();
-        // @codeCoverageIgnoreEnd
+        $vertices = $this->verticesStorage;
+        $this->verticesStorage = array();
+        $this->vertices = VerticesMap::factoryArrayReference($this->verticesStorage);
+
+        $edges = $this->edgesStorage;
+        $this->edgesStorage = array();
+        $this->edges = Edges::factoryArrayReference($this->edgesStorage);
+
+        foreach ($vertices as $vertex) {
+            $this->createVertexClone($vertex);
+        }
+        foreach ($edges as $edge) {
+            $this->createEdgeClone($edge);
+        }
     }
 
     public function getAttribute($name, $default = null)
