@@ -4,12 +4,9 @@ namespace Graphp\Graph;
 
 use Graphp\Graph\Attribute\AttributeAware;
 use Graphp\Graph\Attribute\AttributeBagReference;
-use Graphp\Graph\Exception\BadMethodCallException;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Exception\OutOfBoundsException;
 use Graphp\Graph\Exception\OverflowException;
-use Graphp\Graph\Exception\RuntimeException;
-use Graphp\Graph\Exception\UnderflowException;
 use Graphp\Graph\Set\DualAggregate;
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\Vertices;
@@ -75,96 +72,6 @@ class Graph implements DualAggregate, AttributeAware
     }
 
     /**
-     * create a new Vertex in this Graph from the given input Vertex of another graph
-     *
-     * @param  Vertex           $originalVertex
-     * @return Vertex           new vertex in this graph
-     * @throws RuntimeException if vertex with this ID already exists
-     */
-    public function createVertexClone(Vertex $originalVertex)
-    {
-        $id = $originalVertex->getId();
-        if ($this->vertices->hasVertexId($id)) {
-            throw new RuntimeException('Id of cloned vertex already exists');
-        }
-
-        $newVertex = new Vertex($this, $id);
-        $newVertex->getAttributeBag()->setAttributes($originalVertex->getAttributeBag()->getAttributes());
-
-        return $newVertex;
-    }
-
-    /**
-     * create new clone/copy of this graph - copy all attributes and vertices, but do NOT copy edges
-     *
-     * using this method is faster than creating a new graph and calling createEdgeClone() yourself
-     *
-     * @return Graph
-     */
-    public function createGraphCloneEdgeless()
-    {
-        $graph = new Graph();
-        $graph->attributes = $this->attributes;
-
-        foreach ($this->getVertices() as $originalVertex) {
-            $graph->createVertexClone($originalVertex);
-        }
-
-        return $graph;
-    }
-
-    /**
-     * create new clone/copy of this graph - copy all attributes and vertices. but only copy all given edges
-     *
-     * @param  Edges|Edge[] $edges set or array of edges to be cloned
-     * @return Graph
-     * @uses Graph::createGraphCloneEdgeless()
-     * @uses Graph::createEdgeClone() for each edge to be cloned
-     */
-    public function createGraphCloneEdges($edges)
-    {
-        $graph = $this->createGraphCloneEdgeless();
-        foreach ($edges as $edge) {
-            $graph->createEdgeClone($edge);
-        }
-
-        return $graph;
-    }
-
-    /**
-     * create new clone/copy of this graph - copy all attributes, vertices and edges
-     *
-     * @return Graph
-     * @uses Graph::createGraphCloneEdges() to clone graph with current edges
-     */
-    public function createGraphClone()
-    {
-        return $this->createGraphCloneEdges($this->edges);
-    }
-
-    /**
-     * create a new clone/copy of this graph - copy all attributes and given vertices and its edges
-     *
-     * @param  Vertices $vertices set of vertices to keep
-     * @return Graph
-     * @uses Graph::createGraphClone() to create a complete clone
-     * @uses Vertex::destroy() to remove unneeded vertices again
-     */
-    public function createGraphCloneVertices($vertices)
-    {
-        $verticesKeep = Vertices::factory($vertices);
-
-        $graph = $this->createGraphClone();
-        foreach ($graph->getVertices()->getMap() as $vid => $vertex) {
-            if (!$verticesKeep->hasVertexId($vid)) {
-                $vertex->destroy();
-            }
-        }
-
-        return $graph;
-    }
-
-    /**
      * Creates a new undirected (bidirectional) edge between the given two vertices.
      *
      * @param  Vertex                   $a
@@ -196,69 +103,6 @@ class Graph implements DualAggregate, AttributeAware
         }
 
         return new EdgeDirected($source, $target);
-    }
-
-    /**
-     * create new clone of the given edge between adjacent vertices
-     *
-     * @param  Edge $originalEdge original edge (not neccessarily from this graph)
-     * @return Edge new edge in this graph
-     * @uses Graph::createEdgeCloneInternal()
-     */
-    public function createEdgeClone(Edge $originalEdge)
-    {
-        return $this->createEdgeCloneInternal($originalEdge, 0, 1);
-    }
-
-    /**
-     * create new clone of the given edge inverted (in opposite direction) between adjacent vertices
-     *
-     * @param  Edge $originalEdge original edge (not neccessarily from this graph)
-     * @return Edge new edge in this graph
-     * @uses Graph::createEdgeCloneInternal()
-     */
-    public function createEdgeCloneInverted(Edge $originalEdge)
-    {
-        return $this->createEdgeCloneInternal($originalEdge, 1, 0);
-    }
-
-    /**
-     * create new clone of the given edge between adjacent vertices
-     *
-     * @param  Edge $originalEdge original edge from old graph
-     * @param  int  $ia           index of start vertex
-     * @param  int  $ib           index of end vertex
-     * @return Edge new edge in this graph
-     * @uses Edge::getVertices()
-     * @uses Graph::getVertex()
-     * @uses Vertex::createEdgeUndirected() to create a new undirected edge if given edge was undrected
-     * @uses Vertex::createEdgeDirected() to create a new directed edge if given edge was directed
-     * @uses Edge::getWeight()
-     * @uses Edge::setWeight()
-     * @uses Edge::getFlow()
-     * @uses Edge::setFlow()
-     * @uses Edge::getCapacity()
-     * @uses Edge::setCapacity()
-     */
-    private function createEdgeCloneInternal(Edge $originalEdge, $ia, $ib)
-    {
-        $ends = $originalEdge->getVertices()->getIds();
-
-        // get start vertex from old start vertex id
-        $a = $this->getVertex($ends[$ia]);
-        // get target vertex from old target vertex id
-        $b = $this->getVertex($ends[$ib]);
-
-        if ($originalEdge instanceof EdgeDirected) {
-            $newEdge = $this->createEdgeDirected($a, $b);
-        } else {
-            // create new edge between new a and b
-            $newEdge = $this->createEdgeUndirected($a, $b);
-        }
-
-        $newEdge->getAttributeBag()->setAttributes($originalEdge->getAttributeBag()->getAttributes());
-
-        return $newEdge;
     }
 
     /**
@@ -409,68 +253,45 @@ class Graph implements DualAggregate, AttributeAware
     }
 
     /**
-     * Extracts edge from this graph
-     *
-     * @param  Edge               $edge
-     * @return Edge
-     * @throws UnderflowException if no edge was found
-     * @throws OverflowException  if multiple edges match
+     * create new clone/copy of this graph - copy all attributes, vertices and edges
      */
-    public function getEdgeClone(Edge $edge)
+    public function __clone()
     {
-        // Extract endpoints from edge
-        $vertices = $edge->getVertices()->getVector();
+        $vertices = $this->verticesStorage;
+        $this->verticesStorage = array();
+        $this->vertices = VerticesMap::factoryArrayReference($this->verticesStorage);
 
-        return $this->getEdgeCloneInternal($edge, $vertices[0], $vertices[1]);
-    }
+        $edges = $this->edgesStorage;
+        $this->edgesStorage = array();
+        $this->edges = Edges::factoryArrayReference($this->edgesStorage);
 
-    /**
-     * Extracts inverted edge from this graph
-     *
-     * @param  Edge               $edge
-     * @return Edge
-     * @throws UnderflowException if no edge was found
-     * @throws OverflowException  if multiple edges match
-     */
-    public function getEdgeCloneInverted(Edge $edge)
-    {
-        // Extract endpoints from edge
-        $vertices = $edge->getVertices()->getVector();
+        $map = array();
+        foreach ($vertices as $originalVertex) {
+            assert($originalVertex instanceof Vertex);
 
-        return $this->getEdgeCloneInternal($edge, $vertices[1], $vertices[0]);
-    }
+            $vertex = new Vertex($this, $originalVertex->getId());
+            $vertex->getAttributeBag()->setAttributes($originalVertex->getAttributeBag()->getAttributes());
 
-    private function getEdgeCloneInternal(Edge $edge, Vertex $startVertex, Vertex $targetVertex)
-    {
-        // Get original vertices from resultgraph
-        $residualGraphEdgeStartVertex = $this->getVertex($startVertex->getId());
-        $residualGraphEdgeTargetVertex = $this->getVertex($targetVertex->getId());
-
-        // Now get the edge
-        $residualEdgeArray = $residualGraphEdgeStartVertex->getEdgesTo($residualGraphEdgeTargetVertex);
-        $residualEdgeArray = Edges::factory($residualEdgeArray)->getVector();
-
-        // Check for parallel edges
-        if (!$residualEdgeArray) {
-            throw new UnderflowException('No original edges for given cloned edge found');
-        } elseif (count($residualEdgeArray) !== 1) {
-            throw new OverflowException('More than one cloned edge? Parallel edges (multigraph) not supported');
+            // create map with old vertex hash to new vertex object
+            $map[spl_object_hash($originalVertex)] = $vertex;
         }
 
-        return $residualEdgeArray[0];
-    }
+        foreach ($edges as $originalEdge) {
+            assert($originalEdge instanceof Edge);
 
-    /**
-     * do NOT allow cloning of objects (MUST NOT be called!)
-     *
-     * @throws BadMethodCallException
-     * @see Graph::createGraphClone() instead
-     */
-    private function __clone()
-    {
-        // @codeCoverageIgnoreStart
-        throw new BadMethodCallException();
-        // @codeCoverageIgnoreEnd
+            // use map to match old vertex hashes to new vertex objects
+            $vertices = $originalEdge->getVertices()->getVector();
+            $v1 = $map[spl_object_hash($vertices[0])];
+            $v2 = $map[spl_object_hash($vertices[1])];
+
+            // recreate edge and assign attributes
+            if ($originalEdge instanceof EdgeUndirected) {
+                $edge = $this->createEdgeUndirected($v1, $v2);
+            } else {
+                $edge = $this->createEdgeDirected($v1, $v2);
+            }
+            $edge->getAttributeBag()->setAttributes($originalEdge->getAttributeBag()->getAttributes());
+        }
     }
 
     public function getAttribute($name, $default = null)

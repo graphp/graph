@@ -9,43 +9,6 @@ use Graphp\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 class GraphTest extends AbstractAttributeAwareTest
 {
-    public function setup()
-    {
-        $this->graph = new Graph();
-    }
-
-    public function testVertexClone()
-    {
-        $graph = new Graph();
-        $vertex = $graph->createVertex(123);
-        $vertex->setAttribute('balance', 29);
-        $vertex->setAttribute('group', 4);
-
-        $newgraph = new Graph();
-        $newvertex = $newgraph->createVertexClone($vertex);
-
-        $this->assertVertexEquals($vertex, $newvertex);
-    }
-
-    /**
-     * test to make sure vertex can not be cloned into same graph (due to duplicate id)
-     *
-     * @expectedException RuntimeException
-     */
-    public function testInvalidVertexClone()
-    {
-        $graph = new Graph();
-        $vertex = $graph->createVertex(123);
-        $graph->createVertexClone($vertex);
-    }
-
-    public function testGraphCloneEmpty()
-    {
-        $graph = new Graph();
-        $newgraph = $graph->createGraphClone();
-        $this->assertGraphEquals($graph, $newgraph);
-    }
-
     /**
      * @expectedException OutOfBoundsException
      */
@@ -53,40 +16,6 @@ class GraphTest extends AbstractAttributeAwareTest
     {
         $graph = new Graph();
         $graph->getVertex('non-existant');
-    }
-
-    public function testGraphClone()
-    {
-        $graph = new Graph();
-        $graph->setAttribute('title', 'graph');
-
-        $vertex = $graph->createVertex(123);
-        $vertex->setAttribute('balanace', 10);
-        $vertex->setAttribute('group', 4);
-
-        $newgraph = $graph->createGraphClone();
-
-        $this->assertGraphEquals($graph, $newgraph);
-
-        $graphClonedTwice = $newgraph->createGraphClone();
-
-        $this->assertGraphEquals($graph, $graphClonedTwice);
-    }
-
-    public function testGraphCloneEdgeless()
-    {
-        $graph = new Graph();
-        $graph->createEdgeDirected($graph->createVertex(1), $graph->createVertex(2));
-        $graph->createEdgeUndirected($graph->createVertex(3), $graph->getVertex(2));
-
-        $graphEdgeless = $graph->createGraphCloneEdgeless();
-
-        $graphExpected = new Graph();
-        $graphExpected->createVertex(1);
-        $graphExpected->createVertex(2);
-        $graphExpected->createVertex(3);
-
-        $this->assertGraphEquals($graphExpected, $graphEdgeless);
     }
 
     /**
@@ -304,38 +233,6 @@ class GraphTest extends AbstractAttributeAwareTest
         $graph->createVertices(array(1, 2, array(), 3));
     }
 
-    public function testCloneInvertedUndirectedIsAlmostOriginal()
-    {
-        // 1 -- 2
-        $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
-        $edge = $graph->createEdgeUndirected($v1, $v2);
-
-        $edgeInverted = $graph->createEdgeCloneInverted($edge);
-
-        $this->assertInstanceOf(get_class($edge), $edgeInverted);
-
-        $this->assertEquals($edge->getVertices()->getVector(), array_reverse($edgeInverted->getVertices()->getVector()));
-    }
-
-    public function testCloneDoubleInvertedDirectedEdgeIsOriginal()
-    {
-        // 1 -> 2
-        $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
-        $edge = $graph->createEdgeDirected($v1, $v2);
-
-        $edgeInverted = $graph->createEdgeCloneInverted($edge);
-
-        $this->assertInstanceOf(get_class($edge), $edgeInverted);
-
-        $edgeInvertedAgain = $graph->createEdgeCloneInverted($edgeInverted);
-
-        $this->assertEdgeEquals($edge, $edgeInvertedAgain);
-    }
-
     public function testRemoveEdge()
     {
         // 1 -- 2
@@ -391,69 +288,75 @@ class GraphTest extends AbstractAttributeAwareTest
         $vertex->destroy();
     }
 
-    public function testGetEdgesClones()
+    public function testGraphCloneEmptyGraph()
     {
-        // 1 -> 2 -> 1
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
-        $e1 = $graph->createEdgeDirected($v1, $v2);
-        $e2 = $graph->createEdgeDirected($v2, $v1);
 
-        $graphClone = $graph->createGraphClone();
+        $newgraph = clone $graph;
 
-        $this->assertEdgeEquals($e1, $graphClone->getEdgeClone($e1));
-        $this->assertEdgeEquals($e2, $graphClone->getEdgeCloneInverted($e1));
+        $this->assertCount(0, $newgraph->getVertices());
+        $this->assertCount(0, $newgraph->getEdges());
+        $this->assertGraphEquals($graph, $newgraph);
+        $this->assertNotSame($graph, $newgraph);
     }
 
-    /**
-     * @expectedException OverflowException
-     */
-    public function testEdgesFailParallel()
+    public function testGraphCloneMixedEdges()
     {
-        // 1 -> 2, 1 -> 2
+        // 1 -> 2 -- 3
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
-        $e1 = $graph->createEdgeDirected($v1, $v2);
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
+        $v3 = $graph->createVertex();
         $graph->createEdgeDirected($v1, $v2);
+        $graph->createEdgeUndirected($v2, $v3);
 
-        // which one to return? e1? e2?
-        $graph->getEdgeClone($e1);
+        $newgraph = clone $graph;
+
+        $this->assertCount(3, $newgraph->getVertices());
+        $this->assertCount(2, $newgraph->getEdges());
+        $this->assertGraphEquals($graph, $newgraph);
     }
 
-    /**
-     * @expectedException UnderflowException
-     */
-    public function testEdgesFailEdgeless()
+    public function testGraphCloneParallelEdges()
     {
         // 1 -> 2
+        // |    ^
+        // \----/
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
-        $e1 = $graph->createEdgeDirected($v1, $v2);
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
+        $graph->createEdgeDirected($v1, $v2);
         $graph->createEdgeDirected($v1, $v2);
 
-        $graphCloneEdgeless = $graph->createGraphCloneEdgeless();
+        $newgraph = clone $graph;
 
-        // nothing to return
-        $graphCloneEdgeless->getEdgeClone($e1);
+        $this->assertCount(2, $newgraph->getVertices());
+        $this->assertCount(2, $newgraph->getEdges());
+        $this->assertGraphEquals($graph, $newgraph);
     }
 
-    public function testCreateGraphCloneVertices()
+    public function testGraphCloneLoopGraphWithAttributes()
     {
-        // 1 -- 2 -- 3
+        // 1 -\
+        // ^  |
+        // \--/
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
-        $v3 = $graph->createVertex(3);
-        $graph->createEdgeDirected($v1, $v2);
-        $graph->createEdgeDirected($v2, $v3);
+        $graph->setAttribute('color', 'grey');
+        $v = $graph->createVertex(123)->setAttribute('color', 'blue');
+        $graph->createEdgeDirected($v, $v)->setAttribute('color', 'red');
 
-        $graphClone = $graph->createGraphCloneVertices(array(1 => $v1, 2 => $v2));
+        $newgraph = clone $graph;
 
-        $this->assertEquals(2, count($graphClone->getVertices()));
-        $this->assertEquals(1, count($graphClone->getEdges()));
+        $this->assertCount(1, $newgraph->getVertices());
+        $this->assertCount(1, $newgraph->getEdges());
+        $this->assertGraphEquals($graph, $newgraph);
+
+        $graphClonedTwice = clone $newgraph;
+
+        $this->assertGraphEquals($graph, $graphClonedTwice);
+
+        $this->assertNotSame($graph->getEdges(), $newgraph->getEdges());
+        $this->assertNotSame($graph->getVertices(), $newgraph->getVertices());
     }
 
     protected function createAttributeAware()
