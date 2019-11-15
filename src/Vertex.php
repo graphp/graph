@@ -35,7 +35,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function __construct(Graph $graph, $id)
     {
-        if (!is_int($id) && !is_string($id)) {
+        if (!\is_int($id) && !\is_string($id)) {
             throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
         }
 
@@ -89,7 +89,7 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     public function removeEdge(Edge $edge)
     {
-        $id = array_search($edge, $this->edges, true);
+        $id = \array_search($edge, $this->edges, true);
         if ($id === false) {
             throw new InvalidArgumentException('Given edge does NOT exist');
         }

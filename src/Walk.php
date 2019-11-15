@@ -116,10 +116,10 @@ class Walk implements DualAggregate
         } while (!isset($vertices[$vid]));
 
         // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
-        $vertices = array_reverse($vertices, true);
+        $vertices = \array_reverse($vertices, true);
 
         // additional edge from last vertex to first vertex
-        $vertices[] = reset($vertices);
+        $vertices[] = \reset($vertices);
 
         return self::factoryCycleFromVertices($vertices, $orderBy, $desc);
     }
@@ -245,7 +245,7 @@ class Walk implements DualAggregate
         $vertices = $this->vertices->getVector();
 
         $ret = array();
-        for ($i = 0, $l = count($this->edges); $i < $l; ++$i) {
+        for ($i = 0, $l = \count($this->edges); $i < $l; ++$i) {
             $ret []= $vertices[$i];
             $ret []= $edges[$i];
         }
@@ -275,7 +275,7 @@ class Walk implements DualAggregate
         $edges = $this->getGraph()->getEdges()->getVector();
         // check source graph contains all edges
         foreach ($this->edges as $edge) {
-            if (!in_array($edge, $edges, true)) {
+            if (!\in_array($edge, $edges, true)) {
                 return false;
             }
         }

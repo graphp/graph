@@ -39,7 +39,7 @@ class VerticesMap extends Vertices
 
     public function getIds()
     {
-        return array_keys($this->vertices);
+        return \array_keys($this->vertices);
     }
 
     public function getIndexVertex(Vertex $vertex)

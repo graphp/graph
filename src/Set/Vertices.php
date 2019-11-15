@@ -109,7 +109,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function getIndexVertex(Vertex $vertex)
     {
-        $id = array_search($vertex, $this->vertices, true);
+        $id = \array_search($vertex, $this->vertices, true);
         if ($id === false) {
             throw new OutOfBoundsException('Given vertex does NOT exist');
         }
@@ -132,9 +132,9 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         if (!$this->vertices) {
             throw new UnderflowException('Does not contain any vertices');
         }
-        reset($this->vertices);
+        \reset($this->vertices);
 
-        return current($this->vertices);
+        return \current($this->vertices);
     }
 
     /**
@@ -148,9 +148,9 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         if (!$this->vertices) {
             throw new UnderflowException('Does not contain any vertices');
         }
-        end($this->vertices);
+        \end($this->vertices);
 
-        return current($this->vertices);
+        return \current($this->vertices);
     }
 
     /**
@@ -166,7 +166,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
             throw new UnderflowException('Does not contain any vertices');
         }
 
-        return $this->vertices[array_rand($this->vertices)];
+        return $this->vertices[\array_rand($this->vertices)];
     }
 
     /**
@@ -215,7 +215,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function getVerticesMatch($callbackCheck)
     {
-        return new static(array_filter($this->vertices, $callbackCheck));
+        return new static(\array_filter($this->vertices, $callbackCheck));
     }
 
     /**
@@ -234,7 +234,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
         $callback = $this->getCallback($orderBy);
         $array    = $this->vertices;
 
-        uasort($array, function (Vertex $va, Vertex $vb) use ($callback, $desc) {
+        \uasort($array, function (Vertex $va, Vertex $vb) use ($callback, $desc) {
             $ra = $callback($desc ? $vb : $va);
             $rb = $callback($desc ? $va : $vb);
 
@@ -263,8 +263,8 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     public function getVerticesShuffled()
     {
         // shuffle the vertex positions
-        $keys = array_keys($this->vertices);
-        shuffle($keys);
+        $keys = \array_keys($this->vertices);
+        \shuffle($keys);
 
         // re-order according to shuffled vertex positions
         $vertices = array();
@@ -295,7 +295,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
 
         $vertices = array();
         foreach ($this->vertices as $vid => $vertex) {
-            $i = array_search($vertex, $otherArray, true);
+            $i = \array_search($vertex, $otherArray, true);
 
             if ($i !== false) {
                 // remove from other array in order to check for duplicate matches
@@ -397,7 +397,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function getVector()
     {
-        return array_values($this->vertices);
+        return \array_values($this->vertices);
     }
 
     /**
@@ -408,7 +408,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function count()
     {
-        return count($this->vertices);
+        return \count($this->vertices);
     }
 
     /**
@@ -432,7 +432,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function hasDuplicates()
     {
-        return (count($this->vertices) !== count($this->getMap()));
+        return (\count($this->vertices) !== \count($this->getMap()));
     }
 
     /**
@@ -493,10 +493,10 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     private function getCallback($callback)
     {
-        if (is_callable($callback)) {
-            if (is_array($callback)) {
+        if (\is_callable($callback)) {
+            if (\is_array($callback)) {
                 $callback = function (Vertex $vertex) use ($callback) {
-                    return call_user_func($callback, $vertex);
+                    return \call_user_func($callback, $vertex);
                 };
             }
             return $callback;

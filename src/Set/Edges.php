@@ -76,7 +76,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      */
     public function getIndexEdge(Edge $edge)
     {
-        $id = array_search($edge, $this->edges, true);
+        $id = \array_search($edge, $this->edges, true);
         if ($id === false) {
             throw new OutOfBoundsException('Given edge does NOT exist');
         }
@@ -99,9 +99,9 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
         if (!$this->edges) {
             throw new UnderflowException('Does not contain any edges');
         }
-        reset($this->edges);
+        \reset($this->edges);
 
-        return current($this->edges);
+        return \current($this->edges);
     }
 
     /**
@@ -115,9 +115,9 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
         if (!$this->edges) {
             throw new UnderflowException('Does not contain any edges');
         }
-        end($this->edges);
+        \end($this->edges);
 
-        return current($this->edges);
+        return \current($this->edges);
     }
 
     /**
@@ -133,7 +133,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
             throw new UnderflowException('Does not contain any edges');
         }
 
-        return $this->edges[array_rand($this->edges)];
+        return $this->edges[\array_rand($this->edges)];
     }
 
     /**
@@ -196,7 +196,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      */
     public function getEdgesMatch($callbackCheck)
     {
-        return new static(array_filter($this->edges, $callbackCheck));
+        return new static(\array_filter($this->edges, $callbackCheck));
     }
 
     /**
@@ -213,7 +213,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
         $callback = $this->getCallback($orderBy);
         $array    = $this->edges;
 
-        uasort($array, function (Edge $va, Edge $vb) use ($callback, $desc) {
+        \uasort($array, function (Edge $va, Edge $vb) use ($callback, $desc) {
             $ra = $callback($desc ? $vb : $va);
             $rb = $callback($desc ? $va : $vb);
 
@@ -242,8 +242,8 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     public function getEdgesShuffled()
     {
         // shuffle the edge positions
-        $keys = array_keys($this->edges);
-        shuffle($keys);
+        $keys = \array_keys($this->edges);
+        \shuffle($keys);
 
         // re-order according to shuffled edge positions
         $edges = array();
@@ -305,7 +305,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
         $edges = array();
         foreach ($this->edges as $edge) {
             // filter duplicate edges
-            if (!in_array($edge, $edges, true)) {
+            if (!\in_array($edge, $edges, true)) {
                 $edges []= $edge;
             }
         }
@@ -333,7 +333,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
 
         $edges = array();
         foreach ($this->edges as $eid => $edge) {
-            $i = array_search($edge, $otherArray, true);
+            $i = \array_search($edge, $otherArray, true);
 
             if ($i !== false) {
                 // remove from other array in order to check for duplicate matches
@@ -353,7 +353,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      */
     public function getVector()
     {
-        return array_values($this->edges);
+        return \array_values($this->edges);
     }
 
     /**
@@ -364,7 +364,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      */
     public function count()
     {
-        return count($this->edges);
+        return \count($this->edges);
     }
 
     /**
@@ -431,10 +431,10 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      */
     private function getCallback($callback)
     {
-        if (is_callable($callback)) {
-            if (is_array($callback)) {
+        if (\is_callable($callback)) {
+            if (\is_array($callback)) {
                 $callback = function (Edge $edge) use ($callback) {
-                    return call_user_func($callback, $edge);
+                    return \call_user_func($callback, $edge);
                 };
             }
             return $callback;

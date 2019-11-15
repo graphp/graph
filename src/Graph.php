@@ -115,14 +115,14 @@ class Graph implements DualAggregate, AttributeAware
     public function createVertices($n)
     {
         $vertices = array();
-        if (is_int($n) && $n >= 0) {
+        if (\is_int($n) && $n >= 0) {
             for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
                 $vertices[$id] = new Vertex($this, $id);
             }
-        } elseif (is_array($n)) {
+        } elseif (\is_array($n)) {
             // array given => check to make sure all given IDs are available (atomic operation)
             foreach ($n as $id) {
-                if (!is_int($id) && !is_string($id)) {
+                if (!\is_int($id) && !\is_string($id)) {
                     throw new InvalidArgumentException('All Vertex IDs have to be of type integer or string');
                 } elseif ($this->vertices->hasVertexId($id)) {
                     throw new OverflowException('Given array of Vertex IDs contains an ID that already exists. Given IDs must be unique');
@@ -159,7 +159,7 @@ class Graph implements DualAggregate, AttributeAware
         }
 
         // auto ID
-        return max(array_keys($this->verticesStorage))+1;
+        return \max(\array_keys($this->verticesStorage))+1;
     }
 
     /**
@@ -267,22 +267,22 @@ class Graph implements DualAggregate, AttributeAware
 
         $map = array();
         foreach ($vertices as $originalVertex) {
-            assert($originalVertex instanceof Vertex);
+            \assert($originalVertex instanceof Vertex);
 
             $vertex = new Vertex($this, $originalVertex->getId());
             $vertex->getAttributeBag()->setAttributes($originalVertex->getAttributeBag()->getAttributes());
 
             // create map with old vertex hash to new vertex object
-            $map[spl_object_hash($originalVertex)] = $vertex;
+            $map[\spl_object_hash($originalVertex)] = $vertex;
         }
 
         foreach ($edges as $originalEdge) {
-            assert($originalEdge instanceof Edge);
+            \assert($originalEdge instanceof Edge);
 
             // use map to match old vertex hashes to new vertex objects
             $vertices = $originalEdge->getVertices()->getVector();
-            $v1 = $map[spl_object_hash($vertices[0])];
-            $v2 = $map[spl_object_hash($vertices[1])];
+            $v1 = $map[\spl_object_hash($vertices[0])];
+            $v2 = $map[\spl_object_hash($vertices[1])];
 
             // recreate edge and assign attributes
             if ($originalEdge instanceof EdgeUndirected) {
