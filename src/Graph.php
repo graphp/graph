@@ -6,11 +6,9 @@ use Graphp\Graph\Attribute\AttributeAware;
 use Graphp\Graph\Attribute\AttributeBagReference;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Exception\OutOfBoundsException;
-use Graphp\Graph\Exception\OverflowException;
 use Graphp\Graph\Set\DualAggregate;
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\Vertices;
-use Graphp\Graph\Set\VerticesMap;
 
 class Graph implements DualAggregate, AttributeAware
 {
@@ -24,7 +22,7 @@ class Graph implements DualAggregate, AttributeAware
 
     public function __construct()
     {
-        $this->vertices = VerticesMap::factoryArrayReference($this->verticesStorage);
+        $this->vertices = Vertices::factoryArrayReference($this->verticesStorage);
         $this->edges = Edges::factoryArrayReference($this->edgesStorage);
     }
 
@@ -51,24 +49,11 @@ class Graph implements DualAggregate, AttributeAware
     /**
      * create a new Vertex in the Graph
      *
-     * @param  int|NULL                 $id              new vertex ID to use (defaults to NULL: use next free numeric ID)
-     * @param  bool                     $returnDuplicate normal operation is to throw an exception if given id already exists. pass true to return original vertex instead
-     * @return Vertex                   (chainable)
-     * @throws InvalidArgumentException if given vertex $id is invalid
-     * @throws OverflowException        if given vertex $id already exists and $returnDuplicate is not set
-     * @uses Vertex::getId()
+     * @return Vertex
      */
-    public function createVertex($id = NULL, $returnDuplicate = false)
+    public function createVertex()
     {
-        // no ID given
-        if ($id === NULL) {
-            $id = $this->getNextId();
-        }
-        if ($returnDuplicate && $this->vertices->hasVertexId($id)) {
-            return $this->vertices->getVertexId($id);
-        }
-
-        return new Vertex($this, $id);
+        return new Vertex($this);
     }
 
     /**
@@ -106,86 +91,6 @@ class Graph implements DualAggregate, AttributeAware
     }
 
     /**
-     * create the given number of vertices or given array of Vertex IDs
-     *
-     * @param  int|array $n number of vertices to create or array of Vertex IDs to create
-     * @return Vertices set of Vertices created
-     * @uses Graph::getNextId()
-     */
-    public function createVertices($n)
-    {
-        $vertices = array();
-        if (\is_int($n) && $n >= 0) {
-            for ($id = $this->getNextId(), $n += $id; $id < $n; ++$id) {
-                $vertices[$id] = new Vertex($this, $id);
-            }
-        } elseif (\is_array($n)) {
-            // array given => check to make sure all given IDs are available (atomic operation)
-            foreach ($n as $id) {
-                if (!\is_int($id) && !\is_string($id)) {
-                    throw new InvalidArgumentException('All Vertex IDs have to be of type integer or string');
-                } elseif ($this->vertices->hasVertexId($id)) {
-                    throw new OverflowException('Given array of Vertex IDs contains an ID that already exists. Given IDs must be unique');
-                } elseif (isset($vertices[$id])) {
-                    throw new InvalidArgumentException('Given array of Vertex IDs contain duplicate IDs. Given IDs must be unique');
-                }
-
-                // temporary marker to check for duplicate IDs in the array
-                $vertices[$id] = false;
-            }
-
-            // actually create all requested vertices
-            foreach ($n as $id) {
-                $vertices[$id] = new Vertex($this, $id);
-            }
-        } else {
-            throw new InvalidArgumentException('Invalid number of vertices given. Must be non-negative integer or an array of Vertex IDs');
-        }
-
-        return new Vertices($vertices);
-    }
-
-    /**
-     * get next free/unused/available vertex ID
-     *
-     * its guaranteed there's NO other vertex with a greater ID
-     *
-     * @return int
-     */
-    private function getNextId()
-    {
-        if (!$this->verticesStorage) {
-            return 0;
-        }
-
-        // auto ID
-        return \max(\array_keys($this->verticesStorage))+1;
-    }
-
-    /**
-     * returns the Vertex with identifier $id
-     *
-     * @param  int|string           $id identifier of Vertex
-     * @return Vertex
-     * @throws OutOfBoundsException if given vertex ID does not exist
-     */
-    public function getVertex($id)
-    {
-        return $this->vertices->getVertexId($id);
-    }
-
-    /**
-     * checks whether given vertex ID exists in this graph
-     *
-     * @param int|string $id identifier of Vertex
-     * @return bool
-     */
-    public function hasVertex($id)
-    {
-        return $this->vertices->hasVertexId($id);
-    }
-
-    /**
      * adds a new Vertex to the Graph (MUST NOT be called manually!)
      *
      * @param  Vertex $vertex instance of the new Vertex
@@ -195,10 +100,7 @@ class Graph implements DualAggregate, AttributeAware
      */
     public function addVertex(Vertex $vertex)
     {
-        if (isset($this->verticesStorage[$vertex->getId()])) {
-            throw new OverflowException('ID must be unique');
-        }
-        $this->verticesStorage[$vertex->getId()] = $vertex;
+        $this->verticesStorage[] = $vertex;
     }
 
     /**
@@ -259,7 +161,7 @@ class Graph implements DualAggregate, AttributeAware
     {
         $vertices = $this->verticesStorage;
         $this->verticesStorage = array();
-        $this->vertices = VerticesMap::factoryArrayReference($this->verticesStorage);
+        $this->vertices = Vertices::factoryArrayReference($this->verticesStorage);
 
         $edges = $this->edgesStorage;
         $this->edgesStorage = array();
@@ -269,7 +171,7 @@ class Graph implements DualAggregate, AttributeAware
         foreach ($vertices as $originalVertex) {
             \assert($originalVertex instanceof Vertex);
 
-            $vertex = new Vertex($this, $originalVertex->getId());
+            $vertex = new Vertex($this);
             $vertex->getAttributeBag()->setAttributes($originalVertex->getAttributeBag()->getAttributes());
 
             // create map with old vertex hash to new vertex object

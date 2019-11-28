@@ -25,12 +25,8 @@ class TestCase extends BaseTestCase
         $this->assertEquals($f($expected), $f($actual));
 
         // next, assert that all vertices in both graphs are the same
-        // each vertex has a unique ID, therefor it's easy to search a matching partner
         // do not use assertVertexEquals() in order to not increase assertion counter
-
-        foreach ($expected->getVertices()->getMap() as $vid => $vertex) {
-            $actual->getVertex($vid);
-
+        foreach ($expected->getVertices() as $vertex) {
             if ($this->getVertexDump($vertex) !== $this->getVertexDump($vertex)) {
                 $this->fail();
             }
@@ -70,8 +66,6 @@ class TestCase extends BaseTestCase
     private function getVertexDump(Vertex $vertex)
     {
         $ret = get_class($vertex);
-
-        $ret .= PHP_EOL . 'id: ' . $vertex->getId();
         $ret .= PHP_EOL . 'attributes: ' . json_encode($vertex->getAttributeBag()->getAttributes());
 
         return $ret;
@@ -79,12 +73,13 @@ class TestCase extends BaseTestCase
 
     private function getEdgeDump(Edge $edge)
     {
+        $vertices = $edge->getGraph()->getVertices();
         $ret = get_class($edge) . ' ';
         if ($edge instanceof EdgeDirected) {
-            $ret .= $edge->getVertexStart()->getId() . ' -> ' . $edge->getVertexEnd()->getId();
+            $ret .= $vertices->getIndexVertex($edge->getVertexStart()) . ' -> ' . $vertices->getIndexVertex($edge->getVertexEnd());
         } else {
-            $vertices = $edge->getVertices()->getIds();
-            $ret .= $vertices[0] . ' -- ' . $vertices[1];
+            $foo = $edge->getVertices()->getVector();
+            $ret .= $vertices->getIndexVertex($foo[0]) . ' -- ' . $vertices->getIndexVertex($foo[1]);
         }
         $ret .= PHP_EOL . 'attributes: ' . json_encode($edge->getAttributeBag()->getAttributes());
 

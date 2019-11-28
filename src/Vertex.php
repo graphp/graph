@@ -12,8 +12,6 @@ use Graphp\Graph\Set\Vertices;
 
 class Vertex implements EdgesAggregate, AttributeAware
 {
-    private $id;
-
     /**
      * @var Edge[]
      */
@@ -29,17 +27,11 @@ class Vertex implements EdgesAggregate, AttributeAware
     /**
      * Create a new Vertex
      *
-     * @param Graph      $graph graph to be added to
-     * @param string|int $id    identifier used to uniquely identify this vertex in the graph
+     * @param Graph $graph graph to be added to
      * @see Graph::createVertex() to create new vertices
      */
-    public function __construct(Graph $graph, $id)
+    public function __construct(Graph $graph)
     {
-        if (!\is_int($id) && !\is_string($id)) {
-            throw new InvalidArgumentException('Vertex ID has to be of type integer or string');
-        }
-
-        $this->id = $id;
         $this->graph = $graph;
 
         $graph->addVertex($this);
@@ -53,16 +45,6 @@ class Vertex implements EdgesAggregate, AttributeAware
     public function getGraph()
     {
         return $this->graph;
-    }
-
-    /**
-     * returns id of this Vertex
-     *
-     * @return int|string
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

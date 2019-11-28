@@ -74,57 +74,6 @@ class Walk implements DualAggregate
     }
 
     /**
-     * create new cycle instance from given predecessor map
-     *
-     * @param  Vertex[]                          $predecessors map of vid => predecessor vertex instance
-     * @param  Vertex                            $vertex       start vertex to search predecessors from
-     * @param  null|string|callable(Edge):number $orderBy
-     * @param  bool                              $desc
-     * @return Walk
-     * @throws UnderflowException
-     * @see Edges::getEdgeOrder() for parameters $by and $desc
-     * @uses self::factoryFromVertices()
-     */
-    public static function factoryCycleFromPredecessorMap(array $predecessors, Vertex $vertex, $orderBy = null, $desc = false)
-    {
-        // find a vertex in the cycle
-        $vid = $vertex->getId();
-        $startVertices = array();
-        do {
-            if (!isset($predecessors[$vid])) {
-                throw new InvalidArgumentException('Predecessor map is incomplete and does not form a cycle');
-            }
-
-            $startVertices[$vid] = $vertex;
-
-            $vertex = $predecessors[$vid];
-            $vid = $vertex->getId();
-        } while (!isset($startVertices[$vid]));
-
-        // find negative cycle
-        $vid = $vertex->getId();
-        // build array of vertices in cycle
-        $vertices = array();
-        do {
-            // add new vertex to cycle
-            $vertices[$vid] = $vertex;
-
-            // get predecessor of vertex
-            $vertex = $predecessors[$vid];
-            $vid = $vertex->getId();
-            // continue until we find a vertex that's already in the circle (i.e. circle is closed)
-        } while (!isset($vertices[$vid]));
-
-        // reverse cycle, because cycle is actually built in opposite direction due to checking predecessors
-        $vertices = \array_reverse($vertices, true);
-
-        // additional edge from last vertex to first vertex
-        $vertices[] = \reset($vertices);
-
-        return self::factoryCycleFromVertices($vertices, $orderBy, $desc);
-    }
-
-    /**
      * create new cycle instance with edges between given vertices
      *
      * @param  Vertex[]|Vertices                 $vertices
@@ -264,11 +213,11 @@ class Walk implements DualAggregate
      */
     public function isValid()
     {
-        $vertices = $this->getGraph()->getVertices()->getMap();
+        $vertices = \iterator_to_array($this->getGraph()->getVertices(), false);
+
         // check source graph contains all vertices
-        foreach ($this->getVertices()->getMap() as $vid => $vertex) {
-            // make sure vertex ID exists and has not been replaced
-            if (!isset($vertices[$vid]) || $vertices[$vid] !== $vertex) {
+        foreach ($this->getVertices() as $vertex) {
+            if (!\in_array($vertex, $vertices, true)) {
                 return false;
             }
         }

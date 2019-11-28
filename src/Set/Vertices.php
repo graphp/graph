@@ -68,36 +68,6 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     }
 
     /**
-     * get Vertex with the given vertex $id
-     *
-     * @param int|string $id
-     * @return Vertex
-     * @throws OutOfBoundsException if no Vertex with the given ID exists
-     * @uses self::getVertexMatch()
-     */
-    public function getVertexId($id)
-    {
-        try {
-            return $this->getVertexMatch($this->getCallbackId($id));
-        }
-        catch (UnderflowException $e) {
-            throw new OutOfBoundsException('Vertex ' . $id . ' does not exist', 0, $e);
-        }
-    }
-
-    /**
-     * checks whether given vertex ID exists in this set of vertices
-     *
-     * @param int|string $id identifier of Vertex
-     * @return bool
-     * @uses self::hasVertexMatch()
-     */
-    public function hasVertexId($id)
-    {
-        return $this->hasVertexMatch($this->getCallbackId($id));
-    }
-
-    /**
      * get array index for given Vertex
      *
      * not every set of Vertices represents a map, as such array index and
@@ -353,41 +323,22 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     /**
      * get a new set of Vertices where each Vertex is distinct/unique
      *
-     * @return VerticesMap a new VerticesMap instance
+     * Vertex index/keys will be preserved from original array.
+     *
+     * @return Vertices
      * @uses self::getMap()
      */
     public function getVerticesDistinct()
     {
-        return new VerticesMap($this->getMap());
-    }
-
-    /**
-     * get a mapping array of Vertex ID => Vertex instance and thus remove duplicate vertices
-     *
-     * @return Vertex[] Vertex ID => Vertex instance
-     * @uses Vertex::getId()
-     */
-    public function getMap()
-    {
         $vertices = array();
-        foreach ($this->vertices as $vertex) {
-            $vertices[$vertex->getId()] = $vertex;
+        foreach ($this->vertices as $vid => $vertex) {
+            // filter duplicate vertices
+            if (!\in_array($vertex, $vertices, true)) {
+                $vertices[$vid] = $vertex;
+            }
         }
-        return $vertices;
-    }
 
-    /**
-     * return array of Vertex IDs
-     *
-     * @return array
-     */
-    public function getIds()
-    {
-        $ids = array();
-        foreach ($this->vertices as $vertex) {
-            $ids []= $vertex->getId();
-        }
-        return $ids;
+        return new self($vertices);
     }
 
     /**
@@ -432,7 +383,16 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      */
     public function hasDuplicates()
     {
-        return (\count($this->vertices) !== \count($this->getMap()));
+        $found = array();
+        foreach ($this->vertices as $vertex) {
+            if (\in_array($vertex, $found, true)) {
+                return true;
+            }
+
+            $found[] = $vertex;
+        }
+
+        return false;
     }
 
     /**
@@ -464,13 +424,6 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
             $sum += $callback($vertex);
         }
         return $sum;
-    }
-
-    private function getCallbackId($id)
-    {
-        return function (Vertex $vertex) use ($id) {
-            return ($vertex->getId() == $id);
-        };
     }
 
     private function getVertexMatchOrNull($callbackCheck)
