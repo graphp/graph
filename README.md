@@ -26,16 +26,14 @@ Once [installed](#install), let's initialize a sample graph:
 ```php
 <?php
 
-use \Graphp\Graph\Graph as Graph;
-
 require_once 'vendor/autoload.php';
 
-$graph = new Graph();
+$graph = new Graphp\Graph\Graph();
 
 // create some cities
-$rome = $graph->createVertex('Rome');
-$madrid = $graph->createVertex('Madrid');
-$cologne = $graph->createVertex('Cologne');
+$rome = $graph->createVertex()->setAttribute('name', 'Rome');
+$madrid = $graph->createVertex()->setAttribute('name', 'Madrid');
+$cologne = $graph->createVertex()->setAttribute('name', 'Cologne');
 
 // build some roads
 $graph->createEdgeDirected($cologne, $madrid);
@@ -48,8 +46,8 @@ Let's see which city (Vertex) has a road (i.e. an edge pointing) to Rome:
 
 ```php
 foreach ($rome->getVerticesEdgeFrom() as $vertex) {
-    echo $vertex->getId().' leads to rome'.PHP_EOL;
-    // result: Madrid and Rome itself
+    echo $vertex->getAttribute('name') . ' leads to Rome' . PHP_EOL;
+    // result: Madrid and Rome itself lead to Rome
 }
 ```
 

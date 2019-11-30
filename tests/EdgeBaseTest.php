@@ -5,11 +5,23 @@ namespace Graphp\Graph\Tests;
 use Graphp\Graph\Graph;
 use Graphp\Graph\Edge;
 use Graphp\Graph\Tests\Attribute\AbstractAttributeAwareTest;
+use Graphp\Graph\Vertex;
 
 abstract class EdgeBaseTest extends AbstractAttributeAwareTest
 {
+    /**
+     * @var Graph
+     */
     protected $graph;
+
+    /**
+     * @var Vertex
+     */
     protected $v1;
+
+    /**
+     * @var Vertex
+     */
     protected $v2;
 
     /**
@@ -27,8 +39,8 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
     public function setUp()
     {
         $this->graph = new Graph();
-        $this->v1 = $this->graph->createVertex(1);
-        $this->v2 = $this->graph->createVertex(2);
+        $this->v1 = $this->graph->createVertex();
+        $this->v2 = $this->graph->createVertex();
 
         $this->edge = $this->createEdgeUndirected();
     }
@@ -36,7 +48,6 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
     public function testEdgeVertices()
     {
         $this->assertEquals(array($this->v1, $this->v2), $this->edge->getVertices()->getVector());
-        $this->assertEquals(array(1, 2), $this->edge->getVertices()->getIds());
 
         $this->assertSame($this->graph, $this->edge->getGraph());
     }
@@ -46,7 +57,7 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $this->assertTrue($this->edge->hasVertexStart($this->v1));
         $this->assertTrue($this->edge->hasVertexTarget($this->v2));
 
-        $v3 = $this->graph->createVertex(3);
+        $v3 = $this->graph->createVertex();
 
         $this->assertFalse($this->edge->hasVertexStart($v3));
         $this->assertFalse($this->edge->hasVertexTarget($v3));
@@ -57,7 +68,7 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
      */
     public function testEdgeFromInvalid()
     {
-        $v3 = $this->graph->createVertex(3);
+        $v3 = $this->graph->createVertex();
         $this->edge->getVertexFromTo($v3);
     }
 
@@ -66,7 +77,7 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
      */
     public function testEdgeToInvalid()
     {
-        $v3 = $this->graph->createVertex(3);
+        $v3 = $this->graph->createVertex();
         $this->edge->getVertexToFrom($v3);
     }
 

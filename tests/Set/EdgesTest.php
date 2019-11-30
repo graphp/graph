@@ -22,7 +22,7 @@ class EdgesTest extends TestCase
     {
         // 1 -> 1
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
+        $v1 = $graph->createVertex();
         $e1 = $graph->createEdgeDirected($v1, $v1);
 
         $edgesFromArray = $this->createEdges(array($e1));
@@ -53,7 +53,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testEmpty
      * @expectedException UnderflowException
@@ -64,7 +63,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testEmpty
      * @expectedException UnderflowException
@@ -75,7 +73,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testEmpty
      * @expectedException UnderflowException
@@ -86,7 +83,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testEmpty
      * @expectedException UnderflowException
@@ -100,9 +96,9 @@ class EdgesTest extends TestCase
     {
         // 1 -- 2 -- 3
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
-        $v3 = $graph->createVertex(3);
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
+        $v3 = $graph->createVertex();
         $e1 = $graph->createEdgeUndirected($v1, $v2);
         $e2 = $graph->createEdgeUndirected($v2, $v3);
 
@@ -122,7 +118,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testTwo
      * @expectedException OutOfBoundsException
@@ -133,7 +128,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testTwo
      * @expectedException OutOfBoundsException
@@ -141,14 +135,13 @@ class EdgesTest extends TestCase
     public function testTwoDoesNotContainEdge3(Edges $edges)
     {
         $graph = new Graph();
-        $v3 = $graph->createVertex(3);
+        $v3 = $graph->createVertex();
         $e3 = $graph->createEdgeUndirected($v3, $v3);
 
         $edges->getIndexEdge($e3);
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testTwo
      */
@@ -161,7 +154,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testTwo
      */
@@ -174,7 +166,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testTwo
      */
@@ -187,7 +178,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testTwo
      */
@@ -200,7 +190,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testTwo
      */
@@ -214,7 +203,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testTwo
      */
@@ -225,7 +213,6 @@ class EdgesTest extends TestCase
     }
 
     /**
-     *
      * @param Edges $edges
      * @depends testTwo
      * @expectedException UnderflowException
@@ -248,8 +235,8 @@ class EdgesTest extends TestCase
     public function testOrderByGroup()
     {
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
         $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 1);
         $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 100);
         $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 5);
@@ -282,8 +269,8 @@ class EdgesTest extends TestCase
     public function testOrderByAttribute()
     {
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
         $e1 = $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 20);
         $e2 = $graph->createEdgeUndirected($v1, $v2)->setAttribute('weight', 10);
 
@@ -302,8 +289,8 @@ class EdgesTest extends TestCase
     public function testIntersection()
     {
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
         $e1 = $graph->createEdgeUndirected($v1, $v2);
         $e2 = $graph->createEdgeUndirected($v1, $v2);
         $e3 = $graph->createEdgeUndirected($v1, $v2);
@@ -319,8 +306,8 @@ class EdgesTest extends TestCase
     public function testIntersectionDuplicates()
     {
         $graph = new Graph();
-        $v1 = $graph->createVertex(1);
-        $v2 = $graph->createVertex(2);
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
         $e1 = $graph->createEdgeUndirected($v1, $v2);
 
         $edges1 = $this->createEdges(array($e1, $e1, $e1));
