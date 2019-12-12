@@ -7,6 +7,21 @@ use Graphp\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 class GraphTest extends AbstractAttributeAwareTest
 {
+    public function testEmptyGraphHasNoAttributes()
+    {
+        $graph = new Graph();
+        $this->assertNull($graph->getAttribute('hello'));
+        $this->assertEquals('default', $graph->getAttribute('hello', 'default'));
+        $this->assertEquals(array(), $graph->getAttributeBag()->getAttributes());
+    }
+
+    public function testEmptyGraphWithAttributeReturnsAttributes()
+    {
+        $graph = new Graph(array('hello' => 'wörld'));
+        $this->assertEquals('wörld', $graph->getAttribute('hello'));
+        $this->assertEquals(array('hello' => 'wörld'), $graph->getAttributeBag()->getAttributes());
+    }
+
     public function testCanCreateVertex()
     {
         $graph = new Graph();
@@ -186,10 +201,9 @@ class GraphTest extends AbstractAttributeAwareTest
         // 1 -\
         // ^  |
         // \--/
-        $graph = new Graph();
-        $graph->setAttribute('color', 'grey');
-        $v = $graph->createVertex()->setAttribute('color', 'blue');
-        $graph->createEdgeDirected($v, $v)->setAttribute('color', 'red');
+        $graph = new Graph(array('color' => 'grey'));
+        $v = $graph->createVertex(array('color' => 'blue'));
+        $graph->createEdgeDirected($v, $v, array('color' => 'red'));
 
         $newgraph = clone $graph;
 

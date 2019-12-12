@@ -18,12 +18,16 @@ class Graph implements DualAggregate, AttributeAware
     protected $edgesStorage = array();
     protected $edges;
 
-    protected $attributes = array();
+    protected $attributes;
 
-    public function __construct()
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = array())
     {
         $this->vertices = Vertices::factoryArrayReference($this->verticesStorage);
         $this->edges = Edges::factoryArrayReference($this->edgesStorage);
+        $this->attributes = $attributes;
     }
 
     /**
@@ -49,11 +53,12 @@ class Graph implements DualAggregate, AttributeAware
     /**
      * create a new Vertex in the Graph
      *
+     * @param  array $attributes
      * @return Vertex
      */
-    public function createVertex()
+    public function createVertex(array $attributes = array())
     {
-        return new Vertex($this);
+        return new Vertex($this, $attributes);
     }
 
     /**
@@ -61,33 +66,35 @@ class Graph implements DualAggregate, AttributeAware
      *
      * @param  Vertex                   $a
      * @param  Vertex                   $b
+     * @param  array                    $attributes
      * @return EdgeUndirected
      * @throws InvalidArgumentException
      */
-    public function createEdgeUndirected(Vertex $a, Vertex $b)
+    public function createEdgeUndirected(Vertex $a, Vertex $b, array $attributes = array())
     {
         if ($a->getGraph() !== $this) {
             throw new InvalidArgumentException('Vertices have to be within this graph');
         }
 
-        return new EdgeUndirected($a, $b);
+        return new EdgeUndirected($a, $b, $attributes);
     }
 
     /**
      * Creates a new directed edge from the given start vertex to given target vertex
      *
-     * @param  Vertex                   $source source vertex
-     * @param  Vertex                   $target target vertex
+     * @param  Vertex                   $source     source vertex
+     * @param  Vertex                   $target     target vertex
+     * @param  array                    $attributes
      * @return EdgeDirected
      * @throws InvalidArgumentException
      */
-    public function createEdgeDirected(Vertex $source, Vertex $target)
+    public function createEdgeDirected(Vertex $source, Vertex $target, array $attributes = array())
     {
         if ($source->getGraph() !== $this) {
             throw new InvalidArgumentException('Vertices have to be within this graph');
         }
 
-        return new EdgeDirected($source, $target);
+        return new EdgeDirected($source, $target, $attributes);
     }
 
     /**
@@ -171,8 +178,7 @@ class Graph implements DualAggregate, AttributeAware
         foreach ($vertices as $originalVertex) {
             \assert($originalVertex instanceof Vertex);
 
-            $vertex = new Vertex($this);
-            $vertex->getAttributeBag()->setAttributes($originalVertex->getAttributeBag()->getAttributes());
+            $vertex = new Vertex($this, $originalVertex->getAttributeBag()->getAttributes());
 
             // create map with old vertex hash to new vertex object
             $map[\spl_object_hash($originalVertex)] = $vertex;
@@ -188,11 +194,10 @@ class Graph implements DualAggregate, AttributeAware
 
             // recreate edge and assign attributes
             if ($originalEdge instanceof EdgeUndirected) {
-                $edge = $this->createEdgeUndirected($v1, $v2);
+                $this->createEdgeUndirected($v1, $v2, $originalEdge->getAttributeBag()->getAttributes());
             } else {
-                $edge = $this->createEdgeDirected($v1, $v2);
+                $this->createEdgeDirected($v1, $v2, $originalEdge->getAttributeBag()->getAttributes());
             }
-            $edge->getAttributeBag()->setAttributes($originalEdge->getAttributeBag()->getAttributes());
         }
     }
 

@@ -22,17 +22,19 @@ class Vertex implements EdgesAggregate, AttributeAware
      */
     private $graph;
 
-    private $attributes = array();
+    private $attributes;
 
     /**
      * Create a new Vertex
      *
-     * @param Graph $graph graph to be added to
+     * @param Graph $graph      graph to be added to
+     * @param array $attributes
      * @see Graph::createVertex() to create new vertices
      */
-    public function __construct(Graph $graph)
+    public function __construct(Graph $graph, array $attributes = array())
     {
         $this->graph = $graph;
+        $this->attributes = $attributes;
 
         $graph->addVertex($this);
     }

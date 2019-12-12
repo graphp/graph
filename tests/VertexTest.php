@@ -23,12 +23,24 @@ class VertexTest extends AbstractAttributeAwareTest
         $this->assertEquals(array($this->vertex), $this->graph->getVertices()->getVector());
     }
 
-    public function testConstructor()
+    public function testConstructorWithoutAttributesHasNoAttributes()
     {
         $v2 = new Vertex($this->graph);
 
         $this->assertCount(2, $this->graph->getVertices());
         $this->assertEquals(array($this->vertex, $v2), $this->graph->getVertices()->getVector());
+
+        $this->assertNull($v2->getAttribute('hello'));
+        $this->assertEquals('default', $v2->getAttribute('hello', 'default'));
+        $this->assertEquals(array(), $v2->getAttributeBag()->getAttributes());
+    }
+
+    public function testConstructorWithAttributesReturnsAttributes()
+    {
+        $v2 = new Vertex($this->graph, array('hello' => 'wörld'));
+
+        $this->assertEquals('wörld', $v2->getAttribute('hello'));
+        $this->assertEquals(array('hello' => 'wörld'), $v2->getAttributeBag()->getAttributes());
     }
 
     public function testEdges()

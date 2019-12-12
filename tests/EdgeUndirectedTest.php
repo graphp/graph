@@ -4,10 +4,10 @@ namespace Graphp\Graph\Tests;
 
 class EdgeUndirectedTest extends EdgeBaseTest
 {
-    protected function createEdgeUndirected()
+    protected function createEdge(array $attributes = array())
     {
         // 1 -- 2
-        return $this->graph->createEdgeUndirected($this->v1, $this->v2);
+        return $this->graph->createEdgeUndirected($this->v1, $this->v2, $attributes);
     }
 
     protected function createEdgeLoop()

@@ -29,7 +29,7 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
      */
     protected $edge;
 
-    abstract protected function createEdgeUndirected();
+    abstract protected function createEdge(array $attributes = array());
 
     /**
      * @return Edge
@@ -42,7 +42,21 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $this->v1 = $this->graph->createVertex();
         $this->v2 = $this->graph->createVertex();
 
-        $this->edge = $this->createEdgeUndirected();
+        $this->edge = $this->createEdge();
+    }
+
+    public function testEdgeConstructorDefaultHasNoAttributes()
+    {
+        $this->assertNull($this->edge->getAttribute('hello'));
+        $this->assertEquals('default', $this->edge->getAttribute('hello', 'default'));
+        $this->assertEquals(array(), $this->edge->getAttributeBag()->getAttributes());
+    }
+
+    public function testEdgeConstructorWithAttributeReturnsAttributes()
+    {
+        $edge = $this->createEdge(array('hello' => 'wörld'));
+        $this->assertEquals('wörld', $edge->getAttribute('hello'));
+        $this->assertEquals(array('hello' => 'wörld'), $edge->getAttributeBag()->getAttributes());
     }
 
     public function testEdgeVertices()
@@ -105,6 +119,6 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
 
     protected function createAttributeAware()
     {
-        return $this->createEdgeUndirected();
+        return $this->createEdge();
     }
 }
