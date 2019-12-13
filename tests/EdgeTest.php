@@ -2,12 +2,11 @@
 
 namespace Graphp\Graph\Tests;
 
-use Graphp\Graph\Graph;
 use Graphp\Graph\Edge;
-use Graphp\Graph\Tests\Attribute\AbstractAttributeAwareTest;
+use Graphp\Graph\Graph;
 use Graphp\Graph\Vertex;
 
-abstract class EdgeBaseTest extends AbstractAttributeAwareTest
+abstract class EdgeTest extends EntityTest
 {
     /**
      * @var Graph
@@ -49,14 +48,14 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
     {
         $this->assertNull($this->edge->getAttribute('hello'));
         $this->assertEquals('default', $this->edge->getAttribute('hello', 'default'));
-        $this->assertEquals(array(), $this->edge->getAttributeBag()->getAttributes());
+        $this->assertEquals(array(), $this->edge->getAttributes());
     }
 
     public function testEdgeConstructorWithAttributeReturnsAttributes()
     {
         $edge = $this->createEdge(array('hello' => 'wörld'));
         $this->assertEquals('wörld', $edge->getAttribute('hello'));
-        $this->assertEquals(array('hello' => 'wörld'), $edge->getAttributeBag()->getAttributes());
+        $this->assertEquals(array('hello' => 'wörld'), $edge->getAttributes());
     }
 
     public function testEdgeVertices()
@@ -117,7 +116,7 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $this->assertEquals(array($this->v1, $this->v2), $this->graph->getVertices()->getVector());
     }
 
-    protected function createAttributeAware()
+    protected function createEntity()
     {
         return $this->createEdge();
     }

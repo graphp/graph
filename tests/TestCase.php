@@ -14,7 +14,7 @@ class TestCase extends BaseTestCase
     {
         $f = function(Graph $graph){
             $ret = get_class($graph);
-            $ret .= PHP_EOL . 'attributes: ' . json_encode($graph->getAttributeBag()->getAttributes());
+            $ret .= PHP_EOL . 'attributes: ' . json_encode($graph->getAttributes());
             $ret .= PHP_EOL . 'vertices: ' . count($graph->getVertices());
             $ret .= PHP_EOL . 'edges: ' . count($graph->getEdges());
 
@@ -66,7 +66,7 @@ class TestCase extends BaseTestCase
     private function getVertexDump(Vertex $vertex)
     {
         $ret = get_class($vertex);
-        $ret .= PHP_EOL . 'attributes: ' . json_encode($vertex->getAttributeBag()->getAttributes());
+        $ret .= PHP_EOL . 'attributes: ' . json_encode($vertex->getAttributes());
 
         return $ret;
     }
@@ -81,7 +81,7 @@ class TestCase extends BaseTestCase
             $foo = $edge->getVertices()->getVector();
             $ret .= $vertices->getIndexVertex($foo[0]) . ' -- ' . $vertices->getIndexVertex($foo[1]);
         }
-        $ret .= PHP_EOL . 'attributes: ' . json_encode($edge->getAttributeBag()->getAttributes());
+        $ret .= PHP_EOL . 'attributes: ' . json_encode($edge->getAttributes());
 
         return $ret;
     }

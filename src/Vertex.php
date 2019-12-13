@@ -2,15 +2,13 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Attribute\AttributeAware;
-use Graphp\Graph\Attribute\AttributeBagReference;
 use Graphp\Graph\Exception\BadMethodCallException;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\EdgesAggregate;
 use Graphp\Graph\Set\Vertices;
 
-class Vertex implements EdgesAggregate, AttributeAware
+class Vertex extends Entity implements EdgesAggregate
 {
     /**
      * @var Edge[]
@@ -21,8 +19,6 @@ class Vertex implements EdgesAggregate, AttributeAware
      * @var Graph
      */
     private $graph;
-
-    private $attributes;
 
     /**
      * Create a new Vertex
@@ -284,29 +280,5 @@ class Vertex implements EdgesAggregate, AttributeAware
         // @codeCoverageIgnoreStart
         throw new BadMethodCallException();
         // @codeCoverageIgnoreEnd
-    }
-
-    public function getAttribute($name, $default = null)
-    {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : $default;
-    }
-
-    public function setAttribute($name, $value)
-    {
-        $this->attributes[$name] = $value;
-
-        return $this;
-    }
-
-    public function removeAttribute($name)
-    {
-        unset($this->attributes[$name]);
-
-        return $this;
-    }
-
-    public function getAttributeBag()
-    {
-        return new AttributeBagReference($this->attributes);
     }
 }
