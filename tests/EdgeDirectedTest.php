@@ -2,7 +2,7 @@
 
 namespace Graphp\Graph\Tests;
 
-class EdgeDirectedTest extends EdgeBaseTest
+class EdgeDirectedTest extends EdgeTest
 {
     protected function createEdge(array $attributes = array())
     {

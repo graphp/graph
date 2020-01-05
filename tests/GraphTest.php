@@ -3,23 +3,22 @@
 namespace Graphp\Graph\Tests;
 
 use Graphp\Graph\Graph;
-use Graphp\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
-class GraphTest extends AbstractAttributeAwareTest
+class GraphTest extends EntityTest
 {
     public function testEmptyGraphHasNoAttributes()
     {
         $graph = new Graph();
         $this->assertNull($graph->getAttribute('hello'));
         $this->assertEquals('default', $graph->getAttribute('hello', 'default'));
-        $this->assertEquals(array(), $graph->getAttributeBag()->getAttributes());
+        $this->assertEquals(array(), $graph->getAttributes());
     }
 
     public function testEmptyGraphWithAttributeReturnsAttributes()
     {
         $graph = new Graph(array('hello' => 'wörld'));
         $this->assertEquals('wörld', $graph->getAttribute('hello'));
-        $this->assertEquals(array('hello' => 'wörld'), $graph->getAttributeBag()->getAttributes());
+        $this->assertEquals(array('hello' => 'wörld'), $graph->getAttributes());
     }
 
     public function testCanCreateVertex()
@@ -219,7 +218,7 @@ class GraphTest extends AbstractAttributeAwareTest
         $this->assertNotSame($graph->getVertices(), $newgraph->getVertices());
     }
 
-    protected function createAttributeAware()
+    protected function createEntity()
     {
         return new Graph();
     }

@@ -2,23 +2,19 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Attribute\AttributeAware;
-use Graphp\Graph\Attribute\AttributeBagReference;
 use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Exception\OutOfBoundsException;
 use Graphp\Graph\Set\DualAggregate;
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\Vertices;
 
-class Graph implements DualAggregate, AttributeAware
+class Graph extends Entity implements DualAggregate
 {
     protected $verticesStorage = array();
     protected $vertices;
 
     protected $edgesStorage = array();
     protected $edges;
-
-    protected $attributes;
 
     /**
      * @param array $attributes
@@ -178,7 +174,7 @@ class Graph implements DualAggregate, AttributeAware
         foreach ($vertices as $originalVertex) {
             \assert($originalVertex instanceof Vertex);
 
-            $vertex = new Vertex($this, $originalVertex->getAttributeBag()->getAttributes());
+            $vertex = new Vertex($this, $originalVertex->getAttributes());
 
             // create map with old vertex hash to new vertex object
             $map[\spl_object_hash($originalVertex)] = $vertex;
@@ -194,34 +190,10 @@ class Graph implements DualAggregate, AttributeAware
 
             // recreate edge and assign attributes
             if ($originalEdge instanceof EdgeUndirected) {
-                $this->createEdgeUndirected($v1, $v2, $originalEdge->getAttributeBag()->getAttributes());
+                $this->createEdgeUndirected($v1, $v2, $originalEdge->getAttributes());
             } else {
-                $this->createEdgeDirected($v1, $v2, $originalEdge->getAttributeBag()->getAttributes());
+                $this->createEdgeDirected($v1, $v2, $originalEdge->getAttributes());
             }
         }
-    }
-
-    public function getAttribute($name, $default = null)
-    {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : $default;
-    }
-
-    public function setAttribute($name, $value)
-    {
-        $this->attributes[$name] = $value;
-
-        return $this;
-    }
-
-    public function removeAttribute($name)
-    {
-        unset($this->attributes[$name]);
-
-        return $this;
-    }
-
-    public function getAttributeBag()
-    {
-        return new AttributeBagReference($this->attributes);
     }
 }

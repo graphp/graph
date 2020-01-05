@@ -3,10 +3,9 @@
 namespace Graphp\Graph\Tests;
 
 use Graphp\Graph\Graph;
-use Graphp\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 use Graphp\Graph\Vertex;
 
-class VertexTest extends AbstractAttributeAwareTest
+class VertexTest extends EntityTest
 {
     private $graph;
     private $vertex;
@@ -32,7 +31,7 @@ class VertexTest extends AbstractAttributeAwareTest
 
         $this->assertNull($v2->getAttribute('hello'));
         $this->assertEquals('default', $v2->getAttribute('hello', 'default'));
-        $this->assertEquals(array(), $v2->getAttributeBag()->getAttributes());
+        $this->assertEquals(array(), $v2->getAttributes());
     }
 
     public function testConstructorWithAttributesReturnsAttributes()
@@ -40,7 +39,7 @@ class VertexTest extends AbstractAttributeAwareTest
         $v2 = new Vertex($this->graph, array('hello' => 'wörld'));
 
         $this->assertEquals('wörld', $v2->getAttribute('hello'));
-        $this->assertEquals(array('hello' => 'wörld'), $v2->getAttributeBag()->getAttributes());
+        $this->assertEquals(array('hello' => 'wörld'), $v2->getAttributes());
     }
 
     public function testEdges()
@@ -163,7 +162,7 @@ class VertexTest extends AbstractAttributeAwareTest
         $this->assertEquals(array(), $this->graph->getEdges()->getVector());
     }
 
-    protected function createAttributeAware()
+    protected function createEntity()
     {
         return new Vertex(new Graph());
     }

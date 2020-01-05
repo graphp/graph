@@ -1,19 +1,19 @@
 <?php
 
-namespace Graphp\Graph\Attribute;
+namespace Graphp\Graph;
 
 /**
- * A fairly standard AttributeBag container.
+ * The abstract `Entity` class is the base for `Graph`, `Vertex` and `Edge`.
  *
- * This container passes and returns attributes by value.  It is mutable,
- * however, so multiple references to the container will update in kind.
+ * It contains common methods to access additional attributes.
+ * Each attribute consists of a name (string) and an arbitrary value.
  */
-class AttributeBagContainer implements AttributeBag
+abstract class Entity
 {
     /**
      * @var array
      */
-    private $attributes = array();
+    protected $attributes;
 
     /**
      * get a single attribute with the given $name (or return $default if attribute was not found)
@@ -74,16 +74,6 @@ class AttributeBagContainer implements AttributeBag
     {
         $this->attributes = $attributes + $this->attributes;
 
-        return $this;
-    }
-
-    /**
-     * get a container for all attributes
-     *
-     * @return AttributeBag
-     */
-    public function getAttributeBag()
-    {
         return $this;
     }
 }
