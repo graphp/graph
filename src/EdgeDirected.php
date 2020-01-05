@@ -24,13 +24,14 @@ class EdgeDirected extends Edge
     /**
      * [Internal] Create a new directed Edge from Vertex $from to Vertex $to
      *
-     * @param Vertex $from start/source Vertex
-     * @param Vertex $to   end/target Vertex
+     * @param Vertex $from       start/source Vertex
+     * @param Vertex $to         end/target Vertex
+     * @param array  $attributes
      * @see Graph::createEdgeDirected() to create directed edges
      * @see Graph::createEdgeUndirected() to create undirected edges
      * @internal
      */
-    public function __construct(Vertex $from, Vertex $to)
+    public function __construct(Vertex $from, Vertex $to, array $attributes = array())
     {
         if ($from->getGraph() !== $to->getGraph()) {
             throw new InvalidArgumentException('Vertices have to be within the same graph');
@@ -38,6 +39,7 @@ class EdgeDirected extends Edge
 
         $this->from = $from;
         $this->to = $to;
+        $this->attributes = $attributes;
 
         $from->getGraph()->addEdge($this);
         $from->addEdge($this);

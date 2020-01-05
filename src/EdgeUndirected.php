@@ -26,11 +26,12 @@ class EdgeUndirected extends Edge
      *
      * @param Vertex $a
      * @param Vertex $b
+     * @param array  $attributes
      * @see Graph::createEdgeUndirected() to create undirected edges
      * @see Graph::createEdgeDirected() to create directed edges
      * @internal
      */
-    public function __construct(Vertex $a, Vertex $b)
+    public function __construct(Vertex $a, Vertex $b, array $attributes = array())
     {
         if ($a->getGraph() !== $b->getGraph()) {
             throw new InvalidArgumentException('Vertices have to be within the same graph');
@@ -38,6 +39,7 @@ class EdgeUndirected extends Edge
 
         $this->a = $a;
         $this->b = $b;
+        $this->attributes = $attributes;
 
         $a->getGraph()->addEdge($this);
         $a->addEdge($this);

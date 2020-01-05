@@ -31,9 +31,9 @@ require_once 'vendor/autoload.php';
 $graph = new Graphp\Graph\Graph();
 
 // create some cities
-$rome = $graph->createVertex()->setAttribute('name', 'Rome');
-$madrid = $graph->createVertex()->setAttribute('name', 'Madrid');
-$cologne = $graph->createVertex()->setAttribute('name', 'Cologne');
+$rome = $graph->createVertex(array('name' => 'Rome'));
+$madrid = $graph->createVertex(array('name' => 'Madrid'));
+$cologne = $graph->createVertex(array('name' => 'Cologne'));
 
 // build some roads
 $graph->createEdgeDirected($cologne, $madrid);
