@@ -41,23 +41,6 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     }
 
     /**
-     * create new Edges instance that references the given source array of Edge instances
-     *
-     * Any changes in the referenced source array will automatically be
-     * reflected in this Set of Edges, e.g. if you add an Edge instance to the
-     * array, it will automatically be included in this Set.
-     *
-     * @param array $edgesArray
-     * @return Edges
-     */
-    public static function factoryArrayReference(array &$edgesArray)
-    {
-        $edges = new static();
-        $edges->edges =& $edgesArray;
-        return $edges;
-    }
-
-    /**
      * instantiate new Set of Edges
      *
      * @param array $edges

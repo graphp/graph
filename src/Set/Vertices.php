@@ -41,23 +41,6 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     }
 
     /**
-     * create new Vertices instance that references the given source array of Vertex instances
-     *
-     * Any changes in the referenced source array will automatically be
-     * reflected in this Set of Vertices, e.g. if you add a Vertex instance to
-     * the array, it will automatically be included in this Set.
-     *
-     * @param array $verticesArray
-     * @return Vertices
-     */
-    public static function factoryArrayReference(array &$verticesArray)
-    {
-        $vertices = new static();
-        $vertices->vertices =& $verticesArray;
-        return $vertices;
-    }
-
-    /**
      * instantiate new Set of Vertices
      *
      * @param array $vertices

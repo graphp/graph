@@ -3,26 +3,20 @@
 namespace Graphp\Graph;
 
 use Graphp\Graph\Exception\InvalidArgumentException;
-use Graphp\Graph\Exception\OutOfBoundsException;
 use Graphp\Graph\Set\DualAggregate;
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\Vertices;
 
 class Graph extends Entity implements DualAggregate
 {
-    protected $verticesStorage = array();
-    protected $vertices;
-
-    protected $edgesStorage = array();
-    protected $edges;
+    protected $vertices = array();
+    protected $edges = array();
 
     /**
      * @param array $attributes
      */
     public function __construct(array $attributes = array())
     {
-        $this->vertices = Vertices::factoryArrayReference($this->verticesStorage);
-        $this->edges = Edges::factoryArrayReference($this->edgesStorage);
         $this->attributes = $attributes;
     }
 
@@ -33,7 +27,7 @@ class Graph extends Entity implements DualAggregate
      */
     public function getVertices()
     {
-        return $this->vertices;
+        return new Vertices($this->vertices);
     }
 
     /**
@@ -43,7 +37,7 @@ class Graph extends Entity implements DualAggregate
      */
     public function getEdges()
     {
-        return $this->edges;
+        return new Edges($this->edges);
     }
 
     /**
@@ -103,7 +97,7 @@ class Graph extends Entity implements DualAggregate
      */
     public function addVertex(Vertex $vertex)
     {
-        $this->verticesStorage[] = $vertex;
+        $this->vertices[] = $vertex;
     }
 
     /**
@@ -116,7 +110,7 @@ class Graph extends Entity implements DualAggregate
      */
     public function addEdge(Edge $edge)
     {
-        $this->edgesStorage []= $edge;
+        $this->edges []= $edge;
     }
 
     /**
@@ -130,12 +124,12 @@ class Graph extends Entity implements DualAggregate
      */
     public function removeEdge(Edge $edge)
     {
-        try {
-            unset($this->edgesStorage[$this->edges->getIndexEdge($edge)]);
-        }
-        catch (OutOfBoundsException $e) {
+        $key = \array_search($edge, $this->edges, true);
+        if ($key === false) {
             throw new InvalidArgumentException('Invalid Edge does not exist in this Graph');
         }
+
+        unset($this->edges[$key]);
     }
 
     /**
@@ -149,12 +143,12 @@ class Graph extends Entity implements DualAggregate
      */
     public function removeVertex(Vertex $vertex)
     {
-        try {
-            unset($this->verticesStorage[$this->vertices->getIndexVertex($vertex)]);
-        }
-        catch (OutOfBoundsException $e) {
+        $key = \array_search($vertex, $this->vertices, true);
+        if ($key === false) {
             throw new InvalidArgumentException('Invalid Vertex does not exist in this Graph');
         }
+
+        unset($this->vertices[$key]);
     }
 
     /**
@@ -162,13 +156,11 @@ class Graph extends Entity implements DualAggregate
      */
     public function __clone()
     {
-        $vertices = $this->verticesStorage;
-        $this->verticesStorage = array();
-        $this->vertices = Vertices::factoryArrayReference($this->verticesStorage);
+        $vertices = $this->vertices;
+        $this->vertices = array();
 
-        $edges = $this->edgesStorage;
-        $this->edgesStorage = array();
-        $this->edges = Edges::factoryArrayReference($this->edgesStorage);
+        $edges = $this->edges;
+        $this->edges = array();
 
         $map = array();
         foreach ($vertices as $originalVertex) {
