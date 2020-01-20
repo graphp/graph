@@ -88,6 +88,105 @@ class Graph extends Entity implements DualAggregate
     }
 
     /**
+     * Returns a copy of this graph without the given vertex
+     *
+     * If this vertex was not found in this graph, the returned graph will be
+     * identical.
+     *
+     * @param Vertex $vertex
+     * @return self
+     */
+    public function withoutVertex(Vertex $vertex)
+    {
+        return $this->withoutVertices(new Vertices(array($vertex)));
+    }
+
+    /**
+     * Returns a copy of this graph without the given vertices
+     *
+     * If any of the given vertices can not be found in this graph, they will
+     * silently be ignored. If neither of the vertices can be found in this graph,
+     * the returned graph will be identical.
+     *
+     * @param Vertices $vertices
+     * @return self
+     */
+    public function withoutVertices(Vertices $vertices)
+    {
+        // keep copy of original vertices and edges and temporarily remove all $vertices and their adjacent edges
+        $originalEdges = $this->edges;
+        $originalVertices = $this->vertices;
+        foreach ($vertices as $vertex) {
+            if (($key = \array_search($vertex, $this->vertices, true)) !== false) {
+                unset($this->vertices[$key]);
+                foreach ($vertex->getEdges() as $edge) {
+                    if (($key = \array_search($edge, $this->edges, true)) !== false) {
+                        unset($this->edges[$key]);
+                    }
+                }
+            }
+        }
+
+        // no vertices matched => return graph as-is
+        if (\count($this->vertices) === \count($originalVertices)) {
+            return $this;
+        }
+
+        // clone graph with vertices/edges temporarily removed, then restore
+        $clone = clone $this;
+        $this->edges= $originalEdges;
+        $this->vertices = $originalVertices;
+
+        return $clone;
+    }
+
+    /**
+     * Returns a copy of this graph without the given edge
+     *
+     * If this edge was not found in this graph, the returned graph will be
+     * identical.
+     *
+     * @param Edge $edge
+     * @return self
+     */
+    public function withoutEdge(Edge $edge)
+    {
+        return $this->withoutEdges(new Edges(array($edge)));
+    }
+
+    /**
+     * Returns a copy of this graph without the given edges
+     *
+     * If any of the given edges can not be found in this graph, they will
+     * silently be ignored. If neither of the edges can be found in this graph,
+     * the returned graph will be identical.
+     *
+     * @param Edges $edges
+     * @return self
+     */
+    public function withoutEdges(Edges $edges)
+    {
+        // keep copy of original edges and temporarily remove all $edges
+        $original = $this->edges;
+        foreach ($edges as $edge) {
+            if (($key = \array_search($edge, $this->edges, true)) !== false) {
+                unset($this->edges[$key]);
+            }
+        }
+
+        // no edges matched => return graph as-is
+        if (\count($this->edges) === \count($original)) {
+            return $this;
+        }
+
+        // clone graph with edges temporarily removed, then restore
+        $clone = clone $this;
+        $this->edges = $original;
+
+        return $clone;
+    }
+
+    /**
      * adds a new Vertex to the Graph (MUST NOT be called manually!)
      *
      * @param  Vertex $vertex instance of the new Vertex
@@ -111,44 +210,6 @@ class Graph extends Entity implements DualAggregate
     public function addEdge(Edge $edge)
     {
         $this->edges []= $edge;
-    }
-
-    /**
-     * remove the given edge from list of connected edges (MUST NOT be called manually!)
-     *
-     * @param  Edge                     $edge
-     * @return void
-     * @throws InvalidArgumentException if given edge does not exist (should not ever happen)
-     * @internal
-     * @see Edge::destroy() instead!
-     */
-    public function removeEdge(Edge $edge)
-    {
-        $key = \array_search($edge, $this->edges, true);
-        if ($key === false) {
-            throw new InvalidArgumentException('Invalid Edge does not exist in this Graph');
-        }
-
-        unset($this->edges[$key]);
-    }
-
-    /**
-     * remove the given vertex from list of known vertices (MUST NOT be called manually!)
-     *
-     * @param  Vertex                   $vertex
-     * @return void
-     * @throws InvalidArgumentException if given vertex does not exist (should not ever happen)
-     * @internal
-     * @see Vertex::destroy() instead!
-     */
-    public function removeVertex(Vertex $vertex)
-    {
-        $key = \array_search($vertex, $this->vertices, true);
-        if ($key === false) {
-            throw new InvalidArgumentException('Invalid Vertex does not exist in this Graph');
-        }
-
-        unset($this->vertices[$key]);
     }
 
     /**

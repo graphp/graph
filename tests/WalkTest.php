@@ -30,26 +30,14 @@ class WalkTest extends TestCase
 
         $walk = Walk::factoryFromEdges(new Edges(array($e1, $e2)), $v1);
 
+        $this->assertSame($graph, $walk->getGraph());
         $this->assertEquals(3, count($walk->getVertices()));
         $this->assertEquals(2, count($walk->getEdges()));
         $this->assertSame($v1, $walk->getVertices()->getVertexFirst());
         $this->assertSame($v3, $walk->getVertices()->getVertexLast());
         $this->assertSame(array($v1, $e1, $v2, $e2, $v3), $walk->getAlternatingSequence());
-        $this->assertTrue($walk->isValid());
 
         return $walk;
-    }
-
-    /**
-     * @param Walk $walk
-     * @depends testWalkPath
-     */
-    public function testWalkPathInvalidateByDestroyingVertex(Walk $walk)
-    {
-        // delete v3
-        $walk->getVertices()->getVertexLast()->destroy();
-
-        $this->assertFalse($walk->isValid());
     }
 
     public function testWalkWithinGraph()
@@ -65,12 +53,12 @@ class WalkTest extends TestCase
         // construct partial walk "1 -- 2"
         $walk = Walk::factoryFromEdges(new Edges(array($e1)), $v1);
 
+        $this->assertSame($graph, $walk->getGraph());
         $this->assertEquals(2, count($walk->getVertices()));
         $this->assertEquals(1, count($walk->getEdges()));
         $this->assertSame($v1, $walk->getVertices()->getVertexFirst());
         $this->assertSame($v2, $walk->getVertices()->getVertexLast());
         $this->assertSame(array($v1, $e1, $v2), $walk->getAlternatingSequence());
-        $this->assertTrue($walk->isValid());
 
         // construct same partial walk "1 -- 2"
         $walkVertices = Walk::factoryFromVertices(new Vertices(array($v1, $v2)));
@@ -94,24 +82,8 @@ class WalkTest extends TestCase
         $this->assertEquals(1, count($walk->getEdges()));
         $this->assertSame($v1, $walk->getVertices()->getVertexFirst());
         $this->assertSame($v1, $walk->getVertices()->getVertexLast());
-        $this->assertTrue($walk->isValid());
 
         return $walk;
-    }
-
-    /**
-     * @param Walk $walk
-     * @depends testWalkLoop
-     */
-    public function testWalkInvalidByDestroyingEdge(Walk $walk)
-    {
-        // destroy first edge found
-        foreach ($walk->getEdges() as $edge) {
-            $edge->destroy();
-            break;
-        }
-
-        $this->assertFalse($walk->isValid());
     }
 
     public function testWalkLoopCycle()
@@ -127,7 +99,6 @@ class WalkTest extends TestCase
         $this->assertEquals(1, count($walk->getEdges()));
         $this->assertSame($v1, $walk->getVertices()->getVertexFirst());
         $this->assertSame($v1, $walk->getVertices()->getVertexLast());
-        $this->assertTrue($walk->isValid());
     }
 
     /**
@@ -175,7 +146,6 @@ class WalkTest extends TestCase
         $this->assertCount(1, $cycle->getEdges());
         $this->assertSame($v1, $cycle->getVertices()->getVertexFirst());
         $this->assertSame($v1, $cycle->getVertices()->getVertexLast());
-        $this->assertTrue($cycle->isValid());
     }
 
     public function testFactoryCycleFromVerticesWithLoopCycle()
@@ -193,7 +163,6 @@ class WalkTest extends TestCase
         $this->assertCount(1, $cycle->getEdges());
         $this->assertSame($v1, $cycle->getVertices()->getVertexFirst());
         $this->assertSame($v1, $cycle->getVertices()->getVertexLast());
-        $this->assertTrue($cycle->isValid());
     }
 
 

@@ -3,6 +3,8 @@
 namespace Graphp\Graph\Tests;
 
 use Graphp\Graph\Graph;
+use Graphp\Graph\Set\Edges;
+use Graphp\Graph\Set\Vertices;
 
 class GraphTest extends EntityTest
 {
@@ -91,7 +93,7 @@ class GraphTest extends EntityTest
         $this->assertEquals(array($v1), $v2->getVerticesEdgeFrom()->getVector());
     }
 
-    public function testRemoveEdge()
+    public function testWithoutEdgeReturnsNewGraphAndDoesNotModifyOriginal()
     {
         // 1 -- 2
         $graph = new Graph();
@@ -101,18 +103,14 @@ class GraphTest extends EntityTest
 
         $this->assertEquals(array($edge), $graph->getEdges()->getVector());
 
-        $edge->destroy();
-        //$graph->removeEdge($edge);
+        $new = $graph->withoutEdge($edge);
 
-        $this->assertEquals(array(), $graph->getEdges()->getVector());
-
-        return $graph;
+        $this->assertInstanceOf(get_class($graph), $new);
+        $this->assertEquals(array(), $new->getEdges()->getVector());
+        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testRemoveEdgeInvalid()
+    public function testWithoutEdgesSameTwiceReturnsNewGraphAndDoesNotModifyOriginal()
     {
         // 1 -- 2
         $graph = new Graph();
@@ -120,32 +118,135 @@ class GraphTest extends EntityTest
         $v2 = $graph->createVertex();
         $edge = $graph->createEdgeUndirected($v1, $v2);
 
-        $edge->destroy();
-        $edge->destroy();
+        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
+
+        $new = $graph->withoutEdges(new Edges(array($edge, $edge)));
+
+        $this->assertInstanceOf(get_class($graph), $new);
+        $this->assertEquals(array(), $new->getEdges()->getVector());
+        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
     }
 
-    public function testRemoveVertex()
+    public function testWithoutEdgeFromOtherGraphReturnsSameGraphWithoutModification()
+    {
+        // 1 -- 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
+        $graph->createEdgeUndirected($v1, $v2);
+
+        $clone = clone $graph;
+        $edge = $clone->getEdges()->getEdgeFirst();
+
+        $new = $graph->withoutEdge($edge);
+
+        $this->assertSame($new, $graph);
+        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
+    }
+
+    public function testWithoutVertexReturnsNewGraphAndDoesNotModifyOriginal()
     {
         $graph = new Graph();
         $vertex = $graph->createVertex();
 
         $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
 
-        $vertex->destroy();
+        $new = $graph->withoutVertex($vertex);
 
-        $this->assertEquals(array(), $graph->getVertices()->getVector());
+        $this->assertInstanceOf(get_class($graph), $new);
+        $this->assertEquals(array(), $new->getVertices()->getVector());
+        $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testRemoveVertexInvalid()
+    public function testWithoutVerticesTwiceReturnsNewGraphAndDoesNotModifyOriginal()
     {
         $graph = new Graph();
         $vertex = $graph->createVertex();
 
-        $vertex->destroy();
-        $vertex->destroy();
+        $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
+
+        $new = $graph->withoutVertices(new Vertices(array($vertex, $vertex)));
+
+        $this->assertInstanceOf(get_class($graph), $new);
+        $this->assertEquals(array(), $new->getVertices()->getVector());
+        $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
+    }
+
+    public function testWithoutVertexFromOtherGraphReturnsSameGraphWithoutModification()
+    {
+        $graph = new Graph();
+        $graph->createVertex();
+
+        $other = new Graph();
+        $vertex = $other->createVertex();
+
+        $new = $graph->withoutVertex($vertex);
+
+        $this->assertSame($new, $graph);
+        $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
+    }
+
+    public function testWithoutVertexRemovesAttachedUndirectedEdge()
+    {
+        // 1 -- 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
+        $graph->createEdgeUndirected($v1, $v2);
+
+        $new = $graph->withoutVertex($v1);
+
+        $this->assertCount(1, $new->getVertices());
+        $this->assertCount(0, $new->getEdges());
+    }
+
+    public function testWithoutVertexWithUndirectedLoopReturnsEmptyGraph()
+    {
+        // 1 -\
+        // |  |
+        // \--/
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+        $graph->createEdgeUndirected($v1, $v1);
+
+        $new = $graph->withoutVertex($v1);
+
+        $this->assertCount(0, $new->getVertices());
+        $this->assertCount(0, $new->getEdges());
+    }
+
+    public function testWithoutVertexWithUndirectedLoopReturnsRemainingGraph()
+    {
+        // 1 -- 2 -\
+        // ^    |  |
+        // |    \--/
+        // 3
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
+        $v3 = $graph->createVertex();
+        $graph->createEdgeDirected($v3, $v1);
+        $graph->createEdgeUndirected($v2, $v2);
+
+        $new = $graph->withoutVertex($v2);
+
+        $this->assertCount(2, $new->getVertices());
+        $this->assertCount(1, $new->getEdges());
+    }
+
+    public function testWithoutVertexWithDirectedLoopReturnsEmptyGraph()
+    {
+        // 1 -\
+        // ^  |
+        // \--/
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+        $graph->createEdgeDirected($v1, $v1);
+
+        $new = $graph->withoutVertex($v1);
+
+        $this->assertCount(0, $new->getVertices());
+        $this->assertCount(0, $new->getEdges());
     }
 
     public function testGraphCloneEmptyGraph()
