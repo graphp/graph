@@ -20,47 +20,9 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     protected $edges = array();
 
     /**
-     * create new Edges instance
-     *
-     * You can pass in just about anything that can be expressed as a Set of
-     * Edges, such as:
-     * - an array of Edge instances
-     * - any Algorithm that implements the EdgesAggregate interface
-     * - a Graph instance or
-     * - an existing Set of Edges which will be returned as-is
-     *
-     * @param array|Edges|EdgesAggregate $edges
-     * @return Edges
-     */
-    public static function factory($edges)
-    {
-        if ($edges instanceof EdgesAggregate) {
-            return $edges->getEdges();
-        }
-        return new self($edges);
-    }
-
-    /**
-     * create new Edges instance that references the given source array of Edge instances
-     *
-     * Any changes in the referenced source array will automatically be
-     * reflected in this Set of Edges, e.g. if you add an Edge instance to the
-     * array, it will automatically be included in this Set.
-     *
-     * @param array $edgesArray
-     * @return Edges
-     */
-    public static function factoryArrayReference(array &$edgesArray)
-    {
-        $edges = new static();
-        $edges->edges =& $edgesArray;
-        return $edges;
-    }
-
-    /**
      * instantiate new Set of Edges
      *
-     * @param array $edges
+     * @param Edge[] $edges
      */
     public function __construct(array $edges = array())
     {
@@ -288,7 +250,6 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * return self reference to Set of Edges
      *
      * @return Edges
-     * @see self::factory()
      */
     public function getEdges()
     {
@@ -324,12 +285,12 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * Duplicate Edge instances will be kept if the corresponding number of
      * Edge instances is also found in $otherEdges.
      *
-     * @param Edges|Edge[] $otherEdges
+     * @param Edges $otherEdges
      * @return Edges a new Edges set
      */
-    public function getEdgesIntersection($otherEdges)
+    public function getEdgesIntersection(Edges $otherEdges)
     {
-        $otherArray = self::factory($otherEdges)->getVector();
+        $otherArray = \iterator_to_array($otherEdges, false);
 
         $edges = array();
         foreach ($this->edges as $eid => $edge) {

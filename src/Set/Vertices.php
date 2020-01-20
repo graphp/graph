@@ -20,47 +20,9 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     protected $vertices = array();
 
     /**
-     * create new Vertices instance
-     *
-     * You can pass in just about anything that can be expressed as a Set of
-     * Vertices, such as:
-     * - an array of Vertex instances
-     * - any Algorithm that implements the VerticesAggregate interface
-     * - a Graph instance or
-     * - an existing Set of Vertices which will be returned as-is
-     *
-     * @param array|Vertices|VerticesAggregate $vertices
-     * @return Vertices
-     */
-    public static function factory($vertices)
-    {
-        if ($vertices instanceof VerticesAggregate) {
-            return $vertices->getVertices();
-        }
-        return new self($vertices);
-    }
-
-    /**
-     * create new Vertices instance that references the given source array of Vertex instances
-     *
-     * Any changes in the referenced source array will automatically be
-     * reflected in this Set of Vertices, e.g. if you add a Vertex instance to
-     * the array, it will automatically be included in this Set.
-     *
-     * @param array $verticesArray
-     * @return Vertices
-     */
-    public static function factoryArrayReference(array &$verticesArray)
-    {
-        $vertices = new static();
-        $vertices->vertices =& $verticesArray;
-        return $vertices;
-    }
-
-    /**
      * instantiate new Set of Vertices
      *
-     * @param array $vertices
+     * @param Vertex[] $vertices
      */
     public function __construct(array $vertices = array())
     {
@@ -256,12 +218,12 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * Duplicate Vertex instances will be kept if the corresponding number of
      * Vertex instances is also found in $otherVertices.
      *
-     * @param Vertices|Vertex[] $otherVertices
+     * @param Vertices $otherVertices
      * @return Vertices a new Vertices set
      */
-    public function getVerticesIntersection($otherVertices)
+    public function getVerticesIntersection(Vertices $otherVertices)
     {
-        $otherArray = self::factory($otherVertices)->getVector();
+        $otherArray = \iterator_to_array($otherVertices, false);
 
         $vertices = array();
         foreach ($this->vertices as $vid => $vertex) {
@@ -313,7 +275,6 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * return self reference to Set of Vertices
      *
      * @return Vertices
-     * @see self::factory()
      */
     public function getVertices()
     {
