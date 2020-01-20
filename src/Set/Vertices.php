@@ -20,27 +20,6 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     protected $vertices = array();
 
     /**
-     * create new Vertices instance
-     *
-     * You can pass in just about anything that can be expressed as a Set of
-     * Vertices, such as:
-     * - an array of Vertex instances
-     * - any Algorithm that implements the VerticesAggregate interface
-     * - a Graph instance or
-     * - an existing Set of Vertices which will be returned as-is
-     *
-     * @param array|Vertices|VerticesAggregate $vertices
-     * @return Vertices
-     */
-    public static function factory($vertices)
-    {
-        if ($vertices instanceof VerticesAggregate) {
-            return $vertices->getVertices();
-        }
-        return new self($vertices);
-    }
-
-    /**
      * instantiate new Set of Vertices
      *
      * @param Vertex[] $vertices
@@ -296,7 +275,6 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * return self reference to Set of Vertices
      *
      * @return Vertices
-     * @see self::factory()
      */
     public function getVertices()
     {

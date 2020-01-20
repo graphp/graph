@@ -15,22 +15,7 @@ class EdgesTest extends TestCase
      */
     protected function createEdges(array $edges)
     {
-        return Edges::factory($edges);
-    }
-
-    public function testFactory()
-    {
-        // 1 -> 1
-        $graph = new Graph();
-        $v1 = $graph->createVertex();
-        $e1 = $graph->createEdgeDirected($v1, $v1);
-
-        $edgesFromArray = $this->createEdges(array($e1));
-        $this->assertInstanceOf('Graphp\Graph\Set\Edges', $edgesFromArray);
-        $this->assertSame($e1, $edgesFromArray->getEdgeFirst());
-
-        $edgesFromEdges = Edges::factory($edgesFromArray);
-        $this->assertSame($edgesFromArray, $edgesFromEdges);
+        return new Edges($edges);
     }
 
     public function testEmpty()

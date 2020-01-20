@@ -20,27 +20,6 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     protected $edges = array();
 
     /**
-     * create new Edges instance
-     *
-     * You can pass in just about anything that can be expressed as a Set of
-     * Edges, such as:
-     * - an array of Edge instances
-     * - any Algorithm that implements the EdgesAggregate interface
-     * - a Graph instance or
-     * - an existing Set of Edges which will be returned as-is
-     *
-     * @param array|Edges|EdgesAggregate $edges
-     * @return Edges
-     */
-    public static function factory($edges)
-    {
-        if ($edges instanceof EdgesAggregate) {
-            return $edges->getEdges();
-        }
-        return new self($edges);
-    }
-
-    /**
      * instantiate new Set of Edges
      *
      * @param Edge[] $edges
@@ -271,7 +250,6 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * return self reference to Set of Edges
      *
      * @return Edges
-     * @see self::factory()
      */
     public function getEdges()
     {

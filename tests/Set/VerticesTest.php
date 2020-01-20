@@ -14,19 +14,6 @@ class VerticesTest extends TestCase
         return new Vertices($vertices);
     }
 
-    public function testFactory()
-    {
-        $graph = new Graph();
-        $vertex = $graph->createVertex();
-
-        $verticesFromArray = $this->createVertices(array($vertex));
-        $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $verticesFromArray);
-        $this->assertSame($vertex, $verticesFromArray->getVertexFirst());
-
-        $verticesFromVertices = Vertices::factory($verticesFromArray);
-        $this->assertSame($verticesFromArray, $verticesFromVertices);
-    }
-
     public function testEmpty()
     {
         $vertices = $this->createVertices(array());
@@ -292,14 +279,6 @@ class VerticesTest extends TestCase
     {
         $verticesIntersection = $verticesTwo->getVerticesIntersection($verticesEmpty);
         $this->assertCount(0, $verticesIntersection);
-    }
-
-    public function testFactoryEmptyArray()
-    {
-        $vertices = Vertices::factory(array());
-
-        $this->assertInstanceOf('Graphp\Graph\Set\Vertices', $vertices);
-        $this->assertTrue($vertices->isEmpty());
     }
 
     public function testDuplicates()
