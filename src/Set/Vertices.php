@@ -43,7 +43,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
     /**
      * instantiate new Set of Vertices
      *
-     * @param array $vertices
+     * @param Vertex[] $vertices
      */
     public function __construct(array $vertices = array())
     {
@@ -239,12 +239,12 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * Duplicate Vertex instances will be kept if the corresponding number of
      * Vertex instances is also found in $otherVertices.
      *
-     * @param Vertices|Vertex[] $otherVertices
+     * @param Vertices $otherVertices
      * @return Vertices a new Vertices set
      */
-    public function getVerticesIntersection($otherVertices)
+    public function getVerticesIntersection(Vertices $otherVertices)
     {
-        $otherArray = self::factory($otherVertices)->getVector();
+        $otherArray = \iterator_to_array($otherVertices, false);
 
         $vertices = array();
         foreach ($this->vertices as $vid => $vertex) {

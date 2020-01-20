@@ -23,11 +23,11 @@ class Walk implements DualAggregate
     /**
      * construct new walk from given start vertex and given array of edges
      *
-     * @param  Edges|Edge[]         $edges
-     * @param  Vertex               $startVertex
+     * @param  Edges  $edges
+     * @param  Vertex $startVertex
      * @return Walk
      */
-    public static function factoryFromEdges($edges, Vertex $startVertex)
+    public static function factoryFromEdges(Edges $edges, Vertex $startVertex)
     {
         $vertices = array($startVertex);
         $vertexCurrent = $startVertex;
@@ -36,20 +36,20 @@ class Walk implements DualAggregate
             $vertices []= $vertexCurrent;
         }
 
-        return new self($vertices, $edges);
+        return new self(new Vertices($vertices), $edges);
     }
 
     /**
      * create new walk instance between given set of Vertices / array of Vertex instances
      *
-     * @param  Vertices|Vertex[]                 $vertices
+     * @param  Vertices                          $vertices
      * @param  null|string|callable(Edge):number $orderBy
      * @param  bool                              $desc
      * @return Walk
      * @throws UnderflowException                if no vertices were given
      * @see Edges::getEdgeOrder() for parameters $by and $desc
      */
-    public static function factoryFromVertices($vertices, $orderBy = null, $desc = false)
+    public static function factoryFromVertices(Vertices $vertices, $orderBy = null, $desc = false)
     {
         $edges = array();
         $last = NULL;
@@ -70,13 +70,13 @@ class Walk implements DualAggregate
             throw new UnderflowException('No vertices given');
         }
 
-        return new self($vertices, $edges);
+        return new self($vertices, new Edges($edges));
     }
 
     /**
      * create new cycle instance with edges between given vertices
      *
-     * @param  Vertex[]|Vertices                 $vertices
+     * @param  Vertices                          $vertices
      * @param  null|string|callable(Edge):number $orderBy
      * @param  bool                              $desc
      * @return Walk
@@ -84,7 +84,7 @@ class Walk implements DualAggregate
      * @see Edges::getEdgeOrder() for parameters $by and $desc
      * @uses self::factoryFromVertices()
      */
-    public static function factoryCycleFromVertices($vertices, $orderBy = null, $desc = false)
+    public static function factoryCycleFromVertices(Vertices $vertices, $orderBy = null, $desc = false)
     {
         $cycle = self::factoryFromVertices($vertices, $orderBy, $desc);
 
@@ -102,13 +102,13 @@ class Walk implements DualAggregate
     /**
      * create new cycle instance with vertices connected by given edges
      *
-     * @param  Edges|Edge[] $edges
-     * @param  Vertex       $startVertex
+     * @param  Edges  $edges
+     * @param  Vertex $startVertex
      * @return Walk
      * @throws InvalidArgumentException if the given array of edges does not represent a valid cycle
      * @uses self::factoryFromEdges()
      */
-    public static function factoryCycleFromEdges($edges, Vertex $startVertex)
+    public static function factoryCycleFromEdges(Edges $edges, Vertex $startVertex)
     {
         $cycle = self::factoryFromEdges($edges, $startVertex);
 
@@ -121,21 +121,19 @@ class Walk implements DualAggregate
     }
 
     /**
-     *
      * @var Vertices
      */
     protected $vertices;
 
     /**
-     *
      * @var Edges
      */
     protected $edges;
 
-    protected function __construct($vertices, $edges)
+    protected function __construct(Vertices $vertices, Edges $edges)
     {
-        $this->vertices = Vertices::factory($vertices);
-        $this->edges    = Edges::factory($edges);
+        $this->vertices = $vertices;
+        $this->edges = $edges;
     }
 
     /**
@@ -148,7 +146,7 @@ class Walk implements DualAggregate
      */
     public function getGraph()
     {
-        return $this->getVertices()->getVertexFirst()->getGraph();
+        return $this->vertices->getVertexFirst()->getGraph();
     }
 
     /**

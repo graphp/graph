@@ -43,7 +43,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
     /**
      * instantiate new Set of Edges
      *
-     * @param array $edges
+     * @param Edge[] $edges
      */
     public function __construct(array $edges = array())
     {
@@ -307,12 +307,12 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * Duplicate Edge instances will be kept if the corresponding number of
      * Edge instances is also found in $otherEdges.
      *
-     * @param Edges|Edge[] $otherEdges
+     * @param Edges $otherEdges
      * @return Edges a new Edges set
      */
-    public function getEdgesIntersection($otherEdges)
+    public function getEdgesIntersection(Edges $otherEdges)
     {
-        $otherArray = self::factory($otherEdges)->getVector();
+        $otherArray = \iterator_to_array($otherEdges, false);
 
         $edges = array();
         foreach ($this->edges as $eid => $edge) {
