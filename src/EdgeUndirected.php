@@ -2,8 +2,6 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Set\Vertices;
-
 class EdgeUndirected extends Edge
 {
     /**
@@ -47,17 +45,17 @@ class EdgeUndirected extends Edge
 
     public function getVerticesTarget()
     {
-        return new Vertices(array($this->b, $this->a));
+        return array($this->b, $this->a);
     }
 
     public function getVerticesStart()
     {
-        return new Vertices(array($this->a, $this->b));
+        return array($this->a, $this->b);
     }
 
     public function getVertices()
     {
-        return new Vertices(array($this->a, $this->b));
+        return array($this->a, $this->b);
     }
 
     public function isConnection(Vertex $from, Vertex $to)

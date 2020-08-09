@@ -20,7 +20,7 @@ class EdgeDirectedTest extends EdgeTest
 
     public function testVerticesEnds()
     {
-        $this->assertEquals(array($this->v1), $this->edge->getVerticesStart()->getVector());
-        $this->assertEquals(array($this->v2), $this->edge->getVerticesTarget()->getVector());
+        $this->assertEquals(array($this->v1), $this->edge->getVerticesStart());
+        $this->assertEquals(array($this->v2), $this->edge->getVerticesTarget());
     }
 }

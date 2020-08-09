@@ -2,10 +2,6 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Set\Edges;
-use Graphp\Graph\Set\Vertices;
-use Graphp\Graph\Set\DualAggregate;
-
 /**
  * Base Walk class
  *
@@ -16,16 +12,16 @@ use Graphp\Graph\Set\DualAggregate;
  * @link http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Walks
  * @see Graphp\Graph\Algorithm\Property\WalkProperty for checking special cases, such as cycles, loops, closed trails, etc.
  */
-class Walk implements DualAggregate
+class Walk
 {
     /**
      * construct new walk from given start vertex and given array of edges
      *
-     * @param  Edges  $edges
+     * @param  Edge[] $edges
      * @param  Vertex $startVertex
      * @return Walk
      */
-    public static function factoryFromEdges(Edges $edges, Vertex $startVertex)
+    public static function factoryFromEdges(array $edges, Vertex $startVertex)
     {
         $vertices = array($startVertex);
         $vertexCurrent = $startVertex;
@@ -34,20 +30,20 @@ class Walk implements DualAggregate
             $vertices []= $vertexCurrent;
         }
 
-        return new self(new Vertices($vertices), $edges);
+        return new self($vertices, $edges);
     }
 
     /**
-     * create new walk instance between given set of Vertices / array of Vertex instances
+     * create new walk instance between given array of Vertex instances
      *
-     * @param  Vertices                          $vertices
+     * @param  Vertex[]                          $vertices
      * @param  null|string|callable(Edge):number $orderBy
      * @param  bool                              $desc
      * @return Walk
      * @throws \UnderflowException               if no vertices were given
-     * @see Edges::getEdgeOrder() for parameters $by and $desc
+     * @see self::factoryCycleFromVertices() for parameters $orderBy and $desc
      */
-    public static function factoryFromVertices(Vertices $vertices, $orderBy = null, $desc = false)
+    public static function factoryFromVertices(array $vertices, $orderBy = null, $desc = false)
     {
         $edges = array();
         $last = NULL;
@@ -55,12 +51,8 @@ class Walk implements DualAggregate
             // skip first vertex as last is unknown
             if ($last !== NULL) {
                 // pick edge between last vertex and this vertex
-                /* @var $last Vertex */
-                if ($orderBy === null) {
-                    $edges []= $last->getEdgesTo($vertex)->getEdgeFirst();
-                } else {
-                    $edges []= $last->getEdgesTo($vertex)->getEdgeOrder($orderBy, $desc);
-                }
+                \assert($last instanceof Vertex);
+                $edges[] = self::pickEdge($last->getEdgesTo($vertex), $orderBy, $desc);
             }
             $last = $vertex;
         }
@@ -68,30 +60,30 @@ class Walk implements DualAggregate
             throw new \UnderflowException('No vertices given');
         }
 
-        return new self($vertices, new Edges($edges));
+        return new self($vertices, $edges);
     }
 
     /**
      * create new cycle instance with edges between given vertices
      *
-     * @param  Vertices                          $vertices
+     * @param  Vertex[]                          $vertices
      * @param  null|string|callable(Edge):number $orderBy
      * @param  bool                              $desc
      * @return Walk
      * @throws \UnderflowException               if no vertices were given
      * @throws \InvalidArgumentException         if vertices do not form a valid cycle
-     * @see Edges::getEdgeOrder() for parameters $by and $desc
+     * @see self::factoryCycleFromVertices() for parameters $orderBy and $desc
      * @uses self::factoryFromVertices()
      */
-    public static function factoryCycleFromVertices(Vertices $vertices, $orderBy = null, $desc = false)
+    public static function factoryCycleFromVertices(array $vertices, $orderBy = null, $desc = false)
     {
         $cycle = self::factoryFromVertices($vertices, $orderBy, $desc);
 
-        if ($cycle->getEdges()->isEmpty()) {
+        if (!$cycle->getEdges()) {
             throw new \InvalidArgumentException('Cycle with no edges can not exist');
         }
 
-        if ($cycle->getVertices()->getVertexFirst() !== $cycle->getVertices()->getVertexLast()) {
+        if (\reset($vertices) !== \end($vertices)) {
             throw new \InvalidArgumentException('Cycle has to start and end at the same vertex');
         }
 
@@ -101,18 +93,19 @@ class Walk implements DualAggregate
     /**
      * create new cycle instance with vertices connected by given edges
      *
-     * @param  Edges  $edges
+     * @param  Edge[] $edges
      * @param  Vertex $startVertex
      * @return Walk
      * @throws \InvalidArgumentException if the given array of edges does not represent a valid cycle
      * @uses self::factoryFromEdges()
      */
-    public static function factoryCycleFromEdges(Edges $edges, Vertex $startVertex)
+    public static function factoryCycleFromEdges(array $edges, Vertex $startVertex)
     {
         $cycle = self::factoryFromEdges($edges, $startVertex);
 
         // ensure this walk is actually a cycle by checking start = end
-        if ($cycle->getVertices()->getVertexLast() !== $startVertex) {
+        $vertices = $cycle->getVertices();
+        if (\end($vertices) !== $startVertex) {
             throw new \InvalidArgumentException('The given array of edges does not represent a cycle');
         }
 
@@ -120,16 +113,57 @@ class Walk implements DualAggregate
     }
 
     /**
-     * @var Vertices
+     * @param Edge[]                            $edges
+     * @param null|string|callable(Edge):number $orderBy
+     * @param bool                              $desc
+     * @return Edge
+     * @throws \UnderflowException
+     */
+    private static function pickEdge(array $edges, $orderBy, $desc)
+    {
+        if (!$edges) {
+            throw new \UnderflowException('No edges between two vertices found');
+        }
+
+        if ($orderBy === null) {
+            return \reset($edges);
+        }
+
+        if (\is_string($orderBy)) {
+            $orderBy = function (Edge $edge) use ($orderBy) {
+                return $edge->getAttribute($orderBy);
+            };
+        }
+
+        $ret = NULL;
+        $best = NULL;
+        foreach ($edges as $edge) {
+            $now = $orderBy($edge);
+
+            if ($ret === NULL || ($desc && $now > $best) || (!$desc && $now < $best)) {
+                $ret = $edge;
+                $best = $now;
+            }
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @var Vertex[]
      */
     protected $vertices;
 
     /**
-     * @var Edges
+     * @var Edge[]
      */
     protected $edges;
 
-    protected function __construct(Vertices $vertices, Edges $edges)
+    /**
+     * @param Vertex[] $vertices
+     * @param Edge[]   $edges
+     */
+    protected function __construct(array $vertices, array $edges)
     {
         $this->vertices = $vertices;
         $this->edges = $edges;
@@ -145,16 +179,16 @@ class Walk implements DualAggregate
      */
     public function getGraph()
     {
-        return $this->vertices->getVertexFirst()->getGraph();
+        $vertex = \reset($this->vertices);
+        \assert($vertex instanceof Vertex);
+
+        return $vertex->getGraph();
     }
 
     /**
-     * return set of all Edges of walk (in sequence visited in walk, may contain duplicates)
+     * return list of all edges of walk (in sequence visited in walk, may contain duplicates)
      *
-     * If you need to return set a of all unique Edges of walk, use
-     * `Walk::getEdges()->getEdgesDistinct()` instead.
-     *
-     * @return Edges
+     * @return Edge[]
      */
     public function getEdges()
     {
@@ -162,18 +196,25 @@ class Walk implements DualAggregate
     }
 
     /**
-     * return set of all Vertices of walk (in sequence visited in walk, may contain duplicates)
+     * return list of all vertices of walk (in sequence visited in walk, may contain duplicates)
      *
-     * If you need to return set a of all unique Vertices of walk, use
-     * `Walk::getVertices()->getVerticesDistinct()` instead.
+     * If you need to return the source vertex (first vertex of walk), you can
+     * use something like this:
      *
-     * If you need to return the source vertex (first vertex of walk), use
-     * `Walk::getVertices()->getVertexFirst()` instead.
+     * ```php
+     * $vertices = $walk->getVertices();
+     * $firstVertex = \reset($vertices);
+     * ```
      *
-     * If you need to return the target/destination vertex (last vertex of walk), use
-     * `Walk::getVertices()->getVertexLast()` instead.
+     * If you need to return the target/destination vertex (last vertex of walk),
+     * you can use something like this:
      *
-     * @return Vertices
+     * ```php
+     * $vertices = $walk->getVertices();
+     * $lastVertex = \end($vertices);
+     * ```
+     *
+     * @return Vertex[]
      */
     public function getVertices()
     {
@@ -183,12 +224,12 @@ class Walk implements DualAggregate
     /**
      * get alternating sequence of vertex, edge, vertex, edge, ..., vertex
      *
-     * @return array
+     * @return array<int,Vertex|Edge>
      */
     public function getAlternatingSequence()
     {
-        $edges    = $this->edges->getVector();
-        $vertices = $this->vertices->getVector();
+        $edges    = \array_values($this->edges);
+        $vertices = \array_values($this->vertices);
 
         $ret = array();
         for ($i = 0, $l = \count($this->edges); $i < $l; ++$i) {

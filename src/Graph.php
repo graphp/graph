@@ -2,11 +2,7 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Set\DualAggregate;
-use Graphp\Graph\Set\Edges;
-use Graphp\Graph\Set\Vertices;
-
-class Graph extends Entity implements DualAggregate
+class Graph extends Entity
 {
     protected $vertices = array();
     protected $edges = array();
@@ -20,23 +16,23 @@ class Graph extends Entity implements DualAggregate
     }
 
     /**
-     * return set of Vertices added to this graph
+     * return list of all vertices added to this graph
      *
-     * @return Vertices
+     * @return Vertex[]
      */
     public function getVertices()
     {
-        return new Vertices($this->vertices);
+        return $this->vertices;
     }
 
     /**
-     * return set of ALL Edges added to this graph
+     * return list of all edges added to this graph
      *
-     * @return Edges
+     * @return Edge[]
      */
     public function getEdges()
     {
-        return new Edges($this->edges);
+        return $this->edges;
     }
 
     /**
@@ -97,7 +93,7 @@ class Graph extends Entity implements DualAggregate
      */
     public function withoutVertex(Vertex $vertex)
     {
-        return $this->withoutVertices(new Vertices(array($vertex)));
+        return $this->withoutVertices(array($vertex));
     }
 
     /**
@@ -107,10 +103,10 @@ class Graph extends Entity implements DualAggregate
      * silently be ignored. If neither of the vertices can be found in this graph,
      * the returned graph will be identical.
      *
-     * @param Vertices $vertices
+     * @param Vertex[] $vertices
      * @return self
      */
-    public function withoutVertices(Vertices $vertices)
+    public function withoutVertices(array $vertices)
     {
         // keep copy of original vertices and edges and temporarily remove all $vertices and their adjacent edges
         $originalEdges = $this->edges;
@@ -150,7 +146,7 @@ class Graph extends Entity implements DualAggregate
      */
     public function withoutEdge(Edge $edge)
     {
-        return $this->withoutEdges(new Edges(array($edge)));
+        return $this->withoutEdges(array($edge));
     }
 
     /**
@@ -160,10 +156,10 @@ class Graph extends Entity implements DualAggregate
      * silently be ignored. If neither of the edges can be found in this graph,
      * the returned graph will be identical.
      *
-     * @param Edges $edges
+     * @param Edge[] $edges
      * @return self
      */
-    public function withoutEdges(Edges $edges)
+    public function withoutEdges(array $edges)
     {
         // keep copy of original edges and temporarily remove all $edges
         $original = $this->edges;
@@ -236,7 +232,7 @@ class Graph extends Entity implements DualAggregate
             \assert($originalEdge instanceof Edge);
 
             // use map to match old vertex hashes to new vertex objects
-            $vertices = $originalEdge->getVertices()->getVector();
+            $vertices = $originalEdge->getVertices();
             $v1 = $map[\spl_object_hash($vertices[0])];
             $v2 = $map[\spl_object_hash($vertices[1])];
 

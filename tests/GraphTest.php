@@ -3,8 +3,6 @@
 namespace Graphp\Graph\Tests;
 
 use Graphp\Graph\Graph;
-use Graphp\Graph\Set\Edges;
-use Graphp\Graph\Set\Vertices;
 
 class GraphTest extends EntityTest
 {
@@ -67,7 +65,7 @@ class GraphTest extends EntityTest
         $this->assertEquals(2, count($graph->getEdges()));
         $this->assertEquals(2, count($v1->getEdges()));
 
-        $this->assertEquals(array($v2, $v2), $v1->getVerticesEdge()->getVector());
+        $this->assertEquals(array($v2, $v2), $v1->getVerticesEdge());
     }
 
     public function testCreateMixedGraph()
@@ -87,8 +85,8 @@ class GraphTest extends EntityTest
         $this->assertEquals(2, count($v2->getEdgesOut()));
         $this->assertEquals(1, count($v2->getEdgesIn()));
 
-        $this->assertEquals(array($v1, $v3), $v2->getVerticesEdgeTo()->getVector());
-        $this->assertEquals(array($v1), $v2->getVerticesEdgeFrom()->getVector());
+        $this->assertEquals(array($v1, $v3), $v2->getVerticesEdgeTo());
+        $this->assertEquals(array($v1), $v2->getVerticesEdgeFrom());
     }
 
     public function testWithoutEdgeReturnsNewGraphAndDoesNotModifyOriginal()
@@ -99,13 +97,13 @@ class GraphTest extends EntityTest
         $v2 = $graph->createVertex();
         $edge = $graph->createEdgeUndirected($v1, $v2);
 
-        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
+        $this->assertEquals(array($edge), $graph->getEdges());
 
         $new = $graph->withoutEdge($edge);
 
         $this->assertInstanceOf(get_class($graph), $new);
-        $this->assertEquals(array(), $new->getEdges()->getVector());
-        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
+        $this->assertEquals(array(), $new->getEdges());
+        $this->assertEquals(array($edge), $graph->getEdges());
     }
 
     public function testWithoutEdgesSameTwiceReturnsNewGraphAndDoesNotModifyOriginal()
@@ -116,13 +114,13 @@ class GraphTest extends EntityTest
         $v2 = $graph->createVertex();
         $edge = $graph->createEdgeUndirected($v1, $v2);
 
-        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
+        $this->assertEquals(array($edge), $graph->getEdges());
 
-        $new = $graph->withoutEdges(new Edges(array($edge, $edge)));
+        $new = $graph->withoutEdges(array($edge, $edge));
 
         $this->assertInstanceOf(get_class($graph), $new);
-        $this->assertEquals(array(), $new->getEdges()->getVector());
-        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
+        $this->assertEquals(array(), $new->getEdges());
+        $this->assertEquals(array($edge), $graph->getEdges());
     }
 
     public function testWithoutEdgeFromOtherGraphReturnsSameGraphWithoutModification()
@@ -134,12 +132,13 @@ class GraphTest extends EntityTest
         $graph->createEdgeUndirected($v1, $v2);
 
         $clone = clone $graph;
-        $edge = $clone->getEdges()->getEdgeFirst();
+        $edges = $clone->getEdges();
+        $edge = reset($edges);
 
         $new = $graph->withoutEdge($edge);
 
         $this->assertSame($new, $graph);
-        $this->assertEquals(array($edge), $graph->getEdges()->getVector());
+        $this->assertEquals(array($edge), $graph->getEdges());
     }
 
     public function testWithoutVertexReturnsNewGraphAndDoesNotModifyOriginal()
@@ -147,13 +146,13 @@ class GraphTest extends EntityTest
         $graph = new Graph();
         $vertex = $graph->createVertex();
 
-        $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
+        $this->assertEquals(array($vertex), $graph->getVertices());
 
         $new = $graph->withoutVertex($vertex);
 
         $this->assertInstanceOf(get_class($graph), $new);
-        $this->assertEquals(array(), $new->getVertices()->getVector());
-        $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
+        $this->assertEquals(array(), $new->getVertices());
+        $this->assertEquals(array($vertex), $graph->getVertices());
     }
 
     public function testWithoutVerticesTwiceReturnsNewGraphAndDoesNotModifyOriginal()
@@ -161,13 +160,13 @@ class GraphTest extends EntityTest
         $graph = new Graph();
         $vertex = $graph->createVertex();
 
-        $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
+        $this->assertEquals(array($vertex), $graph->getVertices());
 
-        $new = $graph->withoutVertices(new Vertices(array($vertex, $vertex)));
+        $new = $graph->withoutVertices(array($vertex, $vertex));
 
         $this->assertInstanceOf(get_class($graph), $new);
-        $this->assertEquals(array(), $new->getVertices()->getVector());
-        $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
+        $this->assertEquals(array(), $new->getVertices());
+        $this->assertEquals(array($vertex), $graph->getVertices());
     }
 
     public function testWithoutVertexFromOtherGraphReturnsSameGraphWithoutModification()
@@ -181,7 +180,7 @@ class GraphTest extends EntityTest
         $new = $graph->withoutVertex($vertex);
 
         $this->assertSame($new, $graph);
-        $this->assertEquals(array($vertex), $graph->getVertices()->getVector());
+        $this->assertEquals(array($vertex), $graph->getVertices());
     }
 
     public function testWithoutVertexRemovesAttachedUndirectedEdge()
