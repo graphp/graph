@@ -10,11 +10,9 @@ use Graphp\Graph\Walk;
 
 class WalkTest extends TestCase
 {
-    /**
-     * @expectedException UnderflowException
-     */
     public function testWalkCanNotBeEmpty()
     {
+        $this->setExpectedException('UnderflowException');
         Walk::factoryCycleFromVertices(new Vertices(array()));
     }
 
@@ -101,9 +99,6 @@ class WalkTest extends TestCase
         $this->assertSame($v1, $walk->getVertices()->getVertexLast());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWalkCycleFromVerticesIncomplete()
     {
         // 1 -- 2 -- 1
@@ -114,12 +109,10 @@ class WalkTest extends TestCase
         $graph->createEdgeUndirected($v2, $v1);
 
         // should actually be [v1, v2, v1]
+        $this->setExpectedException('InvalidArgumentException');
         Walk::factoryCycleFromVertices(new Vertices(array($v1, $v2)));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWalkCycleInvalid()
     {
         // 1 -- 2
@@ -128,6 +121,7 @@ class WalkTest extends TestCase
         $v2 = $graph->createVertex();
         $e1 = $graph->createEdgeUndirected($v1, $v2);
 
+        $this->setExpectedException('InvalidArgumentException');
         Walk::factoryCycleFromEdges(new Edges(array($e1)), $v1);
     }
 
@@ -165,16 +159,13 @@ class WalkTest extends TestCase
         $this->assertSame($v1, $cycle->getVertices()->getVertexLast());
     }
 
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testFactoryCycleFromVerticesThrowsWhenCycleIsIncomplete()
     {
         $graph = new Graph();
         $v1 = $graph->createVertex();
 
         // should actually be [v1, v1]
+        $this->setExpectedException('InvalidArgumentException');
         Walk::factoryCycleFromVertices(new Vertices(array($v1)));
     }
 
