@@ -141,6 +141,24 @@ class GraphTest extends EntityTest
         $this->assertEquals(array($edge), $graph->getEdges());
     }
 
+    public function testWithoutEdgeParallelReturnsNewGraphWithSingleEdge()
+    {
+        // /---\
+        // 1   2
+        // \---/
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
+        $e1 = $graph->createEdgeUndirected($v1, $v2);
+        $graph->createEdgeUndirected($v1, $v2);
+
+        $new = $graph->withoutEdge($e1);
+
+        $this->assertInstanceOf(get_class($graph), $new);
+        $this->assertCount(1, $new->getEdges());
+        $this->assertEquals(array_values($new->getEdges()), $new->getEdges());
+    }
+
     public function testWithoutVertexReturnsNewGraphAndDoesNotModifyOriginal()
     {
         $graph = new Graph();
@@ -229,6 +247,8 @@ class GraphTest extends EntityTest
 
         $this->assertCount(2, $new->getVertices());
         $this->assertCount(1, $new->getEdges());
+
+        $this->assertEquals(array_values($new->getVertices()), $new->getVertices());
     }
 
     public function testWithoutVertexWithDirectedLoopReturnsEmptyGraph()
@@ -244,6 +264,19 @@ class GraphTest extends EntityTest
 
         $this->assertCount(0, $new->getVertices());
         $this->assertCount(0, $new->getEdges());
+    }
+
+    public function testWithoutVertexUnconnectedReturnsNewGraphWithSingleVertex()
+    {
+        // 1, 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+        $graph->createVertex();
+
+        $new = $graph->withoutVertex($v1);
+
+        $this->assertCount(1, $new->getVertices());
+        $this->assertEquals(array_values($new->getVertices()), $new->getVertices());
     }
 
     public function testGraphCloneEmptyGraph()

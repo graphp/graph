@@ -34,8 +34,6 @@ class WalkTest extends TestCase
         $this->assertSame($v1, reset($vertices));
         $this->assertSame($v3, end($vertices));
         $this->assertSame(array($v1, $e1, $v2, $e2, $v3), $walk->getAlternatingSequence());
-
-        return $walk;
     }
 
     public function testWalkWithinGraph()
@@ -65,8 +63,58 @@ class WalkTest extends TestCase
 
         $this->assertEquals(2, count($walkVertices->getVertices()));
         $this->assertEquals(1, count($walkVertices->getEdges()));
+    }
 
-        return $walk;
+    public function testFactoryFromEdgesWithTrivialGraphHasOneVertexAndNoEdges()
+    {
+        // 1
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+
+        $walk = Walk::factoryFromEdges(array(), $v1);
+
+        $this->assertEquals(array($v1), $walk->getVertices());
+        $this->assertEquals(array(), $walk->getEdges());
+    }
+
+    public function testFactoryFromEdgesWithArrayKeysWillBeIgnoredForGetEdges()
+    {
+        // 1 -- 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
+        $e1 = $graph->createEdgeDirected($v1, $v2);
+
+        $walk = Walk::factoryFromEdges(array('first' => $e1), $v1);
+
+        $this->assertEquals(array($v1, $v2), $walk->getVertices());
+        $this->assertEquals(array($e1), $walk->getEdges());
+    }
+
+    public function testFactoryFromVerticesWithTrivialGraphHasOneVertexAndNoEdges()
+    {
+        // 1
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+
+        $walk = Walk::factoryFromVertices(array($v1));
+
+        $this->assertEquals(array($v1), $walk->getVertices());
+        $this->assertEquals(array(), $walk->getEdges());
+    }
+
+    public function testFactoryFromVerticesWithArrayKeysWillBeIgnoredForGetVertices()
+    {
+        // 1 -- 2
+        $graph = new Graph();
+        $v1 = $graph->createVertex();
+        $v2 = $graph->createVertex();
+        $e1 = $graph->createEdgeDirected($v1, $v2);
+
+        $walk = Walk::factoryFromVertices(array('first' => $v1, 'second' => $v2));
+
+        $this->assertEquals(array($v1, $v2), $walk->getVertices());
+        $this->assertEquals(array($e1), $walk->getEdges());
     }
 
     public function testFactoryFromVerticesWithUnconnectedComponentsThrows()
@@ -95,8 +143,6 @@ class WalkTest extends TestCase
         $vertices = $walk->getVertices();
         $this->assertSame($v1, reset($vertices));
         $this->assertSame($v1, end($vertices));
-
-        return $walk;
     }
 
     public function testWalkLoopCycle()

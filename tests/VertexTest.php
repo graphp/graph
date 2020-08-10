@@ -56,8 +56,8 @@ class VertexTest extends EntityTest
         $e3 = $this->graph->createEdgeDirected($v4, $this->vertex);
 
         $this->assertEquals(array($e1, $e2, $e3), $this->vertex->getEdges());
-        $this->assertEquals(array($e2, $e3), array_values($this->vertex->getEdgesIn()));
-        $this->assertEquals(array($e1, $e2), array_values($this->vertex->getEdgesOut()));
+        $this->assertEquals(array($e2, $e3), $this->vertex->getEdgesIn());
+        $this->assertEquals(array($e1, $e2), $this->vertex->getEdgesOut());
 
         $this->assertTrue($this->vertex->hasEdgeTo($v2));
         $this->assertTrue($this->vertex->hasEdgeTo($v3));
@@ -68,11 +68,11 @@ class VertexTest extends EntityTest
         $this->assertTrue($this->vertex->hasEdgeFrom($v4));
 
         $this->assertEquals(array($e1), $this->vertex->getEdgesTo($v2));
-        $this->assertEquals(array($e2), array_values($this->vertex->getEdgesTo($v3)));
+        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3));
         $this->assertEquals(array(), $this->vertex->getEdgesTo($v4));
 
         $this->assertEquals(array(), $this->vertex->getEdgesFrom($v2));
-        $this->assertEquals(array($e2), array_values($this->vertex->getEdgesTo($v3)));
+        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3));
         $this->assertEquals(array($e3), $this->vertex->getEdgesFrom($v4));
 
         $this->assertEquals(array($v2, $v3, $v4), $this->vertex->getVerticesEdge());

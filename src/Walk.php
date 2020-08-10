@@ -30,7 +30,7 @@ class Walk
             $vertices []= $vertexCurrent;
         }
 
-        return new self($vertices, $edges);
+        return new self($vertices, \array_values($edges));
     }
 
     /**
@@ -60,7 +60,7 @@ class Walk
             throw new \UnderflowException('No vertices given');
         }
 
-        return new self($vertices, $edges);
+        return new self(\array_values($vertices), $edges);
     }
 
     /**
@@ -160,6 +160,8 @@ class Walk
     protected $edges;
 
     /**
+     * @psalm-param list<Vertex> $vertices
+     * @psalm-param list<Edge>   $edges
      * @param Vertex[] $vertices
      * @param Edge[]   $edges
      */
@@ -188,6 +190,7 @@ class Walk
     /**
      * return list of all edges of walk (in sequence visited in walk, may contain duplicates)
      *
+     * @psalm-return list<Edge>
      * @return Edge[]
      */
     public function getEdges()
@@ -214,6 +217,7 @@ class Walk
      * $lastVertex = \end($vertices);
      * ```
      *
+     * @psalm-return list<Vertex>
      * @return Vertex[]
      */
     public function getVertices()
@@ -224,19 +228,17 @@ class Walk
     /**
      * get alternating sequence of vertex, edge, vertex, edge, ..., vertex
      *
+     * @psalm-return list<Vertex|Edge>
      * @return array<int,Vertex|Edge>
      */
     public function getAlternatingSequence()
     {
-        $edges    = \array_values($this->edges);
-        $vertices = \array_values($this->vertices);
-
         $ret = array();
         for ($i = 0, $l = \count($this->edges); $i < $l; ++$i) {
-            $ret []= $vertices[$i];
-            $ret []= $edges[$i];
+            $ret []= $this->vertices[$i];
+            $ret []= $this->edges[$i];
         }
-        $ret[] = $vertices[$i];
+        $ret[] = $this->vertices[$i];
 
         return $ret;
     }

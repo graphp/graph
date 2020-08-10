@@ -85,6 +85,7 @@ class Vertex extends Entity
     /**
      * get list of ALL edges attached to this vertex
      *
+     * @psalm-return list<Edge>
      * @return Edge[]
      */
     public function getEdges()
@@ -95,6 +96,7 @@ class Vertex extends Entity
     /**
      * get list of all outgoing edges attached to this vertex
      *
+     * @psalm-return list<Edge>
      * @return Edge[]
      */
     public function getEdgesOut()
@@ -102,7 +104,7 @@ class Vertex extends Entity
         $that = $this;
         $prev = null;
 
-        return \array_filter($this->edges, function (Edge $edge) use ($that, &$prev) {
+        return \array_values(\array_filter($this->edges, function (Edge $edge) use ($that, &$prev) {
             $ret = $edge->hasVertexStart($that);
 
             // skip duplicate directed loop edges
@@ -112,12 +114,13 @@ class Vertex extends Entity
             $prev = $edge;
 
             return $ret;
-        });
+        }));
     }
 
     /**
      * get list of all ingoing edges attached to this vertex
      *
+     * @psalm-return list<Edge>
      * @return Edge[]
      */
     public function getEdgesIn()
@@ -125,7 +128,7 @@ class Vertex extends Entity
         $that = $this;
         $prev = null;
 
-        return \array_filter($this->edges, function (Edge $edge) use ($that, &$prev) {
+        return \array_values(\array_filter($this->edges, function (Edge $edge) use ($that, &$prev) {
             $ret = $edge->hasVertexTarget($that);
 
             // skip duplicate directed loop edges
@@ -135,13 +138,14 @@ class Vertex extends Entity
             $prev = $edge;
 
             return $ret;
-        });
+        }));
     }
 
     /**
      * get list of edges FROM this vertex TO the given vertex
      *
      * @param  Vertex $vertex
+     * @psalm-return list<Edge>
      * @return Edge[]
      * @uses Edge::hasVertexTarget()
      */
@@ -149,15 +153,16 @@ class Vertex extends Entity
     {
         $that = $this;
 
-        return \array_filter($this->edges, function (Edge $edge) use ($that, $vertex) {
+        return \array_values(\array_filter($this->edges, function (Edge $edge) use ($that, $vertex) {
             return $edge->isConnection($that, $vertex);
-        });
+        }));
     }
 
     /**
      * get list of edges FROM the given vertex TO this vertex
      *
      * @param  Vertex $vertex
+     * @psalm-return list<Edge>
      * @return Edge[]
      * @uses Vertex::getEdgesTo()
      */
@@ -172,6 +177,7 @@ class Vertex extends Entity
      * If there are multiple parallel edges between the same Vertex, it will be
      * returned several times in the resulting list of vertices.
      *
+     * @psalm-return list<Vertex>
      * @return Vertex[]
      * @uses Edge::hasVertexStart()
      * @uses Edge::getVerticesToFrom()
@@ -197,6 +203,7 @@ class Vertex extends Entity
      * If there are multiple parallel edges to the same Vertex, it will be
      * returned several times in the resulting list of vertices.
      *
+     * @psalm-return list<Vertex>
      * @return Vertex[]
      * @uses Vertex::getEdgesOut()
      * @uses Edge::getVerticesToFrom()
@@ -217,6 +224,7 @@ class Vertex extends Entity
      * If there are multiple parallel edges from the same Vertex, it will be
      * returned several times in the resulting list of vertices.
      *
+     * @psalm-return list<Vertex>
      * @return Vertex[]
      * @uses Vertex::getEdgesIn()
      * @uses Edge::getVerticesFromTo()

@@ -15,6 +15,7 @@ abstract class Edge extends Entity
     /**
      * get vertices that are a target of this edge
      *
+     * @psalm-return list<Vertex>
      * @return Vertex[]
      */
     abstract public function getVerticesTarget();
@@ -22,6 +23,7 @@ abstract class Edge extends Entity
     /**
      * get vertices that are the start of this edge
      *
+     * @psalm-return list<Vertex>
      * @return Vertex[]
      */
     abstract public function getVerticesStart();
@@ -29,7 +31,7 @@ abstract class Edge extends Entity
     /**
      * return true if this edge is an outgoing edge of the given vertex (i.e. the given vertex is a valid start vertex of this edge)
      *
-     * @param  Vertex  $startVertex
+     * @param  Vertex $startVertex
      * @return bool
      * @uses Vertex::getVertexToFrom()
      */
@@ -38,7 +40,7 @@ abstract class Edge extends Entity
     /**
      * return true if this edge is an ingoing edge of the given vertex (i . e. the given vertex is a valid end vertex of this edge)
      *
-     * @param  Vertex  $targetVertex
+     * @param  Vertex $targetVertex
      * @return bool
      * @uses Vertex::getVertexFromTo()
      */
@@ -76,6 +78,7 @@ abstract class Edge extends Entity
     /**
      * get list of all vertices this edge connects
      *
+     * @psalm-return list<Vertex>
      * @return Vertex[]
      */
     abstract public function getVertices();

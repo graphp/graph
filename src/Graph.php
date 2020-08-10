@@ -18,6 +18,7 @@ class Graph extends Entity
     /**
      * return list of all vertices added to this graph
      *
+     * @psalm-return list<Vertex>
      * @return Vertex[]
      */
     public function getVertices()
@@ -28,6 +29,7 @@ class Graph extends Entity
     /**
      * return list of all edges added to this graph
      *
+     * @psalm-return list<Edge>
      * @return Edge[]
      */
     public function getEdges()
@@ -129,7 +131,7 @@ class Graph extends Entity
 
         // clone graph with vertices/edges temporarily removed, then restore
         $clone = clone $this;
-        $this->edges= $originalEdges;
+        $this->edges = $originalEdges;
         $this->vertices = $originalVertices;
 
         return $clone;
