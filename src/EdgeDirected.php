@@ -2,7 +2,6 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Set\Vertices;
 
 class EdgeDirected extends Edge
@@ -34,7 +33,7 @@ class EdgeDirected extends Edge
     public function __construct(Vertex $from, Vertex $to, array $attributes = array())
     {
         if ($from->getGraph() !== $to->getGraph()) {
-            throw new InvalidArgumentException('Vertices have to be within the same graph');
+            throw new \InvalidArgumentException('Vertices have to be within the same graph');
         }
 
         $this->from = $from;
@@ -94,7 +93,7 @@ class EdgeDirected extends Edge
     public function getVertexToFrom(Vertex $startVertex)
     {
         if ($this->from !== $startVertex) {
-            throw new InvalidArgumentException('Invalid start vertex');
+            throw new \InvalidArgumentException('Invalid start vertex');
         }
 
         return $this->to;
@@ -103,7 +102,7 @@ class EdgeDirected extends Edge
     public function getVertexFromTo(Vertex $endVertex)
     {
         if ($this->to !== $endVertex) {
-            throw new InvalidArgumentException('Invalid end vertex');
+            throw new \InvalidArgumentException('Invalid end vertex');
         }
 
         return $this->from;

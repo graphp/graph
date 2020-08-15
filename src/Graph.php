@@ -2,7 +2,6 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Set\DualAggregate;
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\Vertices;
@@ -54,16 +53,16 @@ class Graph extends Entity implements DualAggregate
     /**
      * Creates a new undirected (bidirectional) edge between the given two vertices.
      *
-     * @param  Vertex                   $a
-     * @param  Vertex                   $b
-     * @param  array                    $attributes
+     * @param  Vertex                    $a
+     * @param  Vertex                    $b
+     * @param  array                     $attributes
      * @return EdgeUndirected
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function createEdgeUndirected(Vertex $a, Vertex $b, array $attributes = array())
     {
         if ($a->getGraph() !== $this) {
-            throw new InvalidArgumentException('Vertices have to be within this graph');
+            throw new \InvalidArgumentException('Vertices have to be within this graph');
         }
 
         return new EdgeUndirected($a, $b, $attributes);
@@ -72,16 +71,16 @@ class Graph extends Entity implements DualAggregate
     /**
      * Creates a new directed edge from the given start vertex to given target vertex
      *
-     * @param  Vertex                   $source     source vertex
-     * @param  Vertex                   $target     target vertex
-     * @param  array                    $attributes
+     * @param  Vertex                    $source     source vertex
+     * @param  Vertex                    $target     target vertex
+     * @param  array                     $attributes
      * @return EdgeDirected
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function createEdgeDirected(Vertex $source, Vertex $target, array $attributes = array())
     {
         if ($source->getGraph() !== $this) {
-            throw new InvalidArgumentException('Vertices have to be within this graph');
+            throw new \InvalidArgumentException('Vertices have to be within this graph');
         }
 
         return new EdgeDirected($source, $target, $attributes);

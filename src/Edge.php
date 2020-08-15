@@ -2,9 +2,6 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Exception\BadMethodCallException;
-use Graphp\Graph\Exception\InvalidArgumentException;
-use Graphp\Graph\Exception\LogicException;
 use Graphp\Graph\Set\Vertices;
 use Graphp\Graph\Set\VerticesAggregate;
 
@@ -62,9 +59,9 @@ abstract class Edge extends Entity implements VerticesAggregate
     /**
      * get target vertex we can reach with this edge from the given start vertex
      *
-     * @param  Vertex                   $startVertex
+     * @param  Vertex                    $startVertex
      * @return Vertex
-     * @throws InvalidArgumentException if given $startVertex is not a valid start
+     * @throws \InvalidArgumentException if given $startVertex is not a valid start
      * @see self::hasEdgeFrom() to check if given start is valid
      */
     abstract public function getVertexToFrom(Vertex $startVertex);
@@ -72,9 +69,9 @@ abstract class Edge extends Entity implements VerticesAggregate
     /**
      * get start vertex which can reach us(the given end vertex) with this edge
      *
-     * @param  Vertex                   $endVertex
+     * @param  Vertex                    $endVertex
      * @return Vertex
-     * @throws InvalidArgumentException if given $startVertex is not a valid end
+     * @throws \InvalidArgumentException if given $startVertex is not a valid end
      * @see self::hasEdgeFrom() to check if given start is valid
      */
     abstract public function getVertexFromTo(Vertex $endVertex);
@@ -90,31 +87,20 @@ abstract class Edge extends Entity implements VerticesAggregate
      * get graph instance this edge is attached to
      *
      * @return Graph
-     * @throws LogicException
      */
     public function getGraph()
     {
-        foreach ($this->getVertices() as $vertex) {
-            return $vertex->getGraph();
-
-            // the following code can only be reached if this edge does not
-            // contain any vertices (invalid state), so ignore its coverage
-            // @codeCoverageIgnoreStart
-        }
-
-        throw new LogicException('Internal error: should not be reached');
-        // @codeCoverageIgnoreEnd
+        return $this->getVertices()->getVertexFirst()->getGraph();
     }
 
     /**
      * do NOT allow cloning of objects
      *
-     * @throws BadMethodCallException
+     * @throws \BadMethodCallException
+     * @codeCoverageIgnore
      */
     private function __clone()
     {
-        // @codeCoverageIgnoreStart
-        throw new BadMethodCallException();
-        // @codeCoverageIgnoreEnd
+        throw new \BadMethodCallException();
     }
 }

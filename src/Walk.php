@@ -4,8 +4,6 @@ namespace Graphp\Graph;
 
 use Graphp\Graph\Set\Edges;
 use Graphp\Graph\Set\Vertices;
-use Graphp\Graph\Exception\UnderflowException;
-use Graphp\Graph\Exception\InvalidArgumentException;
 use Graphp\Graph\Set\DualAggregate;
 
 /**
@@ -46,7 +44,7 @@ class Walk implements DualAggregate
      * @param  null|string|callable(Edge):number $orderBy
      * @param  bool                              $desc
      * @return Walk
-     * @throws UnderflowException                if no vertices were given
+     * @throws \UnderflowException               if no vertices were given
      * @see Edges::getEdgeOrder() for parameters $by and $desc
      */
     public static function factoryFromVertices(Vertices $vertices, $orderBy = null, $desc = false)
@@ -67,7 +65,7 @@ class Walk implements DualAggregate
             $last = $vertex;
         }
         if ($last === NULL) {
-            throw new UnderflowException('No vertices given');
+            throw new \UnderflowException('No vertices given');
         }
 
         return new self($vertices, new Edges($edges));
@@ -80,7 +78,8 @@ class Walk implements DualAggregate
      * @param  null|string|callable(Edge):number $orderBy
      * @param  bool                              $desc
      * @return Walk
-     * @throws UnderflowException                if no vertices were given
+     * @throws \UnderflowException               if no vertices were given
+     * @throws \InvalidArgumentException         if vertices do not form a valid cycle
      * @see Edges::getEdgeOrder() for parameters $by and $desc
      * @uses self::factoryFromVertices()
      */
@@ -89,11 +88,11 @@ class Walk implements DualAggregate
         $cycle = self::factoryFromVertices($vertices, $orderBy, $desc);
 
         if ($cycle->getEdges()->isEmpty()) {
-            throw new InvalidArgumentException('Cycle with no edges can not exist');
+            throw new \InvalidArgumentException('Cycle with no edges can not exist');
         }
 
         if ($cycle->getVertices()->getVertexFirst() !== $cycle->getVertices()->getVertexLast()) {
-            throw new InvalidArgumentException('Cycle has to start and end at the same vertex');
+            throw new \InvalidArgumentException('Cycle has to start and end at the same vertex');
         }
 
         return $cycle;
@@ -105,7 +104,7 @@ class Walk implements DualAggregate
      * @param  Edges  $edges
      * @param  Vertex $startVertex
      * @return Walk
-     * @throws InvalidArgumentException if the given array of edges does not represent a valid cycle
+     * @throws \InvalidArgumentException if the given array of edges does not represent a valid cycle
      * @uses self::factoryFromEdges()
      */
     public static function factoryCycleFromEdges(Edges $edges, Vertex $startVertex)
@@ -114,7 +113,7 @@ class Walk implements DualAggregate
 
         // ensure this walk is actually a cycle by checking start = end
         if ($cycle->getVertices()->getVertexLast() !== $startVertex) {
-            throw new InvalidArgumentException('The given array of edges does not represent a cycle');
+            throw new \InvalidArgumentException('The given array of edges does not represent a cycle');
         }
 
         return $cycle;
