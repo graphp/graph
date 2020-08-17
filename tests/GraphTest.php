@@ -30,9 +30,6 @@ class GraphTest extends EntityTest
         $this->assertInstanceOf('\Graphp\Graph\Vertex', $vertex);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCreateEdgeUndirectedWithVerticesFromOtherGraphThrows()
     {
         // 1, 2
@@ -41,12 +38,11 @@ class GraphTest extends EntityTest
         $v2 = $graph->createVertex();
 
         $graph2 = new Graph();
+
+        $this->setExpectedException('InvalidArgumentException');
         $graph2->createEdgeUndirected($v1, $v2);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCreateEdgeDirectedWithVerticesFromOtherGraphThrows()
     {
         // 1, 2
@@ -55,6 +51,8 @@ class GraphTest extends EntityTest
         $v2 = $graph->createVertex();
 
         $graph2 = new Graph();
+
+        $this->setExpectedException('InvalidArgumentException');
         $graph2->createEdgeDirected($v1, $v2);
     }
 

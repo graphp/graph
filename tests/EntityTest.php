@@ -3,7 +3,6 @@
 namespace Graphp\Graph\Tests;
 
 use Graphp\Graph\Entity;
-use Graphp\Graph\Tests\TestCase;
 
 abstract class EntityTest extends TestCase
 {

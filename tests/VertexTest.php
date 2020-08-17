@@ -10,7 +10,10 @@ class VertexTest extends EntityTest
     private $graph;
     private $vertex;
 
-    public function setUp()
+    /**
+     * @before
+     */
+    public function setUpVertex()
     {
         $this->graph = new Graph();
         $this->vertex = $this->graph->createVertex();
@@ -103,23 +106,19 @@ class VertexTest extends EntityTest
         $this->assertEquals(array($this->vertex), $this->vertex->getVerticesEdgeFrom()->getVector());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCreateEdgeOtherGraphFails()
     {
         $graphOther = new Graph();
 
+        $this->setExpectedException('InvalidArgumentException');
         $this->graph->createEdgeUndirected($this->vertex, $graphOther->createVertex());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCreateEdgeDirectedOtherGraphFails()
     {
         $graphOther = new Graph();
 
+        $this->setExpectedException('InvalidArgumentException');
         $this->graph->createEdgeDirected($this->vertex, $graphOther->createVertex());
     }
 

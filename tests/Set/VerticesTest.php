@@ -37,30 +37,30 @@ class VerticesTest extends TestCase
     /**
      * @param Vertices $vertices
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveFirst(Vertices $vertices)
     {
+        $this->setExpectedException('UnderflowException');
         $vertices->getVertexFirst();
     }
 
     /**
      * @param Vertices $vertices
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveLast(Vertices $vertices)
     {
+        $this->setExpectedException('UnderflowException');
         $vertices->getVertexLast();
     }
 
     /**
      * @param Vertices $vertices
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveRandom(Vertices $vertices)
     {
+        $this->setExpectedException('UnderflowException');
         $vertices->getVertexRandom();
     }
 
@@ -76,20 +76,20 @@ class VerticesTest extends TestCase
     /**
      * @param Vertices $vertices
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testGetVertexMatchOneEmptyThrowsUnderflowException(Vertices $vertices)
     {
+        $this->setExpectedException('UnderflowException');
         $vertices->getVertexMatch(function () { return true; });
     }
 
     /**
      * @param Vertices $vertices
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveOrdered(Vertices $vertices)
     {
+        $this->setExpectedException('UnderflowException');
         $vertices->getVertexOrder('group');
     }
 
@@ -114,13 +114,13 @@ class VerticesTest extends TestCase
     /**
      * @param Vertices $vertices
      * @depends testTwo
-     * @expectedException OutOfBoundsException
      */
     public function testTwoDoesNotContainVertex3(Vertices $vertices)
     {
         $graph = new Graph();
         $v3 = $graph->createVertex();
 
+        $this->setExpectedException('OutOfBoundsException');
         $vertices->getIndexVertex($v3);
     }
 

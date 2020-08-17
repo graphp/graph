@@ -35,7 +35,10 @@ abstract class EdgeTest extends EntityTest
      */
     abstract protected function createEdgeLoop();
 
-    public function setUp()
+    /**
+     * @before
+     */
+    public function setUpGraphAndEdge()
     {
         $this->graph = new Graph();
         $this->v1 = $this->graph->createVertex();
@@ -76,21 +79,19 @@ abstract class EdgeTest extends EntityTest
         $this->assertFalse($this->edge->hasVertexTarget($v3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testEdgeFromInvalid()
     {
         $v3 = $this->graph->createVertex();
+
+        $this->setExpectedException('InvalidArgumentException');
         $this->edge->getVertexFromTo($v3);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testEdgeToInvalid()
     {
         $v3 = $this->graph->createVertex();
+
+        $this->setExpectedException('InvalidArgumentException');
         $this->edge->getVertexToFrom($v3);
     }
 

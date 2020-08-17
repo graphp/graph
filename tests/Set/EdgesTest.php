@@ -40,40 +40,40 @@ class EdgesTest extends TestCase
     /**
      * @param Edges $edges
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveFirst(Edges $edges)
     {
+        $this->setExpectedException('UnderflowException');
         $edges->getEdgeFirst();
     }
 
     /**
      * @param Edges $edges
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveLast(Edges $edges)
     {
+        $this->setExpectedException('UnderflowException');
         $edges->getEdgeLast();
     }
 
     /**
      * @param Edges $edges
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveRandom(Edges $edges)
     {
+        $this->setExpectedException('UnderflowException');
         $edges->getEdgeRandom();
     }
 
     /**
      * @param Edges $edges
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveOrdered(Edges $edges)
     {
+        $this->setExpectedException('UnderflowException');
         $edges->getEdgeOrder('weight');
     }
 
@@ -105,17 +105,16 @@ class EdgesTest extends TestCase
     /**
      * @param Edges $edges
      * @depends testTwo
-     * @expectedException OutOfBoundsException
      */
     public function testTwoDoesNotContainIndex3(Edges $edges)
     {
+        $this->setExpectedException('OutOfBoundsException');
         $edges->getEdgeIndex(3);
     }
 
     /**
      * @param Edges $edges
      * @depends testTwo
-     * @expectedException OutOfBoundsException
      */
     public function testTwoDoesNotContainEdge3(Edges $edges)
     {
@@ -123,6 +122,7 @@ class EdgesTest extends TestCase
         $v3 = $graph->createVertex();
         $e3 = $graph->createEdgeUndirected($v3, $v3);
 
+        $this->setExpectedException('OutOfBoundsException');
         $edges->getIndexEdge($e3);
     }
 
@@ -200,10 +200,10 @@ class EdgesTest extends TestCase
     /**
      * @param Edges $edges
      * @depends testTwo
-     * @expectedException UnderflowException
      */
     public function testTwoMatchFail(Edges $edges)
     {
+        $this->setExpectedException('UnderflowException');
         $edges->getEdgeMatch(array($this, 'returnFalse'));
     }
 
