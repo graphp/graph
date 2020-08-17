@@ -2,37 +2,36 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Set\Vertices;
-use Graphp\Graph\Set\VerticesAggregate;
-
 /**
  * Abstract base for `EdgeUndirected` and `EdgeDirected` containing common interfaces and behavior for all edges.
  *
  * @see EdgeUndirected
  * @see EdgeDirected
  */
-abstract class Edge extends Entity implements VerticesAggregate
+abstract class Edge extends Entity
 {
     protected $attributes = array();
 
     /**
-     * get Vertices that are a target of this edge
+     * get vertices that are a target of this edge
      *
-     * @return Vertices
+     * @psalm-return list<Vertex>
+     * @return Vertex[]
      */
     abstract public function getVerticesTarget();
 
     /**
-     * get Vertices that are the start of this edge
+     * get vertices that are the start of this edge
      *
-     * @return Vertices
+     * @psalm-return list<Vertex>
+     * @return Vertex[]
      */
     abstract public function getVerticesStart();
 
     /**
      * return true if this edge is an outgoing edge of the given vertex (i.e. the given vertex is a valid start vertex of this edge)
      *
-     * @param  Vertex  $startVertex
+     * @param  Vertex $startVertex
      * @return bool
      * @uses Vertex::getVertexToFrom()
      */
@@ -41,7 +40,7 @@ abstract class Edge extends Entity implements VerticesAggregate
     /**
      * return true if this edge is an ingoing edge of the given vertex (i . e. the given vertex is a valid end vertex of this edge)
      *
-     * @param  Vertex  $targetVertex
+     * @param  Vertex $targetVertex
      * @return bool
      * @uses Vertex::getVertexFromTo()
      */
@@ -77,11 +76,12 @@ abstract class Edge extends Entity implements VerticesAggregate
     abstract public function getVertexFromTo(Vertex $endVertex);
 
     /**
-     * get set of all Vertices this edge connects
+     * get list of all vertices this edge connects
      *
-     * @return Vertices
+     * @psalm-return list<Vertex>
+     * @return Vertex[]
      */
-    //abstract public function getVertices();
+    abstract public function getVertices();
 
     /**
      * get graph instance this edge is attached to
@@ -90,7 +90,11 @@ abstract class Edge extends Entity implements VerticesAggregate
      */
     public function getGraph()
     {
-        return $this->getVertices()->getVertexFirst()->getGraph();
+        $vertices = $this->getVertices();
+        $vertex = \reset($vertices);
+        \assert($vertex instanceof Vertex);
+
+        return $vertex->getGraph();
     }
 
     /**

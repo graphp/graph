@@ -63,7 +63,7 @@ abstract class EdgeTest extends EntityTest
 
     public function testEdgeVertices()
     {
-        $this->assertEquals(array($this->v1, $this->v2), $this->edge->getVertices()->getVector());
+        $this->assertEquals(array($this->v1, $this->v2), $this->edge->getVertices());
 
         $this->assertSame($this->graph, $this->edge->getGraph());
     }
@@ -100,7 +100,7 @@ abstract class EdgeTest extends EntityTest
         $edge = $this->createEdgeLoop();
 
         $this->assertTrue($edge->isLoop());
-        $this->assertEquals(array($this->v1, $this->v1), $edge->getVertices()->getVector());
+        $this->assertEquals(array($this->v1, $this->v1), $edge->getVertices());
         $this->assertSame($this->v1, $edge->getVertexFromTo($this->v1));
         $this->assertSame($this->v1, $edge->getVertexToFrom($this->v1));
     }

@@ -2,11 +2,7 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Set\Edges;
-use Graphp\Graph\Set\EdgesAggregate;
-use Graphp\Graph\Set\Vertices;
-
-class Vertex extends Entity implements EdgesAggregate
+class Vertex extends Entity
 {
     /**
      * @var Edge[]
@@ -65,11 +61,13 @@ class Vertex extends Entity implements EdgesAggregate
      */
     public function hasEdgeTo(Vertex $vertex)
     {
-        $that = $this;
+        foreach ($this->edges as $edge) {
+            if ($edge->isConnection($this, $vertex)) {
+                return true;
+            }
+        }
 
-        return $this->getEdges()->hasEdgeMatch(function (Edge $edge) use ($that, $vertex) {
-            return $edge->isConnection($that, $vertex);
-        });
+        return false;
     }
 
     /**
@@ -85,26 +83,28 @@ class Vertex extends Entity implements EdgesAggregate
     }
 
     /**
-     * get set of ALL Edges attached to this vertex
+     * get list of ALL edges attached to this vertex
      *
-     * @return Edges
+     * @psalm-return list<Edge>
+     * @return Edge[]
      */
     public function getEdges()
     {
-        return new Edges($this->edges);
+        return $this->edges;
     }
 
     /**
-     * get set of all outgoing Edges attached to this vertex
+     * get list of all outgoing edges attached to this vertex
      *
-     * @return Edges
+     * @psalm-return list<Edge>
+     * @return Edge[]
      */
     public function getEdgesOut()
     {
         $that = $this;
         $prev = null;
 
-        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that, &$prev) {
+        return \array_values(\array_filter($this->edges, function (Edge $edge) use ($that, &$prev) {
             $ret = $edge->hasVertexStart($that);
 
             // skip duplicate directed loop edges
@@ -114,20 +114,21 @@ class Vertex extends Entity implements EdgesAggregate
             $prev = $edge;
 
             return $ret;
-        });
+        }));
     }
 
     /**
-     * get set of all ingoing Edges attached to this vertex
+     * get list of all ingoing edges attached to this vertex
      *
-     * @return Edges
+     * @psalm-return list<Edge>
+     * @return Edge[]
      */
     public function getEdgesIn()
     {
         $that = $this;
         $prev = null;
 
-        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that, &$prev) {
+        return \array_values(\array_filter($this->edges, function (Edge $edge) use ($that, &$prev) {
             $ret = $edge->hasVertexTarget($that);
 
             // skip duplicate directed loop edges
@@ -137,30 +138,32 @@ class Vertex extends Entity implements EdgesAggregate
             $prev = $edge;
 
             return $ret;
-        });
+        }));
     }
 
     /**
-     * get set of Edges FROM this vertex TO the given vertex
+     * get list of edges FROM this vertex TO the given vertex
      *
      * @param  Vertex $vertex
-     * @return Edges
+     * @psalm-return list<Edge>
+     * @return Edge[]
      * @uses Edge::hasVertexTarget()
      */
     public function getEdgesTo(Vertex $vertex)
     {
         $that = $this;
 
-        return $this->getEdges()->getEdgesMatch(function (Edge $edge) use ($that, $vertex) {
+        return \array_values(\array_filter($this->edges, function (Edge $edge) use ($that, $vertex) {
             return $edge->isConnection($that, $vertex);
-        });
+        }));
     }
 
     /**
-     * get set of Edges FROM the given vertex TO this vertex
+     * get list of edges FROM the given vertex TO this vertex
      *
      * @param  Vertex $vertex
-     * @return Edges
+     * @psalm-return list<Edge>
+     * @return Edge[]
      * @uses Vertex::getEdgesTo()
      */
     public function getEdgesFrom(Vertex $vertex)
@@ -169,13 +172,13 @@ class Vertex extends Entity implements EdgesAggregate
     }
 
     /**
-     * get set of adjacent Vertices of this vertex (edge FROM or TO this vertex)
+     * get list of adjacent vertices of this vertex (edge FROM or TO this vertex)
      *
      * If there are multiple parallel edges between the same Vertex, it will be
-     * returned several times in the resulting Set of Vertices. If you only
-     * want unique Vertex instances, use `getVerticesDistinct()`.
+     * returned several times in the resulting list of vertices.
      *
-     * @return Vertices
+     * @psalm-return list<Vertex>
+     * @return Vertex[]
      * @uses Edge::hasVertexStart()
      * @uses Edge::getVerticesToFrom()
      * @uses Edge::getVerticesFromTo()
@@ -191,17 +194,17 @@ class Vertex extends Entity implements EdgesAggregate
             }
         }
 
-        return new Vertices($ret);
+        return $ret;
     }
 
     /**
-     * get set of all Vertices this vertex has an edge to
+     * get list of all vertices this vertex has an edge to
      *
      * If there are multiple parallel edges to the same Vertex, it will be
-     * returned several times in the resulting Set of Vertices. If you only
-     * want unique Vertex instances, use `getVerticesDistinct()`.
+     * returned several times in the resulting list of vertices.
      *
-     * @return Vertices
+     * @psalm-return list<Vertex>
+     * @return Vertex[]
      * @uses Vertex::getEdgesOut()
      * @uses Edge::getVerticesToFrom()
      */
@@ -212,17 +215,17 @@ class Vertex extends Entity implements EdgesAggregate
             $ret []= $edge->getVertexToFrom($this);
         }
 
-        return new Vertices($ret);
+        return $ret;
     }
 
     /**
-     * get set of all Vertices that have an edge TO this vertex
+     * get list of all vertices that have an edge TO this vertex
      *
      * If there are multiple parallel edges from the same Vertex, it will be
-     * returned several times in the resulting Set of Vertices. If you only
-     * want unique Vertex instances, use `getVerticesDistinct()`.
+     * returned several times in the resulting list of vertices.
      *
-     * @return Vertices
+     * @psalm-return list<Vertex>
+     * @return Vertex[]
      * @uses Vertex::getEdgesIn()
      * @uses Edge::getVerticesFromTo()
      */
@@ -233,7 +236,7 @@ class Vertex extends Entity implements EdgesAggregate
             $ret []= $edge->getVertexFromTo($this);
         }
 
-        return new Vertices($ret);
+        return $ret;
     }
 
     /**

@@ -76,10 +76,10 @@ class TestCase extends BaseTestCase
         $vertices = $edge->getGraph()->getVertices();
         $ret = get_class($edge) . ' ';
         if ($edge instanceof EdgeDirected) {
-            $ret .= $vertices->getIndexVertex($edge->getVertexStart()) . ' -> ' . $vertices->getIndexVertex($edge->getVertexEnd());
+            $ret .= array_search($edge->getVertexStart(), $vertices) . ' -> ' . array_search($edge->getVertexEnd(), $vertices);
         } else {
-            $foo = $edge->getVertices()->getVector();
-            $ret .= $vertices->getIndexVertex($foo[0]) . ' -- ' . $vertices->getIndexVertex($foo[1]);
+            $foo = $edge->getVertices();
+            $ret .= array_search($foo[0], $vertices) . ' -- ' . array_search($foo[1], $vertices);
         }
         $ret .= PHP_EOL . 'attributes: ' . json_encode($edge->getAttributes());
 

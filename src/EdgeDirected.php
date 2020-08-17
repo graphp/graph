@@ -2,8 +2,6 @@
 
 namespace Graphp\Graph;
 
-use Graphp\Graph\Set\Vertices;
-
 class EdgeDirected extends Edge
 {
     /**
@@ -47,17 +45,17 @@ class EdgeDirected extends Edge
 
     public function getVerticesTarget()
     {
-        return new Vertices(array($this->to));
+        return array($this->to);
     }
 
     public function getVerticesStart()
     {
-        return new Vertices(array($this->from));
+        return array($this->from);
     }
 
     public function getVertices()
     {
-        return new Vertices(array($this->from, $this->to));
+        return array($this->from, $this->to);
     }
 
     /**

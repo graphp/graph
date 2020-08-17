@@ -22,7 +22,7 @@ class VertexTest extends EntityTest
     public function testPrecondition()
     {
         $this->assertCount(1, $this->graph->getVertices());
-        $this->assertEquals(array($this->vertex), $this->graph->getVertices()->getVector());
+        $this->assertEquals(array($this->vertex), $this->graph->getVertices());
     }
 
     public function testConstructorWithoutAttributesHasNoAttributes()
@@ -30,7 +30,7 @@ class VertexTest extends EntityTest
         $v2 = new Vertex($this->graph);
 
         $this->assertCount(2, $this->graph->getVertices());
-        $this->assertEquals(array($this->vertex, $v2), $this->graph->getVertices()->getVector());
+        $this->assertEquals(array($this->vertex, $v2), $this->graph->getVertices());
 
         $this->assertNull($v2->getAttribute('hello'));
         $this->assertEquals('default', $v2->getAttribute('hello', 'default'));
@@ -55,9 +55,9 @@ class VertexTest extends EntityTest
         $e2 = $this->graph->createEdgeUndirected($this->vertex, $v3);
         $e3 = $this->graph->createEdgeDirected($v4, $this->vertex);
 
-        $this->assertEquals(array($e1, $e2, $e3), $this->vertex->getEdges()->getVector());
-        $this->assertEquals(array($e2, $e3), $this->vertex->getEdgesIn()->getVector());
-        $this->assertEquals(array($e1, $e2), $this->vertex->getEdgesOut()->getVector());
+        $this->assertEquals(array($e1, $e2, $e3), $this->vertex->getEdges());
+        $this->assertEquals(array($e2, $e3), $this->vertex->getEdgesIn());
+        $this->assertEquals(array($e1, $e2), $this->vertex->getEdgesOut());
 
         $this->assertTrue($this->vertex->hasEdgeTo($v2));
         $this->assertTrue($this->vertex->hasEdgeTo($v3));
@@ -67,43 +67,43 @@ class VertexTest extends EntityTest
         $this->assertTrue($this->vertex->hasEdgeFrom($v3));
         $this->assertTrue($this->vertex->hasEdgeFrom($v4));
 
-        $this->assertEquals(array($e1), $this->vertex->getEdgesTo($v2)->getVector());
-        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3)->getVector());
-        $this->assertEquals(array(), $this->vertex->getEdgesTo($v4)->getVector());
+        $this->assertEquals(array($e1), $this->vertex->getEdgesTo($v2));
+        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3));
+        $this->assertEquals(array(), $this->vertex->getEdgesTo($v4));
 
-        $this->assertEquals(array(), $this->vertex->getEdgesFrom($v2)->getVector());
-        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3)->getVector());
-        $this->assertEquals(array($e3), $this->vertex->getEdgesFrom($v4)->getVector());
+        $this->assertEquals(array(), $this->vertex->getEdgesFrom($v2));
+        $this->assertEquals(array($e2), $this->vertex->getEdgesTo($v3));
+        $this->assertEquals(array($e3), $this->vertex->getEdgesFrom($v4));
 
-        $this->assertEquals(array($v2, $v3, $v4), $this->vertex->getVerticesEdge()->getVector());
-        $this->assertEquals(array($v2, $v3), $this->vertex->getVerticesEdgeTo()->getVector());
-        $this->assertEquals(array($v3, $v4), $this->vertex->getVerticesEdgeFrom()->getVector());
+        $this->assertEquals(array($v2, $v3, $v4), $this->vertex->getVerticesEdge());
+        $this->assertEquals(array($v2, $v3), $this->vertex->getVerticesEdgeTo());
+        $this->assertEquals(array($v3, $v4), $this->vertex->getVerticesEdgeFrom());
     }
 
     public function testUndirectedLoopEdgeReturnsEdgeTwiceInAndOut()
     {
         $edge = $this->graph->createEdgeUndirected($this->vertex, $this->vertex);
 
-        $this->assertEquals(array($edge, $edge), $this->vertex->getEdges()->getVector());
-        $this->assertEquals(array($edge, $edge), $this->vertex->getEdgesIn()->getVector());
-        $this->assertEquals(array($edge, $edge), $this->vertex->getEdgesOut()->getVector());
+        $this->assertEquals(array($edge, $edge), $this->vertex->getEdges());
+        $this->assertEquals(array($edge, $edge), $this->vertex->getEdgesIn());
+        $this->assertEquals(array($edge, $edge), $this->vertex->getEdgesOut());
 
-        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdge()->getVector());
-        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdgeTo()->getVector());
-        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdgeFrom()->getVector());
+        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdge());
+        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdgeTo());
+        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdgeFrom());
     }
 
     public function testDirectedLoopEdgeReturnsEdgeTwiceUndirectedAndOnceEachInAndOut()
     {
         $edge = $this->graph->createEdgeDirected($this->vertex, $this->vertex);
 
-        $this->assertEquals(array($edge, $edge), $this->vertex->getEdges()->getVector());
-        $this->assertEquals(array($edge), $this->vertex->getEdgesIn()->getVector());
-        $this->assertEquals(array($edge), $this->vertex->getEdgesOut()->getVector());
+        $this->assertEquals(array($edge, $edge), $this->vertex->getEdges());
+        $this->assertEquals(array($edge), $this->vertex->getEdgesIn());
+        $this->assertEquals(array($edge), $this->vertex->getEdgesOut());
 
-        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdge()->getVector());
-        $this->assertEquals(array($this->vertex), $this->vertex->getVerticesEdgeTo()->getVector());
-        $this->assertEquals(array($this->vertex), $this->vertex->getVerticesEdgeFrom()->getVector());
+        $this->assertEquals(array($this->vertex, $this->vertex), $this->vertex->getVerticesEdge());
+        $this->assertEquals(array($this->vertex), $this->vertex->getVerticesEdgeTo());
+        $this->assertEquals(array($this->vertex), $this->vertex->getVerticesEdgeFrom());
     }
 
     public function testCreateEdgeOtherGraphFails()
