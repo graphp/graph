@@ -18,4 +18,10 @@ class NegativeCycleExceptionTest extends TestCase
         $this->assertEquals('test', $exception->getMessage());
         $this->assertEquals($cycle, $exception->getCycle());
     }
+
+    public function testConstructorThrowsWhenNoCycleIsGiven()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        new NegativeCycleException('test');
+    }
 }
