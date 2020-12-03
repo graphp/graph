@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.2 (2020-12-03)
+
+*   Feature: Support PHP 8 and PHPUnit 9.3.
+    (#200 by @SimonFrings)
+
 ## 0.9.1 (2019-10-02)
 
 *   Fix: Deleting vertex with loop edge no longer fails.

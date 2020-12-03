@@ -11,6 +11,12 @@
     ],
     "homepage": "https://github.com/graphp/graph",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Lück",
+            "email": "christian@clue.engineering"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Fhaculty\\Graph\\": "src/"
