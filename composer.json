@@ -22,10 +22,10 @@
         }
     },
     "require": {
-        "php": "^7.0 || ^5.3"
+        "php": ">=5.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
+        "phpunit/phpunit": "^9.3 || ^5.7 || ^4.8.35"
     },
     "suggest": {
         "graphp/graphviz": "GraphViz graph drawing / DOT output",

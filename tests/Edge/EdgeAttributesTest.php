@@ -14,7 +14,10 @@ class EdgeAttributesTest extends TestCase
      */
     private $edge;
 
-    public function setUp()
+    /**
+     * @before
+     */
+    public function setUpGraph()
     {
 
         $graph = new Graph();
@@ -40,61 +43,49 @@ class EdgeAttributesTest extends TestCase
         $this->assertEquals(null, $this->edge->getCapacityRemaining());
     }
 
-    /**
-     * @expectedException RangeException
-     */
     public function testFlowMustNotExceedCapacity()
     {
         $this->edge->setCapacity(20);
+
+        $this->setExpectedException('RangeException');
         $this->edge->setFlow(100);
     }
 
-    /**
-     * @expectedException RangeException
-     */
     public function testCapacityMustBeGreaterThanFlow()
     {
         $this->edge->setFlow(100);
+
+        $this->setExpectedException('RangeException');
         $this->edge->setCapacity(20);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWeightMustBeNumeric()
     {
+        $this->setExpectedException('InvalidArgumentException');
         $this->edge->setWeight("10");
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCapacityMustBeNumeric()
     {
+        $this->setExpectedException('InvalidArgumentException');
         $this->edge->setCapacity("10");
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCapacityMustBePositive()
     {
+        $this->setExpectedException('InvalidArgumentException');
         $this->edge->setCapacity(-10);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testFlowMustBeNumeric()
     {
+        $this->setExpectedException('InvalidArgumentException');
         $this->edge->setFlow("10");
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testFlowMustBePositive()
     {
+        $this->setExpectedException('InvalidArgumentException');
         $this->edge->setFlow(-10);
     }
 }

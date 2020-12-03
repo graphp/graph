@@ -54,10 +54,10 @@ class EdgesTest extends TestCase
      *
      * @param Edges $edges
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveFirst(Edges $edges)
     {
+        $this->setExpectedException('UnderflowException');
         $edges->getEdgeFirst();
     }
 
@@ -65,10 +65,10 @@ class EdgesTest extends TestCase
      *
      * @param Edges $edges
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveLast(Edges $edges)
     {
+        $this->setExpectedException('UnderflowException');
         $edges->getEdgeLast();
     }
 
@@ -76,10 +76,10 @@ class EdgesTest extends TestCase
      *
      * @param Edges $edges
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveOrdered(Edges $edges)
     {
+        $this->setExpectedException('UnderflowException');
         $edges->getEdgeOrder(Edges::ORDER_WEIGHT);
     }
 
@@ -112,10 +112,10 @@ class EdgesTest extends TestCase
      *
      * @param Edges $edges
      * @depends testTwo
-     * @expectedException OutOfBoundsException
      */
     public function testTwoDoesNotContainIndex3(Edges $edges)
     {
+        $this->setExpectedException('OutOfBoundsException');
         $edges->getEdgeIndex(3);
     }
 
@@ -123,7 +123,6 @@ class EdgesTest extends TestCase
      *
      * @param Edges $edges
      * @depends testTwo
-     * @expectedException OutOfBoundsException
      */
     public function testTwoDoesNotContainEdge3(Edges $edges)
     {
@@ -131,6 +130,7 @@ class EdgesTest extends TestCase
         $v3 = $graph->createVertex(3);
         $e3 = $v3->createEdge($v3);
 
+        $this->setExpectedException('OutOfBoundsException');
         $edges->getIndexEdge($e3);
     }
 
@@ -207,10 +207,10 @@ class EdgesTest extends TestCase
      *
      * @param Edges $edges
      * @depends testTwo
-     * @expectedException UnderflowException
      */
     public function testTwoMatchFail(Edges $edges)
     {
+        $this->setExpectedException('UnderflowException');
         $edges->getEdgeMatch(array($this, 'returnFalse'));
     }
 
@@ -224,9 +224,6 @@ class EdgesTest extends TestCase
         return false;
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testGetEdgeOrderInvalidSortBy()
     {
         // 1 -> 1
@@ -236,16 +233,15 @@ class EdgesTest extends TestCase
 
         $edges = $graph->getEdges();
 
+        $this->setExpectedException('InvalidArgumentException');
         $edges->getEdgeOrder('not a valid callback');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testGetEdgesOrderInvalidSortBy()
     {
         $edges = $this->createEdges(array());
 
+        $this->setExpectedException('InvalidArgumentException');
         $edges->getEdgesOrder('not a valid callback');
     }
 

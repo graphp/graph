@@ -20,9 +20,6 @@ class VerticesTest extends BaseVerticesTest
         $this->assertTrue($vertices->isEmpty());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testGetVertexOrderInvalidSortBy()
     {
         $graph = new Graph();
@@ -30,16 +27,15 @@ class VerticesTest extends BaseVerticesTest
 
         $vertices = $graph->getVertices();
 
+        $this->setExpectedException('InvalidArgumentException');
         $vertices->getVertexOrder('not a valid callback');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testGetVicesOrderInvalidSortBy()
     {
         $vertices = $this->createVertices(array());
 
+        $this->setExpectedException('InvalidArgumentException');
         $vertices->getVerticesOrder('not a valid callback');
     }
 

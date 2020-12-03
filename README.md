@@ -115,7 +115,7 @@ $ composer require clue/graph:^0.9.1
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.
 
 This project aims to run on any platform and thus does not require any PHP
-extensions and supports running on legacy PHP 5.3 through current PHP 7+ and
+extensions and supports running on legacy PHP 5.3 through current PHP 8+ and
 HHVM.
 It's *highly recommended to use PHP 7+* for this project.
 

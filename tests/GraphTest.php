@@ -9,7 +9,10 @@ use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 class GraphTest extends AbstractAttributeAwareTest
 {
-    public function setup()
+    /**
+     * @before
+     */
+    public function setUpGraph()
     {
         $this->graph = new Graph();
     }
@@ -27,13 +30,13 @@ class GraphTest extends AbstractAttributeAwareTest
 
     /**
      * test to make sure vertex can not be cloned into same graph (due to duplicate id)
-     *
-     * @expectedException RuntimeException
      */
     public function testInvalidVertexClone()
     {
         $graph = new Graph();
         $vertex = $graph->createVertex(123);
+
+        $this->setExpectedException('RuntimeException');
         $graph->createVertexClone($vertex);
     }
 
@@ -44,12 +47,11 @@ class GraphTest extends AbstractAttributeAwareTest
         $this->assertGraphEquals($graph, $newgraph);
     }
 
-    /**
-     * @expectedException OutOfBoundsException
-     */
     public function testGetVertexNonexistant()
     {
         $graph = new Graph();
+
+        $this->setExpectedException('OutOfBoundsException');
         $graph->getVertex('non-existant');
     }
 
@@ -106,21 +108,21 @@ class GraphTest extends AbstractAttributeAwareTest
 
     /**
      * fail to create two vertices with same ID
-     * @expectedException OverflowException
      */
     public function testFailDuplicateVertex()
     {
         $graph = new Graph();
         $graph->createVertex(33);
+
+        $this->setExpectedException('OverflowException');
         $graph->createVertex(33);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCreateInvalidId()
     {
         $graph = new Graph();
+
+        $this->setExpectedException('InvalidArgumentException');
         $graph->createVertex(array('invalid'));
     }
 
@@ -200,12 +202,13 @@ class GraphTest extends AbstractAttributeAwareTest
 
     /**
      * expect to fail for invalid number of vertices
-     * @expectedException InvalidArgumentException
      * @dataProvider createVerticesFailProvider
      */
     public function testCreateVerticesFail($number)
     {
         $graph = new Graph();
+
+        $this->setExpectedException('InvalidArgumentException');
         $graph->createVertices($number);
     }
 
@@ -262,12 +265,11 @@ class GraphTest extends AbstractAttributeAwareTest
         }
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCreateVerticesContainsInvalid()
     {
         $graph = new Graph();
+
+        $this->setExpectedException('InvalidArgumentException');
         $graph->createVertices(array(1, 2, array(), 3));
     }
 
@@ -291,7 +293,6 @@ class GraphTest extends AbstractAttributeAwareTest
 
     /**
      * @param Graph $graph
-     * @expectedException InvalidArgumentException
      * @depends testRemoveEdge
      */
     public function testRemoveEdgeInvalid(Graph $graph)
@@ -299,6 +300,8 @@ class GraphTest extends AbstractAttributeAwareTest
         $edge = $graph->getVertex(1)->createEdge($graph->getVertex(2));
 
         $edge->destroy();
+
+        $this->setExpectedException('InvalidArgumentException');
         $edge->destroy();
     }
 
@@ -314,15 +317,14 @@ class GraphTest extends AbstractAttributeAwareTest
         $this->assertEquals(array(), $graph->getVertices()->getVector());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testRemoveVertexInvalid()
     {
         $graph = new Graph();
         $vertex = $graph->createVertex(1);
 
         $vertex->destroy();
+
+        $this->setExpectedException('InvalidArgumentException');
         $vertex->destroy();
     }
 
@@ -341,9 +343,6 @@ class GraphTest extends AbstractAttributeAwareTest
         $this->assertEdgeEquals($e2, $graphClone->getEdgeCloneInverted($e1));
     }
 
-    /**
-     * @expectedException OverflowException
-     */
     public function testEdgesFailParallel()
     {
         // 1 -> 2, 1 -> 2
@@ -353,13 +352,11 @@ class GraphTest extends AbstractAttributeAwareTest
         $e1 = $v1->createEdgeTo($v2);
         $e2 = $v1->createEdgeTo($v2);
 
+        $this->setExpectedException('OverflowException');
         // which one to return? e1? e2?
         $graph->getEdgeClone($e1);
     }
 
-    /**
-     * @expectedException UnderflowException
-     */
     public function testEdgesFailEdgeless()
     {
         // 1 -> 2
@@ -371,6 +368,7 @@ class GraphTest extends AbstractAttributeAwareTest
 
         $graphCloneEdgeless = $graph->createGraphCloneEdgeless();
 
+        $this->setExpectedException('UnderflowException');
         // nothing to return
         $graphCloneEdgeless->getEdgeClone($e1);
     }

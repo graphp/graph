@@ -8,7 +8,10 @@ use Fhaculty\Graph\Vertex;
 
 class VertexTest extends AbstractAttributeAwareTest
 {
-    public function setUp()
+    /**
+     * @before
+     */
+    public function setUpVertex()
     {
         $this->graph = new Graph();
         $this->vertex = $this->graph->createVertex(1);
@@ -32,11 +35,9 @@ class VertexTest extends AbstractAttributeAwareTest
         $this->assertSame($v2, $this->graph->getVertex(2));
     }
 
-    /**
-     * @expectedException OverflowException
-     */
     public function testCanNotConstructDuplicateVertex()
     {
+        $this->setExpectedException('OverflowException');
         $v2 = new Vertex($this->graph, 1);
     }
 
@@ -107,11 +108,9 @@ class VertexTest extends AbstractAttributeAwareTest
         $this->assertEquals(10, $this->vertex->getBalance());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testBalanceInvalid()
     {
+        $this->setExpectedException('InvalidArgumentException');
         $this->vertex->setBalance("10");
     }
 
@@ -121,37 +120,28 @@ class VertexTest extends AbstractAttributeAwareTest
         $this->assertEquals(2, $this->vertex->getGroup());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testGroupInvalid()
     {
+        $this->setExpectedException('InvalidArgumentException');
         $this->vertex->setGroup("3");
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCreateEdgeOtherGraphFails()
     {
         $graphOther = new Graph();
 
+        $this->setExpectedException('InvalidArgumentException');
         $this->vertex->createEdge($graphOther->createVertex(2));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCreateEdgeToOtherGraphFails()
     {
         $graphOther = new Graph();
 
+        $this->setExpectedException('InvalidArgumentException');
         $this->vertex->createEdgeTo($graphOther->createVertex(2));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testRemoveInvalidEdge()
     {
         // 2 -- 3
@@ -159,6 +149,7 @@ class VertexTest extends AbstractAttributeAwareTest
         $v3 = $this->graph->createVertex(3);
         $edge = $v2->createEdge($v3);
 
+        $this->setExpectedException('InvalidArgumentException');
         $this->vertex->removeEdge($edge);
     }
 

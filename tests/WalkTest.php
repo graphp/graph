@@ -9,11 +9,9 @@ use Fhaculty\Graph\Walk;
 
 class WalkTest extends TestCase
 {
-    /**
-     * @expectedException UnderflowException
-     */
     public function testWalkCanNotBeEmpty()
     {
+        $this->setExpectedException('UnderflowException');
         Walk::factoryCycleFromVertices(array());
     }
 
@@ -139,9 +137,6 @@ class WalkTest extends TestCase
         $this->assertTrue($walk->isValid());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWalkCycleFromVerticesIncomplete()
     {
         // 1 -- 2 -- 1
@@ -151,13 +146,11 @@ class WalkTest extends TestCase
         $e1 = $v1->createEdge($v2);
         $e2 = $v2->createEdge($v1);
 
+        $this->setExpectedException('InvalidArgumentException');
         // should actually be [v1, v2, v1]
         Walk::factoryCycleFromVertices(array($v1, $v2));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWalkCycleInvalid()
     {
         // 1 -- 2
@@ -166,6 +159,7 @@ class WalkTest extends TestCase
         $v2 = $graph->createVertex(2);
         $e1 = $v1->createEdge($v2);
 
+        $this->setExpectedException('InvalidArgumentException');
         Walk::factoryCycleFromEdges(array($e1), $v1);
     }
 
@@ -200,22 +194,20 @@ class WalkTest extends TestCase
      *
      * @param Vertex $v1
      * @depends testLoopCycle
-     * @expectedException InvalidArgumentException
      */
     public function testFactoryCycleFromVerticesIncomplete(Vertex $v1)
     {
+        $this->setExpectedException('InvalidArgumentException');
         // should actually be [v1, v1]
         Walk::factoryCycleFromVertices(array($v1));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidPredecessors()
     {
         $graph = new Graph();
         $v1 = $graph->createVertex(1);
 
+        $this->setExpectedException('InvalidArgumentException');
         Walk::factoryCycleFromPredecessorMap(array(), $v1);
     }
 
