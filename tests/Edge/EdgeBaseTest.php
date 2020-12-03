@@ -25,7 +25,10 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
      */
     abstract protected function createEdgeLoop();
 
-    public function setUp()
+    /**
+     * @before
+     */
+    public function setUpGraph()
     {
         $this->graph = new Graph();
         $this->v1 = $this->graph->createVertex(1);
@@ -53,21 +56,19 @@ abstract class EdgeBaseTest extends AbstractAttributeAwareTest
         $this->assertFalse($this->edge->hasVertexTarget($v3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testEdgeFromInvalid()
     {
         $v3 = $this->graph->createVertex(3);
+
+        $this->setExpectedException('InvalidArgumentException');
         $this->edge->getVertexFromTo($v3);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testEdgeToInvalid()
     {
         $v3 = $this->graph->createVertex(3);
+
+        $this->setExpectedException('InvalidArgumentException');
         $this->edge->getVertexToFrom($v3);
     }
 

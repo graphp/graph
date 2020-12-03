@@ -52,10 +52,10 @@ abstract class BaseVerticesTest extends TestCase
      *
      * @param Vertices $vertices
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveFirst(Vertices $vertices)
     {
+        $this->setExpectedException('UnderflowException');
         $vertices->getVertexFirst();
     }
 
@@ -63,10 +63,10 @@ abstract class BaseVerticesTest extends TestCase
      *
      * @param Vertices $vertices
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveLast(Vertices $vertices)
     {
+        $this->setExpectedException('UnderflowException');
         $vertices->getVertexLast();
     }
 
@@ -74,10 +74,10 @@ abstract class BaseVerticesTest extends TestCase
      *
      * @param Vertices $vertices
      * @depends testEmpty
-     * @expectedException UnderflowException
      */
     public function testEmptyDoesNotHaveOrdered(Vertices $vertices)
     {
+        $this->setExpectedException('UnderflowException');
         $vertices->getVertexOrder(Vertices::ORDER_ID);
     }
 
@@ -110,10 +110,10 @@ abstract class BaseVerticesTest extends TestCase
      *
      * @param Vertices $vertices
      * @depends testTwo
-     * @expectedException OutOfBoundsException
      */
     public function testTwoDoesNotContainId3(Vertices $vertices)
     {
+        $this->setExpectedException('OutOfBoundsException');
         $vertices->getVertexId(3);
     }
 
@@ -121,11 +121,12 @@ abstract class BaseVerticesTest extends TestCase
      *
      * @param Vertices $vertices
      * @depends testTwo
-     * @expectedException OutOfBoundsException
      */
     public function testTwoDoesNotContainVertex3(Vertices $vertices)
     {
         $graph = new Graph();
+
+        $this->setExpectedException('OutOfBoundsException');
         $v3 = $graph->createVertex(3);
 
         $vertices->getIndexVertex($v3);
