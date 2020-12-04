@@ -3,10 +3,10 @@
 <!-- PHPUnit configuration file with old format for PHPUnit 9.2 or older -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/4.8/phpunit.xsd"
-         bootstrap="vendor/autoload.php" 
+         bootstrap="vendor/autoload.php"
          colors="true">
     <testsuites>
-        <testsuite name="Graph Test Suite">
+        <testsuite name="Graph test suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

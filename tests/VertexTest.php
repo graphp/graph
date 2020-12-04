@@ -122,7 +122,6 @@ class VertexTest extends EntityTest
         $this->graph->createEdgeDirected($this->vertex, $graphOther->createVertex());
     }
 
-
     protected function createEntity()
     {
         return new Vertex(new Graph());
