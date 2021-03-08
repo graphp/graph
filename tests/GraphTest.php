@@ -62,8 +62,8 @@ class GraphTest extends EntityTest
         $graph->createEdgeUndirected($v1, $v2);
         $graph->createEdgeUndirected($v1, $v2);
 
-        $this->assertEquals(2, count($graph->getEdges()));
-        $this->assertEquals(2, count($v1->getEdges()));
+        $this->assertCount(2, $graph->getEdges());
+        $this->assertCount(2, $v1->getEdges());
 
         $this->assertEquals(array($v2, $v2), $v1->getVerticesEdge());
     }
@@ -79,11 +79,11 @@ class GraphTest extends EntityTest
         $graph->createEdgeUndirected($v1, $v2);
         $graph->createEdgeDirected($v2, $v3);
 
-        $this->assertEquals(2, count($graph->getEdges()));
+        $this->assertCount(2, $graph->getEdges());
 
-        $this->assertEquals(2, count($v2->getEdges()));
-        $this->assertEquals(2, count($v2->getEdgesOut()));
-        $this->assertEquals(1, count($v2->getEdgesIn()));
+        $this->assertCount(2, $v2->getEdges());
+        $this->assertCount(2, $v2->getEdgesOut());
+        $this->assertCount(1, $v2->getEdgesIn());
 
         $this->assertEquals(array($v1, $v3), $v2->getVerticesEdgeTo());
         $this->assertEquals(array($v1), $v2->getVerticesEdgeFrom());
