@@ -27,8 +27,8 @@ class WalkTest extends TestCase
         $walk = Walk::factoryFromEdges(array($e1, $e2), $v1);
 
         $this->assertSame($graph, $walk->getGraph());
-        $this->assertEquals(3, count($walk->getVertices()));
-        $this->assertEquals(2, count($walk->getEdges()));
+        $this->assertCount(3, $walk->getVertices());
+        $this->assertCount(2, $walk->getEdges());
 
         $vertices = $walk->getVertices();
         $this->assertSame($v1, reset($vertices));
@@ -50,8 +50,8 @@ class WalkTest extends TestCase
         $walk = Walk::factoryFromEdges(array($e1), $v1);
 
         $this->assertSame($graph, $walk->getGraph());
-        $this->assertEquals(2, count($walk->getVertices()));
-        $this->assertEquals(1, count($walk->getEdges()));
+        $this->assertCount(2, $walk->getVertices());
+        $this->assertCount(1, $walk->getEdges());
 
         $vertices = $walk->getVertices();
         $this->assertSame($v1, reset($vertices));
@@ -61,8 +61,8 @@ class WalkTest extends TestCase
         // construct same partial walk "1 -- 2"
         $walkVertices = Walk::factoryFromVertices(array($v1, $v2));
 
-        $this->assertEquals(2, count($walkVertices->getVertices()));
-        $this->assertEquals(1, count($walkVertices->getEdges()));
+        $this->assertCount(2, $walkVertices->getVertices());
+        $this->assertCount(1, $walkVertices->getEdges());
     }
 
     public function testFactoryFromEdgesWithTrivialGraphHasOneVertexAndNoEdges()
@@ -137,8 +137,8 @@ class WalkTest extends TestCase
 
         $walk = Walk::factoryFromEdges(array($e1), $v1);
 
-        $this->assertEquals(2, count($walk->getVertices()));
-        $this->assertEquals(1, count($walk->getEdges()));
+        $this->assertCount(2, $walk->getVertices());
+        $this->assertCount(1, $walk->getEdges());
 
         $vertices = $walk->getVertices();
         $this->assertSame($v1, reset($vertices));
@@ -154,8 +154,8 @@ class WalkTest extends TestCase
 
         $walk = Walk::factoryCycleFromEdges(array($e1), $v1);
 
-        $this->assertEquals(2, count($walk->getVertices()));
-        $this->assertEquals(1, count($walk->getEdges()));
+        $this->assertCount(2, $walk->getVertices());
+        $this->assertCount(1, $walk->getEdges());
 
         $vertices = $walk->getVertices();
         $this->assertSame($v1, reset($vertices));
