@@ -289,7 +289,7 @@ class Graph implements DualAggregate, AttributeAware
         }
 
         // auto ID
-        return max(array_keys($this->verticesStorage))+1;
+        return max(array_map('intval', array_keys($this->verticesStorage)))+1;
     }
 
     /**

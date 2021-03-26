@@ -9,12 +9,26 @@ use Fhaculty\Graph\Tests\Attribute\AbstractAttributeAwareTest;
 
 class GraphTest extends AbstractAttributeAwareTest
 {
+    /** @var Graph */
+    private $graph;
+
     /**
      * @before
      */
     public function setUpGraph()
     {
         $this->graph = new Graph();
+    }
+
+    public function testMixedIds()
+    {
+        $vertexString = $this->graph->createVertex('test');
+        $vertex1 = $this->graph->createVertex();
+        $vertex2 = $this->graph->createVertex();
+
+        self::assertEquals('test', $vertexString->getId());
+        self::assertEquals(1, $vertex1->getId());
+        self::assertEquals(2, $vertex2->getId());
     }
 
     public function testVertexClone()
