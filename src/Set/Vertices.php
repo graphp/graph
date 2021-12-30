@@ -411,6 +411,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      * @return int
      * @see self::isEmpty()
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->vertices);
@@ -448,6 +449,7 @@ class Vertices implements \Countable, \IteratorAggregate, VerticesAggregate
      *
      * @return \IteratorIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \IteratorIterator(new \ArrayIterator($this->vertices));

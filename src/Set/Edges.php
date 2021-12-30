@@ -383,6 +383,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      * @return int
      * @see self::isEmpty()
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->edges);
@@ -409,6 +410,7 @@ class Edges implements \Countable, \IteratorAggregate, EdgesAggregate
      *
      * @return \IteratorIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \IteratorIterator(new \ArrayIterator($this->edges));
