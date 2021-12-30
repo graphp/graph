@@ -1,4 +1,6 @@
-# graphp/graph [![Build Status](https://travis-ci.org/graphp/graph.png?branch=master)](https://travis-ci.org/graphp/graph)
+# graphp/graph
+
+[![CI status](https://github.com/graphp/graph/actions/workflows/ci.yml/badge.svg?branch=v0.9.x)](https://github.com/graphp/graph/actions)
 
 GraPHP is the mathematical graph/network library written in PHP.
 
