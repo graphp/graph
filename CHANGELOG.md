@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.3 (2021-12-30)
+
+*   Feature: Support PHP 8.1 release.
+    (#208 by @clue)
+
+*   Fix: Fix automatic vertex ID generation when using vertex IDs with strings.
+    (#204 by @viktorprogger)
+
+*   Improve test suite and use GitHub Actions for continuous integration (CI).
+    (#207 by @clue)
+
 ## 0.9.2 (2020-12-03)
 
 *   Feature: Support PHP 8 and PHPUnit 9.3.
