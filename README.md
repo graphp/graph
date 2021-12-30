@@ -1,6 +1,8 @@
 # graphp/graph
 
 [![CI status](https://github.com/graphp/graph/actions/workflows/ci.yml/badge.svg)](https://github.com/graphp/graph/actions)
+[![development installs on Packagist](https://img.shields.io/packagist/dt/graphp/graph?color=blue&label=development%20installs%20on%20Packagist)](https://packagist.org/packages/graphp/graph)
+[![previous installs on Packagist](https://img.shields.io/packagist/dt/clue/graph?color=blue&label=previous%20installs%20on%20Packagist)](https://packagist.org/packages/clue/graph)
 
 GraPHP is the mathematical graph/network library written in PHP.
 
