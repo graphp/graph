@@ -1,6 +1,6 @@
 # graphp/graph
 
-[![CI status](https://github.com/graphp/graph/workflows/CI/badge.svg)](https://github.com/graphp/graph/actions)
+[![CI status](https://github.com/graphp/graph/actions/workflows/ci.yml/badge.svg)](https://github.com/graphp/graph/actions)
 
 GraPHP is the mathematical graph/network library written in PHP.
 
@@ -28,7 +28,7 @@ Once [installed](#install), let's initialize a sample graph:
 ```php
 <?php
 
-require_once 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 $graph = new Graphp\Graph\Graph();
 
@@ -55,9 +55,9 @@ foreach ($rome->getVerticesEdgeFrom() as $vertex) {
 
 ## Features
 
-This library is built around the concept of [mathematical graph theory](https://en.wikipedia.org/wiki/Graph_theory) (i.e. it is **not** a [charting](http://en.wikipedia.org/wiki/Chart) library for drawing a [graph of a function](http://en.wikipedia.org/wiki/Graph_of_a_function)). In essence, a graph is a set of *nodes* with any number of *connections* in between. In graph theory, [vertices](http://en.wikipedia.org/wiki/Vertex_%28graph_theory%29) (plural of vertex) are an abstract representation of these *nodes*, while *connections* are represented as *edges*. Edges may be either undirected ("two-way") or directed ("one-way", aka di-edges, arcs).
+This library is built around the concept of [mathematical graph theory](https://en.wikipedia.org/wiki/Graph_theory) (i.e. it is **not** a [charting](https://en.wikipedia.org/wiki/Chart) library for drawing a [graph of a function](https://en.wikipedia.org/wiki/Graph_of_a_function)). In essence, a graph is a set of *nodes* with any number of *connections* in between. In graph theory, [vertices](https://en.wikipedia.org/wiki/Vertex_%28graph_theory%29) (plural of vertex) are an abstract representation of these *nodes*, while *connections* are represented as *edges*. Edges may be either undirected ("two-way") or directed ("one-way", aka di-edges, arcs).
 
-Depending on how the edges are constructed, the whole graph can either be undirected, can be a [directed graph](http://en.wikipedia.org/wiki/Directed_graph) (aka digraph) or be a [mixed graph](https://en.wikipedia.org/wiki/Mixed_graph). Edges are also allowed to form [loops](http://en.wikipedia.org/wiki/Loop_%28graph_theory%29) (i.e. an edge from vertex A pointing to vertex A again). Also, [multiple edges](http://en.wikipedia.org/wiki/Multiple_edges) from vertex A to vertex B  are supported as well (aka parallel edges), effectively forming a [multigraph](http://en.wikipedia.org/wiki/Multigraph) (aka pseudograph). And of course, any combination thereof is supported as well. While many authors try to differentiate between these core concepts, this library tries hard to not impose any artificial limitations or assumptions on your graphs.
+Depending on how the edges are constructed, the whole graph can either be undirected, can be a [directed graph](https://en.wikipedia.org/wiki/Directed_graph) (aka digraph) or be a [mixed graph](https://en.wikipedia.org/wiki/Mixed_graph). Edges are also allowed to form [loops](https://en.wikipedia.org/wiki/Loop_%28graph_theory%29) (i.e. an edge from vertex A pointing to vertex A again). Also, [multiple edges](https://en.wikipedia.org/wiki/Multiple_edges) from vertex A to vertex B  are supported as well (aka parallel edges), effectively forming a [multigraph](https://en.wikipedia.org/wiki/Multigraph) (aka pseudograph). And of course, any combination thereof is supported as well. While many authors try to differentiate between these core concepts, this library tries hard to not impose any artificial limitations or assumptions on your graphs.
 
 ## Components
 
@@ -70,7 +70,7 @@ Following is a list of some highlighted components. A list of all official compo
 
 ### Graph drawing
 
-This library is built to support visualizing graph images, including them into webpages, opening up images from within CLI applications and exporting them as PNG, JPEG or SVG file formats (among many others). Because [graph drawing](http://en.wikipedia.org/wiki/Graph_drawing) is a complex area on its own, the actual layouting of the graph is left up to the excellent [GraphViz](http://www.graphviz.org/) "Graph Visualization Software" and we merely provide some convenient APIs to interface with GraphViz.
+This library is built to support visualizing graph images, including them into webpages, opening up images from within CLI applications and exporting them as PNG, JPEG or SVG file formats (among many others). Because [graph drawing](https://en.wikipedia.org/wiki/Graph_drawing) is a complex area on its own, the actual layouting of the graph is left up to the excellent [GraphViz](https://www.graphviz.org/) "Graph Visualization Software" and we merely provide some convenient APIs to interface with GraphViz.
 
 See [graphp/graphviz](https://github.com/graphp/graphviz) for more details.
 
@@ -105,13 +105,13 @@ See [graphp/algorithms](https://github.com/graphp/algorithms) for more details.
 
 ## Install
 
-The recommended way to install this library is [through Composer](https://getcomposer.org).
+The recommended way to install this library is [through Composer](https://getcomposer.org/).
 [New to Composer?](https://getcomposer.org/doc/00-intro.md)
 
 This will install the latest supported version:
 
 ```bash
-$ composer require clue/graph:^0.9.2
+$ composer require clue/graph:^0.9.3
 ```
 
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.
@@ -119,7 +119,7 @@ See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.
 This project aims to run on any platform and thus does not require any PHP
 extensions and supports running on legacy PHP 5.3 through current PHP 8+ and
 HHVM.
-It's *highly recommended to use PHP 7+* for this project.
+It's *highly recommended to use the latest supported PHP version* for this project.
 
 You may also want to install some of the [additional components](#components).
 A list of all official components can be found in the [graphp project](https://github.com/graphp).
@@ -128,7 +128,7 @@ A list of all official components can be found in the [graphp project](https://g
 
 This library uses PHPUnit for its extensive test suite.
 To run the test suite, you first need to clone this repo and then install all
-dependencies [through Composer](https://getcomposer.org):
+dependencies [through Composer](https://getcomposer.org/):
 
 ```bash
 $ composer install
@@ -137,7 +137,7 @@ $ composer install
 To run the test suite, go to the project root and run:
 
 ```bash
-$ php vendor/bin/phpunit
+$ vendor/bin/phpunit
 ```
 
 ## Contributing
@@ -156,4 +156,7 @@ Check out #graphp on irc.freenode.net.
 
 ## License
 
-Released under the terms of the permissive [MIT license](http://opensource.org/licenses/MIT).
+This project is released under the permissive [MIT license](LICENSE).
+
+> Did you know that I offer custom development services and issuing invoices for
+  sponsorships of releases and for contributions? Contact me (@clue) for details.
