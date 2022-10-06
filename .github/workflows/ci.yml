@@ -31,14 +31,3 @@ jobs:
         if: ${{ matrix.php >= 7.3 }}
       - run: vendor/bin/phpunit --coverage-text -c phpunit.xml.legacy
         if: ${{ matrix.php < 7.3 }}
-
-  PHPUnit-hhvm:
-    name: PHPUnit (HHVM)
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: azjezz/setup-hhvm@v1
-        with:
-          version: lts-3.30
-      - run: hhvm $(which composer) install
-      - run: hhvm vendor/bin/phpunit
