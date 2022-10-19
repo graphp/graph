@@ -8,6 +8,12 @@ use Fhaculty\Graph\Vertex;
 
 class VertexTest extends AbstractAttributeAwareTest
 {
+    /** @var Graph */
+    private $graph;
+
+    /** @var Vertex */
+    private $vertex;
+
     /**
      * @before
      */
