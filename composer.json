@@ -17,6 +17,16 @@
             "email": "christian@clue.engineering"
         }
     ],
+    "require": {
+        "php": ">=5.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5 || ^5.7 || ^4.8.35"
+    },
+    "suggest": {
+        "graphp/graphviz": "GraphViz graph drawing / DOT output",
+        "graphp/algorithms": "Common graph algorithms, such as Dijkstra and Moore-Bellman-Ford (shortest path), minimum spanning tree (MST), Kruskal, Prim and many more.."
+    },
     "autoload": {
         "psr-4": {
             "Graphp\\Graph\\": "src/"
@@ -26,15 +36,5 @@
         "psr-4": {
             "Graphp\\Graph\\Tests\\": "tests/"
         }
-    },
-    "require": {
-        "php": ">=5.3"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9.3 || ^5.7 || ^4.8.35"
-    },
-    "suggest": {
-        "graphp/graphviz": "GraphViz graph drawing / DOT output",
-        "graphp/algorithms": "Common graph algorithms, such as Dijkstra and Moore-Bellman-Ford (shortest path), minimum spanning tree (MST), Kruskal, Prim and many more.."
     }
 }
